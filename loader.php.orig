@@ -1,0 +1,364 @@
+<?
+session_start();
+date_default_timezone_set('America/Belem');
+set_time_limit(60);
+$requestUri = $_SERVER['REQUEST_URI'];
+
+require_once $_SERVER['DOCUMENT_ROOT']."/inc/uteis.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/controleacesso.class.php';
+
+define('TITULO_GERAL', 'Dashboard v3.0 - SISTEMA DE ADMINISTR&Ccedil;&Atilde;O DE CERTIFICADOS');
+
+/*
+ * ESTRUTURA DO PROPEL_INIT.PHP
+ */
+
+define('PREFIX',          $_SERVER['DOCUMENT_ROOT'] . '/classes/');
+define('PEAR_BASE',      PREFIX . 'pear/');
+define('PROJECT_CONF',     PREFIX . 'conf/serama-conf.php');
+$includes   = array();
+
+$includes[] = PEAR_BASE;
+$includes[] = PREFIX;
+
+// don't forget to add current include_path
+$includes[] = ini_get('include_path');
+ini_set('include_path', implode(PATH_SEPARATOR, $includes));
+
+require_once 'propel/Propel.php';
+
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/logClass.php';
+$logger = new MyLogger();
+
+//Propel::setLogger($logger); Implementa��o futura: Aprender express�es regulares para a cada modifica��o no banco logar no sistema o que foi feito e por quem
+//Classe inc/logClass.php � a interface que far� isto
+
+$e = Propel::init(PROJECT_CONF);
+
+$arquivo = substr($_SERVER['PHP_SELF'], strrpos($_SERVER['PHP_SELF'], '/' )+1);
+
+$usuarioLogado = controleAcesso::podeAcessar();
+$usuarioLogado = UsuarioPeer::retrieveByPk($usuarioLogado['idUsuario']);
+
+
+//CHECA SE O USU�RIO EST� LOGADO E SE N�O ESTIVER MANDA PARA A TELA DE ACESSO NEGADO
+if (!ControleAcesso::estaLogado())
+	$estaLogado = false;
+else {
+	$estaLogado = true;
+
+    //SE O USUARIO LOGADO FOR DIRETORIA CARREGAR MENU DIRETORIA
+    if ($usuarioLogado->getPerfilId() == 4)
+        $menuCarregar = 'inc/menuDiretoria.php';
+    else
+        $menuCarregar = 'inc/menu.php';
+
+	//PRECISAMOS SERIALIZAR ESSAS ARRAY PARA S� FAZER CONSULTA AO BANCO NA HORA DO LOGIN DO USU�RIO
+
+	$cPerfPermTela = new Criteria();
+	$cPerfPermTela->add(PerfilPermissaoPeer::PERFIL_ID, $_SESSION['idPerfil']);
+    $urlDoArquivo = explode('/',trim($_SERVER['PHP_SELF'], '/'));
+    if ($urlDoArquivo[0] =='funcoes'){
+        switch ($urlDoArquivo[1]){
+            case 'funcoesCertificado.php':
+                $pesquisaPermissao = 'telaCertificado.php';
+                break;
+            case 'funcoesContador.php':
+                $pesquisaPermissao = 'telaContador.php';
+                break;
+            case 'funcoesComissaoParceiro.php':
+                $pesquisaPermissao = 'telaRelatorioComissaoCertificadoParceiro.php';
+                break;
+            case 'funcoesMeuFaturamento.php':
+                $pesquisaPermissao = 'telaFaturamento.php';
+                break;
+            case 'funcoesParceiro.php':
+                $pesquisaPermissao = 'telaParceiro.php';
+                break;
+            case 'funcoesPerfil.php':
+                $pesquisaPermissao = 'telaPerfil.php';
+                break;
+            case 'funcoesUsuario.php':
+                $pesquisaPermissao = 'telaUsuario.php';
+                break;
+        }
+        $cPerfPermTela->add(PermissaoPeer::TELA, $pesquisaPermissao);
+    }else{
+        $cPerfPermTela->add(PermissaoPeer::TELA, trim($_SERVER['PHP_SELF'], '/'));
+    }
+
+	$permissoesPerfilTela = PerfilPermissaoPeer::doSelectJoinPermissao($cPerfPermTela);
+	$arrPermissaoTela = array();
+	foreach ($permissoesPerfilTela as $permissaoPerfilTela) {
+		$arrPermissaoTela[] = $permissaoPerfilTela->getPermissao()->getFuncao();
+	}
+
+
+	//Permiss�es para o MENU
+	$cPerfPermMenu = new Criteria();
+	$cPerfPermMenu->add(PerfilPermissaoPeer::PERFIL_ID, $_SESSION["idPerfil"]);
+	$cPerfPermMenu->add(PermissaoPeer::FUNCAO, 'acessar');
+	$permissoesPerfilMenu = PerfilPermissaoPeer::doSelectJoinPermissao($cPerfPermMenu);
+	$arrTelasMenu = array();
+	foreach ($permissoesPerfilMenu as $permissaoPerfilMenu) {
+		$arrTelasMenu[] = $permissaoPerfilMenu->getPermissao()->getTela();		
+	}
+
+
+	//Fim permiss�es menu
+    $urlDoArquivo = explode('/',trim($_SERVER['PHP_SELF'], '/'));
+    if ($urlDoArquivo[0] =='funcoes'){
+        switch ($urlDoArquivo[1]){
+            case 'funcoesCertificado.php':
+                $arquivo = 'telaCertificado.php';
+                break;
+            case 'funcoesContador.php':
+                $arquivo = 'telaContador.php';
+                break;
+            case 'funcoesComissaoParceiro.php':
+                $arquivo = 'telaRelatorioComissaoCertificadoParceiro.php';
+                break;
+            case 'funcoesMeuFaturamento.php':
+                $arquivo = 'telaFaturamento.php';
+                break;
+            case 'funcoesParceiro.php':
+                $arquivo = 'telaParceiro.php';
+                break;
+            case 'funcoesPerfil.php':
+                $arquivo = 'telaPerfil.php';
+                break;
+            case 'funcoesUsuario.php':
+                $arquivo = 'telaUsuario.php';
+                break;
+        }
+    }
+
+	
+	//RESTRINGE O ACESSO A TELAS DO SISTEMA QUE N�O EST�O AUTORIZADAS!
+	if (!ControleAcesso::permitido($arquivo, 'acessar', $_SESSION['idPerfil']) ) 
+		$permitido = false;
+	else
+		$permitido = true;
+
+	//COMO ALGUMAS TELAS IR�O PRECISAR SABER SE EXISTE CAIXA ABERTO,
+	//O C�GIGO ABAIXO FAZ ESTA CONSULTA
+	$cCaixaAberto = new Criteria();
+	$cCaixaAberto->add(CaixaPeer::DATA_FECHAMENTO, null, Criteria::ISNULL);
+	$cCaixaAberto->add(CaixaPeer::USUARIO_ID, $usuarioLogado->getId());
+	$cxUsuarioLogado = CaixaPeer::doSelectOne($cCaixaAberto);
+
+
+	//CRIAÇÃO DO LOG DE AÇÕES DO USUÁRIO NO SISTEMA
+	$logAcesso = new LogAcesso();
+	$logAcesso->setUsuarioId($usuarioLogado->getId());
+	if($_GET['acao'])
+		$logAcesso->setAcao(strtoupper($_GET['acao']));
+	else
+		$logAcesso->setAcao("ACESSO");
+		
+	$logAcesso->setIp($_SERVER['REMOTE_ADDR']);				
+	$logAcesso->setData(date('Y-m-d H:i:s'));
+	$logAcesso->setTela($_SERVER['REQUEST_URI']);
+	
+	$descricao = explode('.php', $_SERVER['REQUEST_URI']);
+	if ($descricao) {
+		if($_GET['acao']){
+			$descricaoAcao = explode($_GET['acao'] , $descricao[1]);
+			if($descricaoAcao[1]){
+				$logAcesso->setDescricao(strtoupper($_GET['acao']." ".$descricaoAcao[1]));
+			}
+		}else {
+			$tela = explode('/tela',$descricao[0]);
+			if ($tela[1])
+				$logAcesso->setDescricao(strtoupper("Acessou a Tela : ").$tela[1] );
+			else
+				$logAcesso->setDescricao(strtoupper("Acessou a Tela : ").$descricao[0] );
+		}
+	}
+		
+	$logAcesso->save();
+
+	$cProspect = new Criteria();
+	$cProspect->add(ProspectPeer::SITUACAO , 0);
+	$cProspect->add(ProspectPeer::USUARIO_ID, $usuarioLogado->getId());
+	$cProspect->add(ProspectPeer::DATA_AGENDAMENTO, NULL, Criteria::ISNULL);
+	$cProspect->addAnd(ProspectPeer::DATA_ULTIMO_CONTATO , NULL, Criteria::ISNULL);
+	$qtdeProspect = ProspectPeer::doCount($cProspect);
+
+    /*CONSULTA QUANTIDADE CERTIFICADOS FATURADOS (CONFIRMADOS PAGAMENTO)*/
+	$cCertificado = new Criteria();
+    /*SO CHECAR SE ESTA AUTORIZADO OU NAO NA TELA DOS USUÁRIOS COMUNS*/
+    if ($usuarioLogado->getPerfilId() != 4)
+	    $cCertificado->add(CertificadoPeer::AUTORIZADO_VENDA_SEM_CONTADOR,0);
+	$cCertificado->add(CertificadoPeer::DATA_COMPRA, date('Y').'-'.date('m').'-01'.$hora_ini, Criteria::GREATER_EQUAL);
+	$cCertificado->addAnd(CertificadoPeer::DATA_COMPRA, date('Y').'-'.date('m').'-'.getLastDayOfMonth(date('m'), date('Y')) . $hora_fim, Criteria::LESS_EQUAL);
+    $cCertificado->add(CertificadoPeer::APAGADO, 0);
+
+	if (($usuarioLogado->getPerfilId() != 4) && ($usuarioLogado->getPerfilId() != 67) && ($usuarioLogado->getPerfilId() != 1)) {
+		$cLocalUsuario = new  Criteria();
+		$cLocalUsuario->add(LocalUsuarioPeer::SITUACAO, 0);
+		$cLocalUsuario->add(LocalUsuarioPeer::USUARIO_ID, $usuarioLogado->getId());
+		$locaisUsuario = LocalUsuarioPeer::doSelect($cLocalUsuario);
+
+		$cCertificado->add(CertificadoPeer::USUARIO_ID, $usuarioLogado->getId());
+		if ($locaisUsuario) {
+			foreach ($locaisUsuario as $localUsuario)
+				$cCertificado->addOr(CertificadoPeer::LOCAL_ID, $localUsuario->getLocalId(), Criteria::EQUAL);
+		}
+	}
+	$qtdeCertificados = CertificadoPeer::doCount($cCertificado);
+    /*FIM DA CONSULTA QUANTIDADE CERTIFICADOS FATURADOS (CONFIRMADOS PAGAMENTO)*/
+
+    /*CONSULTA QUANTIDADE CERTIFICADOS NAO CONFIRMADOS (NAO CONFIRMADOS E NAO PAGOS)*/
+	$cCertificado = new Criteria();
+	//$cCertificado->add(CertificadoPeer::AUTORIZADO_VENDA_SEM_CONTADOR,1);
+	$cCertificado->add(CertificadoPeer::DATA_COMPRA, date('Y').'-'.date('m').'-01'.$hora_ini, Criteria::GREATER_EQUAL);
+	$cCertificado->addAnd(CertificadoPeer::DATA_COMPRA, date('Y').'-'.date('m').'-'.getLastDayOfMonth(date('m'), date('Y')) . $hora_fim, Criteria::LESS_EQUAL);
+    $cCertificado->add(CertificadoPeer::APAGADO, 0);
+
+	if (($usuarioLogado->getPerfilId() != 4) && ($usuarioLogado->getPerfilId() != 67) && ($usuarioLogado->getPerfilId() != 1)) {
+		$cLocalUsuario = new  Criteria();
+		$cLocalUsuario->add(LocalUsuarioPeer::SITUACAO, 0);
+		$cLocalUsuario->add(LocalUsuarioPeer::USUARIO_ID, $usuarioLogado->getId());
+		$locaisUsuario = LocalUsuarioPeer::doSelect($cLocalUsuario);
+
+		$cCertificado->add(CertificadoPeer::USUARIO_ID, $usuarioLogado->getId());
+		if ($locaisUsuario) {
+			foreach ($locaisUsuario as $localUsuario)
+				$cCertificado->addOr(CertificadoPeer::LOCAL_ID, $localUsuario->getLocalId(), Criteria::EQUAL);
+		}
+	}
+	$cCertificado->add(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, null, Criteria::ISNULL);
+	$qtdeCertificadosLiberados = CertificadoPeer::doCount($cCertificado);
+    /*FIM DA CONSULTA QUANTIDADE CERTIFICADOS NAO CONFIRMADOS (NAO CONFIRMADOS E NAO PAGOS)*/
+    /*BUSCA QUANTIDADE DE CERTIFICADOS APENAS COM INFORME DE PAGAMENTO*/
+
+	$cCertificado = new Criteria();
+
+	$cCertificado->add(CertificadoPeer::DATA_PAGAMENTO, date('Y').'-'.date('m').'-01'.$hora_ini, Criteria::GREATER_EQUAL);
+	$cCertificado->addAnd(CertificadoPeer::DATA_PAGAMENTO, date('Y').'-'.date('m').'-'.getLastDayOfMonth(date('m'), date('Y')) . $hora_fim, Criteria::LESS_EQUAL);
+	$cCertificado->add(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, null, Criteria::ISNULL);
+	if (($usuarioLogado->getPerfilId() != 4) && ($usuarioLogado->getPerfilId() != 67) && ($usuarioLogado->getPerfilId() != 1)) {
+		$cLocalUsuario = new  Criteria();
+		$cLocalUsuario->add(LocalUsuarioPeer::SITUACAO, 0);
+		$cLocalUsuario->add(LocalUsuarioPeer::USUARIO_ID, $usuarioLogado->getId());
+		$locaisUsuario = LocalUsuarioPeer::doSelect($cLocalUsuario);
+
+		$cCertificado->add(CertificadoPeer::USUARIO_ID, $usuarioLogado->getId());
+		if ($locaisUsuario) {
+			foreach ($locaisUsuario as $localUsuario)
+				$cCertificado->addOr(CertificadoPeer::LOCAL_ID, $localUsuario->getLocalId(), Criteria::EQUAL);
+		}
+	}
+
+	if (($usuarioLogado->getPerfilId() == 5) ) {
+		$cCertificado->addOr(CertificadoPeer::FUNCIONARIO_VALIDOU_ID, $usuarioLogado->getId());
+	}
+
+	$cCertificado->add(CertificadoPeer::APAGADO, 0);
+	$cCertificado->addOr(CertificadoPeer::APAGADO, 4);
+
+	$qtdeInformePagamento = CertificadoPeer::doCount($cCertificado);
+
+/*FIM DA BUSCA DE QUANTIDADE DE CERTIFICADOS APENAS COM INFORME DE PAGAMENTO*/
+
+	$cContador = new Criteria();
+	$cContador->add(ContadorPeer::SITUACAO,0);
+<<<<<<< HEAD
+	if ($usuarioLogado->getPerfilId() != 1) {
+		$cContador->add(ContadorPeer::USUARIO_ID, $usuarioLogado->getId());
+	}else{
+		$cContador->add(ContadorPeer::LOCAL_ID, $usuarioLogado->getLocalId());
+	}
+=======
+
+	//SE O PERFIL E DIRETORIA, MOSTRA TODOS
+	if ($usuarioLogado->getPerfilId()!= 4)
+		$cContador->add(ContadorPeer::USUARIO_ID, $usuarioLogado->getId());
+
+>>>>>>> 084fe5a0ae95f7f4d79ce691ab02bbfd42c307d4
+	$qtdeContador = ContadorPeer::doCount($cContador);
+
+	$cUsuario = new Criteria();
+	$cUsuario->add(UsuarioPeer::SITUACAO,0);
+	$qtdeUsuario = UsuarioPeer::doCount($cUsuario);
+
+	$cProduto = new Criteria();
+	$cProduto->add(ProdutoPeer::SITUACAO,0);
+	$qtdeProduto = ProdutoPeer::doCount($cProduto);
+
+	/*BUSCA DE QUANTIDADE DE CERTIFICADOS CONFIRMADOS DE PAGAMENTO*/
+	$cCertificado = new Criteria();
+<<<<<<< HEAD
+	$cCertificado->add(CertificadoPeer::APAGADO,0);
+	$cCertificado->add(CertificadoPeer::AUTORIZADO_VENDA_SEM_CONTADOR,1);
+	if ($usuarioLogado->getPerfilId() != 1) {
+		$cCertificado->add(CertificadoPeer::USUARIO_ID, $usuarioLogado->getId());
+	}else{
+		$cCertificado->add(CertificadoPeer::LOCAL_ID, $usuarioLogado->getLocalId());
+	}
+	$cCertificado->add(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, date('Y').'-'.date('m').'-01'.$hora_ini, Criteria::GREATER_EQUAL);
+=======
+	//$cCertificado->add(CertificadoPeer::APAGADO,0);
+	//SE O PERFIL E DIRETORIA, MOSTRA TODOS
+	if ($usuarioLogado->getPerfilId()!= 4) {
+		$cCertificado->add(CertificadoPeer::USUARIO_ID, $usuarioLogado->getId());
+        $cCertificado->add(CertificadoPeer::AUTORIZADO_VENDA_SEM_CONTADOR,1);
+    }
+    $cCertificado->add(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, date('Y').'-'.date('m').'-01'.$hora_ini, Criteria::GREATER_EQUAL);
+>>>>>>> 084fe5a0ae95f7f4d79ce691ab02bbfd42c307d4
+	$cCertificado->addAnd(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, date('Y').'-'.date('m').'-'.getLastDayOfMonth(date('m'), date('Y')) . $hora_fim, Criteria::LESS_EQUAL);
+	$qtdeFaturados = CertificadoPeer::doCount($cCertificado);
+	/*FIM DE BUSCA BUSCA DE QUANTIDADE DE CERTIFICADOS CONFIRMADOS DE PAGAMENTO*/
+
+
+	//TOTAL SOMA OS NAO AUTORIZADOS COM OS FATURADOS
+	$qtdeCertificadosTotal = $qtdeCertificadosLiberados+$qtdeFaturados;
+
+
+}	
+
+if (($_SERVER['PHP_SELF'] != '/index.php') && ($_SERVER['PHP_SELF'] != '/acessoNegadoLogin.php') && ($_SERVER['PHP_SELF'] != '/acessoNegado.php')  && ($_SERVER['PHP_SELF'] != '/login.php') )
+	if (!$estaLogado) {
+			header('Location:acessoNegadoLogin.php');	
+			exit;
+	}
+	elseif ($estaLogado && !$permitido) {
+			header('Location:acessoNegado.php');
+			exit;
+	}
+
+switch ($arquivo) {
+     
+	 case 'index.php':
+	 	  if ($estaLogado) header('Location:home.php');
+          break;
+     case 'telaCertificado.php'||'telaCertificadoInformePagamento.php':
+          require_once $_SERVER['DOCUMENT_ROOT'].'/inc/paginator.class.php';
+		  //require_once $_SERVER['DOCUMENT_ROOT'].'/inc/PHPMailer_v5.1/class.phpmailer.php';
+          break;
+
+	case 'telaCertificadoNaoAutorizados.php':
+		require_once $_SERVER['DOCUMENT_ROOT'].'/inc/paginator.class.php';
+		break;
+
+	 case 'telaContador.php':
+          require_once $_SERVER['DOCUMENT_ROOT'].'/inc/paginator.class.php';
+          break;
+		  
+     case 'telaProspect.php':
+          require_once $_SERVER['DOCUMENT_ROOT'].'/inc/paginator.class.php';
+          break;
+	case 'telaMeuFaturamento.php':
+		require_once $_SERVER['DOCUMENT_ROOT'].'/inc/paginator.class.php';
+		break;
+	case 'telaParceiro.php':
+		require_once $_SERVER['DOCUMENT_ROOT'].'/inc/paginator.class.php';
+		break;
+	case 'telaRelatorioComissaoCertificadoParceiro.php':
+		require_once $_SERVER['DOCUMENT_ROOT'].'/inc/paginator.class.php';
+		break;
+}
+
+?>

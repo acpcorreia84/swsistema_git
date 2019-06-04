@@ -1,0 +1,1553 @@
+<?
+require_once $_SERVER['DOCUMENT_ROOT'] . '/loader.php';
+try {
+	$hora_ini = ' 00:00:00';
+	$hora_fim = ' 23:59:59';
+
+	$cCertificado = new Criteria();
+
+	if($_POST && $_POST['edt_certificado_id']){
+		$cCertificado->addOr(CertificadoPeer::ID, $_POST['edt_certificado_id']);
+	}elseif($_POST && $_POST['edt_cliente_id']){
+		$cCertificado->addOr(CertificadoPeer::CLIENTE_ID, $_POST['edt_cliente_id']);
+	}elseif($_POST && $_POST['edt_protocolo']){
+		$cCertificado->addOr(CertificadoPeer::PROTOCOLO, $_POST['edt_protocolo']);
+	}elseif($_POST && $_POST['edt_cpf']){
+		$cCliente = new Criteria();
+		$cCliente->add(ClientePeer::CPF_CNPJ,$_POST['edt_cpf']);
+		$cCliente->add(ClientePeer::SITUACAO,0);
+		$cCliente->addDescendingOrderByColumn(ClientePeer::ID);
+		$cliente = ClientePeer::doSelectOne($cCliente);
+		if($cliente) {
+			$cCertificado->addOr(CertificadoPeer::CLIENTE_ID, $cliente->getId());
+		}else{
+			$cResponsavel = new Criteria();
+			$cResponsavel->add(ResponsavelPeer::CPF,$_POST['edt_cpf'] );
+			$cliente = ResponsavelPeer::doSelectOne($cResponsavel);
+			if($cliente) {
+				$cCertificado->addOr(CertificadoPeer::CLIENTE_ID, $cliente->getId());
+			}else{
+				$cCertificado->addOr(CertificadoPeer::CLIENTE_ID, 0);
+			}
+		}
+	}elseif($_POST && $_POST['edt_cnpj']){
+		$cCliente = new Criteria();
+		$cCliente->add(ClientePeer::CPF_CNPJ,$_POST['edt_cnpj']);
+		$cCliente->add(ClientePeer::SITUACAO,0);
+		$cCliente->addDescendingOrderByColumn(ClientePeer::ID);
+		$cliente = ClientePeer::doSelectOne($cCliente);
+        if($cliente) {
+            $cCertificado->addOr(CertificadoPeer::CLIENTE_ID, $cliente->getId());
+        }else{
+            $cCertificado->addOr(CertificadoPeer::CLIENTE_ID, 0);
+        }
+	}else{
+		$cCertificado->add(CertificadoPeer::APAGADO, 0);
+		$cCertificado->addOr(CertificadoPeer::APAGADO, 4);
+		$cCertificado->add(CertificadoPeer::DATA_COMPRA, date('Y').'-'.date('m').'-01'.$hora_ini, Criteria::GREATER_EQUAL);
+		$cCertificado->addAnd(CertificadoPeer::DATA_COMPRA, date('Y').'-'.date('m').'-'.getLastDayOfMonth(date('m'), date('Y')) . $hora_fim, Criteria::LESS_EQUAL);
+
+		if (($usuarioLogado->getPerfilId() != 4) && ($usuarioLogado->getPerfilId() != 67)) {
+			$cLocalUsuario = new  Criteria();
+			$cLocalUsuario->add(LocalUsuarioPeer::SITUACAO, 0);
+			$cLocalUsuario->add(LocalUsuarioPeer::USUARIO_ID, $usuarioLogado->getId());
+			$locaisUsuario = LocalUsuarioPeer::doSelect($cLocalUsuario);
+
+			$cCertificado->add(CertificadoPeer::USUARIO_ID, $usuarioLogado->getId());
+			if ($locaisUsuario) {
+				foreach ($locaisUsuario as $localUsuario)
+					$cCertificado->addOr(CertificadoPeer::LOCAL_ID, $localUsuario->getLocalId(), Criteria::EQUAL);
+			}
+		}
+
+		if (($usuarioLogado->getPerfilId() == 5) ) {
+			$cCertificado->addOr(CertificadoPeer::FUNCIONARIO_VALIDOU_ID, $usuarioLogado->getId());
+		}
+	}
+
+	$num_rows = CertificadoPeer::doCount($cCertificado);
+	$pages = new Paginator($num_rows, 9, array(20, 3, 6, 9, 12, 25, 50, 100, 250, 'Todos'));
+	$cCertificado->setOffset($pages->limit_start);
+	$cCertificado->setLimit($pages->limit_end);
+	$cCertificado->addDescendingOrderByColumn(CertificadoPeer::ID);
+	$certificados = CertificadoPeer::doSelectJoinAll($cCertificado);
+}catch(Exception $e){
+	erroEmail($e->getMessage()."<br/><br/>Usuario: ".$usuarioLogado->getNome(),'Erro na consulta da telaCertificado.php');
+	js_aviso('Desculpe-me pelo trantorno que está acontecendo, mas logo estarei resolvendo isso pra você!');
+}
+
+try {
+	$cProdutos =  new Criteria();
+	$cProdutos->add(ProdutoPeer::SITUACAO,0);
+	$cProdutos->addAscendingOrderByColumn(ProdutoPeer::NOME);
+	$produtos = ProdutoPeer::doSelect($cProdutos);
+}catch(Exception $e){
+	erroEmail($e->getMessage(),"Erro na consulta de produtos na tela de certificado");
+	js_aviso("Erro na consulta de produtos");
+}
+?>
+<? include 'header.php';?>
+<<<<<<< HEAD
+<body oncontextmenu="return false;" ondrag="return false;" ondragstart="return false;" ondragend="return false;" onselectstart="return false;" ondrop="return false;" xmlns="http://www.w3.org/1999/html">
+=======
+<? include 'inc/script.php';?>
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false"
+	  xmlns="http://www.w3.org/1999/html">
+>>>>>>> 24a17f05dc20c41e75c13f59c5baeea538352b36
+<div id="wrapper">
+
+	<? include('inc/menu.php');?>
+
+	<div id="page-wrapper">
+		<div class="container-fluid">
+			<div class="row" style="margin-top:50px;">
+				<div class="panel panel-success">
+					<div class="panel-body">
+						<? include 'inc/filtros/filtroCertificado.php';?>
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Certificados
+						</div><!-- PANEL HEADING -->
+
+						<div class="panel-body">
+							<? if( !$_POST['edtConsulta']) {
+								echo '<span class="pagination"><li>'.$pages->display_pages()."</li></span>";
+							}?>
+
+							<div class="table table-responsive small">
+								<table class="table table-striped table-bordered">
+									<thead>
+									<tr>
+										<td align="center">Codigo</td>
+										<td align="center">Pago</td>
+										<!--<td align="center">Status</td>-->
+										<td align="center">Dt. Pgto</td>
+										<td align="center">Protocolo</td>
+										<td align="center">Cliente</td>
+										<td align="center">Compra</td>
+										<td align="center">Certificado</td>
+										<td align="center">Vendedor</td>
+										<td align="center">Situac&atilde;o</td>
+										<td align="center">A&ccedil;&atilde;o</td>
+									</tr>
+									</thead>
+
+									<? if($certificados) {?>
+										<tbody>
+										<? foreach ($certificados as $key=>$certificado) {
+											$cSit = new Criteria();
+											$cSit->addDescendingOrderByColumn(CertificadoSituacaoPeer::ID);
+											$situacoes = $certificado->getCertificadoSituacaos($cSit);
+											if($certificado->getConfirmacaoValidacao() <> 0){
+												if($certificado->getConfirmacaoValidacao() == 1) {
+													$titulo = 'APROVADO';
+													$situacaoCert = '<span class="totais_menor">VALIDOU ('.$certificado->getDataValidacao('d/m/Y').') <i class="fa fa-flag" style="color:#096;" title="'.$titulo.'" ></i></span>';
+												}
+												elseif( ($certificado->getConfirmacaoValidacao() == 2) || ($certificado->getConfirmacaoValidacao() == 3)) {
+													$titulo = 'PENDENTE';
+													$situacaoCert = '<span class="totais_menor">PENDENTE <i class="fa fa-flag" style="color:#FF0;" title="'.$titulo.'" ></i></span>';
+												}elseif($certificado->getConfirmacaoValidacao() == 4) {
+													$titulo = 'REVOGADO';
+													$situacaoCert = '<span class="totais_menor">REVOGADO <i class="fa fa-flag" style="color:#f00;" title="' . $titulo . '" ></i></span>';
+												}else {
+													$titulo = 'SEM STATUS';
+													$situacaoCert = '<span class="totais_menor">VALIDOU ('.$certificado->getDataValidacao('d/m/Y').') <i class="fa fa-flag" style="color:#FF0;" title="'.$titulo.'" ></i></span>';
+												}
+											}	else {
+												if($situacoes[0]->getSituacao()->getId() == 6)
+													$situacaoCert = '<span class="totais_menor">VALIDOU ('.$certificado->getDataValidacao('d/m/Y').') <i class="fa fa-flag" style="color:#F60;" title="PENDENTE NA SAFEWEB" ></i></span>';
+												else
+													$situacaoCert = $situacoes[0]->getSituacao()->getNome();
+											}
+											?>
+											<tr <?=corLinhaTabela($key)?> >
+												<td align="center"><input type="text" class="semCss50" disabled value="<?=str_pad($certificado->getId(), 4, 0, STR_PAD_LEFT); ?>"/></td>
+												<td align="center">
+													<? if ($certificado->getDataPagamento() == '') {
+														if ($certificado->getFormaPagamentoId() == 1) {
+															$numBol = '';
+															$boletosCert = $certificado->getBoletos();
+
+															foreach ($boletosCert as $boleto) {
+																if ($boleto->getDataPagamento()) {
+																	$numBol = $boleto->getId();
+																}
+															}
+															if (count($boletosCert) == 0 )
+																echo '<i class="fa fa-circle" style="color:#f90;"></i>';
+															else
+																echo '<i class="fa fa-circle" style="color:#f00;"></i>';
+														} else {
+															echo '<i class="fa fa-circle" style="color:#f00;"></i>';
+														}
+													} else {
+														echo '<i class="fa fa-circle" style="color:#096;"></i>';
+													}
+													if ($certificado->getDataConfirmacaoPagamento()) {
+														echo '<i class="fa fa-check" style="color:#096;"></i>';
+													}
+													?>
+
+												</td>
+												<!--<td align="center"><? include "inc/cdStatus.php"?></td>-->
+												<td align="center"><? if ($certificado->getDataPagamento()) echo $certificado->getDataPagamento('d/m/Y'); else echo '---'?></td>
+												<td align="center"><input type="text" class="semCss" disabled value="<? if ($certificado->getProtocolo()!=0) echo $certificado->getProtocolo(); else echo ""; ?>"/> </td>
+												<td align="left"><? if($certificado->getCliente()){ echo '<input type="text" class="semCss40" disabled value="'.$certificado->getCliente()->getId() . '"/> - '; if ($certificado->getCliente()->getRazaoSocial() != '') echo $certificado->getCliente()->getRazaoSocial(); else echo $certificado->getCliente()->getNomeFantasia();} else{ echo "------";}?></td>
+												<td align="center"><?=$certificado->getDataCompra('d/m/Y');?></td>
+												<td align="left"><? if($certificado->getProdutoId()) { echo strtoupper($certificado->getProduto()->getNome());}else { echo "-------";}?></td>
+												<td align="left"><? if ($certificado->getUsuario() !== NULL) echo $certificado->getUsuario()->getNome(); else echo '---'; ?></td>
+												<td align="left"><?=$situacaoCert; ?></td>
+												<td align="center">
+													<? if (array_search('perfil', $arrPermissaoTela)!==false) { ?>
+														<? if (array_search('crud', $arrPermissaoTela)!==false) { ?>
+															<a data-toggle="modal" data-target="#revogarCertificado" title="Revogar Certificado" onclick="recupera_id(<?=$certificado->getId();?>)"> <i class="fa fa-thumbs-o-down"></i></a>
+														<? } ?>
+													<? } ?>
+
+													<? if( ( ($certificado->getDataConfirmacaoPagamento() == '0000-00-00 00:00:00') || ($certificado->getDataConfirmacaoPagamento() == NULL) ) && ($certificado->getApagado() == 0) ) {?>
+														<? if (array_search('perfil', $arrPermissaoTela)!==false) { ?>
+															<? if (array_search('crud', $arrPermissaoTela)!==false) { ?>
+																<a data-toggle="modal" data-target="#editarCertificado" title="Editar Certificado" onclick="recupera_id(<?=$certificado->getId();?>); editar_certificado(<?=$certificado->getId();?>,'editar_certificado',<?=$usuarioLogado->getId();?>)"> <i class="fa fa-edit"></i> </a>
+															<? }?>
+														<? }?>
+													<? }?>
+
+													<? if ( (array_search('situacao', $arrPermissaoTela)!==false)) { ?>
+														<a data-toggle="modal" data-target="#detalharCertificado" title="Detalhar Certificado" id="btnDetalharCertificado" onclick="recupera_id(<?=$certificado->getId();?>); detalhar_certificado(<?=$certificado->getId();?>,'detalhar')"> <i class="fa fa-arrows"></i> </a>
+													<? }?>
+
+													<a data-toggle="modal" data-target="#visualizarProtocolo" title="visualizar Protocolo"> <i class="fa fa-search" onclick="visualizar_protocolo(<?=$certificado->getId();?>,'visualizaProtocolo')"></i> </a>
+
+													<? if  (  (array_search('bol', $arrPermissaoTela)!==false) && ($certificado->getApagado() == 0) ){ ?>
+														<? if ($certificado->getFormaPagamentoId()==1) {?>
+															<?	$cBoletoCert = new Criteria();
+															$cBoletoCert->add(BoletoPeer::CERTIFICADO_ID , $certificado->getId());
+															$boletos = BoletoPeer::doSelectOne($cBoletoCert);
+															$boletosMaximoFive = BoletoPeer::doCount($cBoletoCert);
+															if( (($boletos) || ($certificado->getFormaPagamentoId() == 1 )) && ($certificado->getDataConfirmacaoPagamento() == '') && ($boletosMaximoFive <= 4 ) ) {
+																?>
+																<a data-toggle="modal" data-target="#gerarBoleto" title="Gerar Boleto" onclick="recupera_id(<?=$certificado->getId();?>);carrega_modal_boleto(<?=$certificado->getId();?>,'carrega_modal_boleto')"> <i class="fa fa-barcode"></i> </a>
+															<? }?>
+														<? }?>
+													<? }?>
+
+													<? if ( ($certificado->getDataPagamento() != NULL) && ($certificado->getDataPagamento() > '0000-00-00 00:00:00') && ($certificado->getApagado() == 0) ) {?>
+														<a data-toggle="modal" data-target="#gerarRecibo" title="Gerar Recibo" onclick="gerar_recibo(<?=$certificado->getId();?>,'gerarRecibo')"> <i class="fa fa-file-pdf-o"></i> </a>
+													<? } ?>
+													<? if (($certificado->getUsuarioId() == $usuarioLogado->getId())&&($certificado->getApagado() == 0)&&(!$certificado->getDataConfirmacaoPagamento())&&(!$certificado->getDataPagamento())) {?>
+														<a data-toggle="modal" data-target="#apagarCertificado" title="Apagar Certificado" onclick="recupera_id(<?=$certificado->getId();?>)"> <i class="fa fa-trash"></i> </a>
+													<? }?>
+
+													<? if( ($certificado->getDataPagamento() == '0000-00-00 00:00:00') || ($certificado->getDataPagamento() == NULL) && ($certificado->getApagado() == 0) ){ ?>
+														<a data-toggle="modal" data-target="#modalDesconto" title="Desconto" onclick="recupera_id(<?=$certificado->getId();?>);carregarModalDesconto(<?=$certificado->getId();?>,'carregarDesconto')"><i class ="fa fa-tag"></i></a>
+													<? } ?>
+
+													<? if( ($certificado->getDataPagamento() == NULL) || ($certificado->getDataPagamento() == '0000-00-00 00:00:00') ) {?>
+														<a data-toggle="modal" data-target="#modalTrocar" onclick="trocar_produto(<?=$certificado->getId();?>, 'produto')"> <i class="fa fa-retweet"></i></a>
+													<? }?>
+												</td>
+											</tr>
+										<? }?>
+										</tbody>
+									<? }?>
+								</table>
+							</div><!-- DIV TABLE - REPOSNSIVE -->
+
+							<? if( !$_POST['edtConsulta']) {
+								echo '<span class="pagination"><li>'.$pages->display_pages()."</li></span>";
+							}?>
+						</div><!-- PANEL BODY -->
+					</div><!-- panel default -->
+				</div><!-- COL LG 12 -->
+			</div><!-- CLASS ROW -->
+		</div><!-- container-fluid -->
+	</div><!-- page-wrapper -->
+</div><!-- DIV ID WRAPPER -->
+
+
+<!-- MODAIS DA PAGINA-->
+<div class="container">
+	<!--MODAL DETALHAR CERTIFICADO!-->
+	<div id="detalharCertificado" class="modal fade" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class ="col-lg-6">
+						<h3><i class="fa fa-lg fa-arrows "></i> Detalhar Certificado </h3>
+						<input type="hidden" name="idCertificado" id="idCertificado">
+					</div>
+					<div class ="col-lg-6">
+						<h3>
+							<span id="dcDivModaisPermissao"></span>
+							<button class="btn btn-primary" data-toggle="modal" data-target="#inserirObservacao"><i class="fa fa-lg fa-comment "></i></button>
+							<button class="btn btn-primary" data-toggle="modal" data-target="#agendamentoValidacao"><i class="fa fa-lg fa-calendar-plus-o"></i></button>
+							<button class="btn btn-primary" data-toggle="modal" data-target="#modalDuvida" onclick="modalDuvida(1)"><i class="fa fa-lg fa-question"></i></button>
+							<a class="btn btn-danger" data-toggle="modal" data-target="#detalharCertificado"><i class="fa fa-lg fa-close"></i></a>
+						</h3>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="panel panel-default">
+						<div class="panel-body bg-info">
+							<div class="row">
+								<div class="col-lg-9">
+									<h4>Cliente: <span id="dcSpanIdCliente">...</span> - <span id="dcSpanNomeCliente">...</span></h4>
+								</div>
+                                <div class="col-lg-3">
+                                    <a data-toggle="modal" data-target="#editarCliente" onclick="editar_cliente('editar_cliente',<?=$usuarioLogado->getId();?>)"><i class="fa fa-lg fa-edit"></i> Editar Cliente</a>
+                                </div>
+								<!--<div class="col-lg-3">
+									<a data-toggle="modal" data-target="#confirmarValidacao" class="btn btn-success bg-success"><i class="fa fa-lg fa-thumbs-o-up"></i> Baixa de valida&ccedil;&atilde;o</a>
+								</div>-->
+							</div> <!--DIV CLASS row-->
+							<div class="row">
+								<div class="col-lg-3">
+									<p>Codigo Certificado: <span id="dcSpanCodCertificado">...</span></p>
+								</div>
+
+								<div class="col-lg-3">
+									<p>Protocolo: <span id="dcSpanProtocolo">...</span></p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<p>Produto: <span id="dcSpanNomeProduto">...</span></p>
+								</div>
+								<div class="col-lg-6">
+									<p>Valor: <span id="dcSpanPrecoProduto">...</span> - <span id="dcSpanDesconto">...</span> = <span id="dcSpanValorTotal" class="text-danger lead">...</span></p>
+								</div>
+							</div> <!--DIV CLASS row-->
+
+						</div>
+					</div>
+
+
+					<div class="row">
+						<div class="col-lg-12">
+							<h4>Pagamento:</h4>
+							<div class="table table-responsive small">
+								<span id="edtCertificadoPagamento">Carregando...</span>
+							</div>
+						</div>
+
+
+					</div> <!--DIV CLASS row-->
+
+					<div class="row">
+						<div class="col-lg-12">
+							<h4>Situa&ccedil;&atilde;o:</h4>
+							<!--<i class="fa fa-refresh fa-lg" onclick="consulta_situacao();"></i>-->
+							<div class="table table-responsive small">
+								<span id="edtSituacaoDetalhe">Carregando...</span>
+							</div>
+						</div>
+					</div> <!--DIV CLASS row-->
+
+				</div><!--DIV MODAL-CONTENT-->
+				<div class="modal-footer"></div>
+			</div>
+		</div> <!--DIV CLASS modal-dialog modal-lg-->
+	</div> <!--DIV ID detalharCertificado-->
+	<div id="modalTrocar" class="modal fade" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class ="col-lg-10">
+						<h3><i class="fa fa-lg fa-retweet "></i> Trocar produto/ forma de pagamento </h3>
+					</div>
+					<div class ="col-lg-2">
+						<button class="btn btn-primary" data-toggle="modal" data-target="#modalDuvida" onclick="modalDuvida(2)"><i class="fa fa-lg fa-question"></i></button>
+						<a class="btn btn-danger" data-toggle="modal" data-target="#modalTrocar"><i class="fa fa-lg fa-close"></i></a>
+					</div>
+				</div>
+				<div class="modal-body">
+					<form method="post" action="#">
+						<div class="row">
+							<div class="col-lg-6">
+								<h4>Alterar Produto:</h4>
+							</div>
+							<div class="col-lg-6">
+								<select name="tcEdtProduto" id="tcEdtProduto" class="form-control" data-live-search="true">
+									<option data-tokens="" value="">Escolha o Produto </option>
+
+									<? foreach($produtos as $produto) {?>
+										<? if( ($produto->getPreco() > 0) ) {?>
+											<option data-tokens="<?=$produto->getNome();?>" value="<?=$produto->getId();?>"><?=$produto->getId();?> | <?=removeEspeciais($produto->getNome());?> - R$ <?=formataMoeda($produto->getPreco());?> </option>
+										<? }?>
+									<? }?>
+								</select>
+							</div>
+						</div> <!--DIV CLASS row-->
+
+						<div class="row">
+							<div class="col-lg-6">
+								<h4>Alterar forma de pagamento:</h4>
+							</div>
+							<div class="col-lg-6">
+								<input onblur="valida(this)" type="radio" name="tcEdtPagamento" id="tcEdtPagamento" value="1" > <i class="fa  fa-barcode"> Boleto </i>  <br/>
+								<input onblur="valida(this)" type="radio" name="tcEdtPagamento" id="tcEdtPagamento" value="6" > <i class="fa fa-credit-card"> Credito/Debito</i><br/>
+								<input onblur="valida(this)" type="radio" name="tcEdtPagamento" id="tcEdtPagamento" value="3" > <i class="fa fa-money"> Especie</i>  <br/>
+								<input onblur="valida(this)" type="radio" name="tcEdtPagamento" id="tcEdtPagamento" value="2" > <i class="fa fa-envelope-o"> Deposito</i><br/>
+								<input onblur="valida(this)" type="radio" name="tcEdtPagamento" id="tcEdtPagamento" value="4" > <i class="fa fa-exchange"> Transferência</i><br/>
+								<input onblur="valida(this)" type="radio" name="tcEdtPagamento" id="tcEdtPagamento" value="8" > <i class="fa fa-square-o"> Sem Custo</i><br/>
+							</div>
+						</div> <!--DIV CLASS row-->
+					</form>
+				</div><!--DIV MODAL-CONTENT-->
+				<div class="modal-footer">
+					<input type="hidden" name="ioCodCertificado" id="tcEdtIdCertificado">
+					<button class="btn btn-success"  onclick="trocar_produto('0','trocar_produto',<?=$usuarioLogado->getId();?>);"> <i class="fa fa-lg fa-retweet"></i> Trocar</button>
+				</div>
+			</div>
+		</div> <!--DIV CLASS modal-dialog modal-lg-->
+	</div> <!--DIV ID ajudaModalDetalhar-->
+	<!--MODAL INSERIR OBSERVA��O!-->
+	<div id="inserirObservacao" class="modal fade" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class ="col-lg-10">
+						<h3><i class="fa fa-lg fa-comment "></i> Inserir Observa&ccedil;&atilde;o </h3>
+					</div>
+					<div class ="col-lg-2">
+						<button class="btn btn-primary" data-toggle="modal" data-target="#modalDuvida" onclick="modalDuvida(3)"><i class="fa fa-lg fa-question"></i></button>
+						<a class="btn btn-danger" data-toggle="modal" data-target="#inserirObservacao"><i class="fa fa-lg fa-close"></i></a>
+					</div>
+				</div>
+				<div class="modal-body">
+					<form method="post" action="#">
+						<div class="row">
+							<div class="col-lg-12">
+								<h4>Observa&ccedil;&atilde;o:</h4>
+							</div>
+						</div> <!--DIV CLASS row-->
+
+						<div class="row">
+							<div class="col-lg-12">
+								<input type="hidden" name="ioCodCertificado" id="ioCodCertificado"/>
+								<textarea rows="10"  name="edtObservacao" id="edtObservacao" class="form-control"></textarea>
+							</div>
+						</div> <!--DIV CLASS row-->
+					</form>
+
+				</div><!--DIV MODAL-CONTENT-->
+				<div class="modal-footer"><button class="btn btn-success" onclick="inserir_observacao('inserir_observacao',<?=$usuarioLogado->getId();?>);"><i class="fa fa-lg fa-save"></i> Salvar</button></div>
+			</div>
+		</div> <!--DIV CLASS modal-dialog modal-lg-->
+	</div> <!--DIV ID inserirObservacao-->
+	<!--MODAL EDITAR CERTIFICADO-->
+	<div id="editarCertificado" class="modal fade" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class ="col-lg-10">
+						<h3><i class="fa fa-lg fa-edit "></i> Editar Certificado </h3>
+						<input type="hidden" name="ecInputIdCertificado" id="ecInputIdCertificado">
+						<input type="hidden" name="idCertificado" id="idCertificado">
+					</div>
+					<div class ="col-lg-2">
+						<button class="btn btn-primary" data-toggle="modal" data-target="#modalDuvida"onclick="modalDuvida(4)"><i class="fa fa-lg fa-question"></i></button>
+						<a class="btn btn-danger" data-toggle="modal" data-target="#editarCertificado"><i class="fa fa-lg fa-close"></i></a>
+					</div>
+				</div>
+				<div class="modal-body">
+
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="panel panel-default">
+								<div class="panel-header">
+									<div class="col-lg-9">
+										<h4>Cliente:</h4>
+									</div>
+									<div class="col-lg-2">
+										<a data-toggle="modal" data-target="#editarCliente" onclick="editar_cliente('editar_cliente',<?=$usuarioLogado->getId();?>)"><i class="fa fa-lg fa-edit"></i> Editar Cliente</a>
+									</div>
+
+								</div>
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-lg-12">
+											Nome: <span id="ecSpanNomeCliente"></span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-9">
+											E-mail: <span id="ecSpanEmail"></span>
+										</div>
+										<div class="col-lg-3">
+											Telefone: <span id="ecSpanTelefone"></span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-9">
+											Endereço: <span id="ecSpanEndereco"></span>
+										</div>
+										<div class="col-lg-3">
+											Bairro: <span id="ecSpanBairro"></span>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+					<div class="form">
+						<form action="#" method="post">
+							<div class="row">
+								<div class="col-lg-6">
+									<label for="ecEdtLocal"> Local:</label>
+								</div>
+								<div class="col-lg-6">
+									<label for="ecEdtProduto">Tipo de Certificado:</label>
+								</div>
+							</div><!--Div Class row-->
+
+							<div class="row">
+								<div class="col-lg-6">
+									<select name="ecEdtLocal" id="ecEdtLocal" class="selectpicker form-control" data-show-subtext="true" data-live-search="true">
+										<option data-tokens="" value="">Escolha o Local </option>
+									</select>
+								</div>
+								<div class="col-lg-6">
+									<select name="ecEdtProduto" id="ecEdtProduto" class="selectpicker form-control" data-show-subtext="true" data-live-search="true">
+										<option data-tokens="" value="">Escolha o Produto </option>
+										<? foreach($produtos as $produto) {?>
+											<? if( ($produto->getPreco() > 0) ) {?>
+												<option data-tokens="<?=$produto->getNome();?>" value="<?=$produto->getId();?>"><?=$produto->getId();?> | <?=$produto->getNome();?> - R$ <?=formataMoeda($produto->getPreco());?> </option>
+											<? }?>
+										<? }?>
+									</select>
+								</div>
+							</div><!--Div Class row-->
+
+							<div class="row">
+								<div class="col-lg-12">
+									<h4>Valor do Certificado:</h4> <span id="ecSpanValor"></span>
+								</div>
+							</div><!--Div Class row-->
+
+							<div class="row">
+								<div class="col-lg-6">
+									<label for="ecEdtPagamento">Forma de Pagamento:</label>
+								</div>
+								<div class="col-lg-6">
+									<label for="ecEdtVendedor">Vendedor:</label>
+								</div>
+							</div><!--Div Class row-->
+
+							<div class="row">
+								<div class="col-lg-6">
+									<input type="radio" name="ecEdtPagamento" id="ecEdtPagamento" value="1"  > <i class="fa  fa-barcode"> Boleto </i>  <br/>
+									<input type="radio" name="ecEdtPagamento" id="ecEdtPagamento" value="6" > <i class="fa fa-credit-card"> Cr�dito/Debito</i><br/>
+									<input type="radio" name="ecEdtPagamento" id="ecEdtPagamento" value="3" > <i class="fa fa-money">&nbsp;Esp�cie</i>  <br/>
+									<input type="radio" name="ecEdtPagamento" id="ecEdtPagamento" value="2" > <i class="fa fa-envelope-o"> Deposito</i><br/>
+									<input type="radio" name="ecEdtPagamento" id="ecEdtPagamento" value="4" > <i class="fa fa-exchange"> Transfer�ncia</i><br/>
+									<input type="radio" name="ecEdtPagamento" id="ecEdtPagamento" value="8" > <i class="fa fa-square-o"> Sem Custo</i><br/>
+								</div>
+								<div class="col-lg-6">
+									<select name="ecEdtVendedor" id="ecEdtVendedor" class="selectpicker form-control" data-show-subtext="true" data-live-search="true">
+										<option data-tokens="" value="">Escolha o Vendedor </option>
+										<? foreach($vendedores as $vendedor) {?>
+											<? if( ($vendedor->getId() != 0) ) {?>
+												<option data-tokens="<?=$vendedor->getNome();?>" value="<?=$vendedor->getId();?>"><?=$vendedor->getId();?> | <?=$vendedor->getNome();?> - R$ <?=formataMoeda($produto->getPreco());?> </option>
+											<? }?>
+										<? }?>
+									</select>
+								</div>
+
+							</div><!--Div Class row-->
+
+						</form>
+					</div><!--Div class form-->
+
+				</div><!--DIV MODAL-CONTENT-->
+				<div class="modal-footer">
+					<input type="hidden" name="ecInputIdCertificado" id="ecInputIdCertificado">
+					<button class="btn btn-success" onclick=" editar_certificado('0','alterar_certificado',<?=$usuarioLogado->getId();?>)">Alterar</button>
+				</div>
+			</div>
+		</div> <!--DIV CLASS modal-dialog modal-lg-->
+	</div> <!--DIV ID inserirObservacao-->
+	<!--MODAL EDITAR CLIENTE-->
+	<div id="editarCliente" class="modal fade" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class ="col-lg-10">
+						<h3><i class="fa fa-lg fa-edit "></i> Editar Cliente </h3>
+						<input type="hidden" name="clEdtPessoaTipo" id="clEdtPessoaTipo">
+					</div>
+					<div class ="col-lg-2">
+						<button class="btn btn-primary" data-toggle="modal" data-target="#modalDuvida"onclick="modalDuvida(5)"><i class="fa fa-lg fa-question"></i></button>
+						<a class="btn btn-danger" data-toggle="modal" data-target="#editarCliente"><i class="fa fa-lg fa-close"></i></a>
+					</div>
+				</div>
+				<div class="form">
+					<form action="#" method="post" id="form_validacao">
+						<div class="modal-body">
+
+							<div id="pessoaJuridica">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div class="row">
+											<div class="col-lg-3">
+												<label for="clEdtCnpj">CNPJ:</label>
+											</div>
+
+											<div class="col-lg-9">
+												<label for="clEdtRazaoSocial" >Raz&atilde;o Social:</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-3">
+												<input type="text" name="clEdtCnpj" onkeyup="formatarCpfCnpj(this,'cnpj')" id="clEdtCnpj" class="form-control" onblur="valida(this)">
+											</div>
+
+											<div class="col-lg-9">
+												<input type="text" name="clEdtRazaoSocial" id="clEdtRazaoSocial" onkeyup="UpperCase(this)" class="form-control" onblur="valida(this)">
+											</div>
+										</div> <!--DIV CLASS row-->
+
+										<div class="row">
+											<div class="col-lg-9">
+												<label for="clEdtNomeFantasia">Nome:</label>
+											</div>
+											<div class="col-lg-3">
+												<label for="clEdtCepEmpresa">Cep:</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-9">
+												<input type="text" name="clEdtNomeFantasia" id="clEdtNomeFantasia" onkeyup="UpperCase(this)" class="form-control" onblur="valida(this)">
+											</div>
+
+											<div class="col-lg-3">
+												<input type="text" name="clEdtCepEmpresa" id="clEdtCepEmpresa" onkeyup="UpperCase(this)" class="form-control" onblur="valida(this)">
+											</div>
+										</div> <!--DIV CLASS row-->
+
+										<div class="row">
+											<div class="col-lg-4">
+												<label for="clEdtEnderecoEmpresa">Endere&ccedil;o:</label>
+											</div>
+											<div class="col-lg-4">
+												<label for="clEdtBairroEmpresa">Bairro:</label>
+											</div>
+											<div class="col-lg-2">
+												<label for="clEdtNumeroEmpresa">N&uacute;mero:</label>
+											</div>
+											<div class="col-lg-2">
+												<label for="clEdtUfEmpresa">UF:</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-4">
+												<input type="text" name="clEdtEnderecoEmpresa" id="clEdtEnderecoEmpresa" onkeyup="UpperCase(this)" class="form-control" onblur="valida(this)">
+											</div>
+
+											<div class="col-lg-4">
+												<input type="text" name="clEdtBairroEmpresa" id="clEdtBairroEmpresa" onkeyup="UpperCase(this)" class="form-control" onblur="valida(this)">
+											</div>
+
+											<div class="col-lg-2">
+												<input type="text" name="clEdtNumeroEmpresa" id="clEdtNumeroEmpresa" onkeyup="UpperCase(this)" class="form-control"  onblur="valida(this)">
+											</div>
+											<div class="col-lg-2">
+												<select name="clEdtUfEmpresa" id="clEdtUfEmpresa" class="form-control" onblur="valida(this)"">
+												<option value="">Selecione</option>
+												<option value="AC" >AC</option>
+												<option value="AL" >AL</option>
+												<option value="AP" >AP</option>
+												<option value="AM" >AM</option>
+												<option value="BA" >BA</option>
+												<option value="CE" >CE</option>
+												<option value="DF" >DF</option>
+												<option value="ES" >ES</option>
+												<option value="GO" >GO</option>
+												<option value="MA" >MA</option>
+												<option value="MT" >MT</option>
+												<option value="MS" >MS</option>
+												<option value="MG" >MG</option>
+												<option value="PA" >PA</option>
+												<option value="PB" >PB</option>
+												<option value="PR" >PR</option>
+												<option value="PE" >PE</option>
+												<option value="PI" >PI</option>
+												<option value="RJ" >RJ</option>
+												<option value="RN" >RN</option>
+												<option value="RS" >RS</option>
+												<option value="RO" >RO</option>
+												<option value="RR" >RR</option>
+												<option value="SC" >SC</option>
+												<option value="SP" >SP</option>
+												<option value="SE" >SE</option>
+												<option value="TO" >TO</option>
+												</select>
+											</div>
+
+										</div> <!--DIV CLASS row-->
+
+										<div class="row">
+											<div class="col-lg-4">
+												<label for="clEdtComplementoEmpresa">Complemento:</label>
+											</div>
+											<div class="col-lg-4">
+												<label>Cidade:</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-4">
+												<input type="text" name="clEdtComplementoEmpresa" onkeyup="UpperCase(this)" id="clEdtComplementoEmpresa" class="form-control">
+											</div>
+
+											<div class="col-lg-4">
+												<input type="text" name="clEdtCidadeEmpresa" id="clEdtCidadeEmpresa" onkeyup="UpperCase(this)" class="form-control" onblur="valida(this)">
+											</div>
+
+										</div> <!--DIV CLASS row-->
+
+										<div class="row">
+											<div class="col-lg-4">
+												<label for="clEdtFone1Empresa">Fone1:</label>
+											</div>
+											<div class="col-lg-4">
+												<label for="clEdtFone2Empresa">Fone2:</label>
+											</div>
+											<div class="col-lg-4">
+												<label for="clEdtCelularEmpresa">Celular:</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-4">
+												<input type="text" name="clEdtFone1Empresa" id="clEdtFone1Empresa" class="form-control" onblur="valida(this)">
+											</div>
+
+											<div class="col-lg-4">
+												<input type="text" name="clEdtFone2Empresa" id="clEdtFone2Empresa" class="form-control">
+											</div>
+
+											<div class="col-lg-4">
+												<input type="text" name="clEdtCelularEmpresa" id="clEdtCelularEmpresa" class="form-control" onblur="valida(this)">
+											</div>
+										</div> <!--DIV CLASS row-->
+										<div class="row">
+											<div class="col-lg-7">
+												<label for="clEdtEmailEmpresa">Email: </label><input type="text" onkeyup="LowerCase(this)" name="clEdtEmailEmpresa" id="clEdtEmailEmpresa" class="form-control" onblur="valida(this)">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<!-- DADOS RESPONS�VEL -->
+
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-lg-12">
+											<h4>DADOS DO RESPONS&Aacute;VEL:</h4>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-3">
+											<label for="clEdtCpfResponsavel">CPF:</label>
+										</div>
+										<div class="col-lg-3">
+											<label for="clEdtNascimentoResponsavel" >Nascimento:</label>
+										</div>
+										<div class="col-lg-6">
+											<label for="clEdtNomeResponsavel">Nome:</label>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-3">
+											<input type="text" name="clEdtCpfResponsavel"  id="clEdtCpfResponsavel" class="form-control"  onblur="valida(this)">
+										</div>
+										<div class="col-lg-3">
+											<input type="text" name="clEdtNascimentoResponsavel" id="clEdtNascimentoResponsavel" class="form-control"  onblur="valida(this)">
+										</div>
+										<div class="col-lg-6">
+											<input type="text" name="clEdtNomeResponsavel" onkeyup="UpperCase(this)" id="clEdtNomeResponsavel" class="form-control"  onblur="valida(this)">
+										</div>
+									</div> <!--DIV CLASS row-->
+
+									<div class="row">
+										<div class="col-lg-4">
+											<label for="clEdtCepResponsavel">CEP:</label>
+										</div>
+										<div class="col-lg-4">
+											<label for="clEdtEnderecoResponsavel">Endere&ccedil;o:</label>
+										</div>
+										<div class="col-lg-2">
+											<label for="edtNumeroResponsavel">N&uacute;mero:</label>
+										</div>
+										<div class="col-lg-2">
+											<label for="edtUfResponsavel" >UF:</label>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-lg-4">
+											<input type="text" name="clEdtCepResponsavel" id="clEdtCepResponsavel" onkeyup="UpperCase(this)" class="form-control"  onblur="valida(this)">
+										</div>
+
+										<div class="col-lg-4">
+											<input type="text" name="clEdtEnderecoResponsavel" id="clEdtEnderecoResponsavel" onkeyup="UpperCase(this)" class="form-control"  onblur="valida(this)">
+										</div>
+										<div class="col-lg-2">
+											<input type="text" name="clEdtNumeroResponsavel" id="clEdtNumeroResponsavel" onkeyup="UpperCase(this)" class="form-control"  onblur="valida(this)">
+										</div>
+										<div class="col-lg-2">
+											<select name="clEdtUfResponsavel" id="clEdtUfResponsavel" class="form-control" onblur="valida(this)">
+												<option value="">Selecione</option>
+												<option value="AC" >AC</option>
+												<option value="AL" >AL</option>
+												<option value="AP" >AP</option>
+												<option value="AM" >AM</option>
+												<option value="BA" >BA</option>
+												<option value="CE" >CE</option>
+												<option value="DF" >DF</option>
+												<option value="ES" >ES</option>
+												<option value="GO" >GO</option>
+												<option value="MA" >MA</option>
+												<option value="MT" >MT</option>
+												<option value="MS" >MS</option>
+												<option value="MG" >MG</option>
+												<option value="PA" >PA</option>
+												<option value="PB" >PB</option>
+												<option value="PR" >PR</option>
+												<option value="PE" >PE</option>
+												<option value="PI" >PI</option>
+												<option value="RJ" >RJ</option>
+												<option value="RN" >RN</option>
+												<option value="RS" >RS</option>
+												<option value="RO" >RO</option>
+												<option value="RR" >RR</option>
+												<option value="SC" >SC</option>
+												<option value="SP" >SP</option>
+												<option value="SE" >SE</option>
+												<option value="TO" >TO</option>
+											</select>
+										</div>
+									</div> <!--DIV CLASS row-->
+
+									<div class="row">
+										<div class="col-lg-4">
+											<label for="edtCompletamentoResponsavel">Complemento:</label>
+										</div>
+										<div class="col-lg-4">
+											<label for="edtBairroResponsavel">Bairro:</label>
+										</div>
+										<div class="col-lg-4">
+											<label for="editObservacaoResponsavel">Cidade:</label>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-4">
+											<input type="text" name="clEdtCompletamentoResponsavel" id="clEdtCompletamentoResponsavel" onkeyup="UpperCase(this)" class="form-control">
+										</div>
+
+										<div class="col-lg-4">
+											<input type="text" name="clEdtBairroResponsavel" id="clEdtBairroResponsavel" onkeyup="UpperCase(this)" class="form-control" onblur="valida(this)">
+										</div>
+
+										<div class="col-lg-4">
+											<input type="text" name="clEdtCidadeResponsavel" id="clEdtCidadeResponsavel" onkeyup="UpperCase(this)" class="form-control" onblur="valida(this)">
+										</div>
+									</div> <!--DIV CLASS row-->
+
+
+									<div class="row">
+										<div class="col-lg-4">
+											<label for="edtFone1Responsavel">Fone1:</label>
+										</div>
+										<div class="col-lg-4">
+											<label for="edtFone2Responsavel">Fone2:</label>
+										</div>
+										<div class="col-lg-4">
+											<label for="edtCelularResponsavel">Celular:</label>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-4">
+											<input type="text" name="clEdtFone1Responsavel" id="clEdtFone1Responsavel" class="form-control"  onblur="valida(this)">
+										</div>
+
+										<div class="col-lg-4">
+											<input type="text" name="clEdtFone2Responsavel" id="clEdtFone2Responsavel" class="form-control">
+										</div>
+
+										<div class="col-lg-4">
+											<input type="text" name="clEdtCelularResponsavel" id="clEdtCelularResponsavel" class="form-control"  onblur="valida(this)">
+										</div>
+									</div> <!--DIV CLASS row-->
+									<div class="row">
+										<div class="col-lg-7">
+											<h4>Email: </h4><input type="text" onkeyup="LowerCase(this)" name="clEdtEmailResponsavel" id="clEdtEmailResponsavel" class="form-control"  onblur="valida(this)">
+										</div>
+									</div>
+
+
+									<div class="row">
+										<div class="col-lg-4">
+											<label for="edtRg">RG:</label>
+										</div>
+										<div class="col-lg-4">
+											<label for="edtCargo">Cargo:</label>
+										</div>
+										<div class="col-lg-4">
+											<label for="edtNis">NIS (PIS/PASEP/CI):</label>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-4">
+											<input type="text" name="clEdtRg" id="clEdtRg" class="form-control">
+										</div>
+
+										<div class="col-lg-4">
+											<input type="text" onkeyup="UpperCase(this)" name="clEdtCargo" id="clEdtCargo" class="form-control">
+										</div>
+
+										<div class="col-lg-4">
+											<input type="text" name="clEdtNis" id="clEdtNis" class="form-control"></br>
+										</div>
+									</div> <!--DIV CLASS row-->
+
+									<div class="row">
+										<div class="col-lg-12">
+											<h4><input type="checkbox" name="confirma" id="confirma" onchange="confirma_formulario()">Os Dados est&atilde;o preenchidos corretamente!</h4>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div><!--Div Modal Body -->
+						<div class="modal-footer">
+							<button id="altCliente" disabled="disabled" class="btn btn-success" onclick="editar_cliente('alterar_cliente',<?=$usuarioLogado->getId();?>)">Alterar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div> <!--DIV CLASS modal-dialog modal-lg-->
+	</div> <!--DIV ID inserirObservacao-->
+	<!--MODAL VISUALIZAR PROTOCOLO!-->
+	<div id="visualizarProtocolo" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class ="col-lg-10">
+						<h3><i class="fa fa-lg fa-search "></i> Visualizar Protocolo: </h3>
+					</div>
+					<div class ="col-lg-2">
+						<button class="btn btn-primary" data-toggle="modal" data-target="#modalDuvida" onclick="modalDuvida(6)"><i class="fa fa-lg fa-question"></i></button>
+						<a class="btn btn-danger" data-toggle="modal" data-target="#visualizarProtocolo"><i class="fa fa-lg fa-close"></i></a>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div id="dadosEmpresariais" class="panel panel-default">
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<h4>Dados Empresariais:</h4>
+									<hr>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-9">
+									<label> Nome: </label><br/><span id="vpSpanNomeEmpresa">...</span>
+								</div>
+								<div class="col-lg-3">
+									<label>CNPJ: </label><br/><span id="vpSpanCnpj">...</span>
+								</div>
+							</div>
+							<div class="row">
+
+								<div class="col-lg-6">
+									<label>Fone: </label><br/><span id="vpSpanFoneEmpresa">...</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-7">
+									<label>Endere&ccedil;o: </label><br/><span id="vpSpanEnderecoEmpresa">...</span>
+								</div>
+							</div>
+
+
+						</div>
+					</div>
+
+
+					<!--Fim Etapa 1-->
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<h4>Dados Pessoais:</h4><hr>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<label> Nome: </label><br/><span id="vpSpanNomeResponsavel">...</span>
+								</div>
+								<div class="col-lg-3">
+									<label>CPF: </label><br/><span id="vpSpanCpf">...</span>
+								</div>
+                                <div class="col-lg-3">
+                                    <label>Nascimento:</label><br/><span id="vpSpanNascResponsavel">...</span>
+                                </div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<label>Endere&ccedil;o: </label><br/><span id="vpSpanEnderecoResponsavel">...</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<label>RG: </label><br/><span id="vpSpanRg">...</span>
+								</div>
+								<div class="col-lg-3">
+									<label>Cargo: </label><br/><span id="vpSpanCargo">...</span>
+								</div>
+								<div class="col-lg-3">
+									<label>Nis (PIS/PASEP/CI): </label><br/><span id="vpSpanNis">...</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-8">
+									<label>E-mail: </label><br/><span id="vpSpanEmail">...</span>
+								</div>
+								<div class="col-lg-4">
+									<label>Fone: </label><br/><span id="vpSpanFoneResponsavel">...</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--Fim Etapa 2-->
+
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<h4>Resumo: </h4><hr>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<label>Vendedor: </label> <span id="vpSpanVendedor">...</span>
+								</div>
+								<div class="col-lg-6">
+									<label>Forma de pagamento: </label> <span id="vpSpanFormaPagto">...</span>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<label>Produto selecionado: </label> <span id="vpSpanNomeProduto">...</span>
+								</div>
+								<div class="col-lg-6">
+									<label>Pagamento: </label> <span id="vpSpanPagamento">...</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<label>N&uacute;mero de boleto: </label> <span id="vpSpanNumBol">...</span>
+								</div>
+								<div class="col-lg-6">
+									<label>Data de Pagamento: </label> <span id="vpSpanDtPagamento"></span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<label>Protocolo: </label> <span id="vpSpanProtocolo">...</span>
+								</div>
+								<div class="col-lg-6">
+									<label>Local: </label> <span id="vpSpanLocal">...</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<label>Agendamento: </label> <span id="vpSpanAgendamento">...</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<label>Situa&ccedil;&atilde;o: </label> <span id="vpSpanSituacao">...</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+				</div><!--DIV MODAL-CONTENT-->
+				<div class="modal-footer"></div>
+			</div>
+		</div> <!--DIV CLASS modal-dialog modal-lg-->
+	</div> <!--DIV ID visualizarProtocolo-->
+	<!--MODAL GERAR RECIBO!-->
+	<div id="gerarRecibo" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class ="col-lg-10">
+						<h3><i class="fa fa-lg fa-file-pdf-o"></i> Gerar Recibo: </h3>
+					</div>
+					<div class ="col-lg-2">
+						<button class="btn btn-primary" data-toggle="modal" data-target="#modalDuvida" onclick="modalDuvida(7)" name="teste"><i class="fa fa-lg fa-question"></i></button>
+						<a class="btn btn-danger" data-toggle="modal" data-target="#gerarRecibo"><i class="fa fa-lg fa-close"></i></a>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="panel panel-default">
+						<div class="panel-body bg-info">
+							<div class="row">
+								<div class="col-lg-6">
+									<label> Nome:</label><br/> <span id="grSpanNomeClienteCabecalho">...</span>
+								</div>
+								<div class="col-lg-3">
+									<label>Fone: </label> <br/><span id="grSpanFone">...</span>
+								</div>
+								<div class="col-lg-3">
+									<label>email: </label> <br/><span id="grSpanEmail">...</span>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-lg-6">
+									<label>Vendedor: </label> <br/><span id="grSpanVendedorCabecalho">...</span>
+								</div>
+								<div class="col-lg-3">
+									<label>Certificado: </label> <br/><span id="grSpanNomeProdutoCabecalho">...</span>
+								</div>
+								<div class="col-lg-3">
+									<label>Valor: </label> <br/><span id="grSpanValorCabecalho">...</span>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-lg-6">
+									<label>Forma de Pagamento: </label> <br/><span id="grSpanFormaPagto">...</span>
+								</div>
+								<div class="col-lg-3">
+									<label>Data da Compra:</label> <br/><span id="grSpandtCompra">...</span>
+								</div>
+								<div class="col-lg-3">
+									<label>Data do pagamento: </label> <br/><span id="grSpanDtPagamento">...</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-12">
+							<h4>Pr&eacute;-visualiza&ccedil;&atilde;o do Recibo:</h4>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="panel panel-default">
+								<div class="panel-header">
+									<table class="texto" width="100%">
+										<tr>
+											<td align="left"><img src="img/logo_serama.gif" width="25%" height="50%" /></td>
+											<td align="right"><img src="img/logo_safeweb.png" width="25%" height="50%"/></td>
+										</tr>
+									</table>
+								</div>
+								<div class="panel-body">
+									<table  width="100%" border="0" cellpadding="5" cellspacing="0">
+										<tr class="trtitulo">
+											<td class="tdtitulo" align="center">
+												<strong><u>RECIBO</u></strong>
+											</td>
+										</tr>
+									</table>
+
+									<table width="100%" border="0" cellpadding="5" cellspacing="0">
+										<tr>
+											<td align="left">
+												<valor><b>Vendedor: <span id="grSpanVendedorPre">...</span></b></valor>
+											</td>
+											<td align="right" width="30%">
+												<numero><strong>TOTAL R$ <span id="grSpanValorPre">...</span> </strong></numero>
+											</td>
+										</tr>
+									</table>
+									<table cellpadding="0" cellspacing="0">
+										<BR>
+										<tr>
+											<td align="justify">
+												<texto>Recebi  da empresa <b><span id="grSpanNomeClientePre">...</span></b> - CNPJ/CPF <b><span id="grSpanCnpj">...</span></b>, localizado <span id="grSpanEndereco">....</span> CEP:<span id="grSpanCep">...</span>. <b>Referente a AQUISI&Ccedil;&Atilde;O DE <span id="grSpanNomeProdutoPre">...</span>.</b></texto>
+											</td>
+										</tr>
+										<tr>
+											<td align="left">
+												<br /><texto>No qual dou plena quita&ccedil;&atilde;o.</texto>
+											</td>
+											<td>&nbsp;</td>
+										</tr>
+									</table>
+									<br><br>
+									<table class="texto" width="100%" border="0" cellpadding="5" cellspacing="0">
+										<tr>
+											<td align="left" width="50%"><assinatura><b>Ass: ..............................................</b></assinatura></td>
+											<td align="right" width="50%"><data><b><?=$usuarioLogado->getLocal()->getNome();?>, <?=date('d')." de ".date('M')." de ".date('Y');?> </b></data></td>
+										</tr>
+										<tr>
+											<td align="left" width="50%"><assinatura><b>&emsp;&emsp;&emsp;Carimbo/Assinatura</b></assinatura></td>
+										</tr>
+									</table>
+									<br />
+
+								</div><!--Panel-body-->
+								<div class="panel-footer">
+									<center>
+										<table class="end" width="100%" border="0" cellpadding="5" cellspacing="0" align="center">
+											<tr class="rodape">
+												<td class="dados_rodape text-center">
+													<b><span id="grSpanRodape" >...</span></b><br/>
+												</td>
+											</tr>
+										</table>
+									</center>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer"><input type="hidden" id="grInputIdCertificado" /><a href="#"><i class="fa fa-lg fa-print" onclick="imprimir(<?=$certificado->getId();?>);"> Gerar Recibo</i></a></div>
+			</div>
+		</div> <!--DIV CLASS modal-dialog modal-lg-->
+	</div>  <!--DIV ID gerarRecibo-->
+	<div id="apagarCertificado" class="modal fade" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class ="col-lg-10">
+						<h3><i class="fa fa-lg fa-trash "></i> Apagar certificado </h3>
+					</div>
+					<div class ="col-lg-2">
+						<button class="btn btn-primary" data-toggle="modal" data-target="#modalDuvida" onclick="modalDuvida(8)"><i class="fa fa-lg fa-question"></i></button>
+						<a class="btn btn-danger" data-toggle="modal" data-target="#apagarCertificado"><i class="fa fa-lg fa-close"></i></a>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-6">
+							<h4>Motivo da Exclus&atilde;o:</h4>
+						</div>
+						<div class="col-lg-6">
+							<h4>Voc&ecirc; tem certeza que deseja apagar certificado?</h4>
+						</div>
+					</div> <!--DIV CLASS row-->
+					<div class="row">
+						<div class="col-lg-6">
+							<form action="#" method="post">
+								<textarea rows="5" class="form-control" name="edtMotivoExclusao" onkeyup="UpperCase(this);" onblur="valida(this)" id="acEdtMotivoExclusao"></textarea>
+							</form>
+						</div>
+						<div class="col-lg-3">
+							<input type="hidden" name="idCertificado" id="idCertificado">
+							<button class="btn btn-success" id="conApagar" onclick="apagar(<?=$certificado->getId();?>,'apagar',<?=$usuarioLogado->getId();?>)">Sim</button>
+						</div>
+						<div class="col-lg-3">
+							<a class="btn btn-danger" data-toggle="modal" data-target="#apagarCertificado">N&atilde;o</a>
+						</div>
+					</div> <!--DIV CLASS row-->
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div> <!--DIV CLASS modal-dialog modal-lg-->
+	</div> <!--DIV ID excluirCertificado-->
+	<!--Revogar Certificado-->
+	<div id="revogarCertificado" class="modal fade" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class ="col-lg-10">
+						<h3><i class="fa fa-lg fa-thumbs-o-down "></i> Revogar Certificado </h3>
+					</div>
+					<div class ="col-lg-2">
+						<button class="btn btn-primary" data-toggle="modal" data-target="#modalDuvida" onclick="modalDuvida(9)"><i class="fa fa-lg fa-question"></i></button>
+						<a class="btn btn-danger" data-toggle="modal" data-target="#revogarCertificado"><i class="fa fa-lg fa-close"></i></a>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-6">
+							<h4>Motivo da Revoga&ccedil;&atilde;o:</h4>
+						</div>
+						<div class="col-lg-6">
+							<h4>Voc� tem certeza que deseja revogar certificado:</h4>
+						</div>
+					</div> <!--DIV CLASS row-->
+					<div class="row">
+						<div class="col-lg-6">
+							<form action="#" method="post">
+								<input tipe="text" class="form-control" name="edtMotivoRevogacao" onblur="valida(this)" id="edtMotivoRevogacao" />
+							</form>
+						</div>
+						<div class="col-lg-3">
+							<input type="hidden" name="idCertificado" id="idCertificado">
+							<button class="btn btn-success" id="conRevogar" onclick="revogar_certificado('0','revogar',<?=$usuarioLogado->getId();?>)">Sim</button>
+						</div>
+						<div class="col-lg-3">
+							<a class="btn btn-danger" data-toggle="modal" data-target="#revogarCertificado">N&atilde;o</a>
+						</div>
+					</div> <!--DIV CLASS row-->
+				</div><!--DIV MODAL-CONTENT-->
+				<div class="modal-footer"></div>
+			</div>
+		</div> <!--DIV CLASS modal-dialog modal-lg-->
+	</div> <!--DIV ID RevogarCertificado-->
+	<!--ConfirmarValidacao-->
+	<div id="confirmarValidacao" class="modal fade" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class ="col-lg-11">
+						<h3> <i class="fa fa-lg fa-thumbs-o-up "></i> Baixa de Valida&ccedil;&atilde;o </h3>
+					</div>
+					<div class ="col-lg-1">
+						<a class="btn btn-danger" data-toggle="modal" data-target="#confirmarValidacao"><i class="fa fa-lg fa-close"></i></a>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-6">
+							<h4>Voc&ecirc; Confirma a valida&ccedil;&atilde;o desse certificado?:</h4>
+						</div>
+						<div class="col-lg-3">
+							<input type="hidden" name="idCertificado" id="idCertificado">
+							<button class="btn btn-success">Sim</button>
+						</div>
+						<div class="col-lg-3">
+							<button class="btn btn-danger">N&atilde;o</button>
+						</div>
+					</div> <!--DIV CLASS row-->
+				</div><!--DIV MODAL-CONTENT-->
+				<div class="modal-footer"></div>
+			</div>
+		</div> <!--DIV CLASS modal-dialog modal-lg-->
+	</div> <!--DIV ID ValidarCertificado-->
+	<!--Gerar Boleto-->
+	<div id="gerarBoleto" class="modal fade" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class ="col-lg-10">
+						<h3> <i class="fa fa-lg fa-barcode"></i> Gerar Boleto </h3>
+					</div>
+					<div class ="col-lg-2">
+						<button class="btn btn-primary" data-toggle="modal" data-target="#modalDuvida" onclick="modalDuvida(10)"><i class="fa fa-lg fa-question"></i></button>
+						<a class="btn btn-danger" data-toggle="modal" data-target="#gerarBoleto"><i class="fa fa-lg fa-close"></i></a>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="panel panel-default">
+						<div class="panel-body bg-info">
+							<div class="row">
+								<div class="col-lg-6">
+									<p><label>Cliente:</label> <span id="gbSpanCliente">...</span> </p>
+								</div>
+								<div class="col-lg-6">
+									<p><label>Vendedor:</label> <span id="gbSpanVendedor">...</span> </p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<p><label>Produto:</label> <span id="gbSpanProduto">...</span> </p>
+								</div>
+								<div class="col-lg-6">
+									<p><label>Pre&ccedil;o:</label>  <span id="gbSpanPreco">...</span> </p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<p><label>Endere&ccedil;o:</label> <span id="gbSpanEndereco">...</span> </p>
+								</div>
+								<div class="col-lg-6">
+									<p><label>Email:</label> <span id="gbSpanEmail">...</span> </p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6">
+							<h4>Data de Vencimento:</h4>
+						</div>
+						<div class="col-lg-4">
+							<input class="form-control" type="text" id="gbEdtVencimento" onkeypress="formatarCpfCnpj(this,'data')"  maxlength="10" name="gbEdtVencimento" onkeyup="validDate()"/>
+						</div>
+						<div class="col-lg-2">
+							<input name="edHabilita" type="checkbox" id="gbEdtHabilita"
+								   checked onClick="var campo = document.getElementById('gbEdtVencimento');
+							 if (!campo.disabled) campo.disabled=true;
+							  else campo.disabled=false;">
+							<script language="javascript">
+								var campo = document.getElementById('gbEdtVencimento');
+								campo.disabled=true;
+							</script>
+						</div>
+					</div>
+					<br/>
+					<div class="row">
+						<div class="col-lg-6">
+							<h4>Gerar boleto desse certificado?</h4>
+						</div>
+						<div class="col-lg-3">
+							<input type="hidden" name="idCertificado" id="idCertificado">
+							<button class="btn btn-success" onclick="gerar_boleto('gerarBoleto',<?=$usuarioLogado->getId();?>)">Sim</button>
+						</div>
+						<div class="col-lg-3">
+							<a class="btn btn-danger" data-toggle="modal" data-target="#modalBoleto">N&atilde;o</a>
+						</div>
+					</div> <!--DIV CLASS row-->
+				</div><!--DIV MODAL-CONTENT-->
+				<div class="modal-footer"></div>
+			</div>
+		</div> <!--DIV CLASS modal-dialog modal-lg-->
+	</div> <!--DIV ID GerarBoleto-->
+
+	<!--Desconto-->
+
+	<div id="modalDesconto" class="modal fade" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class ="col-lg-10">
+						<h3><i class="fa fa-lg fa-tag "></i> Inserir desconto </h3>
+					</div>
+
+					<div class ="col-lg-2">
+						<button class="btn btn-primary" data-toggle="modal" data-target="#modalDuvida" onclick="modalDuvida(11)"><i class="fa fa-lg fa-question"></i></button>
+						<a class="btn btn-danger" data-toggle="modal" data-target="#modalDesconto"><i class="fa fa-lg fa-close"></i></a>
+					</div>
+				</div>
+				<div class="modal-body">
+						<div class="panel panel-primary">
+							<div class="panel-body bg-info">
+								<div class="row">
+									<div class="col-lg-12">
+										<h4 class="text-center">Dados e valor do produto:</h4>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-lg-6">
+										Produto: <span id="cdSpanCliente">...</span>
+									</div>
+									<div class="col-lg-6">
+										Pre&ccedil;o: <span id="cdSpanVendedor">...</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					<div class="row"><br/></div>
+					<div class="row">
+						<form method="post" action="#">
+							<div class="col-lg-6">
+								<h4>Motivo do Desconto:</h4>
+							</div>
+							<div class="col-lg-3">
+								<h4>Valor do Desconto:</h4>
+							</div>
+							<div class="col-lg-3">
+								<input type="text" onblur="valida(this)" name="mdEdtValor" onblur="valida(this)" id="mdEdtValor" class="form-control">
+							</div>
+						</form>
+					</div><!--DIV CLASS row-->
+					<div class="row">
+						<div class="col-lg-6">
+							<textarea rows="5" onblur="valida(this)" type="text" name="mdEdtMotivoDesconto" id="mdEdtMotivoDesconto" class="form-control"></textarea>
+						</div>
+						<div class="col-lg-6">
+							<h4>Voc&ecirc; tem certeza que deseja Inserir desconto?</h4>
+							<div class="row">
+								<div class="col-lg-2">
+
+								</div>
+								<div class="col-lg-4">
+									<button class="btn btn-success" id="conDesconto" onclick="desconto('desconto',<?=$usuarioLogado->getId();?>)">Sim</button>
+								</div>
+								<div class="col-lg-6">
+									<a class="btn btn-danger" data-toggle="modal" data-target="#modalDesconto">N&atilde;o</a>
+								</div>
+							</div>
+						</div>
+					</div> <!--DIV CLASS row-->
+					<div class="row">
+						<div class="col-lg-6">
+							<input type="hidden" name="idCertificado" id="idCertificado">
+						</div>
+					</div> <!--DIV CLASS row-->
+
+				</div>
+				<div class="modal-footer"></div>
+			</div><!--DIV MODAL-CONTENT-->
+		</div> <!--DIV CLASS modal-dialog modal-lg-->
+	</div> <!--DIV ID ModalDesconto-->
+
+
+
+
+	<!--D�vida-->
+
+
+	<div id="modalDuvida" class="modal" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class ="col-lg-11">
+						<h3><i class="fa fa-lg fa-question "></i> D&uacute;vida </h3>
+					</div>
+					<div class ="col-lg-1">
+						<a class="btn btn-danger" data-toggle="modal" data-target="#modalDuvida"><i class="fa fa-lg fa-close"></i></a>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div id="ajudateste"> </div>
+				</div><!--DIV MODAL-CONTENT-->
+				<div class="modal-footer"></div>
+			</div>
+		</div> <!--DIV CLASS modal-dialog modal-lg-->
+	</div> <!--DIV ID excluirCertificado-->
+
+
+	<!--MODAL FIM DOS MODAIS!-->
+
+	<div id="gerarProtocolo" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-sm">
+			<!-- Modal content-->
+			<div class="modal-content" id="gpDivGeral">
+			</div><!--DIV MODAL-CONTENT-->
+		</div> <!--DIV CLASS modal-dialog modal-lg-->
+	</div> <!--DIV ID ModalDesconto-->
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 24a17f05dc20c41e75c13f59c5baeea538352b36
+</div> <!--DIV CLASS CONTAINER-->
+
+</body>
+<? include 'inc/script.php';?>
+</html>

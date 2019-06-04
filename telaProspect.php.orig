@@ -1,0 +1,1358 @@
+<?
+require_once $_SERVER['DOCUMENT_ROOT'] . '/loader.php';
+
+
+$cProspect = new Criteria();
+$cProspect->add(ProspectPeer::SITUACAO , 0);
+$cProspect->add(ProspectPeer::USUARIO_ID , $usuarioLogado->getId());
+
+if( ($_POST['filtro'] == 'renovacaoaAll') || ($_GET['filtro'] == 'renovacaoaAll')){
+    $cProspect->add(ProspectPeer::PROSPECT_TIPO_ID, 3);
+}elseif(($_POST['filtro'] == 'contador') || ($_GET['filtro'] == 'contador') ){
+    $cProspect->add(ProspectPeer::PROSPECT_TIPO_ID, 2);
+}elseif(($_POST['filtro'] == 'cobranca') || ($_GET['filtro'] == 'cobranca') ){
+    $cProspect->add(ProspectPeer::PROSPECT_TIPO_ID, 1);
+}
+$cProspect->add(ProspectPeer::DATA_AGENDAMENTO, NULL, Criteria::ISNULL);
+$cProspect->addAnd(ProspectPeer::DATA_ULTIMO_CONTATO , NULL, Criteria::ISNULL);
+$num_rows = ProspectPeer::doCount($cProspect);
+if($num_rows >= 20 ) {
+    $pages = new Paginator($num_rows,9,array(30,3,6,9,12,25,50,100,250,'All'));
+    $cProspect->setOffset($pages->limit_start);
+    $cProspect->setLimit($pages->limit_end);
+}
+$prospects = ProspectPeer::doSelect($cProspect);
+
+
+$cProspect = new Criteria();
+$cProspect->add(ProspectPeer::SITUACAO , 0);
+$cProspect->add(ProspectPeer::USUARIO_ID , $usuarioLogado->getId());
+$cProspect->add(ProspectPeer::DATA_AGENDAMENTO , date("Y-m-d 00:00:00"), Criteria::GREATER_EQUAL);
+$agendamentoCount = ProspectPeer::doCount($cProspect);
+$prospectsAgendamento = ProspectPeer::doSelect($cProspect);
+
+$cRetencao = new Criteria();
+$cRetencao->add(ProspectRetencaoPeer::SITUACAO , 0 );
+$prospectRetencoes = ProspectRetencaoPeer::doSelect($cRetencao);
+
+$cProduto = new  Criteria();
+$cProduto->add(ProdutoPeer::SITUACAO, 0);
+$produtos = ProdutoPeer::doSelect($cProduto);
+
+$cFormas = new Criteria();
+$formas = FormaPagamentoPeer::doSelect($cFormas);
+?>
+<? include 'header.php';?>
+    <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Tipo', 'Ligações'],
+          ['Agendados',     11],
+          ['Concluidos',      2],
+          ['Restantes',  2],
+        ]);
+
+        var options = {
+          title: 'Metas',
+          pieHole: 1,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+      }
+    </script>
+    -->
+    <script>
+        function modalCliente(){
+             $(document).ready(function(){
+                $("#atenderCl").modal('show');
+            });
+        }
+    </script>
+<? include 'inc/script.php';?>
+
+<? if($usuarioLogado->getPerfilId() == 4){
+    echo '<body>';
+}else{
+   echo '<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">';
+}?>
+    <div id="wrapper">
+         <? include('inc/menu.php');?>
+         <div id="page-wrapper">
+                 <div class="row" style="margin-top:5%;">
+                     <div class="panel col-lg-12">
+                         <div class="panel-body bg-info">
+                             <? include 'inc/filtros/filtroProspect.php';?>
+                         </div>
+                     </div>
+                     <div class="col-lg-12">
+                         <div class="panel panel-default">
+                             <div class="panel-body">
+                                 <div class="text-left">
+                                     <i class='fa fa-square' style='color:orange;'></i> Cobran&ccedil;a |&nbsp;
+                                     <i class='fa fa-square' style='color:red;'></i> Cobran&ccedil;a (Restam 3 dias) |&nbsp;
+                                     <i class='fa fa-square' style='color:blue;'></i> Renova&ccedil;ao |&nbsp;
+                                     <i class='fa fa-square' style='color:green;'></i> Contador Carterizado |&nbsp;
+                                     <i class='fa fa-square' style='color:green;'></i><i class="fa fa-flag" style="color:red;"></i> Contador s/ Indica&ccedil;ao |&nbsp;
+                                     <i class='fa fa-square' style='color:orange;'></i><i class="fa fa-flag" style="color:black;"></i> Validado e nao Pago |&nbsp;
+                                 </div>
+                             </div><!-- PANEL BODY -->
+                         </div><!-- PANEL DEFAULT -->
+                     </div>
+                    <div class="col-lg-12">
+                           <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="text-left"><label>Lista de Prospec&ccedil;&atilde;o (<?=$qtdeProspect?>)</label></div>
+                                        <div class="text-right">
+                                            <? if($agendamentoCount) {?>
+                                                <a href="#agenda" class="btn-danger btn text-primary"><i class="fa fa-calendar"></i> Agendamentos: <?=$agendamentoCount;?></a>
+                                            <? }?>
+                                            <button name="ligacaoPassiva" id="ligacaoPassiva" data-toggle="modal" data-target="#mdLigacaoPassiva" class="btn btn-primary"><i class="fa fa-phone"></i> Passiva</button>
+                                        </div>
+                                    </div><!-- PANEL HWADING -->
+
+                                    <div class="panel-body">
+                                        <? if($num_rows >= 20 ) { echo '<span class="pagination"><li>'.$pages->display_pages()."</li></span>"; } ?>
+                                        <div class="table table-responsive small">
+                                                <table class="table table-responsive table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <td><label>Cod</label></td>
+                                                            <td><label>Nome</label></td>
+                                                            <td><label>Data Compra</label></td>
+                                                            <td><label>Produto</label></td>
+                                                            <td><label>Data Valida&ccedil;&atilde;o</label></td>
+                                                            <td><label>Ultimo Contato</label></td>
+                                                            <td><label>Vendedor</label></td>
+                                                            <td><label>Localidade</label></td>
+                                                            <td><label>Tipo</label></td>
+                                                            <td><label>A&ccedil;&atilde;o</label></td>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                        <? foreach($prospects as $prospect) {?>
+                                                          <? if($prospect->getDataUltimoContato() <= 0 ) {?>
+                                                            <? if($prospect->getCertificadoId()) {?>
+                                                                    <tr>
+                                                                        <td><?=$prospect->getId()?></td>
+                                                                        <td><?
+                                                                            echo $prospect->getCertificado()->getClienteId()." - ";
+                                                                            if($prospect->getCertificado()->getCliente()->getRazaoSocial())
+                                                                                echo $prospect->getCertificado()->getCliente()->getRazaoSocial();
+                                                                            else
+                                                                                echo $prospect->getCertificado()->getCliente()->getNomeFantasia()
+                                                                        ?></td>
+                                                                        <td><?=$prospect->getCertificado()->getDataCompra('d/m/Y');?></td>
+                                                                        <td><?=$prospect->getCertificado()->getProduto()->getNome();?></td>
+                                                                        <td><?=$prospect->getCertificado()->getDataValidacao('d/m/Y');?></td>
+                                                                        <td><?=$prospect->getDataUltimoContato('d/m/Y H:i:s');?></td>
+                                                                        <td><?=$prospect->getCertificado()->getUsuario()->getNome()?></td>
+                                                                        <td><?=$prospect->getCertificado()->getLocal()->getNome()?></td>
+                                                                        <td><?
+                                                                            if($prospect->getProspectTipoId() == 1 ) {
+                                                                                echo "<i class='fa fa-square fa-lg' style='color:orange; '></i>";
+                                                                            }
+
+                                                                            if($prospect->getProspectTipoId() == 3 ) {
+                                                                                echo "<i class='fa fa-square fa-lg' style='color:blue; '></i>";
+                                                                            }
+
+                                                                            if($prospect->getCertificado()->getDataValidacao() && $prospect->getProspectTipoId() != 3) {
+                                                                                echo "<i class='fa fa-flag fa-lg' style='color:black; '></i>";
+                                                                            }
+                                                                        ?></td>
+                                                                        <td>
+                                                                            <form action="" method="post" role="form">
+                                                                                <button type="submit" class="icon-button" name="atenderCliente" value="<?=$prospect->getId()?>" data-toggle="modal" ><i class="fa fa-phone fa-lg"></i></button>
+                                                                            </form>
+                                                                        </td>
+                                                                    </tr>
+                                                            <? }?>
+
+                                                            <? if($prospect->getContadorId()) {?>
+                                                                    <tr>
+                                                                        <td><?=$prospect->getId()?></td>
+                                                                        <td><?
+                                                                            echo $prospect->getContadorId()." - ";
+                                                                            if($prospect->getContadorId())
+                                                                                echo $prospect->getContador()->getNome();
+
+                                                                        ?></td>
+                                                                        <td><?="-------------"?></td>
+                                                                        <td><?="-------------"?></td>
+                                                                        <td><?="-------------"?></td>
+                                                                        <td><?=$prospect->getDataUltimoContato('d/m/Y H:i:s');?></td>
+                                                                        <td><?=$prospect->getContador()->getUsuario()->getNome()?></td>
+                                                                        <td><?=$prospect->getContador()->getLocal()->getNome()?></td>
+                                                                        <td><?
+                                                                            if($prospect->getProspectTipoId() == 2 ) {
+                                                                                echo "<i class='fa fa-square fa-lg' style='color:green; '></i>";
+                                                                            }
+
+                                                                            $cCertificado = new Criteria();
+                                                                            $cCertificado->add(CertificadoPeer::APAGADO, 0);
+                                                                            $cCertificado->add(CertificadoPeer::CONTADOR_ID , $prospect->getContadorId());
+                                                                            $certificado = CertificadoPeer::doSelectOne($cCertificado);
+                                                                            if(!$certificado) {
+                                                                                echo "<i class='fa fa-flag fa-lg' style='color:red; '></i>";
+                                                                            }
+                                                                        ?></td>
+                                                                        <td>
+                                                                            <form action="" method="post">
+                                                                                <button type="submit" class="icon-button" name="atenderCliente"   value="<?=$prospect->getId();?>" data-toggle="modal" ><i class="fa fa-phone fa-lg"></i></button>
+                                                                            </form>
+                                                                        </td>
+                                                                    </tr>
+                                                                <? }?>
+                                                            <? }?>
+                                                        <? }?>
+                                                    </tbody>
+                                                </table>
+                                        </div>
+                                        <? if($num_rows >= 20 ) { echo '<span class="pagination"><li>'.$pages->display_pages()."</li></span>"; } ?>
+                                    </div><!-- PANEL BODY -->
+                           </div><!-- PANEL DEFAULT -->
+                    </div>
+
+                    <div class="modal fade" role="dialog" id="mdLigacaoPassiva">
+                        	<div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    	<h3><i class="fa fa-lg fa-phone"></i> Atendimento/Liga&ccedil;&otilde;es</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                    	<div class="row ">
+                                    		<div class="panel panel-default">
+	                                    		<div class="panel-body btn-info">
+			                                    	<div class="col-lg-2"><label>CPF/CNPJ:</label></div>
+			                                    	<div class="col-lg-7"><input type="text" name="edtPesquisaProspect" id="edtPesquisaProspect" class="form-control" /></div>
+			                                    	<div class="col-lg-2"><button class="btn btn-primary" onclick="consulta_passiva();"><i class="fa fa-search fa-lg"></i></button></div>
+		                                    	</div>
+	                                    	</div>
+                                    	</div>
+
+                                    	<div class="row ">
+                                    		<div class="panel panel-default">
+	                                    		<div class="panel-body">
+			                                    	<div class="col-lg-3"><button class="btn btn-success" data-toggle="modal" data-target="#inserir" id="btnEdtNovo" disabled="disabled"><i class="fa fa-lg fa-plus"></i> NOVO</button></div>
+                                                    <form action="" method="post">
+                                                        <input type="hidden" id="idCertificado" name="idCertificado" />
+                                                        <input type="hidden" id="idCliente" name="idCliente" />
+			                                    	    <div class="col-lg-3"><button name="atender" class="btn btn-primary" id="btnEdtAnteder" onclick="modalCliente();" disabled="disabled"><i class="fa fa-lg fa-phone"></i> ATENDER</button></div>
+                                                    </form>
+			                                    	<div class="col-lg-3"><button class="btn btn-danger"  id="btnEdtLimpar" onclick="limpar_passiva();" disabled="disabled"><i class="fa fa-lg fa-close"></i> LIMPAR</button></div>
+		                                    	</div>
+	                                    	</div>
+                                    	</div>
+
+                                    	<div class="row">
+                                    		<div class="panel panel-default">
+                                    			<div class="panel-body">
+                                    				<label for="edtPesquisaDados">CPF/CNPJ:</label> <span type="text" name="pssCpfCnpj" id="pssCpfCnpj"></span><br>
+                                    				<label for="edtPesquisaDados">Nome:</label> <span type="text" name="pssEdtNome" id="pssEdtNome"></span><br>
+                                    				<label for="edtPesquisaDados">Nascimento:</label> <span type="text" name="pssEdtNascimento" id="pssEdtNascimento"></span><br>
+                                    				<label for="edtPesquisaDados">Produto:</label> <span type="text" name="pssEdtProduto" id="pssEdtProduto"></span><br>
+                                    				<label for="edtPesquisaDados">Localidade:</label> <span type="text" name="pssEdtLocal" id="pssEdtLocal"></span><br>
+                                    				<label for="edtPesquisaDados">Valor:</label> <span type="text" name="pssValorProduto" id="pssValorProduto"></span><br>
+                                    				<label for="edtPesquisaDados">Protocolo:</label> <span type="text" name="pssEdtProtocolo" id="pssEdtProtocolo"></span><br>
+                                    			</div>
+                                    		</div>
+                                    	</div>
+                                    </div>
+                                    <div class="modal-footer">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <!-- INICIO PAINEL AGENDAMENTOS -->
+                    <div class="col-lg-7" id="agenda">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <label>Agendamentos</label>
+                                </div><!-- PANEL HEADING -->
+                                <div class="panel-body">
+                                    <table class="table table-bordered table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <td>Nome</td>
+                                                <td>Contato</td>
+                                                <td>Tipo</td>
+                                                <td>A&ccedil;ao</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <? foreach ($prospectsAgendamento as $prospectAgendamentos) {?>
+                                                <? if($prospectAgendamentos->getDataAgendamento('d/m/Y') >= date('d/m/Y')) { ?>
+                                                    <tr>
+                                                        <? if($prospectAgendamentos->getContadorId()){?>
+                                                            <td><?=$prospectAgendamentos->getContador()->getNome();?></td>
+                                                            <td><?=$prospectAgendamentos->getContador()->getFone1();?></td>
+                                                            <td><?
+                                                                if($prospectAgendamentos->getProspectTipoId() == 1 ) {
+                                                                    echo "<i class='fa fa-square fa-lg' style='color:orange'></i>";
+                                                                }else if($prospectAgendamentos->getProspectTipoId() == 2 ) {
+                                                                    echo "<i class='fa fa-square fa-lg' style='color:green '></i>";
+                                                                }else if($prospectAgendamentos->getProspectTipoId() == 3 ) {
+                                                                    echo "<i class='fa fa-square fa-lg' style='color:blue'></i>";
+                                                                }else{
+                                                                    echo "";
+                                                                }
+                                                                ?></td>
+                                                            <td><form action="" method="post">
+                                                                    <button type="submit" class="icon-button" name="atenderCliente"   value="<?=$prospectAgendamentos->getId();?>" data-toggle="modal" ><i class="fa fa-phone fa-lg"></i></button>
+                                                                </form></td>
+                                                        <? }?>
+
+                                                        <? if($prospectAgendamentos->getCertificadoId()){?>
+                                                            <td><?=$prospectAgendamentos->getCertificado()->getCliente()->getNomefantasia();?></td>
+                                                            <td><?=$prospectAgendamentos->getCertificado()->getCliente()->getFone1();?></td>
+                                                            <td><?
+                                                                if($prospectAgendamentos->getProspectTipoId() == 1 ) {
+                                                                    echo "<i class='fa fa-square fa-lg' style='color:orange'></i>";
+                                                                }else if($prospectAgendamentos->getProspectTipoId() == 2 ) {
+                                                                    echo "<i class='fa fa-square fa-lg' style='color:green '></i>";
+                                                                }else if($prospectAgendamentos->getProspectTipoId() == 3 ) {
+                                                                    echo "<i class='fa fa-square fa-lg' style='color:blue'></i>";
+                                                                }else{
+                                                                    echo "";
+                                                                }
+                                                            ?></td>
+                                                            <td><form action="" method="post">
+                                                                    <button type="submit" class="icon-button" name="atenderCliente"   value="<?=$prospectAgendamentos->getId();?>" data-toggle="modal" ><i class="fa fa-phone fa-lg"></i></button>
+                                                                </form></td>
+                                                        <? }?>
+                                                    </tr>
+                                                <? }?>
+                                            <? }?>
+                                        </tbody>
+                                    </table>
+                                </div><!-- PANEL BODY -->
+                            </div><!-- PANEL DEFAULT -->
+                    </div>
+                     <!-- FIM PAINEL AGENDAEMTOS -->
+
+                     <div class="col-lg-4">
+                         <div class="panel panel-default">
+                             <div class="panel-heading">
+                                 Contatos Inseridos
+                             </div><!-- PANEL BODY -->
+                             <div class="panel-body">
+                                 <table class="table table-stripped">
+                                 <?
+                                    $cProspectContato = new Criteria();
+                                    $cProspectContato->add(ProspectContatoPeer::USUARIO_ID,$usuarioLogado->getId());
+                                    $prospectCont = ProspectContatoPeer::doSelect($cProspectContato);
+
+                                    if($prospectCont){
+                                        foreach ($prospectCont as $contato){
+                                 ?>
+                                            <tr>
+                                               <td><?=$contato->getNome();?></td>
+                                               <td><?=$contato->getFone();?></td>
+                                            </tr>
+                                        <?}?>
+                                 <?}?>
+                                 </table>
+                             </div><!-- PANEL BODY -->
+                         </div><!-- PANEL DEFAULT -->
+                     </div>
+
+                     <!-- GRAFICO DE PIZZA -->
+                    <!--<div class="col-lg-4">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                            <div id="donutchart"></div>
+                                </div><!-- PANEL BODY
+                            </div><!-- PANEL DEFAULT
+                    </div>-->
+                 </div><!-- FIM ROW FLUID -->
+             <div class="row">
+                 <label style="margin-left: 80%;">Vers&atilde;o do CRM v1.0.0</label>
+             </div>
+         </div><!-- FOM PAGE WRAPPER -->
+    </div><!-- FIM WRAPPER -->
+
+     <? if($_POST['atenderCliente'] || $_POST['idCertificado']) { ?>
+                         <script type="text/javascript">
+                           modalCliente();
+                         </script>
+                         <?
+                            if($_POST['atenderCliente']){
+                                $prospect = ProspectPeer::retrieveByPk($_POST['atenderCliente']);
+                            }else{
+                                 $cProspect = new Criteria();
+                                 $cProspect->add(ProspectPeer::SITUACAO, 0);
+                                 $cProspect->add(ProspectPeer::CERTIFICADO_ID, $_POST['idCertificado']);
+                                 $cProspect->addDescendingOrderByColumn(ProspectPeer::ID);
+                                 $prospect = ProspectPeer::doSelectOne($cProspect);
+                            }
+
+                            if($prospect){
+                                if(!$prospect->getDataPrimeiroContato()) {
+                                    $prospect->setDataPrimeiroContato(date('Y-m-d H:i:s'));
+                                }
+                                //$prospect->setDataUltimoContato(date('Y-m-d H:i:s'));
+                                $prospect->save();
+
+                                if($prospect->getCertificadoId())
+                                    $cliente = ClientePeer::retrieveByPk($prospect->getCertificado()->getClienteId());
+
+                                if($prospect->getContadorId())
+                                    $cliente = ContadorPeer::retrieveByPk($prospect->getContadorId());
+
+                                $cCertificado = new Criteria();
+                                $cCertificado->add(CertificadoPeer::APAGADO, 0);
+                                if($prospect->getCertificadoId())
+                                    $cCertificado->add(CertificadoPeer::CLIENTE_ID, $cliente->getId());
+                                if($prospect->getContadorId())
+                                    $cCertificado->add(CertificadoPeer::CONTADOR_ID, $cliente->getId());
+
+                                $cCertificado->addDescendingOrderByColumn(CertificadoPeer::DATA_COMPRA);
+                                $certificados = CertificadoPeer::doSelect($cCertificado);
+                            }else {
+
+                                $cliente = ClientePeer::RetrieveByPk($_POST['idCliente']);
+
+                                $cCertificado = new Criteria();
+                                $cCertificado->add(CertificadoPeer::APAGADO, 0);
+                                $cCertificado->add(CertificadoPeer::CLIENTE_ID, $cliente->getId());
+                                $cCertificado->addDescendingOrderByColumn(CertificadoPeer::ID);
+                                $certificado = CertificadoPeer::doSelectOne($cCertificado);
+
+                                try{
+                                        $prospect = new Prospect();
+                                        $prospect->setUsuarioId($usuarioLogado->getId());
+                                        $prospect->setProspectTipoId(3);
+                                        $prospect->setSituacao(0);
+                                        $prospect->setCertificadoId($certificado->getId());
+                                        $prospect->setDataCadastro(date('Y-m-d H:i:s'));
+                                        $prospect->setDataPrimeiroContato(date('Y-m-d H:i:s'));
+                                        $prospect->save();
+
+                                        ?>
+                                            <script>modalCliente();</script>
+                                        <?
+
+                                }catch (Exception $e){
+                                        var_dump($e->getMessage());
+                                        exit;
+                                }
+                            }
+
+                         ?>
+                         <input type="hidden" name="prospectId" id="prospectId" value="<?=$prospect->getId();?>">
+                         <div id="atenderCl" class="modal fade" role="dialog" data-backdrop="static">
+                              <div class="modal-dialog modal-lg">
+
+                                    <!-- Modal content-->
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                    <div class="col-lg-7"></div>
+
+                                                        <div class="col-lg-5">
+                                                                <button type="buton" class="btn btn-primary" name="edtSalvar" id="edtsalvar" data-toggle="modal" data-target="#sobreAtendimentoCrm"><i class="fa fa-question fa-lg"></i></button>
+                                                                <button type="buton" class="btn btn-danger" name="edtFinalizar" id="edtFinalizar" data-toggle="modal" data-target="#observacaoChamada" disabled="disabled" onClick="bancoLocal_read();"><i class="fa fa-close fa-lg"></i> Finalizar</button>
+                                                                <button type="buton" class="btn btn-warning" name="edtEspera" id="edtEspera" data-toggle="modal" data-target="#espera" disabled="disabled"><i class="fa fa-tty fa-lg"></i> Espera</button>
+                                                                <a href="<?=$_SERVER['REQUEST_URI']?>" class="btn btn-default" name="edtFechar" id="edtFechar" ><i class="fa fa-close fa-lg"></i></a>
+                                                        </div>
+                                               </div>
+
+                                              <div class="modal-body">
+                                                     <table>
+                                                         <tr>
+                                                            <td>
+                                                                <div class="container-fluid row bg-success">
+                                                                    <label>Codigo CRM:</label> <?=$prospect->getId();?><?=' (ATIVO)';?><br/>
+                                                                    <label>Atendimento ao</label>
+                                                                    <? if($prospect->getCertificadoId()) {
+                                                                        echo "<label>Cliente:</label> ";
+                                                                        if($cliente->getRazaoSocial())
+                                                                            echo $cliente->getRazaoSocial();
+                                                                        else
+                                                                            echo $cliente->getNomeFantasia();
+                                                                    }
+                                                                        if($prospect->getContadorId()) {
+                                                                            echo "<label>Contador(a):</label> ";
+                                                                            echo $cliente->getNome();
+
+                                                                        }
+                                                                    ?><br/>
+                                                                    <label>Tipo:</label><?=$prospect->getProspectTipo()->getDescricao();?>
+                                                                    <table>
+                                                                        <tr>
+                                                                            <td>
+                                                                                <label>Contatos:</label>
+                                                                                <span class="myTitle">
+                                                                                <?
+                                                                                if($cliente->getFone1()) { echo  $cliente->getFone1(); } else { echo ""; }
+                                                                                if($cliente->getFone2()){ echo  " / ".$cliente->getFone2(); }else { echo ""; }
+                                                                                if($cliente->getCelular()){ echo  " / ".$cliente->getCelular(); }else { echo ""; }
+                                                                                ?>
+                                                                        </span>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td>
+                                                                                <label>Email:</label>
+                                                                                <span class="myTitle">
+                                                                                <?
+                                                                                if($cliente->getEmail()) { echo  $cliente->getEmail(); } else { echo ""; }
+                                                                                if($prospect->getProspectTipoId() != 2) { if($cliente->getEmailContato()){ echo  " / ".$cliente->getEmailContato(); }else { echo ""; }}
+                                                                                ?>
+                                                                        </span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-11">
+                                                                        <label>Tempo de Atendimento:</label> <input type="text" name="cronometro" id="cronometro" value="00:00:00" disabled="disabled" />
+                                                                    </div>
+                                                                    <div class="col-lg-1 ">
+                                                                        <br/><button class="btn btn-default center-block"  data-toggle="modal" data-target="#inserirObservacao" disabled="disabled" id="ioBtnObservacao"><i class="fa fa-lg fa-2x fa-comment"></i></button>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col-lg-7">
+                                                                        <div class="panel panel-default">
+                                                                                <div class="panel-header">
+                                                                                    Forma de Atendimento:
+                                                                                </div>
+                                                                                <div class="panel-body">
+                                                                                    <button class="col-md-2 center-block btn btn-info" id="telefone" onClick="iniciar_contato(1);iniciar_tempo();prospect_atendimento(1);"><i class="fa fa-lg fa-3x fa-phone"></i><br></button>
+                                                                                    <div class="col-md-1"></div>
+                                                                                    <button class="col-md-2 center-block btn btn-info" id="celular" onClick="iniciar_contato(2);iniciar_tempo();prospect_atendimento(2);"><i class="glyphicon glyphicon-phone fa-2x"></i><br></button>
+                                                                                    <div class="col-md-1"></div>
+                                                                                    <button class="col-md-2 center-block btn btn-info" id="email" onClick="iniciar_contato(3);iniciar_tempo();prospect_atendimento(3);"><i class="fa fa-lg fa-3x fa-envelope"></i><br></button>
+                                                                                    <div class="col-md-1"></div>
+                                                                                    <button class="col-md-2 center-block btn btn-info" id="wpp" onClick="iniciar_contato(4);iniciar_tempo();prospect_atendimento(4);"><i class="fa fa-lg fa-3x fa-whatsapp"></i><br></button>
+                                                                                </div>
+                                                                        </div>
+
+                                                                                <button class="btn btn-default col-lg-4 center-block" name="edtInserirProspect" id="edtInserirProspect" data-toggle="modal" data-target="#inserir" disabled="disabled"><i class="fa fa-plus fa-lg fa-2x"></i><h5>Inserir<br/>Prospect</h5></button>
+
+                                                                                <? if($prospect->getProspectTipoId() == 1) {?>
+                                                                                    <button class="btn btn-default col-lg-4 center-block" name="edtFecharNegocio" type="submit" id="edtFecharNegocio" data-toggle="modal" data-target="#informarPagto" disabled="disabled"><i class="fa fa-check fa-lg fa-2x"></i><h5>Fechar<br/> Negocio</h5></button>
+                                                                                <?}else{?>
+                                                                                    <button class="btn btn-default col-lg-4 center-block" name="edtFecharNegocio" type="submit" id="edtFecharNegocio" data-toggle="modal" data-target="#fecharNegocio" disabled="disabled"><i class="fa fa-check fa-lg fa-2x"></i><h5>Fechar<br/> Negocio</h5></button>
+                                                                                <?}?>
+                                                                                <button class="btn btn-default col-lg-4 center-block" name="edtReagendar" id="edtReagendar" data-toggle="modal" data-target="#reagendamento" disabled="disabled"><i class="fa fa-calendar fa-lg fa-2x"></i><h5>Retorno<br/>Agendamento</h5></button>
+                                                                                <button class="btn btn-default col-lg-4 center-block" onClick="consulta_certificado()" name="edtConsultaCertificados" id="edtConsultaCertificados" data-toggle="modal" data-target="#ultimosCD"><i class="fa fa-history fa-lg fa-2x"></i><h5>Ultimos<br/>Certificados</h5></button>
+                                                                                <button class="btn btn-default col-lg-4 center-block" type="submit" name="edtEnviarProposta" id="edtEnviarProposta" disabled="disabled"><i class="fa fa-envelope fa-lg fa-2x"></i><h5>Enviar<br/> Prosposta<br/></h5></button>
+                                                                                <button class="btn btn-danger  col-lg-4 center-block" type="submit" name="edtRetencaoCliente" id="edtRetencaoCliente" data-toggle="modal" data-target="#retencao" disabled="disabled"><i class="fa fa-close fa-lg fa-2x"></i><h5>Cancelamento<br/>Reten&ccedil;&atilde;o</h5></button>
+                                                                    </div>
+
+                                                                     <div class="col-lg-5">
+                                                                        <iframe src='iframe/prospectHistorico.php?prospect_id=<?=$prospect->getId()?>' width="100%" height="300px"></iframe>
+                                                                    </div>
+                                                                </div>
+
+                                                            </td>
+                                                         </tr>
+                                                     </table>
+                                              </div>
+
+                                              <div class="modal-footer">
+                                              </div>
+                                            </div>
+                              </div>
+                        </div>
+            <? }?>
+<<<<<<< HEAD
+                        <? include "modais/crm/modalCrmReagadar.phps" ;?>
+                        <? include "modais/crm/modalCrmEpera.php" ;?>
+                        <? include "modais/crm/modalCrmFecharNegocio.php" ;?>
+                        <? include "modais/crm/modalCrmFecharNegocioFisica.php" ;?>
+                        <? include "modais/crm/modalCrmEscolherProduto.php" ;?>
+                        <? include "modais/crm/modalCrmUltimoCertificados.php";?>
+                        <? include "modais/crm/modalCrmInformarPagamento.php";?>
+                        <? include "modais/crm/modalCrmRetencao.php";?>
+                        <? include "modais/crm/modalCrmInserirProspect.php";?>
+                        <? include "modais/crm/modalCrmObservacaoFinalizar.php";?>
+                        <? include "modais/crm/modalCrmEviarProposta.php";?>
+                        <? include "modais/crm/modalCrmManualUsuario.php";?>
+=======
+
+                        <div class="modal fade" role="dialog" id="ultimosCD">
+                                <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title"><i class="fa fa-certificate fa-lg"></i> Ultimos Certificados
+                                                    <? if($prospect->getCertificadoId()) echo "Adquiridos";
+                                                       if($prospect->getContadorId()) echo "Indicados";
+                                                    ?>
+                                                </h3>
+                                            </div>
+
+                                            <div class="modal-header">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <table class="table table-responsive table-striped">
+                                                            <thead>
+                                                                <td>Cod</td>
+                                                                <td>Cliente</td>
+                                                                <td>Produto</td>
+                                                                <td>Data Compra</td>
+                                                                <? if($prospect->getContadorId()) {?>
+                                                                    <td>Sem Idica&ccedil;ao</td>
+                                                                <? }?>
+                                                                <td>Vendedor</td>
+                                                            </thead>
+
+                                                            <tbody>
+                                                                <? foreach ($certificados as $certificado) {?>
+                                                                    <tr>
+                                                                        <td><?=$certificado->getId()?></td>
+                                                                        <td><?=$certificado->getCliente()->getRazaoSocial();?></td>
+                                                                        <td><?=$certificado->getProduto()->getNome()?></td>
+                                                                        <td><?=$certificado->getDataCompra('d/m/Y')?></td>
+                                                                        <? if($prospect->getContadorId()) {?>
+                                                                            <td><?
+                                                                                $tempo = (date('m')-$certificado->getDataCompra('m'));
+
+                                                                                if($tempo < 0) {
+                                                                                    $tempo = 12-(($tempo)*-1);
+                                                                                }
+                                                                                echo $tempo;
+                                                                                    if($tempo == 1)
+                                                                                        echo " Mes";
+                                                                                    else
+                                                                                        echo " Meses";
+                                                                            ?></td>
+                                                                        <? }?>
+                                                                        <td><?=$certificado->getUsuario()->getNome()?></td>
+                                                                    </tr>
+                                                                <? }?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                 <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close fa-lg"></i> Fechar</button>
+                                            </div>
+                                        </div>
+                                </div>
+                        </div>
+
+                        <!-- INSEIRIR REAGENDAMENTO MODAL -->
+                         <div class="modal fade" role="dialog" id="reagendamento">
+                                <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title"><i class="fa fa-calendar fa-lg"></i> Agendamento de Contato</h3>
+                                            </div>
+                                            <!-- CHAMADA DO CALANEDARIO PELO SCRIPT -->
+                                            <div class="modal-body">
+                                                            Data:<input type="text" class="datetimeInput form-control" name="edtDataAgendamento" value="" id="datetimepicker13"/>
+                                                        <div>
+                                                            <br/>
+                                                            Motivo do Reagendamento:
+                                                            <textarea cols="5" row="15" class="form-control" name="edtMotivoAgendamento" id="edtMotivoAgendamento" onkeyUp="UpperCase(this);"></textarea>
+                                                        </div>
+                                            </div>
+
+
+                                            <div class="modal-footer">
+                                                 <button type="button" class="btn btn-success" data-dismiss="modal" onClick="angendar_contato();bancoLocal_add('reagendamento');"><i class="fa fa-check fa-lg"></i> Salvar</button>
+                                                 <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close fa-lg"></i> Fechar</button>
+                                            </div>
+                                        </div>
+                                </div>
+                        </div>
+
+
+                        <!-- INSEIRIR REAGENDAMENTO MODAL -->
+                        <div class="modal fade" role="dialog" id="espera">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title"><i class="fa fa-calendar fa-lg"></i> Colocar Contato em Espera:</h3>
+                                    </div>
+                                    <!-- CHAMADA DO CALANEDARIO PELO SCRIPT -->
+                                    <div class="modal-body">
+                                        <div clas="form-group">
+                                            Data:
+                                            <div class="date" >
+                                                <input type="text" class="datetimeInput form-control" name="edtDataAgendamentoEspera" id="datetimepicker14" />
+                                            </div>
+
+                                            <div>
+                                                <br/>
+                                                Motivo do Reagendamento:
+                                                <textarea cols="5" row="15" class="form-control" name="edtMotivoAgendamentoEspera" id="edtMotivoAgendamentoEspera" onkeyUp="UpperCase(this);"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-success" data-dismiss="modal" onClick="espera_contato();"><i class="fa fa-check fa-lg"></i> Agendar</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close fa-lg"></i> Fechar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" role="dialog" id="fecharNegocio">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content modal-lg">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title"><i class="fa fa-check fa-lg"></i> Fechar Neg&oacute;cio</h3>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <input type="radio" name="edtTipoPessoa" id="edtTipoPessoa" value="F" /><label>Pessoa F&iacute;sica</label>
+                                        <input type="radio" name="edtTipoPessoa" id="edtTipoPessoa" value="J" /><label>Pessoa Jur&iacute;dica</label>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" onclick="tipo_pessoa_form();"> Avan&ccedil;ar >> </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FECHAR NEGOCIO MODAL - JURIDOCO -->
+                        <!--<div class="modal fade" role="dialog" id="fecharNegocioFormJ">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content modal-lg">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title"><i class="fa fa-check fa-lg"></i> Pessoa Jur&iacute;dica</h3>
+                                    </div>
+                                    <div class="modal-header">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <table class="table table-striped table-responsive">
+                                                    <form role="form">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <label for="edtCnpjNegocio">CNPJ:</label>
+                                                                <input type='text' placeholder="00.000.000/0000-00" class="form-control" name="edtCnpjNegocio" id="edtCnpjNegocio" onKeyPress="formatarCpfCnpj(this, 'cnpj')" onBlur="validaCNPJ(this);pesquisa_cpf(this.value);" onKeyUp="validaCNPJ(this);" maxlength="18" />
+                                                            </td>
+
+                                                            <td>
+                                                                <label for="edtCepJuridicoNegocio">CEP:</label>
+                                                                <input type='text' placeholder="00000-000" class="form-control" name="edtCepJuridicoNegocio" id="edtCepJuridicoNegocio" onKeyPress="formatarCpfCnpj(this , 'cep')" onBlur="pesquisacep(this.value);" maxlength="9" />
+                                                            </td>
+
+                                                            <td>
+                                                                <label for="edtUfJuridicoNegocio">Uf:</label>
+                                                                <select name="edtUfNegocio" id="edtUfNegocio" class="form-control" tabindex="10">
+                                                                    <option value="">Selecione</option>
+                                                                    <option value="AC">AC</option>
+                                                                    <option value="AL">AL</option>
+                                                                    <option value="AP">AP</option>
+                                                                    <option value="AM">AM</option>
+                                                                    <option value="BA">BA</option>
+                                                                    <option value="CE">CE</option>
+                                                                    <option value="DF">DF</option>
+                                                                    <option value="ES">ES</option>
+                                                                    <option value="GO">GO</option>
+                                                                    <option value="MA">MA</option>
+                                                                    <option value="MT">MT</option>
+                                                                    <option value="MS">MS</option>
+                                                                    <option value="MG">MG</option>
+                                                                    <option value="PA">PA</option>
+                                                                    <option value="PB">PB</option>
+                                                                    <option value="PR">PR</option>
+                                                                    <option value="PE">PE</option>
+                                                                    <option value="PI">PI</option>
+                                                                    <option value="RJ">RJ</option>
+                                                                    <option value="RN">RN</option>
+                                                                    <option value="RS">RS</option>
+                                                                    <option value="RO">RO</option>
+                                                                    <option value="RR">RR</option>
+                                                                    <option value="SC">SC</option>
+                                                                    <option value="SP">SP</option>
+                                                                    <option value="SE">SE</option>
+                                                                    <option value="TO">TO</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <label for="edtNomeFantasiaNegocio">Nome Fantasia:</label>
+                                                                <input type="text" class="form-control" name="edtNomeFantasiaNegocio" id="edtNomeFantasiaNegocio" />
+                                                            </td>
+
+                                                            <td>
+                                                                <label for="edtFoneJuridicoNegocio">Telefone 1:</label>
+                                                                <input type="text" placeholder="DDD +  N&Uacute;MERO" class="form-control" name="edtFoneNegocio" id="edtFoneNegocio" onKeyPress="formatarCpfCnpj(this , 'fone')" maxlength="12"/>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <label for="edtRazaoSocialNegocio">Raz&atilde;o Social:</label>
+                                                                <input type="text" class="form-control" name="edtRazaoSocialNegocio" id="edtRazaoSocialNegocio" />
+                                                            </td>
+
+                                                            <td>
+                                                                <label for="edtEmailJuridicoNegocio">Email:</label>
+                                                                <input type="text" placeholder="email@provedor.com" class="form-control" name="edtEmailNegocio" id="edtEmailNegocio" />
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+
+                                                            <td colspan="2">
+                                                                <label for="edtEnderecoJuridicoNegocio">Endere&ccedil;o:</label>
+                                                                <input type="text" class="form-control" name="edtEnderecoNegocio" id="edtEnderecoNegocio" onFocus="pesquisacep(edtCepNegocio.value);" />
+                                                            </td>
+
+                                                            <td>
+                                                                <label for="edtComplementoJuridicoNegocio">Complemento:</label>
+                                                                <input type="text" placeholder="Ex.: Casa ,Apartamento, Conjunto" class="form-control" name="edtComplementoNegocio" id="edtComplementoNegocio" />
+                                                                <input type="hidden" name="edtCidadeNegocio" id="edtCidadeNegocio">
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>
+                                                                <label for="edtNumeroJuridicoNegocio">N&uacute;mero:</label>
+                                                                <input type="text" class="form-control" name="edtNumeroNegocio" id="edtNumeroNegocio" />
+                                                            </td>
+
+                                                            <td>
+                                                                <label for="edtBairroJuridicoNegocio">Bairro:</label>
+                                                                <input type="text" class="form-control" name="edtBairroNegocio" id="edtBairroNegocio" />
+                                                            </td>
+
+                                                            <td>
+                                                                <label for="edtCelularJuridicoNegocio">Celular:</label>
+                                                                <input type="text" placeholder="DDD + 9 N&Uacute;MERO" class="form-control" name="edtCelularNegocio" id="edtCelularNegocio"  onKeyPress="formatarCpfCnpj(this , 'celular')" maxlength="13"/>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                        <input type="hidden" name="edtCodigoNegocio" id="edtCodigoNegocio" />
+                                                    </form>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" name="edtSalvar" id="edtSalvar" class="btn btn-primary" data-toggle="modal" data-target="#escolherProduto" onClick="proxima_etapa(this,'fecharNegocioFormF')"><i class="fa fa-list fa-lg"></i> Proximo >> </button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close fa-lg"></i> Fechar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+
+                        <!-- FECHAR NEGOCIO MODAL -->
+                         <div class="modal fade" role="dialog" id="fecharNegocioFormF">
+                                <div class="modal-dialog modal-lg">
+                                        <div class="modal-content modal-lg">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title"><i class="fa fa-check fa-lg"></i> Pessoa F&iacute;sica</h3>
+                                            </div>
+                                            <div class="modal-header">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                            <table class="table table-striped table-responsive">
+                                                                <form role="form">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>
+                                                                                <label for="edtCpfNegocio">CPF:</label>
+                                                                                <input type='text' placeholder="000.000.000-00" class="form-control" name="edtCpfNegocio" id="edtCpfNegocio" onKeyPress="formatarCpfCnpj(this, 'cpf')" onBlur="validaCPF(this);pesquisa_cpf(this.value);" onKeyUp="validaCPF(this);" maxlength="14" />
+                                                                            </td>
+
+                                                                            <td>
+                                                                                <label for="edtDataNascimentoNegocio">Data Nascimento:</label>
+                                                                                <input type='text' placeholder="__/__/____" class="form-control" name="edtDataNascimentoNegocio" id="edtDataNascimentoNegocio" onKeyPress="formatarCpfCnpj(this , 'data')" maxlength="10" />
+                                                                            </td>
+
+                                                                            <td>
+                                                                                <label for="edtCepNegocio">CEP:</label>
+                                                                                <input type='text' placeholder="00000-000" class="form-control" name="edtCepNegocio" id="edtCepNegocio" onKeyPress="formatarCpfCnpj(this , 'cep')" onBlur="pesquisacep(this.value);" maxlength="9" />
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                                <td colspan="2">
+                                                                                        <label for="edtNomeNegocio">Nome:</label>
+                                                                                        <input type="text" class="form-control" name="edtNomeNegocio" id="edtNomeNegocio" />
+                                                                                </td>
+
+                                                                                <td>
+                                                                                        <label for="edtEmailNegocio">Email:</label>
+                                                                                        <input type="text" placeholder="email@provedor.com" class="form-control" name="edtEmailNegocio" id="edtEmailNegocio" />
+                                                                                </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                                <td colspan="2">
+                                                                                        <label for="edtEnderecoNegocio">Endereço:</label>
+                                                                                        <input type="text" class="form-control" name="edtEnderecoNegocio" id="edtEnderecoNegocio" onFocus="pesquisacep(edtCepNegocio.value);" />
+                                                                                </td>
+
+                                                                                <td>
+                                                                                        <label for="edtComplementoNegocio">Complemento:</label>
+                                                                                        <input type="text" placeholder="Ex.: Casa ,Apartamento, Conjunto" class="form-control" name="edtComplementoNegocio" id="edtComplementoNegocio" />
+                                                                                        <input type="hidden" name="edtCidadeNegocio" id="edtCidadeNegocio">
+                                                                                </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                                <td>
+                                                                                        <label for="edtNumeroNegocio">Número:</label>
+                                                                                        <input type="text" class="form-control" name="edtNumeroNegocio" id="edtNumeroNegocio" />
+                                                                                </td>
+
+                                                                                <td>
+                                                                                        <label for="edtBairroNegocio">Bairro:</label>
+                                                                                        <input type="text" class="form-control" name="edtBairroNegocio" id="edtBairroNegocio" />
+                                                                                </td>
+
+                                                                                <td>
+                                                                                        <label for="edtUfNegocio">Uf:</label>
+                                                                                        <select name="edtUfNegocio" id="edtUfNegocio" class="form-control" tabindex="10">
+                                                                                              <option value="">Selecione</option>
+                                                                                              <option value="AC">AC</option>
+                                                                                              <option value="AL">AL</option>
+                                                                                              <option value="AP">AP</option>
+                                                                                              <option value="AM">AM</option>
+                                                                                              <option value="BA">BA</option>
+                                                                                              <option value="CE">CE</option>
+                                                                                              <option value="DF">DF</option>
+                                                                                              <option value="ES">ES</option>
+                                                                                              <option value="GO">GO</option>
+                                                                                              <option value="MA">MA</option>
+                                                                                              <option value="MT">MT</option>
+                                                                                              <option value="MS">MS</option>
+                                                                                              <option value="MG">MG</option>
+                                                                                              <option value="PA">PA</option>
+                                                                                              <option value="PB">PB</option>
+                                                                                              <option value="PR">PR</option>
+                                                                                              <option value="PE">PE</option>
+                                                                                              <option value="PI">PI</option>
+                                                                                              <option value="RJ">RJ</option>
+                                                                                              <option value="RN">RN</option>
+                                                                                              <option value="RS">RS</option>
+                                                                                              <option value="RO">RO</option>
+                                                                                              <option value="RR">RR</option>
+                                                                                              <option value="SC">SC</option>
+                                                                                              <option value="SP">SP</option>
+                                                                                              <option value="SE">SE</option>
+                                                                                              <option value="TO">TO</option>
+                                                                                          </select>
+                                                                                </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                                <td>
+                                                                                        <label for="edtFoneNegocio">Telefone 1:</label>
+                                                                                        <input type="text" placeholder="DDD + NÚMERO" class="form-control" name="edtFoneNegocio" id="edtFoneNegocio" onKeyPress="formatarCpfCnpj(this , 'fone')" maxlength="12"/>
+                                                                                </td>
+
+                                                                                <td>
+                                                                                        <label for="edtFone2Negocio">Telefone 2:</label>
+                                                                                        <input type="text" placeholder="DDD + NÚMERO" class="form-control" name="edtFone2Negocio" id="edtFone2Negocio" onKeyPress="formatarCpfCnpj(this , 'fone')" maxlength="12" />
+                                                                                </td>
+
+                                                                                <td>
+                                                                                        <label for="edtCelularNegocio">Celular:</label>
+                                                                                        <input type="text" placeholder="DDD + 9 NÚMERO" class="form-control" name="edtCelularNegocio" id="edtCelularNegocio"  onKeyPress="formatarCpfCnpj(this , 'celular')" maxlength="13"/>
+                                                                                </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                    <input type="hidden" name="edtCodigoNegocio" id="edtCodigoNegocio" />
+                                                                </form>
+                                                            </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                                                <div class="modal-footer">
+                                                                     <button type="button" name="edtSalvar" id="edtSalvar" class="btn btn-primary" data-toggle="modal" data-target="#escolherProduto" onClick="inserir_cadastro()"><i class="fa fa-list fa-lg"></i> Escolher Produto</button>
+                                                                     <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close fa-lg"></i> Fechar</button>
+                                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+
+                        <div class="modal fade" role="dialog" id="escolherProduto">
+                                <div class="modal-dialog modal-lg">
+                                        <div class="modal-content modal-lg">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title"><i class="fa fa-car-plus fa-lg"></i> Escolha o Produto:</h3>
+                                            </div>
+                                            <div class="modal-header">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                            <form role="form" name="frm" method="post">
+                                                                    <label for="edtProduto">Produto:</label>
+                                                                    <select name="edtProduto" id="edtProduto" class="selectpicker form-control" data-show-subtext="true" data-live-search="true">
+                                                                        <? foreach($produtos as $produto) {?>
+                                                                            <option data-tokens="<?=$produto->getNome()?>" value="<?=$produto->getId()?>"><?=$produto->getId()?> | <?=$produto->getNome()?> - R$ <?=formataMoeda($produto->getPreco())?> </option>
+                                                                        <? }?>
+                                                                    </select>
+                                                                    <label for="edtFormaPagamento">Forma de Pagamento:</label>
+                                                                    <select name="edtFormaPagamento" id="edtFormaPagamento" class="selectpicker form-control" data-show-subtext="true" data-live-search="true">
+                                                                        <? foreach($formas as $forma) {?>
+                                                                            <option data-tokens="<?=$forma->getNome()?>" value="<?=$forma->getId()?>"><?=$forma->getId()?> - <?=$forma->getNome()?></option>
+                                                                        <? }?>
+                                                                    </select>
+                                                                    <!--<label for="edtDesconto">Desconto:</label><input type="text" class="form-control" name="edtDesconto" id="edtDesconto" />-->
+                                                                <input type="hidden" name="edtCodigoNegocio" id="edtCodigoNegocio" />
+                                                            </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                 <button type="button" name="edtSalvar" id="edtSalvar" class="btn btn-success" data-toggle="modal" data-target="" onClick="finalizar_negocio();bancoLocal_add('fechar_negocio');"><i class="fa fa-check fa-lg"></i> Salvar</button>
+                                                 <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close fa-lg"></i> Fechar</button>
+                                            </div>
+                                        </div>
+                                </div>
+                        </div>
+                        <!-- FIM FECHAR NEGOCIO MODAL -->
+
+                        <!-- INFOMRAR PAGAMENTO  FOR COBRAÇA -->
+                            <div class="modal fade" role="dialog" id="informarPagto">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content modal-lg">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title"><i class="fa fa-car-plus fa-lg"></i> Informar Pagamento</h3>
+                                        </div>
+                                        <div class="modal-header">
+                                            <div class="panel panel-default">
+                                                <div class="panel-body">
+                                                    Voc&ecirc; relamente deseja informar pagamento para o cliente:
+                                                    <span class="text-warning"><strong>
+                                                    <? if($cliente) {?>
+                                                        <? if($cliente->getRazaoSocial())
+                                                            echo $cliente->getRazaoSocial();
+                                                        else
+                                                            echo $cliente->getNomeFantasia();
+                                                        ?>
+                                                    <? }?>
+                                                    </strong></span>
+                                                    , com a compra<br/>
+                                                    do produto
+                                                    <? if($prospect->getProspectTipo() == 2) {?>
+                                                        <span class="text-warning"><strong>
+                                                        <? if($prospect->getCertificado()->getProduto()){ $prospect->getCertificado()->getProduto()->getNome(); }?></strong></span> no valor de
+                                                        <span class="text-warning"><strong>
+                                                        <?=formataMoeda($prospect->getCertificado()->getProduto()->getPreco() - $prospect->getCertificado()->getDesconto());?></strong></span>.
+                                                        <br/><br/><br/>
+                                                    <? }?>
+                                                    <button class="btn btn-success" name="baixaValidacao" id="baixaValidacao">Informar Pagamento</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- FIM INFORMAR PAGTO MODAL FOR COBRANÇA
+
+                        <!-- INSEIRIR RETENÇAO MODAL -->
+                         <div class="modal fade" role="dialog" id="retencao">
+                                <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Retençao do
+                                                    <? if($prospect->getCertificadoId()) {
+                                                            echo "Cliente: ";
+                                                            if($cliente->getRazaoSocial())
+                                                                echo $cliente->getRazaoSocial();
+                                                            else
+                                                                echo $cliente->getNomeFantasia();
+                                                       }
+
+                                                       if($prospect->getContadorId() && $prospect->getProspectTipo() == 2) {
+                                                            echo "Contador(a): ";
+                                                            echo $cliente->getNome();
+                                                       }
+
+                                                    ?>
+                                                    <? ?></h4>
+                                              </div>
+                                            <div class="modal-body">
+                                                        <form name="frm">
+                                                            <select name="edtSelectRetencao" id="edtSelectRetencao" class="form-control pd-4">
+                                                                <option value="">---------------Selecione o Motivo-----------------</option>
+                                                                <? foreach($prospectRetencoes as $retencao) {?>
+                                                                    <option value="<?=$retencao->getId()?>"><?=$retencao->getDescricao()?></option>
+                                                                <? }?>
+                                                            </select>
+                                                            <input type="hidden" name="prospectId" id="prospectId" value="<?=$prospect->getId();?>">
+                                                            <textarea class="form-control" name="edtObservacaoRetencao" id="edtObservacaoRetencao" cols="30" rows="5"></textarea>
+                                                        </form>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                 <button type="button" name="edtRetencao" id="edtRetencao" class="btn btn-success" data-dismiss="modal" onClick="retencao()"><i class="fa fa-check fa-lg"></i> Salvar</button>
+                                                 <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close fa-lg"></i> Fechar</button>
+                                            </div>
+                                        </div>
+                                </div>
+                        </div>
+
+                         <!-- INSEIRIR OBSERVAÇAO NA FINALIZAÇAO DA CHAMADA MODAL -->
+                         <div class="modal fade" role="dialog" id="observacaoChamada">
+                                <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Finalizar Chamada do
+                                                    <? if($prospect->getCertificadoId()) {
+                                                            echo "Cliente: ";
+                                                            if($cliente->getRazaoSocial())
+                                                                echo $cliente->getRazaoSocial();
+                                                            else
+                                                                echo $cliente->getNomeFantasia();
+                                                       }
+
+                                                       if($prospect->getContadorId() && $prospect->getProspectTipo() == 2) {
+                                                            echo "Contador(a): ";
+                                                            echo $cliente->getNome();
+
+                                                       }
+
+                                                    ?>
+                                                    <? ?></h4>
+                                              </div>
+                                            <div class="modal-body">
+                                                        <form name="frm">
+                                                            <input type="hidden" name="prospectId" id="prospectId" value="<?=$prospect->getId();?>">
+                                                            <textarea class="form-control" name="edtObservacaoChamada" id="edtObservacaoChamada" cols="30" rows="5" onkeyUp="UpperCase(this);"></textarea>
+                                                        </form>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                 <a type="button" class="btn btn-success" onClick="finalizar_chamada();bancoLocal_delete();" ><i class="fa fa-check fa-lg"></i> Finalizar</a>
+                                                 <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close fa-lg"></i> Fechar</button>
+                                            </div>
+                                        </div>
+                                </div>
+                        </div>
+
+                        <!-- INSEIRIR NOVO MODAL -->
+                         <div class="modal fade" role="dialog" id="inserir">
+                                <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title"><i class="fa fa-plus fa-lg"></i> Inserir Prospect</h3>
+                                            </div>
+
+                                            <div class="modal-body1">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <table class="table table-responsive table-striped">
+                                                            <form name="frm">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td><label for="edtNome">Nome:</label></td>
+                                                                        <td><input type="text" class="form-control" name="edtNome" id="edtNome" size="10" /></td>
+                                                                        <td><label for="edtCpf">CPF:</label></td>
+                                                                        <td><input type="text" class="form-control"  maxlength="14" name="edtCpf" id="edtCpf" size="10" /></td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td><label for="edtCep">CEP:</label></td>
+                                                                        <td><input type="text" class="form-control" name="edtCep" id="edtCep" maxlength="9" placeholder="XXXXX-XXX" onKeyPress="formatarCpfCnpj(this, 'cep')" onBlur="pesquisacep1(this.value);" size="10" /></td>
+                                                                        <td><label for="edtBairro">Bairro:</label></td>
+                                                                        <td><input type="text" class="form-control" name="edtBairro" id="edtBairro" size="10" /></td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td><label for="edtCidade">Cidade:</label></td>
+                                                                        <td><input type="text" class="form-control" name="edtCidade" id="edtCidade" size="10" /></td>
+                                                                        <td><label for="edtUf">UF:</label></td>
+                                                                        <td>
+                                                                        <select name="edtUf" id="edtUf" class="form-control" tabindex="10">
+                                                                                  <option value="">Selecione</option>
+                                                                                  <option value="AC">AC</option>
+                                                                                  <option value="AL">AL</option>
+                                                                                  <option value="AP">AP</option>
+                                                                                  <option value="AM">AM</option>
+                                                                                  <option value="BA">BA</option>
+                                                                                  <option value="CE">CE</option>
+                                                                                  <option value="DF">DF</option>
+                                                                                  <option value="ES">ES</option>
+                                                                                  <option value="GO">GO</option>
+                                                                                  <option value="MA">MA</option>
+                                                                                  <option value="MT">MT</option>
+                                                                                  <option value="MS">MS</option>
+                                                                                  <option value="MG">MG</option>
+                                                                                  <option value="PA">PA</option>
+                                                                                  <option value="PB">PB</option>
+                                                                                  <option value="PR">PR</option>
+                                                                                  <option value="PE">PE</option>
+                                                                                  <option value="PI">PI</option>
+                                                                                  <option value="RJ">RJ</option>
+                                                                                  <option value="RN">RN</option>
+                                                                                  <option value="RS">RS</option>
+                                                                                  <option value="RO">RO</option>
+                                                                                  <option value="RR">RR</option>
+                                                                                  <option value="SC">SC</option>
+                                                                                  <option value="SP">SP</option>
+                                                                                  <option value="SE">SE</option>
+                                                                                  <option value="TO">TO</option>
+                                                                              </select>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td><label for="edtEndereco">Endere&ccedil;o:</label></td>
+                                                                        <td><input type="text" class="form-control" name="edtEndereco" id="edtEndereco" size="10" /></td>
+                                                                        <td><label for="edtComplemento">Complemento:</label></td>
+                                                                        <td><input type="text" class="form-control" name="edtComplemento" id="edtComplemento" size="10" /></td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td><label for="edtFone">Fone:</label></td>
+                                                                        <td><input type="text" class="form-control" onKeyPress="formatarCpfCnpj(this, 'fone')" name="edtFone" id="edtFone" size="10" maxlength="12" /></td>
+                                                                        <td><label for="edtSite">Site: http://</label></td>
+                                                                        <td><input type="text" class="form-control" name="edtSite" id="edtSite" size="10" /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </form>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                 <button type="button" name="edtSalvar" id="edtSalvar" class="btn btn-success" data-dismiss="modal" onClick="inserir_registo();bancoLocal_add('inserir_prospect');"><i class="fa fa-check fa-lg"></i> Salvar</button>
+                                                 <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close fa-lg"></i> Fechar</button>
+                                            </div>
+                                        </div>
+                                </div>
+                        </div>
+
+                        <!-- ENVIAR PROPOSTA -->
+                        <div class="modal fade" role="dialog" id="enviarProposta">
+                                <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title"><i class="fa fa-envelope fa-lg"></i> Enviar Proposta</h3>
+                                            </div>
+
+                                            <div class="modal-header">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                 <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close fa-lg"></i> Fechar</button>
+                                            </div>
+                                        </div>
+                                </div>
+                        </div>
+
+                        <!-- QUESTIONAMENTO -->
+                        <div class="modal fade" role="dialog" id="sobreAtendimentoCrm">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+
+                                    </div><!-- FIM MODA LHEADER-->
+
+                                    <div class="modal-body">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                    <h3>Seja Bem-Vindo!</h3>
+                                                    <p class="text-center">
+                                                        <img src="img/manual_crm/painel_atendimento_full.png" class="img-responsive" />
+                                                    </p>
+                                                    <p class="text-justify">
+                                                        Aqui nesta tela você poderá interagir e informar ao nosso sistema, todas a ação utilizada e trablahadas com o seu Cliente/Contador,
+                                                        poderá ter em tempo real todas as informações do seu registro em tempo hábil de consulta e  cadastro!
+                                                    </p>
+                                                    <p>
+                                                        Cada Espaço no painel do CRM , foi pensado para auxiliar e agilizar sua vida!
+                                                    </p>
+                                                    <p class="text-justify">
+                                                        No cabeçalho do nosso painel de Atendimento, temos as informações do ue registro como Nome , Tipo do Regsitro <span class="text-info">(Ex.: Contador, Cliente)</span>. E-mail
+                                                        de contato, Números cadastrado no sistema e Codigo do CRM como segue na Figura 1. <span class="text-warning">(Obs.: Lembrando que o Código do CRM Não é o mesmo que Código do Cliente / Certificado,
+                                                        Deve somente ser usado para consulta no CRM)</span>.
+                                                    </p>
+
+                                                    <p class="text-center">
+                                                        <h4>Figura 1</h4><br/>
+                                                        <img src="img/manual_crm/painel_atendimento_header.png" class="img-responsive" />
+                                                    </p>
+
+                                                    <p class="text-justify">
+                                                        Você também poderá visualizar o historico já trablaho no CRM, na tabelinha ao seu lado direito inferior! Como ilustra a Figura 2:
+                                                    </p>
+                                                    <p class="text-center">
+                                                        <h4>Figura 2</h4><br/>
+                                                        <img src="img/manual_crm/painel_atendimento_historico.png" class="img-responsive" /><br/>
+                                                        Onde aqui você encontra 4 informações básicas como:<br/>
+                                                        1 - Data e Hora da Ação.<br/>
+                                                        2 - Açõa Realizada.<br/>
+                                                        3 - O usuário que aplicou a ação.<br/>
+                                                        4 - Observação se houver, caso não aja observação irá aparecer -----.<br/>
+                                                    </p>
+
+                                                    <p class="text-justify">
+                                                        Para iniciar o seu atendimento você deverá clicar no painel de forma de contato para iniciar o conometro que está acima do painel
+                                                        e  também liberar os botões de ações do CRM, como ilustra a figiura 3 como ações bloqqueadas e Figura 4 com ações liberadas:<br/>
+
+                                                        <h4>Figura 3</h4><br/>
+                                                        <img src="img/manual_crm/painel_atendimento_botoes_bloqueados.png" class="img-responsive" /><br/>
+                                                        <h4>Figura 4</h4><br/>
+                                                        <img src="img/manual_crm/painel_atendimento_botoes_liberados.png" class="img-responsive" /><br/>
+                                                    </p>
+                                            </div><!-- FIM PANEL BODY -->
+                                        </div><!-- FIM PANEL -->
+                                    </div><!-- FIM MODAL BODY -->
+                                </div><!-- FIM MODAL CONTENT -->
+                            </div><!--FIM MODAL DIALOG -->
+                        </div><!-- FIM sobreAtendimentoCrm-->
+
+                        <!--MODAL INSERIR OBSERVA��O!-->
+                        <div id="inserirObservacao" class="modal fade" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <div class ="col-lg-10">
+                                            <h3><i class="fa fa-lg fa-comment "></i> Inserir Observa&ccedil;&atilde;o </h3>
+                                        </div>
+                                        <div class ="col-lg-2">
+                                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalDuvida" onclick="modalDuvida(3)"><i class="fa fa-lg fa-question"></i></button>
+                                            <a class="btn btn-danger" data-toggle="modal" data-target="#inserirObservacao"><i class="fa fa-lg fa-close"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" action="#">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h4>Observa&ccedil;&atilde;o:</h4>
+                                                </div>
+                                            </div> <!--DIV CLASS row-->
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <textarea rows="10"  name="edtObservacao" id="ioEdtObservacao" class="form-control"></textarea>
+                                                </div>
+                                            </div> <!--DIV CLASS row-->
+                                        </form>
+
+                                    </div><!--DIV MODAL-CONTENT-->
+                                    <div class="modal-footer"><button class="btn btn-success" data-dismiss="modal" onclick="inserir_observacao(<?=$usuarioLogado->getId();?>);"><i class="fa fa-lg fa-save"></i> Salvar</button></div>
+                                </div>
+                            </div> <!--DIV CLASS modal-dialog modal-lg-->
+                        </div> <!--DIV ID inserirObservacao-->
+
+>>>>>>> 3e4fe518559f4d97e3dc379cfe8aeab53a5685f6
+</body>
+</html>
