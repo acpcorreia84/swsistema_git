@@ -1,0 +1,11 @@
+ALTER TABLE `usuario`
+	ADD COLUMN `foto_avatar` VARCHAR(200) NULL AFTER `nome`;
+
+ALTER TABLE `cliente`
+	ADD COLUMN `telefone_ac` VARCHAR(20) NULL AFTER `data_sincronizacao_ac`,
+	ADD COLUMN `email_ac` VARCHAR(100) NULL AFTER `telefone_ac`;
+
+ALTER TABLE `certificado_fora_sistema`
+	ADD COLUMN `data_sincronizacao_ac` TIMESTAMP NULL,
+	ADD COLUMN `telefone_cliente` VARCHAR(20) NULL AFTER `data_sincronizacao_ac`,
+	ADD COLUMN `email_cliente` VARCHAR(100) NULL AFTER `telefone_cliente`;

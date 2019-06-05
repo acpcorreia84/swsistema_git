@@ -1,0 +1,1 @@
+INSERT INTO `serama_bd`.`usuario` (`nome`, `data_cadastro`, `setor_id`, `local_id`, `perfil_id`, `data_expiracao_senha`, `email`, `nascimento`, `situacao`, `senha`, `limite_quantidade`) VALUES ('PORTAL SERAMA', '2017-06-16', '3', '1', '43', '2020-06-16', 'sac@gruposerama.com.br', '2017-06-16', '-1', '0FFAEC66-DB63-488A-A459-745CED763C36', '5');

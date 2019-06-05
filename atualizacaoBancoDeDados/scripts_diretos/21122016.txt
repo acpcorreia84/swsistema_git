@@ -1,0 +1,1 @@
+INSERT INTO `serama_bd`.`situacao` (`sigla`, `nome`, `descricao`) VALUES ('lim_prot', 'APAGOU O PROTOCOLO', 'Apagou o protocolo para criar outro');

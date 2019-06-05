@@ -1,0 +1,59 @@
+ALTER TABLE `certificado`
+	ADD COLUMN `usuario_validou_id` INT(11) NULL AFTER `funcionario_validou_id`;
+
+ALTER TABLE `certificado`
+	ADD CONSTRAINT `Rel_usuario_id_Usuario` FOREIGN KEY (`usuario_validou_id`) REFERENCES `usuario` (`id`);
+
+
+
+
+
+
+
+
+
+
+
+
+DELIMITER $$
+
+drop procedure if exists copiaCampoFuncionarioValidouParaUsuarioValidou;
+
+CREATE PROCEDURE copiaCampoFuncionarioValidouParaUsuarioValidou()
+BEGIN
+	DECLARE funcionarios_id VARCHAR(1000) DEFAULT '';
+	DECLARE VAR_funcionario_id INT DEFAULT 0;
+	DECLARE finalizou INT DEFAULT 0;
+	
+	BLOCK1: BEGIN 
+		DECLARE usuarios CURSOR FOR select cd.funcionario_validou_id from certificado cd join usuario u on cd.funcionario_validou_id = u.id
+			where (cd.usuario_validou_id is null) and (cd.funcionario_validou_id is not null )
+			group by cd.funcionario_validou_id;
+	
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET finalizou = -1;
+	
+		OPEN usuarios;
+			
+		REPEAT 
+			FETCH usuarios INTO VAR_funcionario_id;
+--			SET funcionarios_id = CONCAT (funcionarios_id,funcionario_id ,",");
+
+			BLOCK2: BEGIN
+/*			   DECLARE finalizou2 INT DEFAULT 0;
+				DECLARE certificados CURSOR FOR select cd.id, cd.funcionario_validou_id from certificado cd where cd.funcionario_validou_id = VAR_funcionario_id;
+				DECLARE CONTINUE HANDLER FOR NOT FOUND SET finalizou2 = -1;
+				OPEN certificados;
+				
+*/
+			update certificado set certificado.usuario_validou_id = VAR_funcionario_id where certificado.funcionario_validou_id = VAR_funcionario_id;
+
+			END BLOCK2;
+	
+		UNTIL (finalizou = -1 )	END REPEAT;
+	END BLOCK1;
+	
+	select 'sucesso!';
+	
+END$$
+
+DELIMITER ;

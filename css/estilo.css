@@ -1,0 +1,308 @@
+﻿/*CONFIGURAÇÃO GERAL DE FORMULÁRIOS */
+::-webkit-scrollbar              { width:10px; background:#fff; }
+::-webkit-scrollbar-button       { /* 2 */ }
+::-webkit-scrollbar-track        { background: rgba(0,0,0,0.1); }
+::-webkit-scrollbar-track-piece  { /* 4 */ }
+::-webkit-scrollbar-thumb        { border-radius:10px; background:#B6B6B6; }
+::-webkit-scrollbar-thumb:hover  { border-radius:10px; background:#bbb; }
+::-webkit-scrollbar-corner       { /* 6 */ }
+::-webkit-resizer                { /* 7 */ }
+
+#yourId {
+    border-radius: 500px;
+    margin-top: 100px;
+    width: 200px;
+    height: 150px;
+    position:relative; /* or fixed or absolute */
+    border: 1px solid #0A246A;
+}
+
+.avatar {
+    margin-left: 1px;
+    margin-top: 10px;
+    background-color: #ffffff;
+    width: 99%;
+    height: 140px;
+    text-align: center;
+}
+.fotoPrincipalAvatar {
+    margin-top: 5px;
+    border: 2px solid #fff;
+    border-radius: 30px;
+    box-sizing: border-box;
+    color: #fff;
+    height: 60px;
+    width: 60px;
+}
+.fotoAvatar {
+    border: 1px solid #fff;
+    border-radius: 7px;
+    box-sizing: border-box;
+    color: #fff;
+    height: 20px;
+    width: 20px;
+}
+.nomeAvatar {
+    font-family: 'PT Sans', sans-serif;
+    font-size: large;
+    font-weight: bold;
+    color: #0a0a0a;
+
+}
+.textoAvatar {
+    font-family: 'Lato', sans-serif;
+    font-stretch: condensed;
+    color: #0a0a0a;
+}
+
+.alinharTituloDireitaBox {
+    float: right;
+    line-height: 1;
+    color: #9c9c9c;
+}
+.maisOpcoes {
+    cursor:pointer;
+}
+@media print {
+	.naoImprimir{
+		display: none;
+	}
+}
+/*MUITO IMPORTANTE, E O QUE FAZ O CALENDARIO APARECER DENTRO DOS MODAIS*/
+.datepicker{z-index:9999 !important}
+/*CURSOR DO MOUSE*/
+a {
+	cursor: pointer;
+}
+.modal{
+	vertical-align: middle;
+}
+
+.text-big{
+	font-size: 2em;
+}
+
+.modal.modal-wide .modal-dialog {
+	width: 90%;
+}
+.modal-wide .modal-body {
+	overflow-y: auto;
+}
+.fonte10{
+	font-size: 10px;
+}
+:invalid {
+	outline: 1px solid #cc0000;
+}
+
+.btn-circle {
+	width: 50px;
+	height: 50px;
+	font-size: 20px; 
+	border-radius: 50%;
+	position: absolute;
+	margin-bottom: 0;
+	margin-left: 84.5%;
+	padding: 1%;
+
+}
+
+.navbar-inverse .navbar-nav>li>a {
+	color:#fff;
+}
+
+div#pessoaJuridica{
+	display: none;
+}
+div#dadosEmpresariais{
+	display: none;
+}
+.space-padrao{
+	margin-top:5%;
+}
+.myTitle{
+	font-size: 14px;
+	padding: 5px;
+	border-radius: 5px;
+	margin-bottom: 5px;
+	color:#000;
+}
+
+.pagination li a.current {
+	background-color:#000;
+	color:#fff;
+	border-radius:2px;
+}
+
+.icon-button  {
+	background:transparent;
+	border-radius:0;
+	color:#0380E4;
+	padding:0.5em;
+	border:0;
+}
+iframe {
+	border:0;
+	border:#FFF;
+}
+
+/*MUITO IMPORTANTE PARA MOSTRAR O SCROL DUPLO DOS MODAIS*/
+.modal{
+    overflow: auto !important;
+}
+.pd-4 {
+	padding: 10px;
+	margin: 5px;
+}
+
+#cronometro {
+	width:300px;
+	margin-top: 1%;
+	margin-left: 1%;
+	font-size:31px;
+	border:none;
+	text-align: center;
+    background-color: transparent;
+}
+/* FIN CONF GERAL DE FORMULÁRIOS */
+
+.semCss{
+	border: 0;
+	background-color: transparent;
+	width: 100px;
+}
+.semCss40{
+	border: 0;
+	background-color: transparent;
+	width: 40px;
+}
+.semCss50{
+	border: 0;
+	background-color: transparent;
+	width: 50px;
+}
+
+select {
+	height:30px;
+	-webkit-appearance: none;
+	overflow: hidden;
+   	background: #fff;
+}
+
+.divValor{
+	font-size:2.0em;
+	text-align:center;
+	font-style:oblique;
+}
+
+.valor {
+	font-size:20px;
+}
+
+.nav{
+	background-color:#0b62a4;
+	color:#FFF;
+}
+
+.navbar-inverse{
+	background-color:#0b62a4;
+	color:#FFF;
+}
+
+@media screen and (min-width:769px){
+	.navbar-brand img {
+		max-width:100%;
+		margin-left:-15px;
+		padding-left:20px;
+		padding-right:19px;
+		height:70px;
+		z-index:999999;
+		background-color:#0b62a4;
+		position:absolute;
+	}
+}
+
+.oculto{
+	visibility: hidden;
+	display: none;
+}
+.center-block {
+	text-align:center;
+	padding-bottom:20px;
+}
+
+.panel-heading {
+    padding: 5px 15px;
+}
+
+.panel-footer {
+	padding: 1px 15px;
+	color: #A0A0A0;
+}
+
+.profile-img {
+	width: 96px;
+	height: 96px;
+	margin: 0 auto 10px;
+	display: block;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+}
+
+@media screen and (max-width:768px){
+	.navbar-brand img {
+		max-width:100%;
+		margin-top:-13px;
+		height:45px;
+		z-index:999999;
+		background-color:#0b62a4;
+	}
+
+	.navbar-header{
+		background-color:#0b62a4;
+	}
+
+	.center-block {
+		width: 30%;
+	}
+
+	.myTitle{
+		font-size: 14px;
+		padding: 7px;
+		border: 1px solid #5cb85c;
+		border-radius: 5px; 
+		margin-bottom: 5px;
+		color:#fff;
+		background: #5cb85c;
+	}
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+	.navbar-brand img {
+		max-width:100%;
+		margin-top:-13px;
+		height:45px;
+		z-index:999999;
+		background-color:#0b62a4;
+	}
+
+	.navbar-header{
+		background-color:#0b62a4;
+	}
+
+	.center-block {
+		width: 50%;
+	}
+
+	.myTitle{
+		font-size: 14px;
+		padding: 7px;
+		border: 1px solid #5cb85c;
+		border-radius: 5px; 
+		margin-bottom: 5px;
+		color:#fff;
+		background: #5cb85c;
+	}
+
+}

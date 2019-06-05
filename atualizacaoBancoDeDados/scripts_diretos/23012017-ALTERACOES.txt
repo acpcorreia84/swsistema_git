@@ -1,0 +1,49 @@
+ALTER TABLE `parceiro`
+	DROP COLUMN `cpf_cnpj_conta`;
+
+CREATE TABLE `parceiro_usuario_tipo`
+(
+	`id` INTEGER  NOT NULL AUTO_INCREMENT,
+	`nome` VARCHAR(50)  NOT NULL,
+	PRIMARY KEY (`id`)
+);
+
+ALTER TABLE `parceiro_usuario`
+	ADD COLUMN `parceiro_usuario_tipo_id` INT NULL AFTER `parceiro_id`;
+DROP TABLE IF EXISTS `parceiro_usuario`;
+
+
+CREATE TABLE `parceiro_usuario`
+(
+	`usuario_id` INTEGER  NOT NULL,
+	`parceiro_id` INTEGER  NOT NULL,
+	`parceiro_usuario_tipo_id` INTEGER,
+	`situacao` INTEGER,
+	PRIMARY KEY (`usuario_id`,`parceiro_id`),
+	INDEX `FI__parceiro_usuario` (`parceiro_id`),
+	CONSTRAINT `Rel_parceiro_usuario`
+		FOREIGN KEY (`parceiro_id`)
+		REFERENCES `parceiro` (`id`)
+		ON DELETE RESTRICT,
+	CONSTRAINT `Rel_usuario_usuarioId`
+		FOREIGN KEY (`usuario_id`)
+		REFERENCES `usuario` (`id`)
+		ON DELETE RESTRICT,
+	INDEX `FI__parceiro_usuario_parceiro_usuario_tipo` (`parceiro_usuario_tipo_id`),
+	CONSTRAINT `Rel_parceiro_usuario_parceiro_usuario_tipo`
+		FOREIGN KEY (`parceiro_usuario_tipo_id`)
+		REFERENCES `parceiro_usuario_tipo` (`id`)
+		ON DELETE RESTRICT
+);
+
+CREATE TABLE `parceiro_usuario_tipo`
+(
+	`id` INTEGER  NOT NULL AUTO_INCREMENT,
+	`nome` VARCHAR(50)  NOT NULL,
+	PRIMARY KEY (`id`)
+);
+
+INSERT INTO `serama_bd`.`parceiro_usuario_tipo` (`nome`) VALUES ('USUARIO COMUM');
+INSERT INTO `serama_bd`.`parceiro_usuario_tipo` (`nome`) VALUES ('PARCEIRO');
+INSERT INTO `serama_bd`.`parceiro_usuario_tipo` (`nome`) VALUES ('AGENTE DE REGISTRO');
+INSERT INTO `serama_bd`.`parceiro_usuario_tipo` (`nome`) VALUES ('VENDEDOR / AGENTE REGISTRO');

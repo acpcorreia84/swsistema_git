@@ -1,0 +1,2 @@
+ALTER TABLE `parceiro`
+	ADD COLUMN `tipo_canal` VARCHAR(8) NULL DEFAULT 'PARCEIRO' AFTER `observacao`;

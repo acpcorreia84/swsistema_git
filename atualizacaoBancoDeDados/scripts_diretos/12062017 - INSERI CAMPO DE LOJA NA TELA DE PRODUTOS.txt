@@ -1,0 +1,2 @@
+ALTER TABLE `produto`
+	ADD COLUMN `produto_loja` INT NOT NULL DEFAULT '0' AFTER `comissao`;

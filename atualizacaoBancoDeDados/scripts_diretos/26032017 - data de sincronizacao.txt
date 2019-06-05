@@ -1,0 +1,2 @@
+ALTER TABLE `certificado`
+	ADD COLUMN `data_sincronizacao_ac` DATETIME NULL DEFAULT NULL AFTER `autorizado_venda_sem_contador`;

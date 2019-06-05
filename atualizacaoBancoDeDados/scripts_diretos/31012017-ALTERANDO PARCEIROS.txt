@@ -1,0 +1,5 @@
+ALTER TABLE `parceiro`
+	ADD COLUMN `comissao_venda` INT NOT NULL DEFAULT '0' AFTER `operacao`,
+	ADD COLUMN `comissao_validacao` INT NOT NULL DEFAULT '0' AFTER `comissao_venda`,
+	ADD COLUMN `comissao_venda_validacao` INT NOT NULL DEFAULT '0' AFTER `comissao_validacao`,
+	ADD COLUMN `observacao` VARCHAR(150) NULL AFTER `comissao_venda_validacao`;

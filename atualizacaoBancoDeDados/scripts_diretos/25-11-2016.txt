@@ -1,0 +1,15 @@
+ALTER TABLE `usuario`
+	CHANGE COLUMN `local_id` `local_id` INT(11) NOT NULL AFTER `id`,
+	CHANGE COLUMN `perfil_id` `perfil_id` INT(11) NOT NULL AFTER `local_id`,
+	CHANGE COLUMN `login` `login` VARCHAR(15) NULL DEFAULT NULL AFTER `perfil_id`,
+	CHANGE COLUMN `senha` `senha` VARCHAR(30) NULL DEFAULT NULL AFTER `login`,
+	CHANGE COLUMN `data_expiracao_senha` `data_expiracao_senha` DATE NOT NULL AFTER `senha`,
+	CHANGE COLUMN `data_ultimo_acesso` `data_ultimo_acesso` TIMESTAMP NULL DEFAULT NULL AFTER `data_expiracao_senha`,
+	CHANGE COLUMN `url` `url` VARCHAR(25) NULL DEFAULT NULL AFTER `data_ultimo_acesso`,
+	CHANGE COLUMN `complemento` `complemento` VARCHAR(80) NULL DEFAULT NULL AFTER `endereco`,
+	CHANGE COLUMN `nascimento` `nascimento` DATE NOT NULL AFTER `celular`,
+	CHANGE COLUMN `setor_id` `setor_id` INT(11) NOT NULL AFTER `nascimento`,
+	CHANGE COLUMN `situacao` `situacao` INT(11) NOT NULL AFTER `setor_id`,
+	CHANGE COLUMN `data_cadastro` `data_cadastro` DATE NOT NULL AFTER `situacao`,
+	CHANGE COLUMN `saida_ferias` `saida_ferias` DATE NULL DEFAULT NULL AFTER `data_cadastro`,
+	CHANGE COLUMN `volta_ferias` `volta_ferias` DATE NULL DEFAULT NULL AFTER `saida_ferias`;

@@ -1,0 +1,4 @@
+INSERT INTO `serama_bd`.`situacao` (`sigla`, `nome`, `descricao`) VALUES ('em_proc', 'PAGAMENTO EM PROCESSAMENTO', 'O pagamento está sendo processado, aguarde...');
+INSERT INTO `serama_bd`.`situacao` (`sigla`, `nome`, `descricao`) VALUES ('rej_pagt', 'PAGAMENTO EM CARTÃO REJEITADO', 'Por algum motivo o Pagamento do cartão foi rejeitado.');
+INSERT INTO `serama_bd`.`situacao` (`sigla`, `nome`, `descricao`) VALUES ('ref_pagt', 'PAGAMENTO EM CARTÃO REEMBOLSADO', 'O pagamento desta transação foi devidamente reembolsado para o cliente.');
+

@@ -1,0 +1,38 @@
+DELIMITER $$
+
+drop procedure if exists TROCAR_DATA_VALIDACAO;
+
+CREATE PROCEDURE TROCAR_DATA_VALIDACAO()
+BEGIN
+
+declare terminou INT default 0;
+DECLARE VAR_ID INT;
+DECLARE VAR_DATA_PAGAMENTO, VAR_DATA_CONFIRMACAO_PAGAMENTO TIMESTAMP;
+DECLARE cur1 CURSOR FOR 
+select certificado.id, certificado.data_confirmacao_pagamento, certificado.data_pagamento from certificado where data_validacao = '0001-01-01';
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET terminou = -1;
+
+OPEN cur1;
+    
+while terminou <> -1 do
+    FETCH cur1 INTO VAR_ID, VAR_DATA_CONFIRMACAO_PAGAMENTO, VAR_DATA_PAGAMENTO;
+    
+    if VAR_DATA_CONFIRMACAO_PAGAMENTO is not null and VAR_DATA_PAGAMENTO <> '0000-00-00 00:00:00') then
+    	update certificado set certificado.DATA_VALIDACAO = VAR_DATA_CONFIRMACAO_PAGAMENTO where certificado.id = VAR_ID;
+  	end if;
+    	
+  	
+END WHILE;
+
+select "SUCESSO!";
+
+CLOSE cur1;
+
+	
+END$$
+
+DELIMITER ;
+
+INSERT INTO `permissao` VALUES (191, 'telaContador.php', 'regComiss', 'Registrar comissões de Contador, Usuários e Parceiros.', 24);
+

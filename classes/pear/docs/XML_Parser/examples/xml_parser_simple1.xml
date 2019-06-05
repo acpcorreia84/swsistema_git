@@ -1,0 +1,9 @@
+<!-- $Id: xml_parser_simple1.xml,v 1.1 2005/07/18 13:02:37 carlito Exp $ -->
+<foo>
+	<bar>content of bar</bar>
+	<empty />
+	<argh foo="bar">
+		test
+		<tomato>pizza</tomato>
+	</argh>
+</foo>

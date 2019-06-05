@@ -1,0 +1,1796 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+
+<database name="serama_bd" defaultIdMethod="native">
+
+    <table name="parceiro" package="pacoteParceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+
+        <column name="nome" type="VARCHAR" size="50" required="true"/>
+        <column name="empresa" type="VARCHAR" size="50" required="true"/>
+        <column name="cnpj" type="VARCHAR" size="20" required="true"/>
+        <column name="endereco" type="VARCHAR" size="100" required="true"/>
+        <column name="numero" type="VARCHAR" size="4" required="true"/>
+        <column name="bairro" type="VARCHAR" size="50" required="true"/>
+        <column name="cidade" type="VARCHAR" size="30" required="true"/>
+        <column name="complemento" type="VARCHAR" size="30"/>
+        <column name="email" type="VARCHAR" size="60" required="true"/>
+        <column name="uf" type="CHAR" size="2" required="true"/>
+        <column name="cep" type="CHAR" size="10" required="true"/>
+        <column name="ibge" type="VARCHAR" size="10" required="true"/>
+        <column name="fone" type="VARCHAR" size="15"/>
+        <column name="celular" type="VARCHAR" size="15"/>
+        <column name="local_id" type="INTEGER" required="true"/>
+        <column name="situacao" type="INTEGER"/>
+        <column name="data_cadastro" type="DATE" required="true"/>
+        <!--DADOS BANCARIOS-->
+        <column name="banco" type="VARCHAR" size="50"/>
+        <column name="conta_corrente" type="VARCHAR" size="12"/>
+        <column name="agencia" type="VARCHAR" size="8"/>
+        <column name="operacao" type="VARCHAR" size="5"/>
+
+        <column name="comissao_venda" type="INTEGER" required="true"/>
+        <column name="comissao_validacao" type="INTEGER" required="true"/>
+        <column name="comissao_venda_validacao" type="INTEGER" required="true"/>
+        <column name="observacao" type="VARCHAR" size="150"/>
+
+        <foreign-key foreignTable="local" name="Rel_parceiro_local" onDelete="restrict">
+            <reference local="local_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="parceiro_comissionamento" package="pacoteParceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="descricao" type="VARCHAR" size="150"/>
+        <column name="parceiro_id" type="INTEGER" />
+        <column name="data_registro" type="TIMESTAMP" required="true"/>
+        <column name="data_pagamento" type="TIMESTAMP" required="true"/>
+        <column name="periodo_inicial" type="TIMESTAMP" required="true"/>
+        <column name="periodo_final" type="TIMESTAMP" required="true"/>
+        <column name="venda_validacao" type="FLOAT" required="true"/>
+        <column name="venda" type="FLOAT" required="true"/>
+        <column name="validacao" type="FLOAT" required="true"/>
+        <column name="comissao_venda" type="INTEGER" required="true"/>
+        <column name="comissao_validacao" type="INTEGER" required="true"/>
+        <column name="comissao_venda_validacao" type="INTEGER" required="true"/>
+
+        <column name="observacao" type="VARCHAR" size="150"/>
+        <column name="situacao" type="INTEGER"/>
+
+        <foreign-key foreignTable="parceiro" name="Rel_parceiroComissionamento_parceiro" onDelete="restrict">
+            <reference local="parceiro_id" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <table name="parceiro_lancamento" package="pacoteParceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="data_lancamento" type="TIMESTAMP" required="true"/>
+        <column name="descricao" type="VARCHAR" size="150" required="true"/>
+        <column name="tipo_lancamento" type="CHAR" size="1" required="true"/>
+        <column name="valor" type="FLOAT" required="true"/>
+        <column name="observacao" type="VARCHAR" size="150" required="true"/>
+
+        <column name="parceiro_comissionamento_id" type="INTEGER" required="true"/>
+        <column name="situacao" type="INTEGER"/>
+
+
+        <foreign-key foreignTable="parceiro_comissionamento" name="Rel_Lancamento_comissionamento_Parceiro_Comissionamento" onDelete="restrict">
+            <reference local="parceiro_comissionamento_id" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <table name="parceiro_usuario_tipo" package="pacoteParceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="nome" type="VARCHAR" size="50" required="true"/>
+
+    </table>
+    <table name="parceiro_usuario" package="pacoteParceiro">
+
+        <column name="usuario_id" type="INTEGER" required="true" primaryKey="true"/>
+        <column name="parceiro_id" type="INTEGER" primaryKey="true"/>
+        <column name="parceiro_usuario_tipo_id" type="INTEGER"/>
+        <column name="situacao" type="INTEGER"/>
+
+        <foreign-key foreignTable="parceiro" name="Rel_parceiro_usuario" onDelete="restrict">
+            <reference local="parceiro_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_usuario_usuarioId" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="parceiro_usuario_tipo" name="Rel_parceiro_usuario_parceiro_usuario_tipo" onDelete="restrict">
+            <reference local="parceiro_usuario_tipo_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="usuario" package="pacoteUsuario">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="local_id" type="INTEGER"/>
+        <column name="perfil_id" type="INTEGER" required="true"/>
+        <column name="login" type="VARCHAR" size="20"/>
+        <column name="senha" type="VARCHAR" size="10"/>
+        <column name="data_expiracao_senha" type="DATE"/>
+        <column name="data_ultimo_acesso" type="TIMESTAMP"/>
+        <column name="url" type="VARCHAR" required="true"/>
+
+        <column name="nome" type="VARCHAR" size="50" required="true"/>
+        <column name="endereco" type="VARCHAR" size="100"/>
+        <column name="complemento" type="VARCHAR" size="100"/>
+        <column name="numero" type="VARCHAR" size="4"/>
+        <column name="bairro" type="VARCHAR" size="50"/>
+        <column name="cidade" type="VARCHAR" size="30"/>
+        <column name="email" type="VARCHAR" size="60" required="true"/>
+        <column name="uf" type="CHAR" size="2"/>
+        <column name="cep" type="CHAR" size="10"/>
+        <column name="cpf" type="VARCHAR" size="20" required="true"/>
+        <column name="fone" type="VARCHAR" size="15"/>
+        <column name="fone2" type="VARCHAR" size="15"/>
+        <column name="celular" type="VARCHAR" size="15"/>
+        <column name="nascimento" type="DATE" required="true"/>
+        <column name="setor_id" type="INTEGER" required="true"/>
+        <column name="cargo_id" type="INTEGER" required="true"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+        <column name="data_cadastro" type="DATE" required="true"/>
+        <column name="saida_ferias" type="DATE" required="true"/>
+        <column name="volta_ferias" type="DATE" required="true"/>
+
+        <unique name="Unique_email_usuario">
+            <unique-column name="email" />
+        </unique>
+        <foreign-key foreignTable="setor" name="Rel_funcionario_setor" onDelete="restrict">
+            <reference local="setor_id" foreign="id"/>
+        </foreign-key>
+
+        <validator column="login">
+            <rule name="unique"
+                  message="Ja existe um Usuario cadastrado com este LOGIN. Por favor verificar com o departamento comercial."/>
+        </validator>
+
+        <foreign-key foreignTable="local" name="Rel_usuario_local" onDelete="restrict">
+            <reference local="local_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="cargo" name="Rel_usuario_cargo" onDelete="restrict">
+            <reference local="cargo_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="perfil" name="Rel_usuario_perfil" onDelete="restrict">
+            <reference local="perfil_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="usuario_usuarioAgr" package="pacoteUsuario">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="usuario_id" type="INTEGER" required="true"/>
+        <column name="usuario_agr_id" type="INTEGER" required="true"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+
+
+        <foreign-key foreignTable="usuario" name="Rel_usuario_usuarioId" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="perfil" package="pacoteUsuario">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="nome" type="VARCHAR" size="15"/>
+        <column name="situacao" type="INTEGER"/>
+
+    </table>
+    <table name="permissao" package="pacoteUsuario">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="tela" type="VARCHAR" size="20"/>
+        <column name="funcao" type="VARCHAR" size="10"/>
+        <column name="descricao" type="VARCHAR" size="60"/>
+        <column name="grupo_permissao_id" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="grupo_permissao" name="Rel_permissao_grupoPermissao" onDelete="restrict">
+            <reference local="grupo_permissao_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="grupo_permissao" package="pacoteUsuario">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="nome" type="VARCHAR" size="30"/>
+
+    </table>
+    <table name="perfil_permissao" package="pacoteAcesso">
+
+        <column name="perfil_id" type="INTEGER" primaryKey="true" required="true"/>
+        <column name="permissao_id" type="INTEGER" primaryKey="true" required="true"/>
+
+        <foreign-key foreignTable="perfil" name="Rel_perfilPermissao_perfil" onDelete="restrict">
+            <reference local="perfil_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="permissao" name="Rel_perfilPermissao_permissao" onDelete="restrict">
+            <reference local="permissao_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="agendamento" package="pacoteComum">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="certificado_id" type="INTEGER"/>
+        <column name="data_agendamento" type="TIMESTAMP"/>
+        <column name="local_id" type="INTEGER"/>
+
+        <foreign-key foreignTable="local" name="Rel_agendamento_local" onDelete="restrict">
+            <reference local="local_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="certificado" name="Rel_agendamento_certificado" onDelete="restrict">
+            <reference local="certificado_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="acao" package="pacoteComum">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="sigla" type="CHAR" size="8"/>
+        <column name="descricao" type="VARCHAR" size="80"/>
+
+    </table>
+    <table name="log_serama" package="pacoteComum">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="usuario_id" type="INTEGER"/>
+        <column name="registro_id" type="INTEGER"/>
+        <column name="acao_id" type="INTEGER"/>
+        <column name="descricao" type="VARCHAR" size="120"/>
+        <column name="data" type="TIMESTAMP"/>
+        <column name="tela" type="VARCHAR" size="50"/>
+
+        <foreign-key foreignTable="acao" name="Rel_logSerama_acao" onDelete="restrict">
+            <reference local="acao_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_logSerama_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="log_acesso" package="pacoteComum">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="usuario_id" type="INTEGER"/>
+        <column name="acao" type="VARCHAR" size="50"/>
+        <column name="ip" type="VARCHAR" size="120"/>
+        <column name="descricao" type="VARCHAR" size="120"/>
+        <column name="data" type="TIMESTAMP"/>
+        <column name="tela" type="VARCHAR" size="50"/>
+
+        <foreign-key foreignTable="usuario" name="Rel_logSerama_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="setor" package="pacoteFuncionario">
+
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="nome" required="true" type="VARCHAR" size="50"/>
+        <column name="fone" required="true" type="VARCHAR" size="20"/>
+        <column name="cor" type="VARCHAR" size="10"/>
+
+    </table>
+    <table name="funcionario" package="pacoteFuncionario">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="contador_id" type="INTEGER"/>
+        <column name="usuario_id" type="INTEGER"/>
+
+        <column name="nome" type="VARCHAR" size="50" required="true"/>
+        <column name="endereco" type="VARCHAR" size="100"/>
+        <column name="numero" type="VARCHAR" size="4"/>
+        <column name="bairro" type="VARCHAR" size="50"/>
+        <column name="complemento" type="VARCHAR" size="80"/>
+        <column name="cidade" type="VARCHAR" size="30"/>
+        <column name="email" type="VARCHAR" size="60" required="true"/>
+        <column name="uf" type="CHAR" size="2"/>
+        <column name="cep" type="CHAR" size="10"/>
+        <column name="cpf" type="VARCHAR" size="20" required="true"/>
+        <column name="fone1" type="VARCHAR" size="15"/>
+        <column name="fone2" type="VARCHAR" size="15"/>
+        <column name="celular" type="VARCHAR" size="15"/>
+        <column name="apelido" type="VARCHAR" size="30"/>
+        <column name="nascimento" type="DATE" required="true"/>
+        <column name="setor_id" type="INTEGER" required="true"/>
+        <column name="cargo_id" type="INTEGER" required="true"/>
+        <column name="funcionario_id" type="INTEGER" required="true"/>
+
+        <column name="situacao" type="INTEGER" required="true"/>
+        <column name="data_admissao" type="DATE" required="true"/>
+        <column name="local_id" type="DATE" required="true"/>
+
+        <foreign-key foreignTable="contador" name="Rel_funcionario_contador" onDelete="restrict">
+            <reference local="contador_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_funcionario_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="local" name="Rel_funcionario_local" onDelete="restrict">
+            <reference local="local_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="setor" name="Rel_funcionario_setor" onDelete="restrict">
+            <reference local="setor_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="cargo" name="Rel_funcionario_cargo" onDelete="restrict">
+            <reference local="cargo_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="funcionario" name="Rel_funcionario_funcionario" onDelete="restrict">
+            <reference local="funcionario_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="responsavel" package="pacoteResponsavel">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="nome" type="VARCHAR" size="50"/>
+        <column name="endereco" type="VARCHAR" size="100"/>
+        <column name="numero" type="VARCHAR" size="4"/>
+        <column name="bairro" type="VARCHAR" size="50"/>
+        <column name="complemento" type="VARCHAR" size="80"/>
+        <column name="cidade" type="VARCHAR" size="30"/>
+        <column name="uf" type="CHAR" size="2"/>
+        <column name="cep" type="CHAR" size="10"/>
+        <column name="cpf" type="VARCHAR" size="20"/>
+        <column name="fone1" type="VARCHAR" size="15"/>
+        <column name="fone2" type="VARCHAR" size="15"/>
+        <column name="celular" type="VARCHAR" size="15"/>
+        <column name="apelido" type="VARCHAR" size="30"/>
+        <column name="nascimento" type="DATE"/>
+        <column name="email" type="VARCHAR" size="60" required="true"/>
+        <column name="cargo" type="VARCHAR" size="20"/>
+        <column name="rg" type="VARCHAR" size="20"/>
+        <column name="nis" type="VARCHAR" size="15"/>
+
+    </table>
+    <table name="arquivo" package="pacoteArquivo">
+
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="data" type="TIMESTAMP"/>
+        <column name="nome" required="true" type="VARCHAR" size="50"/>
+        <column name="tamanho" type="INTEGER" required="true"/>
+        <column name="arquivo_fisico" required="true" type="VARCHAR" size="50"/>
+
+    </table>
+    <table name="autorizacao" package="pacoteArquivo">
+
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="data" type="TIMESTAMP"/>
+        <column name="nome" required="true" type="VARCHAR" size="50"/>
+        <column name="usuario_id" type="INTEGER"/>
+
+        <foreign-key foreignTable="usuario" name="Rel_autorizacao_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="extrato" package="pacoteFinanceiro">
+
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="importacao_id" required="true" type="INTEGER"/>
+        <column name="movimentacao" required="true" type="VARCHAR" size="100"/>
+        <column name="tipo" required="true" type="VARCHAR" size="10"/>
+        <column name="valor" required="true" type="FLOAT"/>
+        <column name="data" required="true" type="TIMESTAMP"/>
+        <column name="situacao" required="true" type="INTEGER"/>
+        <column name="cod_movimentacao" required="true" type="VARCHAR" size="20"/>
+        <column name="local_id" required="true" type="INTEGER"/>
+
+        <foreign-key foreignTable="importacao" name="Rel_importacao_extrato" onDelete="restrict">
+            <reference local="importacao_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="local" name="Rel_local_extrato" onDelete="restrict">
+            <reference local="local_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="forma_pagamento" package="pacoteFinanceiro">
+
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="nome" required="true" type="VARCHAR" size="20"/>
+
+    </table>
+    <table name="certificado_situacao" package="pacoteCertificado">
+
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="situacao_id" required="true" type="INTEGER"/>
+        <column name="comentario" required="false" type="LONGVARCHAR"/>
+        <column name="usuario_id" required="false" type="INTEGER"/>
+        <column name="certificado_id" required="true" type="INTEGER"/>
+        <column name="data" required="true" type="TIMESTAMP"/>
+
+        <foreign-key foreignTable="usuario" name="Rel_certificadoSituacao_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="situacao" name="Rel_certificadoSituacao_situacao" onDelete="restrict">
+            <reference local="situacao_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="certificado" name="Rel_certificadoSituacao_cewrtificado" onDelete="restrict">
+            <reference local="certificado_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="situacao" package="pacoteCertificado">
+
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="sigla" required="true" type="VARCHAR" size="8"/>
+        <column name="nome" required="true" type="VARCHAR" size="20"/>
+        <column name="descricao" required="true" type="VARCHAR" size="40"/>
+
+    </table>
+    <table name="fornecedor" package="pacoteProduto">
+
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="nome" required="true" type="VARCHAR" size="50"/>
+
+    </table>
+
+    <table name="cupons_desconto_certificado" package="pacoteCertificado">
+
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="produto_id" type="INTEGER" required="true"/>
+        <column name="usuario_id" type="INTEGER" required="true"/>
+        <column name="certificado_id" type="INTEGER" required="true"/>
+        <column name="usuario_autorizacao_id" type="INTEGER" required="true"/>
+        <column name="usado" type="INTEGER"/>
+        <column name="vencimento" type="DATE"/>
+        <column name="cpf_cnpj" required="true" type="VARCHAR" size="20"/>
+        <column name="desconto" type="FLOAT"/>
+        <column name="codigo_desconto" required="true" type="VARCHAR" size="50"/>
+        <column name="motivo" required="true" type="VARCHAR" size="255"/>
+        <column name="email_cliente" required="true" type="VARCHAR" size="60"/>
+        <column name="autorizado" type="INTEGER"/>
+        <column name="motivo_autorizacao" required="true" type="VARCHAR" size="255"/>
+
+
+        <foreign-key foreignTable="produto" name="rel_produto_cupons_desconto_certificado" onDelete="restrict">
+            <reference local="produto_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="rel_usuario_cupons_desconto_certificado" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="certificado" name="rel_certificado_cupons_desconto_certificado" onDelete="restrict">
+            <reference local="certificado_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="rel_usuario_autorizacao_cupons_desconto_certificado" onDelete="restrict">
+            <reference local="usuario_autorizacao_id" foreign="id"/>
+        </foreign-key>
+
+        <validator column="codigo_desconto">
+            <rule name="unique"
+                  message="Ja existe um Codigo de Desconto cadastrado com esse codigo. Por favor verificar com o departamento comercial."/>
+        </validator>
+
+
+    </table>
+
+
+    <table name="produto" package="pacoteProduto">
+
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="fornecedor_id" type="INTEGER" required="true"/>
+
+        <column name="codigo" type="INTEGER"/>
+        <column name="nome" required="true" type="VARCHAR" size="50"/>
+        <column name="preco" required="true" type="FLOAT"/>
+        <column name="preco_antigo2" required="true" type="FLOAT"/>
+        <column name="preco_antigo" required="true" type="FLOAT"/>
+        <column name="preco_custo" required="true" type="FLOAT"/>
+        <column name="pessoa_tipo" required="true" type="CHAR" size="1"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+        <column name="validade" type="INTEGER" required="true"/>
+        <column name="produto_id" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="fornecedor" name="Rel_produto_fornecedor" onDelete="restrict">
+            <reference local="fornecedor_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="produto" name="rel_produto_produto" onDelete="restrict">
+            <reference local="produto_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+
+    <table name="local_produto" package="pacoteProduto">
+
+        <column name="local_id" type="INTEGER" required="true" primaryKey="true"/>
+        <column name="produto_id" type="INTEGER" required="true" primaryKey="true"/>
+        <column name="preco" required="true" type="FLOAT"/>
+        <column name="comissionamento" required="true" type="FLOAT"/>
+        <column name="observacao" type="VARCHAR" size="1000"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="local" name="Rel_localProduto_local" onDelete="restrict">
+            <reference local="local_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="produto" name="Rel_localProduto_produto" onDelete="restrict">
+            <reference local="produto_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="local_usuario" package="pacoteUsuario">
+
+        <column name="id" type="INTEGER" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="local_id" type="INTEGER" required="true"/>
+        <column name="usuario_id" type="INTEGER" required="true"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="local" name="Rel_localusuario_local" onDelete="restrict">
+            <reference local="local_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_localusuario_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="local" package="pacoteComum">
+
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="nome" required="true" type="VARCHAR" size="50"/>
+        <column name="situacao" type="INTEGER"/>
+        <column name="comissao" type="FLOAT"/>
+
+    </table>
+    <table name="importacao" package="pacoteComum">
+
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="arquivo" required="true" type="VARCHAR" size="50"/>
+        <column name="data" required="true" type="TIMESTAMP"/>
+        <column name="usuario_id" required="true" type="INTEGER"/>
+        <column name="tela" required="true" type="VARCHAR" size="100"/>
+
+        <foreign-key foreignTable="usuario" name="Rel_usuario_importacao" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="cep" package="pacoteComum">
+
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="cidade" required="true" type="VARCHAR" size="50"/>
+        <column name="logradouro" required="true" type="VARCHAR" size="70"/>
+        <column name="bairro" required="true" type="VARCHAR" size="72"/>
+        <column name="cep" required="true" type="VARCHAR" size="9"/>
+        <column name="tp_logradouro" required="true" type="VARCHAR" size="20"/>
+        <column name="uf" required="true" type="VARCHAR" size="2"/>
+
+    </table>
+    <table name="certificado_fora_sistema" package="pacoteCertificado">
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="protocolo" type="INTEGER"/>
+        <column name="documento" type="VARCHAR" size="100"/>
+        <column name="razao" type="VARCHAR" size="100"/>
+        <column name="status" type="VARCHAR" size="100"/>
+        <column name="produto" type="VARCHAR" size="150"/>
+        <column name="local" type="VARCHAR" size="100"/>
+        <column name="ar" type="VARCHAR" size="150"/>
+        <column name="cpf_ar" type="VARCHAR" size="50"/>
+        <column name="valor" type="VARCHAR" size="50"/>
+        <column name="data_avp" type="TIMESTAMP"/>
+        <column name="data_validacao" type="TIMESTAMP"/>
+        <column name="data_importacao" type="TIMESTAMP"/>
+        <column name="data_mes_referente" type="INTEGER"/>
+        <column name="situacao" type="INTEGER"/>
+    </table>
+
+    <table name="certificado" package="pacoteCertificado">
+
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+
+        <column name="produto_id" type="INTEGER"/>
+        <column name="cliente_id" type="INTEGER"/>
+        <column name="forma_pagamento_id" type="INTEGER"/>
+        <column name="usuario_id" type="INTEGER"/>
+        <column name="funcionario_validou_id" type="INTEGER"/>
+        <column name="usuario_validou_id" type="INTEGER"/>
+        <column name="local_id" type="INTEGER"/>
+        <column name="contador_id" type="INTEGER"/>
+
+        <column name="autorizado_venda_sem_contador" type="INTEGER"/>
+
+        <column name="codigo_documento" type="VARCHAR" size="30"/>
+        <column name="protocolo" type="INTEGER"/>
+        <column name="voucher" type="VARCHAR" size="30"/>
+        <column name="desconto" type="FLOAT"/>
+        <column name="motivo_desconto" type="VARCHAR" size="200"/>
+        <column name="observacao" type="VARCHAR" size="255"/>
+
+        <column name="data_compra" type="TIMESTAMP"/>
+        <column name="data_ultima_validacao" type="TIMESTAMP"/>
+        <column name="data_pagamento" type="TIMESTAMP"/>
+        <column name="data_validacao" type="TIMESTAMP"/>
+        <column name="data_confirmacao_pagamento" type="TIMESTAMP"/>
+        <column name="confirmacao_validacao" type="INTEGER"/>
+        <column name="certificado_renovado" type="INTEGER"/>
+        <column name="apagado" type="INTEGER"/>
+        <column name="parceiro_id" type="INTEGER"/>
+
+        <foreign-key foreignTable="parceiro" name="Rel_certificado_parceiro" onDelete="restrict">
+            <reference local="parceiro_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="contador" name="Rel_certificado_contador" onDelete="restrict">
+            <reference local="contador_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="local" name="Rel_certificado_local" onDelete="restrict">
+            <reference local="local_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="forma_pagamento" name="Rel_certificado_formaPagamento" onDelete="restrict">
+            <reference local="forma_pagamento_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="produto" name="Rel_certificado_produto" onDelete="restrict">
+            <reference local="produto_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="cliente" name="Rel_certificado_cliente" onDelete="restrict">
+            <reference local="cliente_id" foreign="id"/>
+        </foreign-key>
+
+
+        <foreign-key foreignTable="usuario" name="Rel_certificado_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="usuario" name="Rel_certificado_usuario" onDelete="restrict">
+            <reference local="usuario_validou_id" foreign="id"/>
+
+        </foreign-key>
+
+ <!--       <foreign-key foreignTable="usuario" name="Rel_funcionario_id_Usuario" onDelete="restrict">
+            <reference local="funcionario_validou_id" foreign="id"/>
+        </foreign-key>
+-->
+
+        <foreign-key foreignTable="certificado" name="Rel_certificado_certificado" onDelete="restrict">
+            <reference local="certificado_renovado" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <!-- TABELA QUE GUARDARA OS PROTOCOLOS DAQUELE CERTIFICADO-->
+    <table name="certificado_protocolo" package="pacoteCertificado">
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="protocolo" type="INTEGER"/>
+        <column name="tipo" type="CHAR"/>
+    </table>
+
+    <table name="cliente" package="pacoteCliente">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="responsavel_id" type="INTEGER"/>
+        <column name="local_id" type="INTEGER"/>
+
+        <column name="pessoa_tipo" type="CHAR" size="1" required="true"/>
+        <column name="razao_social" type="VARCHAR" size="80" required="true"/>
+        <column name="nome_fantasia" type="VARCHAR" size="80" required="true"/>
+        <column name="endereco" type="VARCHAR" size="100"/>
+        <column name="numero" type="VARCHAR" size="4"/>
+        <column name="bairro" type="VARCHAR" size="50"/>
+        <column name="complemento" type="VARCHAR" size="80"/>
+        <column name="cidade" type="VARCHAR" size="30"/>
+        <column name="email" type="VARCHAR" size="60" required="true"/>
+        <column name="uf" type="CHAR" size="2"/>
+        <column name="cep" type="CHAR" size="10"/>
+        <column name="fone1" type="VARCHAR" size="15"/>
+        <column name="fone2" type="VARCHAR" size="15"/>
+        <column name="celular" type="VARCHAR" size="15"/>
+        <column name="cpf_cnpj" type="VARCHAR" size="20" required="true"/>
+        <column name="situacao" type="INTEGER"/>
+        <column name="nascimento" type="DATE"/>
+
+        <column name="nome_contato" type="VARCHAR" size="50"/>
+        <column name="referencia_contato" type="VARCHAR" size="30"/>
+        <column name="telefone_contato" type="VARCHAR" size="15"/>
+        <column name="email_contato" type="VARCHAR" size="60"/>
+        <column name="cargo" type="VARCHAR" size="20"/>
+        <column name="rg" type="VARCHAR" size="20"/>
+        <column name="nis" type="VARCHAR" size="15"/>
+        <column name="contador_id" type="INTEGER"/>
+
+        <foreign-key foreignTable="local" name="Rel_cliente_local" onDelete="restrict">
+            <reference local="local_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="contador" name="Rel_cliente_contador" onDelete="restrict">
+            <reference local="contador_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="responsavel" name="Rel_cliente_responsavel" onDelete="restrict">
+            <reference local="responsavel_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="cliente_cadastro" package="pacoteCliente">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+
+        <column name="nome" type="VARCHAR" size="80" required="true"/>
+        <column name="endereco" type="VARCHAR" size="100"/>
+        <column name="numero" type="VARCHAR" size="10"/>
+        <column name="bairro" type="VARCHAR" size="50"/>
+        <column name="complemento" type="VARCHAR" size="80"/>
+        <column name="cidade" type="VARCHAR" size="40"/>
+        <column name="email" type="VARCHAR" size="60"/>
+        <column name="uf" type="CHAR" size="2"/>
+        <column name="cep" type="CHAR" size="10"/>
+        <column name="fone1" type="VARCHAR" size="15"/>
+        <column name="fone2" type="VARCHAR" size="15"/>
+        <column name="celular" type="VARCHAR" size="15"/>
+        <column name="cpf" type="VARCHAR" size="20" required="true"/>
+        <column name="situacao" type="INTEGER"/>
+        <column name="data_nascimento" type="DATE"/>
+        <column name="profissao" type="VARCHAR" size="60"/>
+        <column name="rg_orgao" type="VARCHAR" size="40"/>
+        <column name="tipo" type="CHAR" size="1"/>
+
+    </table>
+
+    <table name="cliente_historico" package="pacoteCliente">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="cliente_id" type="INTEGER" size="11" required="true"/>
+        <column name="usuario_id" type="INTEGER" size="11"/>
+        <column name="acao" type="VARCHAR" size="200"/>
+        <column name="comentario" type="VARCHAR" size="200"/>
+
+        <foreign-key foreignTable="cliente" name="Rel_cliente" onDelete="restrict">
+            <reference local="cliente_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+
+    <table name="contador" package="pacoteContador">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="local_id" type="INTEGER"/>
+        <column name="comissao" type="INTEGER"/>
+        <column name="desconto" type="INTEGER"/>
+
+        <!--DADOS BANCARIOS-->
+        <column name="banco" type="VARCHAR" size="50"/>
+        <column name="conta_corrente" type="VARCHAR" size="12"/>
+        <column name="agencia" type="VARCHAR" size="8"/>
+        <column name="operacao" type="VARCHAR" size="5"/>
+        <column name="cpf_cnpj_conta" type="VARCHAR" size="20"/>
+
+        <column name="responsavel_id" type="INTEGER"/>
+        <column name="usuario_id" type="INTEGER"/>
+        <column name="data_cadastro" type="TIMESTAMP"/>
+
+        <column name="nome" type="VARCHAR" size="50"/>
+        <column name="nascimento" type="DATE"/>
+        <column name="cpf" type="VARCHAR" size="20"/>
+        <column name="celular" type="VARCHAR" size="15"/>
+        <column name="email" type="VARCHAR" size="60" required="true"/>
+
+        <column name="razao_social" type="VARCHAR" size="80" required="true"/>
+        <column name="cnpj" type="VARCHAR" size="20"/>
+        <column name="nome_fantasia" type="VARCHAR" size="80" required="true"/>
+        <column name="endereco" type="VARCHAR" size="100"/>
+        <column name="numero" type="VARCHAR" size="4"/>
+        <column name="bairro" type="VARCHAR" size="50"/>
+        <column name="complemento" type="VARCHAR" size="80"/>
+        <column name="cidade" type="VARCHAR" size="30"/>
+        <column name="email_empresa" type="VARCHAR" size="60" required="true"/>
+        <column name="uf" type="CHAR" size="2"/>
+        <column name="cep" type="CHAR" size="10"/>
+        <column name="fone1" type="VARCHAR" size="15"/>
+        <column name="fone2" type="VARCHAR" size="15"/>
+        <column name="pessoa_tipo" type="VARCHAR" size="2"/>
+
+        <column name="crc" type="VARCHAR" size="8"/>
+        <column name="cod_contador" type="VARCHAR" size="10"/>
+        <column name="situacao" type="INTEGER"/>
+
+        <column name="url" type="VARCHAR" size="255"/>
+        <column name="logo" type="VARCHAR" size="255"/>
+        <column name="localidade" type="VARCHAR" size="255"/>
+
+        <column name="contato1_nome" type="VARCHAR" size="100"/>
+        <column name="contato1_cargo" type="VARCHAR" size="100"/>
+        <column name="contato1_fone" type="VARCHAR" size="50"/>
+
+        <column name="contato2_nome" type="VARCHAR" size="100"/>
+        <column name="contato2_cargo" type="VARCHAR" size="100"/>
+        <column name="contato2_fone" type="VARCHAR" size="50"/>
+
+        <column name="tipo_contador" type="VARCHAR" size="100"/>
+
+        <validator column="email">
+            <rule name="unique"
+                  message="Ja existe um Contador Amigo cadastrado com este EMAIL. Por favor verificar com o departamento comercial."/>
+        </validator>
+
+        <validator column="cpf">
+            <rule name="unique"
+                  message="Ja existe um Contador Amigo cadastrado com este CPF. Por favor verificar com o departamento comercial."/>
+        </validator>
+
+        <validator column="cod_contador">
+            <rule name="unique"
+                  message="Ja existe um Contador Amigo cadastrado com este COD. Por favor verificar com o departamento comercial."/>
+        </validator>
+
+        <validator column="celular">
+            <rule name="unique"
+                  message="Ja existe um Contador Amigo cadastrado com este numero CELULAR. Por favor verificar com o departamento comercial."/>
+        </validator>
+
+        <validator column="url">
+            <rule name="unique"
+                  message="Ja existe um Contador Amigo cadastrado com esta URL. Por favor verificar com o departamento comercial."/>
+        </validator>
+
+        <validator column="cod_contador">
+            <rule name="unique"
+                  message="Ja existe um Contador Amigo cadastrado com esta CODIGO. Por favor verificar com o departamento comercial."/>
+        </validator>
+
+        <foreign-key foreignTable="usuario" name="Rel_contador_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="local" name="Rel_contador_local" onDelete="restrict">
+            <reference local="local_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="responsavel" name="Rel_contador_responsavel" onDelete="restrict">
+            <reference local="responsavel_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+
+    <table name="contador_detalhar" package="pacoteContador">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="contador_id" type="INTEGER"/>
+        <column name="usuario_id" type="INTEGER"/>
+        <column name="data_cadastro" type="TIMESTAMP"/>
+        <column name="descricao" type="VARCHAR" size="250"/>
+
+        <foreign-key foreignTable="usuario" name="Rel_contador_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="contador" name="Rel_acao_contador" onDelete="restrict">
+            <reference local="contador_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="contador_contato" package="pacoteContador">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="nome" type="VARCHAR" size="50"/>
+        <column name="fone" type="VARCHAR" size="15"/>
+        <column name="celular" type="VARCHAR" size="15"/>
+        <column name="cargo" type="VARCHAR" size="50"/>
+        <column name="email" type="VARCHAR" size="60" required="true"/>
+        <column name="nascimento" type="DATE"/>
+        <column name="cpf" type="VARCHAR" size="20"/>
+
+        <column name="contador_id" type="INTEGER"/>
+
+        <foreign-key foreignTable="contador" name="Rel_contador_contadorContato" onDelete="restrict">
+            <reference local="contador_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+
+    <!--Contato contador deixará de ser usada a partir da data: 28/09/2016-->
+
+    <table name="contato_contador" package="pacoteContador">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="contador_id" type="INTEGER"/>
+        <column name="situacao" type="INTEGER"/>
+
+        <column name="data_contato" type="TIMESTAMP"/>
+
+        <column name="nome_contato" type="VARCHAR" size="50" required="true"/>
+        <column name="historico" type="VARCHAR" size="255" required="true"/>
+
+        <foreign-key foreignTable="contador" name="Rel_contato_contador" onDelete="restrict">
+            <reference local="contador_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="contato" package="pacoteContato">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="local_id" type="INTEGER"/>
+
+        <column name="nome" type="VARCHAR" size="60" required="true"/>
+        <column name="empresa" type="VARCHAR" size="80" required="true"/>
+        <column name="email" type="VARCHAR" size="60"/>
+        <column name="nascimento" type="DATE"/>
+        <column name="sexo" type="CHAR" size="1" required="true"/>
+
+        <column name="endereco" type="VARCHAR" size="100"/>
+        <column name="bairro" type="VARCHAR" size="50"/>
+        <column name="complemento" type="VARCHAR" size="80"/>
+        <column name="cidade" type="VARCHAR" size="30"/>
+        <column name="uf" type="CHAR" size="2"/>
+        <column name="cep" type="CHAR" size="10"/>
+        <column name="fone1" type="VARCHAR" size="15"/>
+        <column name="celular" type="VARCHAR" size="15"/>
+        <column name="cpf_cnpj" type="VARCHAR" size="20" required="true"/>
+        <column name="situacao" type="INTEGER"/>
+        <column name="cargo" type="VARCHAR" size="20"/>
+
+        <foreign-key foreignTable="local" name="Rel_contato_local" onDelete="restrict">
+            <reference local="local_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="boleto" package="pacoteFinanceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="tid" type="INTEGER" required="false"/>
+        <column name="certificado_id" type="INTEGER" required="true"/>
+        <column name="pedido_id" type="INTEGER" required="true"/>
+        <column name="contas_receber_id" type="INTEGER" required="true"/>
+        <column name="cliente_id" type="VARCHAR" size="50" required="true"/>
+
+        <column name="vencimento" type="DATE"/>
+        <column name="data_processamento" type="DATE"/>
+        <column name="data_pagamento" type="DATE"/>
+        <column name="data_confirmacao_pagamento" type="TIMESTAMP"/>
+        <column name="valor" type="FLOAT"/>
+        <column name="url_boleto" type="VARCHAR" size="150"/>
+        <column name="descricao" type="VARCHAR" size="200"/>
+
+        <foreign-key foreignTable="certificado" name="Rel_boleto_certificado" onDelete="restrict">
+            <reference local="certificado_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="pedido" name="Rel_boleto_pedido" onDelete="restrict">
+            <reference local="pedido_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="contas_receber" name="Rel_boleto_contasReceber" onDelete="restrict">
+            <reference local="contas_receber_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="cliente" name="Rel_boleto_cliente" onDelete="restrict">
+            <reference local="cliente_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="recibo" package="pacoteFinanceiro">
+
+        <column name="id_recibo" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="certificado_id" type="INTEGER" required="true"/>
+
+        <column name="data_geracao" type="TIMESTAMP"/>
+        <column name="valor" type="FLOAT"/>
+
+        <foreign-key foreignTable="certificado" name="Rel_recibo_certificado" onDelete="restrict">
+            <reference local="certificado_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="evento" package="pacoteCliente">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="razao_social" type="VARCHAR" size="80" required="true"/>
+        <column name="nome" type="VARCHAR" size="50" required="true"/>
+        <column name="endereco" type="VARCHAR" size="100"/>
+        <column name="numero" type="INTEGER"/>
+        <column name="bairro" type="VARCHAR" size="50"/>
+        <column name="complemento" type="VARCHAR" size="80"/>
+        <column name="cidade" type="VARCHAR" size="30"/>
+        <column name="email" type="VARCHAR" size="60" required="true"/>
+        <column name="uf" type="CHAR" size="2"/>
+        <column name="cep" type="CHAR" size="10"/>
+        <column name="fone1" type="VARCHAR" size="15"/>
+        <column name="fone2" type="VARCHAR" size="15"/>
+        <column name="celular" type="VARCHAR" size="15"/>
+        <column name="cpf_cnpj" type="VARCHAR" size="20" required="true"/>
+        <column name="situacao" type="INTEGER"/>
+
+    </table>
+    <table name="caixa" package="pacoteFinanceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="usuario_id" type="INTEGER" required="true"/>
+        <column name="data_abertura" type="TIMESTAMP" required="true"/>
+        <column name="data_fechamento" type="TIMESTAMP"/>
+
+        <foreign-key foreignTable="usuario" name="Rel_caixa_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="lancamento_caixa" package="pacoteFinanceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="caixa_id" type="INTEGER" required="true"/>
+        <column name="conta_pagar_id" type="INTEGER"/>
+        <column name="CONTA_CONTABIL_ID" type="INTEGER"/>
+        <column name="conta_contabil_dest_id" type="INTEGER"/>
+        <column name="conta_receber_id" type="INTEGER"/>
+
+        <column name="data_lancamento" type="TIMESTAMP"/>
+        <column name="descricao" type="VARCHAR"/>
+        <column name="valor" type="FLOAT"/>
+        <column name="tipo" type="CHAR" size="1"/>
+
+        <foreign-key foreignTable="conta_contabil" name="Rel_lancamentoCaixa_contaContabil" onDelete="restrict">
+            <reference local="CONTA_CONTABIL_ID" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="contas_pagar" name="Rel_lancamentoCaixa_contasPagar" onDelete="restrict">
+            <reference local="conta_pagar_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="contas_receber" name="Rel_lancamentoCaixa_contasReceber" onDelete="restrict">
+            <reference local="conta_receber_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="caixa" name="Rel_lancamentoCaixa_caixa" onDelete="restrict">
+            <reference local="caixa_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="detalhe_lancamento" package="pacoteFinanceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="lancamento_caixa_id" type="INTEGER" required="true"/>
+        <column name="cedulas" type="FLOAT"/>
+        <column name="moedas" type="FLOAT"/>
+        <column name="cheques" type="FLOAT"/>
+        <column name="deposito" type="FLOAT"/>
+        <column name="despesa" type="FLOAT"/>
+        <column name="outro" type="FLOAT"/>
+        <column name="observacao_outro" type="VARCHAR" size="200"/>
+        <column name="observacao_despesa" type="VARCHAR" size="200"/>
+
+        <foreign-key foreignTable="lancamento_caixa" name="Rel_detalheLancamento_lancamentoCaixa" onDelete="restrict">
+            <reference local="lancamento_caixa_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="detalhe_cheque" package="pacoteFinanceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="banco_id" type="INTEGER" required="true"/>
+        <column name="vendedor_id" type="INTEGER" required="false"/>
+        <column name="lancamento_caixa_id" type="INTEGER" required="false"/>
+        <column name="numero" type="INTEGER"/>
+        <column name="bom_para" type="TIMESTAMP"/>
+        <column name="valor" type="FLOAT"/>
+        <column name="data_recebimento" type="TIMESTAMP"/>
+        <column name="nome_cliente" type="VARCHAR" size="40"/>
+        <column name="situacao" type="CHAR" size="1"/>
+
+        <foreign-key foreignTable="lancamento_caixa" name="Rel_detalheCheque_lancamentoCaixa" onDelete="restrict">
+            <reference local="lancamento_caixa_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="banco" name="Rel_detalheCheque_banco" onDelete="restrict">
+            <reference local="banco_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="funcionario" name="Rel_detalheCheque_funcionario" onDelete="restrict">
+            <reference local="vendedor_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="banco" package="pacoteFinanceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="codigo" type="VARCHAR" size="5"/>
+        <column name="nome" type="VARCHAR" size="50"/>
+
+    </table>
+    <table name="pedido" package="pacoteComercial">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="cliente_id" type="INTEGER"/>
+        <column name="forma_pagamento_id" type="INTEGER"/>
+        <column name="funcionario_id" type="INTEGER"/>
+
+        <column name="data_pedido" type="TIMESTAMP"/>
+        <column name="desconto" type="FLOAT"/>
+        <column name="observacao" type="VARCHAR" size="200"/>
+        <column name="situacao" type="INTEGER"/>
+        <column name="data_confirmacao_pagamento" type="TIMESTAMP"/>
+
+        <foreign-key foreignTable="cliente" name="Rel_pedido_cliente" onDelete="restrict">
+            <reference local="cliente_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="forma_pagamento" name="Rel_pedido_formaPagamento" onDelete="restrict">
+            <reference local="forma_pagamento_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="funcionario" name="Rel_pedido_funcionario" onDelete="restrict">
+            <reference local="funcionario_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="item_pedido" package="pacoteComercial">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="produto_id" type="INTEGER"/>
+        <column name="certificado_id" type="INTEGER"/>
+        <column name="pedido_id" type="INTEGER"/>
+
+        <foreign-key foreignTable="produto" name="Rel_itemPedido_produto" onDelete="restrict">
+            <reference local="produto_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="certificado" name="Rel_itemPedido_certificado" onDelete="restrict">
+            <reference local="certificado_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="pedido" name="Rel_itemPedido_pedido" onDelete="restrict">
+            <reference local="pedido_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="contas_receber" package="pacoteFinanceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="pedido_id" type="INTEGER" required="false"/>
+        <column name="banco_id" type="INTEGER" required="false"/>
+        <column name="certificado_id" type="INTEGER"/>
+        <column name="conta_contabil_id" type="INTEGER"/>
+
+        <column name="descricao" type="VARCHAR" size="200" required="true"/>
+        <column name="data_documento" type="TIMESTAMP"/>
+        <column name="data_pagamento" type="TIMESTAMP"/>
+
+        <column name="valor_documento" type="FLOAT"/>
+        <column name="vencimento" type="TIMESTAMP"/>
+        <column name="desconto" type="FLOAT"/>
+        <column name="observacao" type="VARCHAR" size="200"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+        <column name="forma_pagamento_id" type="INTEGER"/>
+        <column name="codigo_documento" type="VARCHAR" size="30"/>
+        <column name="nota_fiscal" type="INTEGER"/>
+
+        <foreign-key foreignTable="banco" name="Rel_CReceber_Banco" onDelete="restrict">
+            <reference local="banco_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="conta_contabil" name="Rel_0099sdf975" onDelete="restrict">
+            <reference local="conta_contabil_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="pedido" name="Rel_c00999sd3f75fasdf" onDelete="restrict">
+            <reference local="pedido_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="certificado" name="Rel_contaReceber_certificado" onDelete="restrict">
+            <reference local="certificado_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="forma_pagamento" name="Rel_0SD099975" onDelete="restrict">
+            <reference local="forma_pagamento_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="contas_pagar" package="pacoteFinanceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="conta_pagar_id" type="INTEGER"/>
+        <column name="conta_contabil_id" type="INTEGER"/>
+        <column name="lancamento_caixa_id" type="INTEGER"/>
+
+        <column name="data_pagamento" type="TIMESTAMP"/>
+        <column name="data_documento" type="DATE" required="true"/>
+
+        <column name="descricao" type="VARCHAR" size="100" required="true"/>
+        <column name="valor_documento" type="FLOAT" required="true"/>
+        <column name="valor_restante" type="FLOAT" required="true"/>
+        <column name="vencimento" type="DATE" required="true"/>
+        <column name="desconto" type="FLOAT"/>
+        <column name="observacao" type="VARCHAR" size="100" required="false"/>
+        <column name="motivo_desconto" type="VARCHAR" size="200"/>
+        <column name="situacao" type="INTEGER"/>
+
+        <foreign-key foreignTable="contas_pagar" name="Rel_contasPagar_contasPagar" onDelete="restrict">
+            <reference local="conta_pagar_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="lancamento_caixa" name="Rel_contasPagar_lancamentoCaixa" onDelete="restrict">
+            <reference local="lancamento_caixa_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="conta_contabil" name="Rel_contasPagar_contaContabil" onDelete="restrict">
+            <reference local="conta_contabil_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="lancamento_conta" package="pacoteFinanceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="conta_bancaria_id" type="INTEGER" required="true"/>
+        <column name="conta_pagar_id" type="INTEGER"/>
+        <column name="conta_receber_id" type="INTEGER"/>
+        <column name="conta_contabil_id" type="INTEGER"/>
+        <column name="cod_movimentacao" type="VARCHAR" size="20"/>
+
+        <column name="data_lancamento" type="TIMESTAMP"/>
+        <column name="descricao" type="VARCHAR"/>
+        <column name="valor" type="FLOAT"/>
+        <column name="tipo" type="CHAR" size="1"/>
+        <column name="observacao" type="VARCHAR" size="100"/>
+        <column name="local_id" type="INTEGER"/>
+        <column name="extrato_id" type="INTEGER"/>
+
+        <foreign-key foreignTable="contas_pagar" name="Rel_lancamentoConta_contasPagar" onDelete="restrict">
+            <reference local="conta_pagar_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="extrato" name="Rel_lancamentoConta_extrato" onDelete="restrict">
+            <reference local="extrato_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="contas_receber" name="Rel_lancamentoConta_contasReceber" onDelete="restrict">
+            <reference local="conta_receber_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="conta_bancaria" name="Rel_lancamentoConta_contaBancaria" onDelete="restrict">
+            <reference local="conta_bancaria_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="conta_contabil" name="Rel_lancamentoConta_contaContabil" onDelete="restrict">
+            <reference local="conta_contabil_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="local" name="Rel_lancamentoConta_local" onDelete="restrict">
+            <reference local="local_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="categoria_conta_contabil" package="pacoteFinanceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="codigo" type="VARCHAR" size="6"/>
+        <column name="nome" type="VARCHAR" size="50" required="true"/>
+        <column name="descricao" type="VARCHAR" size="80" required="true"/>
+        <column name="tipo" type="CHAR" size="1"/>
+
+    </table>
+    <table name="conta_contabil" package="pacoteFinanceiro">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="codigo" type="VARCHAR" size="50"/>
+        <column name="classificacao" type="VARCHAR" size="100"/>
+        <column name="categoria_conta_contabil_id" type="INTEGER" required="true"/>
+
+        <column name="nome" type="VARCHAR" size="50" required="true"/>
+        <column name="apelido" type="VARCHAR" size="50" required="true"/>
+        <column name="descricao" type="VARCHAR" size="100" required="true"/>
+        <column name="tipo" type="CHAR" size="1"/>
+
+        <foreign-key foreignTable="categoria_conta_contabil" name="Rel_contaContabil_categoriaContaContabil"
+                     onDelete="restrict">
+            <reference local="categoria_conta_contabil_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="conta_bancaria" package="pacoteUsuario">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="banco" type="VARCHAR" size="50" required="true"/>
+        <column name="agencia" type="VARCHAR" size="7"/>
+        <column name="numero_conta" type="VARCHAR" size="10"/>
+        <column name="tipo" type="char" size="2"/>
+        <column name="situacao" type="INTEGER"/>
+
+    </table>
+
+    <!-- begin Central de Solicitação -->
+
+    <table name="usuario_cliente" package="pacoteCliente">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="login" type="VARCHAR" size="30" required="true"/>
+        <column name="nome" type="VARCHAR" size="50" required="true"/>
+        <column name="email" type="VARCHAR" size="60"/>
+        <column name="senha" type="VARCHAR" size="15" required="true"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+        <column name="master" type="CHAR" size="1"/>
+        <column name="pasta_raiz" type="VARCHAR" size="255"/>
+
+        <column name="perfil_id" type="INTEGER" required="true"/>
+        <column name="cliente_id" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="perfil" name="Rel_usuariocliente_perfil" onDelete="restrict">
+            <reference local="perfil_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="cliente" name="Rel_usuariocliente_cliente" onDelete="restrict">
+            <reference local="cliente_id" foreign="id"/>
+        </foreign-key>
+    </table>
+    <table name="tipo" package="pacoteSolicitacao">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="nome" type="VARCHAR" size="40" required="true"/>
+        <column name="descricao" type="VARCHAR" size="100" required="true"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+        <column name="setor_id" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="setor" name="Rel_tipo_setor" onDelete="restrict">
+            <reference local="setor_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="requisicao" package="pacoteSolicitacao">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+
+        <column name="protocolo" type="VARCHAR" size="14" required="true"/>
+        <column name="data" type="TIMESTAMP" required="true"/>
+        <column name="assunto" type="VARCHAR" size="255" required="true"/>
+        <column name="empresa_requisitante" type="VARCHAR" size="100" required="true"/>
+        <column name="cnpj_requisitante" type="VARCHAR" size="20" required="true"/>
+        <column name="nome_requisitante" type="VARCHAR" size="100" required="true"/>
+        <column name="email_requisitante" type="VARCHAR" size="80" required="true"/>
+        <column name="telefone_requisitante" type="VARCHAR" size="20" required="true"/>
+        <column name="observacao" type="VARCHAR" size="255"/>
+        <column name="nota" type="INTEGER"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+        <column name="tipo_atendente" type="CHAR" size="1"/>
+        <column name="tipo_usuario" type="CHAR" size="1"/>
+
+        <column name="setor_id" type="INTEGER" required="true"/>
+        <column name="tipo_id" type="INTEGER" required="true"/>
+        <column name="usuario_id" type="INTEGER" required="true"/>
+        <column name="usuario_cliente_id" type="INTEGER" required="true"/>
+        <column name="usuario_atendente_id" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="setor" name="Rel_requisicao_setor" onDelete="restrict">
+            <reference local="setor_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="tipo" name="Rel_requisicao_tipo" onDelete="restrict">
+            <reference local="tipo_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_requisicao_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario_cliente" name="Rel_requisicao_usuariocliente" onDelete="restrict">
+            <reference local="usuario_cliente_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_requisicao_usuario_2" onDelete="restrict">
+            <reference local="usuario_atendente_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="requisicao_usuario" package="pacoteSolicitacao">
+
+        <column name="data_visualizacao" type="TIMESTAMP"/>
+
+        <column name="requisicao_id" type="INTEGER" primaryKey="true" required="true"/>
+        <column name="usuario_id" type="INTEGER" primaryKey="true" required="true"/>
+
+        <foreign-key foreignTable="requisicao" name="Rel_requisicaoUsuario_requisicao" onDelete="restrict">
+            <reference local="requisicao_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_requisicaoUsuario_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="iteracoes" package="pacoteSolicitacao">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+
+        <column name="data" type="TIMESTAMP" required="true"/>
+        <column name="descricao" type="VARCHAR" size="255" required="true"/>
+        <column name="nota" type="INTEGER" required="true"/>
+        <column name="tipo_usuario" type="CHAR" size="1"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+
+        <column name="requisicao_id" type="INTEGER" required="true"/>
+        <column name="usuario_id" type="INTEGER" required="true"/>
+        <column name="usuario_cliente_id" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="requisicao" name="Rel_iteracoes_requisicao" onDelete="restrict">
+            <reference local="requisicao_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_iteracoes_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario_cliente" name="Rel_iteracoes_usuariocliente" onDelete="restrict">
+            <reference local="usuario_cliente_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+
+    <!-- end Central de Solicitação  -->
+
+    <!-- begin Central de Aviso  -->
+
+    <table name="aviso" package="pacoteInformacao">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+
+        <column name="titulo" type="VARCHAR" size="40" required="true"/>
+        <column name="texto" type="VARCHAR" size="100" required="true"/>
+        <column name="data_inicial" type="DATE" required="true"/>
+        <column name="data_final" type="DATE" required="true"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+        <column name="data" type="TIMESTAMP" required="true"/>
+        <column name="data_envio" type="TIMESTAMP"/>
+
+        <column name="tipo_aviso_id" type="INTEGER" required="true"/>
+        <column name="usuario_id" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="tipo_aviso" name="Rel_aviso_tipoaviso" onDelete="restrict">
+            <reference local="tipo_aviso_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_aviso_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="tipo_aviso" package="pacoteInformacao">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="nome" type="VARCHAR" size="40" required="true"/>
+        <column name="descricao" type="VARCHAR" size="100" required="true"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+
+    </table>
+    <table name="aviso_usuario" package="pacoteInformacao">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="tipo_usuario" type="CHAR" size="1"/>
+        <column name="status" type="INTEGER"/>
+        <column name="data_visualizacao" type="TIMESTAMP"/>
+        <column name="data_resumo" type="TIMESTAMP"/>
+
+        <column name="aviso_id" type="INTEGER" required="true"/>
+        <column name="usuario_id" type="INTEGER" required="true"/>
+        <column name="usuario_cliente_id" type="INTEGER" required="true"/>
+
+
+        <foreign-key foreignTable="aviso" name="Rel_avisousuario_aviso" onDelete="restrict">
+            <reference local="aviso_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_avisousuario_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario_cliente" name="Rel_avisousuario_usuariocliente" onDelete="restrict">
+            <reference local="usuario_cliente_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="cargo" package="pacoteAvaliacaoDesempenho">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="nome" type="VARCHAR" size="200" required="true"/>
+        <column name="cbo" type="VARCHAR" size="20" required="true"/>
+        <column name="setor_id" type="INTEGER" required="false"/>
+        <column name="apagado" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="setor" name="Rel_Cargo_setor" onDelete="restrict">
+            <reference local="setor_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="grupo_habilidade" name="Rel_cargo_grupohabilidade" onDelete="restrict">
+            <reference local="grupo_habilidade_id" foreign="id"/>
+        </foreign-key>
+
+
+    </table>
+    <table name="grupo_tarefa" package="pacoteAvaliacaoDesempenho">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="nome" type="VARCHAR" size="200" required="true"/>
+        <column name="cargo_id" type="INTEGER" required="false"/>
+        <column name="apagado" type="INTEGER" required="true"/>
+
+
+        <foreign-key foreignTable="cargo" name="Rel_tarefa_cargo" onDelete="restrict">
+            <reference local="cargo_id" foreign="id"/>
+        </foreign-key>
+    </table>
+    <table name="tarefa" package="pacoteAvaliacaoDesempenho">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="tarefa_id" type="INTEGER" required="true"/>
+        <column name="grupo_tarefa_id" type="INTEGER" required="true"/>
+
+        <column name="nome" type="VARCHAR" size="200" required="true"/>
+        <column name="observacao" type="VARCHAR" size="200" required="false"/>
+        <column name="cargo_id" type="INTEGER" required="false"/>
+        <column name="periodo" type="VARCHAR" size="15" required="false"/>
+        <column name="apagado" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="cargo" name="Rel_tarefa_cargo" onDelete="restrict">
+            <reference local="cargo_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="tarefa" name="Rel_tarefa_tarefa" onDelete="restrict">
+            <reference local="tarefa_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="grupo_tarefa" name="Rel_tarefa_grupoTarefa" onDelete="restrict">
+            <reference local="grupo_tarefa_id" foreign="id"/>
+        </foreign-key>
+
+
+    </table>
+    <table name="tarefa_funcionario" package="pacoteAvaliacaoDesempenho">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="tarefa_id" type="INTEGER" required="true"/>
+        <column name="funcionario_id" type="INTEGER" required="true"/>
+        <column name="observacao" type="VARCHAR" size="50" required="false"/>
+        <column name="periodo" type="VARCHAR" size="15" required="false"/>
+        <column name="data" type="TIMESTAMP" required="true"/>
+        <column name="apagado" type="INTEGER" required="true"/>
+        <column name="concluido" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="tarefa" name="Rel_tarefaFuncionario_tarefa" onDelete="restrict">
+            <reference local="tarefa_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="funcionario" name="Rel_tarefaFuncionario_funcionario" onDelete="restrict">
+            <reference local="funcionario_id" foreign="id"/>
+        </foreign-key>
+    </table>
+    <table name="grupo_habilidade" package="pacoteAvaliacaoDesempenho">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="nome" type="VARCHAR" size="50" required="false"/>
+        <column name="apagado" type="INTEGER" required="true"/>
+    </table>
+    <table name="habilidade" package="pacoteAvaliacaoDesempenho">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="grupo_habilidade_id" type="INTEGER" required="true"/>
+        <column name="nome" type="VARCHAR" size="50" required="false"/>
+        <column name="descricao" type="VARCHAR" size="150" required="false"/>
+        <column name="periodo" type="VARCHAR" size="15" required="true"/>
+        <column name="apagado" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="grupo_habilidade" name="Rel_habilidade_grupohabilidade" onDelete="restrict">
+            <reference local="grupo_habilidade_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="habilidade_funcionario" package="pacoteAvaliacaoDesempenho">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="funcionario_id" type="INTEGER" required="true"/>
+        <column name="habilidade_id" type="INTEGER" required="true"/>
+        <column name="data" type="TIMESTAMP" required="true"/>
+        <column name="apagado" type="INTEGER" required="true"/>
+        <column name="nota" type="INTEGER" required="true"/>
+        <column name="observacao" type="VARCHAR" size="50" required="false"/>
+
+        <foreign-key foreignTable="habilidade" name="Rel_habilidadefuncionario_habilidade" onDelete="restrict">
+            <reference local="habilidade_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="funcionario" name="Rel_tarefaFuncionario_funcionario" onDelete="restrict">
+            <reference local="funcionario_id" foreign="id"/>
+        </foreign-key>
+    </table>
+
+    <!-- end Central de Aviso  -->
+
+    <!-- PROSPECT SISTEMA -->
+    <table name="prospect" package="pacoteProspect">
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="data_cadastro" type="TIMESTAMP" required="true"/>
+        <column name="data_prospeccao" type="TIMESTAMP" required="true"/>
+        <column name="data_primeiro_contato" type="TIMESTAMP" required="true"/>
+        <column name="data_ultimo_contato" type="TIMESTAMP" required="true"/>
+        <column name="data_agendamento" type="TIMESTAMP" required="true"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+
+        <column name="contador_id" type="INTEGER" required="true"/>
+        <column name="certificado_id" type="INTEGER" required="true"/>
+        <column name="usuario_id" type="INTEGER" required="true"/>
+        <column name="supervisor_usuario_id" type="INTEGER" required="true"/>
+        <column name="prospect_contatos_id" type="INTEGER" required="true"/>
+        <column name="prospect_tipo_id" type="INTEGER" required="true"/>
+        <column name="parceiro_id" type="INTEGER" required="true"/>
+        <column name="prospect_id" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="contador" name="Rel_prospect_contador" onDelete="restrict">
+            <reference local="contador_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="certificado" name="Rel_prospect_certificado" onDelete="restrict">
+            <reference local="certificado_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_prospect_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_prospect_usuario" onDelete="restrict">
+            <reference local="supervisor_usuario_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="prospect_contato" name="Rel_prospect_prospectContados" onDelete="restrict">
+            <reference local="prospect_contatos_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="prospect_tipo" name="Rel_prospect_prospectTipo" onDelete="restrict">
+            <reference local="prospect_tipo_id" foreign="id"/>
+        </foreign-key>
+
+        <!--<foreign-key foreignTable="parceiro" name="Rel_prospect_parceiro" onDelete="restrict">
+          <reference local="parceiro_id" foreign="id"/>
+        </foreign-key>-->
+    </table>
+    <table name="prospect_tipo" package="pacoteProspect">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="descricao" type="VARCHAR" size="200" required="true"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+    </table>
+    <table name="prospect_acao" package="pacoteProspect">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="nome" type="VARCHAR" size="200" required="true"/>
+        <column name="descricao" type="VARCHAR" size="200" required="true"/>
+        <column name="situacao" type="INTEGER"/>
+    </table>
+    <table name="prospect_meio_contato" package="pacoteProspect">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="nome" type="VARCHAR" size="200" required="true"/>
+        <column name="situacao" type="INTEGER"/>
+    </table>
+    <table name="prospect_meta" package="pacoteProspect">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="meta" type="VARCHAR" size="200" required="true"/>
+        <column name="descricao" type="VARCHAR" size="200" required="true"/>
+
+        <column name="perfil_id" type="INTEGER"/>
+        <column name="prospect_tipo_id" type="INTEGER"/>
+
+        <foreign-key foreignTable="prospect_tipo" name="Rel_prospect_prospectTipo" onDelete="restrict">
+            <reference local="prospect_tipo_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+
+    <table name="prospect_contato" package="pacoteProspect">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="nome" type="VARCHAR" size="200" required="true"/>
+        <column name="pessoa_tipo" type="CHAR" size="1" required="true"/>
+        <column name="cpf" type="VARCHAR" size="15" required="true"/>
+        <column name="cnpj" type="VARCHAR" size="16" required="true"/>
+        <column name="fone" type="VARCHAR" size="16" required="true"/>
+        <column name="site" type="VARCHAR" size="100" required="true"/>
+        <column name="cidade" type="VARCHAR" size="100" required="true"/>
+        <column name="bairro" type="VARCHAR" size="100" required="true"/>
+        <column name="uf" type="CHAR" size="2" required="true"/>
+        <column name="endereco" type="VARCHAR" size="250" required="true"/>
+
+        <column name="prospect_tipo_id" type="INTEGER" required="true"/>
+        <column name="usuario_id" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="usuario" name="Rel_prospect_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="prospect_tipo" name="Rel_prospect_prospectTipo" onDelete="restrict">
+            <reference local="prospect_tipo_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+    <table name="prospect_contato_detalhe" package="pacoteProspect">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="nome_pessoa" type="VARCHAR" size="200" required="true"/>
+        <column name="email" type="VARCHAR" size="100" required="true"/>
+        <column name="fone" type="VARCHAR" size="20" required="true"/>
+        <column name="celular" type="VARCHAR" size="20" required="true"/>
+
+        <column name="prospect_contato_id" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="prospect_contato" name="Rel_prospect_prospectContato" onDelete="restrict">
+            <reference local="prospect_contato_id" foreign="id"/>
+        </foreign-key>
+    </table>
+    <table name="prospect_situacao" package="pacoteProspect">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="data_acao" type="TIMESTAMP" required="true"/>
+        <column name="observacao" type="VARCHAR" size="250" required="true"/>
+
+        <column name="usuario_id" type="INTEGER" required="true"/>
+        <column name="prospect_meio_contato_id" type="INTEGER" required="true"/>
+        <column name="prospect_acao_id" type="INTEGER" required="true"/>
+        <column name="prospect_id" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="prospect_acao" name="Rel_prospect_prospectAcao" onDelete="restrict">
+            <reference local="prospect_acao_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="prospect_meio_contato" name="Rel_prospect_prospectViaContato" onDelete="restrict">
+            <reference local="prospect_meio_contato_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="prospect" name="Rel_prospect_prospectProspect" onDelete="restrict">
+            <reference local="prospect_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_prospect_prospectUsuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+    </table>
+    <table name="prospect_retencao" package="pacoteProspect">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="descricao" type="VARCHAR" size="500" required="true"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+    </table>
+    <table name="prospect_concorrente" package="pacoteProspect">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="nome" type="VARCHAR" size="500" required="true"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+    </table>
+    <table name="prospect_atendimento" package="pacoteProspect">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="data_atendimento" type="TIMESTAMP" size="500" required="true"/>
+        <column name="usuario_id" type="INTEGER" required="true"/>
+        <column name="prospect_meio_contato_id" type="INTEGER" required="true"/>
+        <column name="prospect_id" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="prospect_meio_contato" name="Rel_prospect_prospectMeioContato" onDelete="restrict">
+            <reference local="prospect_meio_contato_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_prospect_prospectUsuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="prospect" name="Rel_prospect_prospectId" onDelete="restrict">
+            <reference local="prospect_id" foreign="id"/>
+        </foreign-key>
+    </table>
+    <table name="prospect_negocio" package="pacoteProspect">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="data_processamento" type="TIMESTAMP" size="500" required="true"/>
+        <column name="usuario_id" type="INTEGER" required="true"/>
+        <column name="prospect_id" type="INTEGER" required="true"/>
+
+        <foreign-key foreignTable="usuario" name="Rel_prospect_prospectUsuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="prospect" name="Rel_prospect_prospectId" onDelete="restrict">
+            <reference local="prospect_id" foreign="id"/>
+        </foreign-key>
+    </table>
+    <!-- PROSPECT SISTEMA -->
+
+</database>

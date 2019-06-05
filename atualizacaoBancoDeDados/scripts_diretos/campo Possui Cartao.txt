@@ -1,0 +1,2 @@
+ALTER TABLE `contador`
+	ADD COLUMN `possui_cartao` INT(11) NULL DEFAULT '0' AFTER `desconto`;

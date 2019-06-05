@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Safeweb Checkout</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1">
+</head>
+
+<body>
+<!-- Testes-->
+<button id="btnComprarCreditos">Comprar créditos</button>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
+
+
+
+<script src="https://cdn.safe2pay.com.br/safe2pay.js"></script>
+<script>
+    Safe2Pay.Init('A9519C7362984CB7944ACF1EB88162A6');
+    //Safe2Pay.Init('466d8827-e9f5-4bc7-bf21-9f9e41964ds');
+    // Comprar credito
+    $('#btnComprarCreditos').click(function (e) {
+        // Parametros da Comprar
+
+        var parametrosCompra =
+            {
+                Produto: [{
+                    Codigo: "9543", // Código do produto que está sendo vendido
+                    Descricao: "e-CNPJ A1 + NFC-e + NF-e", // Descrição do que está sendo vendido
+                    ValorUnitario: "1.00", // Informar decimal como string. (Ex: 1.50)
+                    Quantidade: "1" // Informar int como string. (Ex: 15)
+                },
+                    {
+                        Codigo: "9543", // Código do produto que está sendo vendido
+                        Descricao: "Teste", // Descrição do que está sendo vendido
+                        ValorUnitario: "3.50", // Informar decimal como string. (Ex: 1.50)
+                        Quantidade: "6" // Informar int como string. (Ex: 15)
+                    },
+                    {
+                        Codigo: "9543", // Código do produto que está sendo vendido
+                        Descricao: "teste 2", // Descrição do que está sendo vendido
+                        ValorUnitario: "3.50", // Informar decimal como string. (Ex: 1.50)
+                        Quantidade: "6" // Informar int como string. (Ex: 15)
+                    }],
+                DadosCobranca: {
+                    Nome: "STAEL RODRIGUES VIANA",
+                    CPFCNPJ: "00590638076",
+                    Logradouro: "AV FLORIANOPOLIS",
+                    Numero: "95",
+                    Bairro: "AZENHA",
+                    Complemento: "BLOCO B",
+                    CEP: "90880460",
+                    Pais: 'Brasil',
+                    UF: "RS",
+                    Cidade: "PORTO ALEGRE",
+                    Email: "stael@safeweb.com.br"
+                },
+                Aplicacao: "TesteTransaction",
+                Vendedor: "Caroline", // Opcional
+                URLNotificacao: 'http://swsistema.com.br/inc/retornoteste.php?codigoGuiar=1234' // Opcional
+            };
+
+
+        function callbackSucess(response)
+        {
+            console.log(response);
+        }
+
+
+        function callbackError(error) {
+            // Função que será executada quando ocorrer erros no plugin
+
+            console.log(error);
+        }
+
+        function callbackConclude() {
+            // Função que será executada quando a modal do safe2pay for fechada
+        }
+
+        // Abre wizard
+        Safe2Pay.OpenWizard(parametrosCompra, callbackSucess, callbackError, callbackConclude);
+    });
+</script>
+</body>
+
+</html>

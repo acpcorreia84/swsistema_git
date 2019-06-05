@@ -1,0 +1,2 @@
+UPDATE `serama_bd`.`contador` SET `local_id`='1' WHERE  `id`=633;
+UPDATE `serama_bd`.`contador` SET `local_id`='1' WHERE  `id`=682;

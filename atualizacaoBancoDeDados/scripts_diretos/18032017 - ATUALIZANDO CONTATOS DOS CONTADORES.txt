@@ -1,0 +1,113 @@
+ALTER TABLE `contador_contato`
+	CHANGE COLUMN `nascimento` `nascimento` DATE NULL DEFAULT NULL AFTER `email`;
+
+
+DELIMITER $$
+
+drop procedure if exists CONTADOR_TRANSFERE_CONTATOS_ANTIGOS_SISTEMA_NOVO;
+
+CREATE PROCEDURE CONTADOR_TRANSFERE_CONTATOS_ANTIGOS_SISTEMA_NOVO()
+BEGIN
+
+declare terminou INT default 0;
+DECLARE id INT;
+DECLARE n1, f1, n2, f2, c1, c2 VARCHAR(40);
+DECLARE cur1 CURSOR FOR 
+select c.id, c.contato1_nome as nome1, c.contato1_fone as fone1, c.contato1_cargo as cargo1, c.contato2_nome as nome2, 
+c.contato2_fone as fone2, c.contato2_cargo as cargo2
+from contador c where (c.contato1_nome <> '' and c.contato1_fone <> '') or (c.contato2_nome <> '' and c.contato2_fone <> '');
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET terminou = -1;
+
+OPEN cur1;
+    
+while terminou <> -1 do
+    FETCH cur1 INTO id, n1, f1, c1, n2, f2, c2;
+    
+    if (n1 <> '' and f1 <> '') then
+    	INSERT INTO contador_contato (contador_id, nome, fone, cargo) values (id, n1, f1, c1);
+  	end if;
+    	
+    if (n2 <> '' and f2 <> '') then
+    	INSERT INTO contador_contato (contador_id, nome, fone, cargo) values (id, n2, f2, c2);
+  	end if;
+  	
+END WHILE;
+
+select "SUCESSO!";
+
+CLOSE cur1;
+
+	
+END$$
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DELIMITER $$
+
+drop procedure if exists contador_acrescenta_numero_cpf_duplicado;
+
+CREATE PROCEDURE contador_acrescenta_numero_cpf_duplicado()
+BEGIN
+	
+	DECLARE VAR_cpf VARCHAR(20) DEFAULT '';
+	DECLARE finalizou INT DEFAULT 0;
+	
+	BLOCK1: BEGIN 
+		DECLARE contadores CURSOR FOR select c.cpf from contador c group by c.cpf having count(c.cpf) > 1;
+	
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET finalizou = -1;
+	
+		OPEN contadores;
+			
+		REPEAT 
+			FETCH contadores INTO VAR_cpf;
+
+			BLOCK2: BEGIN
+				DECLARE VAR_id INT;
+				DECLARE i int DEFAULT 0;
+				DECLARE finalizou2 INT DEFAULT 0;
+
+				DECLARE contadores_duplicados CURSOR FOR select c.id from contador c where c.cpf = VAR_cpf;
+			
+				DECLARE CONTINUE HANDLER FOR NOT FOUND SET finalizou2 = -1;
+				
+				OPEN contadores_duplicados;
+				
+				REPEAT 
+					FETCH contadores_duplicados INTO VAR_id;
+					
+					update contador set contador.cpf = CONCAT (contador.cpf , "*",i) where contador.id = VAR_id;
+					set i = i + 1;
+					
+				UNTIL (finalizou2 = -1 )	END REPEAT;
+				CLOSE contadores_duplicados;
+			END BLOCK2;
+	
+		UNTIL (finalizou = -1 )	END REPEAT;
+
+	CLOSE contadores;	
+	END BLOCK1;
+
+	select 'sucesso!';
+	
+END$$
+
+DELIMITER ;
+
+
+ALTER TABLE `contador`
+	ADD UNIQUE INDEX `CHK_CONTADOR_CPF` (`cpf`);

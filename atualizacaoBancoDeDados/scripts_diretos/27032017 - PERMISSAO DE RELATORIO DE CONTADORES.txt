@@ -1,0 +1,1 @@
+INSERT INTO `serama_bd`.`permissao` (`tela`, `funcao`, `descricao`, `grupo_permissao_id`) VALUES ('telaRelatorioComissionamentoContador.php', 'acessar', 'Acessar Relatório de Comissionamento de Contadores.', '24');

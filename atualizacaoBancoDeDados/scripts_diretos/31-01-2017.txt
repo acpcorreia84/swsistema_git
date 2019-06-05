@@ -1,0 +1,4 @@
+ALTER TABLE `cupons_desconto_certificado`
+	CHANGE COLUMN `motivo` `motivo` VARCHAR(255) NOT NULL DEFAULT '0' AFTER `desconto`,
+	ADD COLUMN `motivo_autorizacao` VARCHAR(255) NOT NULL AFTER `autorizado`;
+UPDATE `serama_bd`.`produto` SET `produto_id`='90' WHERE  `id`=15;

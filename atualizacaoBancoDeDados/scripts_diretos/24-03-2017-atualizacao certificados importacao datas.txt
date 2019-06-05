@@ -1,0 +1,4 @@
+ALTER TABLE `certificado`
+	CHANGE COLUMN `data_validacao` `data_validacao` DATETIME NULL DEFAULT NULL AFTER `data_confirmacao_pagamento`,
+	ADD COLUMN `data_verificacao` TIMESTAMP NULL DEFAULT NULL AFTER `data_validacao`,
+	ADD COLUMN `data_revogacao` TIMESTAMP NULL DEFAULT NULL AFTER `data_verificacao`;

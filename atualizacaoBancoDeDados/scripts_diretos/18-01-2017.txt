@@ -1,0 +1,6 @@
+INSERT INTO `serama_bd`.`permissao` (`tela`, `funcao`, `descricao`, `grupo_permissao_id`) VALUES ('telaCuponsDesconto.php', 'acessar', 'Acessar a tela de Cupons de Desconto', '3');
+INSERT INTO `serama_bd`.`permissao` (`tela`, `funcao`, `descricao`, `grupo_permissao_id`) VALUES ('telaCuponsDesconto.php', 'acessar', 'Acessar Menu de Cupons de Desconto', '18');
+ALTER TABLE `produto`
+	ALTER `parceiro_id` DROP DEFAULT;
+ALTER TABLE `produto`
+	CHANGE COLUMN `parceiro_id` `produto_id` INT(11) NOT NULL AFTER `validade`;

@@ -1,0 +1,1 @@
+INSERT INTO `serama_bd`.`permissao` (`tela`, `funcao`, `descricao`, `grupo_permissao_id`) VALUES ('telaParceiro.php', 'acessar', 'Acessar Tela de Parceiro', '18');

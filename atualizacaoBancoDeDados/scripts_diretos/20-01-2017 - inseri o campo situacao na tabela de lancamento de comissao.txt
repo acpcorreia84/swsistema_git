@@ -1,0 +1,6 @@
+ALTER TABLE `parceiro_lancamento`
+	ADD COLUMN `situacao` INT NOT NULL DEFAULT '0' AFTER `observacao`;
+
+
+ALTER TABLE `parceiro_comissionamento`
+	ADD COLUMN `data_pagamento` TIMESTAMP NULL DEFAULT NULL AFTER `data_registro`;

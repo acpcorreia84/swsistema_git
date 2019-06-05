@@ -1,0 +1,7 @@
+UPDATE `serama_bd`.`perfil` SET `nome`='SUPORTE GERAL', `situacao`='0' WHERE  `id`=3;
+
+UPDATE `serama_bd`.`usuario` SET `perfil_id`='3' WHERE  `id`=107;
+
+UPDATE `serama_bd`.`usuario` SET `perfil_id`='3' WHERE  `id`=34;
+
+delete from perfil_permissao where perfil_id=3

@@ -1,0 +1,19 @@
+INSERT INTO `serama_bd`.`permissao` (`tela`, `funcao`, `descricao`) VALUES ('telaCuponsDesconto.php', 'autorizar', 'Autorizar Cupom de Desconto');
+INSERT INTO `serama_bd`.`permissao` (`tela`, `funcao`, `descricao`) VALUES ('telaCuponsDesconto.php', 'editar', 'Editar Cupom de Desconto');
+UPDATE `serama_bd`.`permissao` SET `grupo_permissao_id`='3' WHERE  `id`=191;
+UPDATE `serama_bd`.`permissao` SET `grupo_permissao_id`='3' WHERE  `id`=192;
+
+ALTER TABLE `cupons_desconto_certificado`
+	ADD COLUMN `autorizado` INT(1) NULL DEFAULT '0' AFTER `email_cliente`;
+
+ALTER TABLE `cupons_desconto_certificado`
+	ADD COLUMN `certificado_id` INT(11) NULL AFTER `usuario_id`;
+
+ALTER TABLE `cupons_desconto_certificado`
+	ADD CONSTRAINT `fk_certificado_cupons_desconto_certificado` FOREIGN KEY (`certificado_id`) REFERENCES `certificado` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+ALTER TABLE `cupons_desconto_certificado`
+	ADD COLUMN `usuario_autorizacao_id` INT(11) NULL DEFAULT NULL AFTER `certificado_id`;
+
+ALTER TABLE `cupons_desconto_certificado`
+	ADD CONSTRAINT `fk_usuario_autorizacao_cupons_desconto_certificado` FOREIGN KEY (`usuario_autorizacao_id`) REFERENCES `usuario` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION;

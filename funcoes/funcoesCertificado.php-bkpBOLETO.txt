@@ -1,0 +1,109 @@
+/*INICIO CADASTRO DO BOLETO*/
+        $resultadoBoleto = '';
+        /*GERACAO COMPLETA DO BOLETO*/
+        if ($_POST['edtFormaPagamento'] =='1') {
+            /*REMOVE A HORA E DIVIDE A STRING NO ARRAY*/
+            $vencimento = explode ('/', $_POST['edtVencimentoBoleto']);
+            $boleto = new Boleto();
+            $boleto->setCertificadoId($certificadoNovo->getId());
+            $boleto->setVencimento($vencimento[2].'/'.$vencimento[1].'/'.$vencimento[0]);
+            $boleto->setDataProcessamento(date("Y-m-d"));
+            $boleto->setClienteId($certificadoNovo->getClienteId());
+
+            $boleto->setValor( $produtoNovo->getPreco()  );
+
+            $boleto->setDescricao($produtoNovo->getNome());
+            $boleto->setContasReceberId($contaReceber->getId());
+            $boleto->setPedidoId($pedido->getId());
+            $boleto->save();
+
+            $res = $cliente->getResponsavel();
+            if (!is_null($res))
+                $emailRes = $res->getEmail();
+
+            if ($cliente->getEmail() != '')
+                $email = $cliente->getEmail();
+            elseif ($emailRes != '')
+                $email = $emailRes;
+            else
+                $email = $cliente->getEmailContato();
+            if (is_null($email))
+                $emailEnvio = $email;
+            else
+                $emailEnvio = $email;
+
+            $certSit = new CertificadoSituacao();
+            $certSit->setCertificadoId($certificadoNovo->getId());
+            $cSit = new Criteria();
+            $cSit->add(SituacaoPeer::SIGLA, 'ger_bolt');
+            $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
+            $certSit->setComentario($usuarioLogadoRn->getNome()." gerou o boleto e enviou para o e-mail: " . $emailEnvio);
+            $certSit->setData(date("Y-m-d H:i:s"));
+            $certSit->setUsuarioId($usuarioLogadoRn->getId());
+            $certSit->save();
+
+            $valor= $produtoNovo->getPreco();
+            $dia= $vencimento[0];
+            $mes= $vencimento[1];
+            $ano= $vencimento[2];
+            $email=$emailEnvio;
+
+            //GerarBoletoPagarMe
+            if ($cliente->getEndereco())
+                $endereco = removeEspeciais($cliente->getEndereco());
+            else
+                $endereco = '---';
+
+            $endereco2 = ' Cep:' .$cliente->getCep() .  ' ' . $cliente->getCidade() . ' - '. $cliente->getUf();
+
+            $sacado = urlencode("$nome <br>$cnpj <br>$endereco <br>$endereco2");
+
+            $cnpj = 'Cnpj: '.$cliente->getCpfCnpj();
+
+            require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/pagarme-php/Pagarme.php';
+
+//            Pagarme::setApiKey("ak_live_snGWlbkg0GxidcKPpKfWyUojRPoaBC");
+              //Pagarme::setApiKey("ak_test_sY6UfR8wCl8AmgWb7ra5MGoOLm54Ny");
+            $customer = new PagarMe_Customer(array(
+                "document_number" => removeTracoPontoBarra($cnpj),
+                "name" => removeEspeciais($nome),
+                "email" => $email,
+                "address" => array(
+                    "street" => removeEspeciais($endereco),
+                    "complementary" => removeEspeciais($cliente->getComplemento()),
+                    "street_number" => removeEspeciais($cliente->getNumero()),
+                    "neighborhood" => removeEspeciais($cliente->getBairro()),
+                    "city" => removeEspeciais($cliente->getCidade()),
+                    "state" => removeEspeciais($cliente->getUf()),
+                    "zipcode" => "66055080",
+                    "country" => "Brasil"
+                ),
+            ));
+            $transaction = new PagarMe_Transaction(array(
+                "customer" => $customer,
+                'amount' => removeTracoPontoBarra($valor.'00'),
+                'postback_url' => "http://www.dashboard.serama.com.br/retorno_transacao.php",
+                "boleto_expiration_date"=>$ano.'-'.$mes.'-'.$dia.'T21:54:56.000Z',
+                'payment_method' => "boleto"
+            ));
+
+            $transaction->charge();
+            $boleto_url = $transaction->boleto_url; // URL do boleto banc?rio
+            $boleto_barcode = $transaction->boleto_barcode; // c?digo de barras do boleto banc?rio
+            $transacaoId = $transaction->id;
+
+            if ($boleto) {
+                /*SALVANDO A URL DO BOLETO*/
+                $boleto->setUrlBoleto($boleto_url);
+
+                $boleto->setTid($transacaoId);
+                $boleto->save();
+            }
+
+            // To send HTML mail, the Content-type header must be set
+            $resultadoBoleto = enviarEmailBoleto($nome,$emailEnvio, $boleto_barcode,$boleto_url, $produtoNovo->getNome(), $valor);
+            //INSERI AQUI ENVIO DE BOLETO PARA EMAIL DO CLIENTE
+            if ($resultadoBoleto)
+                $resultadoBoleto = ';boletoOk';
+        }
+        /*FIM CADASTRO DO BOLETO*/

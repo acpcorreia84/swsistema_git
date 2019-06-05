@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<config>
+  <log>
+    <name>propel.log</name>
+    <ident>log_sw</ident>
+    <level>0</level>
+  </log>
+ <propel>
+    <datasources default="swsistema">
+      <datasource id="swsistema">
+        <adapter>sqlite</adapter>
+        <connection>
+          <classname>DebugPDO</classname>
+          <dsn>mysql:host=localhost;dbname=swsistem_master</dsn>
+          <user>root</user>
+          <password></password>
+          <options>
+            <option id="ATTR_PERSISTENT">false</option>
+          </options>
+          <attributes>
+            <option id="ATTR_EMULATE_PREPARES">true</option>
+          </attributes>
+        </connection>
+      </datasource>
+    </datasources>
+  </propel>
+</config>
