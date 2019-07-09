@@ -1111,6 +1111,7 @@ CREATE TABLE `contador`
 	`contato2_fone` VARCHAR(50),
 	`tipo_contador` VARCHAR(100),
 	`possui_cartao` INTEGER,
+	`sync_safe` INTEGER,
 	PRIMARY KEY (`id`),
 	INDEX `FI__contador_usuario` (`usuario_id`),
 	CONSTRAINT `Rel_contador_usuario`

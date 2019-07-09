@@ -10,7 +10,7 @@ return array (
       'connection' => 
       array (
         'classname' => 'DebugPDO',
-        'dsn' => 'mysql:host=localhost;dbname=swsistema',
+        'dsn' => 'mysql:host=localhost;dbname=swsistem_master',
         'user' => 'root',
         'password' => '',
         'options' => 
@@ -35,7 +35,7 @@ return array (
   array (
     'name' => 'propel.log',
     'ident' => 'log_sw',
-    'level' => '7',
+    'level' => '0',
   ),
   'generator_version' => '1.4.1',
   'classmap' => 

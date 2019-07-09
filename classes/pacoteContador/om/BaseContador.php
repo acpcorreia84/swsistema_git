@@ -289,6 +289,12 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 	protected $possui_cartao;
 
 	/**
+	 * The value for the sync_safe field.
+	 * @var        int
+	 */
+	protected $sync_safe;
+
+	/**
 	 * @var        Usuario
 	 */
 	protected $aUsuario;
@@ -881,6 +887,16 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 	public function getPossuiCartao()
 	{
 		return $this->possui_cartao;
+	}
+
+	/**
+	 * Get the [sync_safe] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getSyncSafe()
+	{
+		return $this->sync_safe;
 	}
 
 	/**
@@ -1854,6 +1870,26 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 	} // setPossuiCartao()
 
 	/**
+	 * Set the value of [sync_safe] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     Contador The current object (for fluent API support)
+	 */
+	public function setSyncSafe($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->sync_safe !== $v) {
+			$this->sync_safe = $v;
+			$this->modifiedColumns[] = ContadorPeer::SYNC_SAFE;
+		}
+
+		return $this;
+	} // setSyncSafe()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1930,6 +1966,7 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 			$this->contato2_fone = ($row[$startcol + 42] !== null) ? (string) $row[$startcol + 42] : null;
 			$this->tipo_contador = ($row[$startcol + 43] !== null) ? (string) $row[$startcol + 43] : null;
 			$this->possui_cartao = ($row[$startcol + 44] !== null) ? (int) $row[$startcol + 44] : null;
+			$this->sync_safe = ($row[$startcol + 45] !== null) ? (int) $row[$startcol + 45] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1939,7 +1976,7 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 45; // 45 = ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 46; // 46 = ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Contador object", $e);
@@ -2439,6 +2476,7 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(ContadorPeer::CONTATO2_FONE)) $criteria->add(ContadorPeer::CONTATO2_FONE, $this->contato2_fone);
 		if ($this->isColumnModified(ContadorPeer::TIPO_CONTADOR)) $criteria->add(ContadorPeer::TIPO_CONTADOR, $this->tipo_contador);
 		if ($this->isColumnModified(ContadorPeer::POSSUI_CARTAO)) $criteria->add(ContadorPeer::POSSUI_CARTAO, $this->possui_cartao);
+		if ($this->isColumnModified(ContadorPeer::SYNC_SAFE)) $criteria->add(ContadorPeer::SYNC_SAFE, $this->sync_safe);
 
 		return $criteria;
 	}
@@ -2580,6 +2618,8 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 		$copyObj->setTipoContador($this->tipo_contador);
 
 		$copyObj->setPossuiCartao($this->possui_cartao);
+
+		$copyObj->setSyncSafe($this->sync_safe);
 
 
 		if ($deepCopy) {

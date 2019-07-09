@@ -294,13 +294,13 @@ function carregarContadoresRelatorioComissao () {
                 'Localidade'=> utf8_encode($contador->getCidade() .'/' . $contador->getUf()),
                 'Dados'=> utf8_encode($contador->getBanco()). '<br/> (Ag: ' .$contador->getAgencia() .') <strong> CC:' . $contador->getContaCorrente() .'</strong> - Op:'. $contador->getOperacao(),
                 'Registro'=>$descricaoRegistroComissao, 'Pagto.'=>$dataPagamento, 'Valor' =>$valor,
-                utf8_encode('Ação')=>$btnPago
+                utf8_encode('Aï¿½ï¿½o')=>$btnPago
             );
         }/*FIM DO FOR*/
 
         $colunas = array(
             array('nome'=>' '),array('nome'=>'Id'), array('nome'=>'Nome'),array('nome'=>'Consultor'), array('nome'=>'Localidade'),
-            array('nome'=>'Dados'),array('nome'=>'Registro'),  array('nome'=>'Pagto.'),array('nome'=>'Valor'), array('nome'=>utf8_encode('Ação'))
+            array('nome'=>'Dados'),array('nome'=>'Registro'),  array('nome'=>'Pagto.'),array('nome'=>'Valor'), array('nome'=>utf8_encode('Aï¿½ï¿½o'))
         );
 
         echo json_encode(array('mensagem'=>'Ok', 'colunas'=>json_encode($colunas), 'dadosContadores'=>json_encode($contadores), 'quantidadeContadores'=>$quantidadeTotalContadores));
@@ -371,7 +371,7 @@ function apagarLancamentoComissaoContador () {
 
 function registrarComissaoContador() {
     try {
-        //Cabeçalho do modal detalhar usuario
+        //Cabeï¿½alho do modal detalhar usuario
         $comissaoContador =  new ContadorComissionamento();
         $comissaoContador->setDescricao(utf8_decode($_POST['descricao']));
         $periodoDe = explode('/',$_POST['periodoDe']);
@@ -438,6 +438,7 @@ function carregarContadores(){
 
         $cContador = new Criteria();
         $cContador->add(ContadorPeer::SITUACAO, -1, Criteria::NOT_EQUAL);
+        $cContador->add(ContadorPeer::SYNC_SAFE, 1);
         if ($_POST['filtros']['filtroChkRecebeComissao']) {
             if ($_POST['filtros']['filtroChkRecebeComissao']=='true')
                 $cContador->add(ContadorPeer::COMISSAO, 1);
@@ -607,20 +608,20 @@ function carregarContadores(){
 
             $contadores[] =  array(' '=>($i++),
                 'Id'=>$contador->getId(), 'Cod.'=>$contador->getCodContador() ? $contador->getCodContador() : '-',
-                'Nome'=>$nomeContador, utf8_encode('Escritório')=>$nomeEscritorio,
+                'Nome'=>$nomeContador, utf8_encode('Escritï¿½rio')=>$nomeEscritorio,
                 'Consultor'=> ($contador->getUsuarioId())?utf8_encode($contador->getUsuario()->getNome()):'---',
                 'Local'=>($contador->getLocalId())?utf8_encode($contador->getLocal()->getNome()):'---',
                 'D.Cadas.'=> $contador->getDataCadastro('d/m/Y'),
                 '*'=>$desconto, '**'=>$comissao,
-                utf8_encode('Ação')=>'<button class="btn btn-primary" onclick="carregarModalDetalharContador(\''.$contador->getId().'\',\'sim\'); $(\'#detalharContador\').modal(\'show\'); "><i class="fa fa-arrows"></i></button> '
+                utf8_encode('Aï¿½ï¿½o')=>'<button class="btn btn-primary" onclick="carregarModalDetalharContador(\''.$contador->getId().'\',\'sim\'); $(\'#detalharContador\').modal(\'show\'); "><i class="fa fa-arrows"></i></button> '
             );
         }
 
         $colunas = array(
-            array('nome'=>' '),array('nome'=>'Id'),array('nome'=>'Cod.'), array('nome'=>'Nome'), array('nome'=>utf8_encode('Escritório')),array('nome'=>'Consultor'),
+            array('nome'=>' '),array('nome'=>'Id'),array('nome'=>'Cod.'), array('nome'=>'Nome'), array('nome'=>utf8_encode('Escritï¿½rio')),array('nome'=>'Consultor'),
             array('nome'=>'Local'),  array('nome'=>'D.Cadas.'),
             array('nome'=>'**'), array('nome'=>'*'),
-            array('nome'=>utf8_encode('Ação'))
+            array('nome'=>utf8_encode('Aï¿½ï¿½o'))
         );
 
         echo json_encode(
@@ -703,8 +704,8 @@ function salvarContador(){
 
         $contador->setNome(utf8_decode($_POST['nome']));
         if ($contador->getPessoaTipo() != $_POST['pessoaTipo']) {
-            $anterior = $contador->getPessoaTipo()=='F'?utf8_encode('Pessoa Física'):utf8_encode('Pessoa Jurídica');
-            $novo = $_POST['pessoaTipo']=='F'?utf8_encode('Pessoa Física'):utf8_encode('Pessoa Jurídica');
+            $anterior = $contador->getPessoaTipo()=='F'?utf8_encode('Pessoa Fï¿½sica'):utf8_encode('Pessoa Jurï¿½dica');
+            $novo = $_POST['pessoaTipo']=='F'?utf8_encode('Pessoa Fï¿½sica'):utf8_encode('Pessoa Jurï¿½dica');
             $arrAlteracoes['pessoaTipo'] = 'O campo tipo de contador foi alterado, antes:' . $anterior.
             ' | depois:'.$novo;
 
@@ -712,8 +713,8 @@ function salvarContador(){
         $contador->setPessoaTipo($_POST['pessoaTipo']);
 
         if ($contador->getPossuiCartao() != $_POST['possuiCartao']) {
-            $anterior = $contador->getPossuiCartao()==1?utf8_encode('Possui Cartão'):utf8_encode('Conta Bancária');
-            $novo = $_POST['possuiCartao']==1?utf8_encode('Possui Cartão'):utf8_encode('Conta Bancária');
+            $anterior = $contador->getPossuiCartao()==1?utf8_encode('Possui Cartï¿½o'):utf8_encode('Conta Bancï¿½ria');
+            $novo = $_POST['possuiCartao']==1?utf8_encode('Possui Cartï¿½o'):utf8_encode('Conta Bancï¿½ria');
             $arrAlteracoes['possuiCartao'] = 'O campo possui cart&atilde;o foi alterado, antes:' . $anterior.
                 ' | depois:'.$novo;
 
@@ -847,8 +848,8 @@ function salvarContador(){
         $contador->setEmailEmpresa($_POST['emailEscritorio']);
 
         if ($contador->getComissao() != $_POST['comissao']) {
-            $anterior = ($contador->getComissao()==1)?'Recebia':utf8_encode('Não Recebia');
-            $novo = ($_POST['comissao']==1)?'Recebe':utf8_encode('Não Recebe');
+            $anterior = ($contador->getComissao()==1)?'Recebia':utf8_encode('Nï¿½o Recebia');
+            $novo = ($_POST['comissao']==1)?'Recebe':utf8_encode('Nï¿½o Recebe');
             $arrAlteracoes['comissao'] = 'A informacao de comissionamento foi alterada, anterior: ' . $anterior.
             ' | depois: '.$novo;
         }
@@ -856,8 +857,8 @@ function salvarContador(){
         $contador->setComissao($_POST['comissao']);
 
         if ($contador->getDesconto() != $_POST['desconto']) {
-            $anterior = ($contador->getDesconto()==1)?'Concedia':utf8_encode('Não Concedia');
-            $novo = ($_POST['desconto']==1)?'Concede':utf8_encode('Não Concede');
+            $anterior = ($contador->getDesconto()==1)?'Concedia':utf8_encode('Nï¿½o Concedia');
+            $novo = ($_POST['desconto']==1)?'Concede':utf8_encode('Nï¿½o Concede');
             $arrAlteracoes['desconto'] = 'A informacao de desconto foi alterada, anterior: ' . $anterior.
                 ' | depois: '.$novo;
         }
@@ -923,7 +924,7 @@ function salvarContador(){
                 $contatoContador->save();
             }
 
-            inserirObservacaoContador($contador->getId(), utf8_encode('Inseriu o novo contador através do Sistema'));
+            inserirObservacaoContador($contador->getId(), utf8_encode('Inseriu o novo contador atravï¿½s do Sistema'));
         }
         else {
             $mensagemAlteracao ='';
@@ -1112,7 +1113,7 @@ function detalharContador(){
                 $contatosContador[] =
                     array(
                         "Id"=>$contato->getId(),"Nome"=>utf8_encode($contato->getNome()), "Cargo"=>utf8_encode($contato->getCargo()),
-                        "Telefone"=>$telefone,"Celular"=>$celular, "E-mail"=>$contato->getEmail(), utf8_encode('Ação')=>$btnApagarContato
+                        "Telefone"=>$telefone,"Celular"=>$celular, "E-mail"=>$contato->getEmail(), utf8_encode('Aï¿½ï¿½o')=>$btnApagarContato
                     );
 
             }
@@ -1121,7 +1122,7 @@ function detalharContador(){
 
         $colunasContatos = array(
             array('nome'=>'Id'), array('nome'=>'Nome'), array('nome'=>'Cargo'),
-            array('nome'=>'Telefone'), array('nome'=>'Celular'), array('nome'=>'E-mail'), array('nome'=>utf8_encode('Ação'))
+            array('nome'=>'Telefone'), array('nome'=>'Celular'), array('nome'=>'E-mail'), array('nome'=>utf8_encode('Aï¿½ï¿½o'))
         );
 
         if ($contador->getDesconto()==1)
@@ -1319,7 +1320,7 @@ function detalharContador(){
             $cLancamentosContador->addDescendingOrderByColumn(ContadorLancamentoPeer::DATA_LANCAMENTO);
             $lancamentosComissao = $registroComissao->getContadorLancamentos($cLancamentosContador);
 
-            $quadroResumo[] = array(utf8_encode('Descrição')=>utf8_encode('Pedidos do contador ('.$registroComissao->getComissaoVenda().'%)'),
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>utf8_encode('Pedidos do contador ('.$registroComissao->getComissaoVenda().'%)'),
                 $tituloReceita=>formataMoeda($registroComissao->getVenda() * $coeficienteVenda), 'Despesas'=> '-'
             );
 
@@ -1346,7 +1347,7 @@ function detalharContador(){
                 else
                     $iconeApagar = '';
                 if ($lancamentoComissao->getTipoLancamento() == 'C') {
-                    $quadroResumo[] = array(utf8_encode('Descrição') => utf8_encode($lancamentoComissao->getDescricao()) . $iconeApagar . $acaoApagar,
+                    $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o') => utf8_encode($lancamentoComissao->getDescricao()) . $iconeApagar . $acaoApagar,
                         $tituloReceita => formataMoeda($lancamentoComissao->getValor()), 'Despesas' => '-'
                     );
 
@@ -1354,12 +1355,12 @@ function detalharContador(){
                 }
 
             }
-            $quadroResumo[] = array(utf8_encode('Descrição')=>'<span class="text-danger">TOTAL PARCIAL (RECEITAS)</span>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>'<span class="text-danger">TOTAL PARCIAL (RECEITAS)</span>',
                 $tituloReceita=>'<span class="text-danger">'.formataMoeda($somaTotalAcrescimos).'</span>', 'Despesas'=> '-'
             );
 
 
-            $quadroResumo[] = array(utf8_encode('Descrição')=>'<strong>Descontos</strong>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>'<strong>Descontos</strong>',
                 $tituloReceita=>'', 'Despesas'=>''
             );
 
@@ -1382,7 +1383,7 @@ function detalharContador(){
                     $iconeApagar = '';
 
                 if ($lancamentoComissao->getTipoLancamento() == 'D') {
-                    $quadroResumo[] = array(utf8_encode('Descrição') => utf8_encode($lancamentoComissao->getDescricao()) . $iconeApagar . $acaoApagar,
+                    $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o') => utf8_encode($lancamentoComissao->getDescricao()) . $iconeApagar . $acaoApagar,
                         $tituloReceita => '-', 'Despesas' => formataMoeda($lancamentoComissao->getValor())
                     );
 
@@ -1391,7 +1392,7 @@ function detalharContador(){
 
             }
 
-            $quadroResumo[] = array(utf8_encode('Descrição')=>'<span class="text-danger">TOTAL PARCIAL (DESCONTOS)</span>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>'<span class="text-danger">TOTAL PARCIAL (DESCONTOS)</span>',
                 $tituloReceita=>'-', 'Despesas'=> '<span class="text-danger">'.formataMoeda($somaTotalDescontos).'</span>'
             );
         } else {
@@ -1408,7 +1409,7 @@ function detalharContador(){
 
             $somaTotalAcrescimos += ($somaTotalDescontos) + ($somaProdutosVendidos * $coeficienteVenda);
 
-            $quadroResumo[] = array(utf8_encode('Descrição') => utf8_encode('Apenas Vendidos ('.($coeficienteVenda*100).'%)'),
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o') => utf8_encode('Apenas Vendidos ('.($coeficienteVenda*100).'%)'),
                 $tituloReceita => formataMoeda($somaProdutosVendidos * $coeficienteVenda), 'Despesas' => '-'
             );
 
@@ -1449,13 +1450,13 @@ function detalharContador(){
                  * */
                 $somaTotalAcrescimos += $somaTotalComissoesAnteriores;
 
-                $quadroResumo[] = array(utf8_encode('Descrição') => utf8_encode('Lançamentos de comissão não paga do período de '.
-                    $comissaoAnterior->getPeriodoInicial('d/m/Y') . ' até ' . $comissaoAnterior->getPeriodoFinal('d/m/Y')),
+                $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o') => utf8_encode('Lanï¿½amentos de comissï¿½o nï¿½o paga do perï¿½odo de '.
+                    $comissaoAnterior->getPeriodoInicial('d/m/Y') . ' atï¿½ ' . $comissaoAnterior->getPeriodoFinal('d/m/Y')),
                     $tituloReceita => formataMoeda($somaTotalComissoesAnteriores), 'Despesas' => '-'
                 );
 
-                $lancamentoAntigo = array('valor'=>$somaTotalComissoesAnteriores, 'descricao'=>utf8_encode('Lançamentos de comissão não paga do período de '.
-                    $comissaoAnterior->getPeriodoInicial('d/m/Y') . ' até ' . $comissaoAnterior->getPeriodoFinal('d/m/Y')));
+                $lancamentoAntigo = array('valor'=>$somaTotalComissoesAnteriores, 'descricao'=>utf8_encode('Lanï¿½amentos de comissï¿½o nï¿½o paga do perï¿½odo de '.
+                    $comissaoAnterior->getPeriodoInicial('d/m/Y') . ' atï¿½ ' . $comissaoAnterior->getPeriodoFinal('d/m/Y')));
 
 
                 $_SESSION['totalLancamentosAntigos'] = serialize($lancamentoAntigo);
@@ -1466,11 +1467,11 @@ function detalharContador(){
              * */
 
 
-            $quadroResumo[] = array(utf8_encode('Descrição') => '<span class="text-danger">TOTAL PARCIAL (RECEITAS)</span>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o') => '<span class="text-danger">TOTAL PARCIAL (RECEITAS)</span>',
                 $tituloReceita => '<span class="text-danger">' . formataMoeda($somaTotalAcrescimos) . '</span>', 'Despesas' => '-'
             );
 
-            $quadroResumo[] = array(utf8_encode('Descrição') => '<strong>Descontos</strong>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o') => '<strong>Descontos</strong>',
                 $tituloReceita => '', 'Despesas' => ''
             );
 
@@ -1479,16 +1480,16 @@ function detalharContador(){
 
         /*SE O SALDO FOR POSITIVO COLOCA O TOTAL NAS RECEITAS E SAO COLOCA NAS DESPESAS*/
         if ($somaTotalAcrescimos-$somaTotalDescontos > 0)
-            $quadroResumo[] = array(utf8_encode('Descrição')=>'<span class="text-danger">TOTAL GERAL</span>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>'<span class="text-danger">TOTAL GERAL</span>',
                 $tituloReceita=>'<span class="text-danger">'.formataMoeda($somaTotalAcrescimos-$somaTotalDescontos).'</span>', 'Despesas'=> '-'
             );
         else
-            $quadroResumo[] = array(utf8_encode('Descrição')=>'<span class="text-danger">TOTAL GERAL</span>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>'<span class="text-danger">TOTAL GERAL</span>',
                 $tituloReceita=>'-', 'Despesas'=> '<span class="text-danger">'.formataMoeda($somaTotalAcrescimos-$somaTotalDescontos).'</span>'
             );
 
         $colunasQuadroResumo = array(
-            array('nome'=>utf8_encode('Descrição')), array('nome'=>$tituloReceita), array('nome'=>'Despesas')
+            array('nome'=>utf8_encode('Descriï¿½ï¿½o')), array('nome'=>$tituloReceita), array('nome'=>'Despesas')
         );
 
 
@@ -1519,11 +1520,11 @@ function detalharContador(){
         $detalhesContador = array();
         foreach ($detalhesContadorObj as $detalheContador) {
             $detalhesContador[] = array('Id'=>$detalheContador->getId(), 'Data'=>$detalheContador->getDataCadastro('d/m/Y H:i:s'),
-                utf8_encode('Descrição')=>utf8_encode($detalheContador->getDescricao()), utf8_encode('Usuário')=>utf8_encode($detalheContador->getUsuario()->getNome()),
+                utf8_encode('Descriï¿½ï¿½o')=>utf8_encode($detalheContador->getDescricao()), utf8_encode('Usuï¿½rio')=>utf8_encode($detalheContador->getUsuario()->getNome()),
             );
         }
         $colunasDetalhes = array(
-            array('nome'=>'Id'), array('nome'=>'Data'), array('nome'=>utf8_encode('Descrição')), array('nome'=>utf8_encode('Usuário'))
+            array('nome'=>'Id'), array('nome'=>'Data'), array('nome'=>utf8_encode('Descriï¿½ï¿½o')), array('nome'=>utf8_encode('Usuï¿½rio'))
         );
 
         /*
@@ -1862,7 +1863,7 @@ function carregarFiltrosContadores() {
         $usuariosObj = $stmt->fetchAll();
 
         $usuarios = array();
-        $usuarios[] = array("id"=>'', "nome"=>utf8_encode('Selecione o Usuário'));
+        $usuarios[] = array("id"=>'', "nome"=>utf8_encode('Selecione o Usuï¿½rio'));
         foreach ($usuariosObj as $usuario)
             $usuarios[] = array("id"=>$usuario['id'], "nome"=>utf8_encode(strtoupper($usuario['nome'])) . ' ('.$usuario['qtd'].')');
 

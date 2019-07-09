@@ -81,6 +81,7 @@ class ContadorTableMap extends TableMap {
 		$this->addColumn('CONTATO2_FONE', 'Contato2Fone', 'VARCHAR', false, 50, null);
 		$this->addColumn('TIPO_CONTADOR', 'TipoContador', 'VARCHAR', false, 100, null);
 		$this->addColumn('POSSUI_CARTAO', 'PossuiCartao', 'INTEGER', false, null, null);
+		$this->addColumn('SYNC_SAFE', 'SyncSafe', 'INTEGER', false, null, null);
 		// validators
 		$this->addValidator('EMAIL', 'unique', 'propel.validator.UniqueValidator', '', 'Ja existe um Contador Amigo cadastrado com este E-MAIL.');
 		$this->addValidator('CPF', 'unique', 'propel.validator.UniqueValidator', '', 'Ja existe um Contador Amigo cadastrado com este CPF.');

@@ -848,6 +848,8 @@
         <column name="tipo_contador" type="VARCHAR" size="100"/>
         <column name="possui_cartao" type="INTEGER"/>
 
+        <column name="sync_safe" type="INTEGER"/>
+
 
         <validator column="email">
             <rule name="unique"
