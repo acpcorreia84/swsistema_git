@@ -185,8 +185,8 @@
         var parametrosCompra =
             {
                 Produto: [{
-                    Codigo: $('#codigoProdutoSafeweb').val(), // Código do produto que está sendo vendido
-                    Descricao: $('#dcSpanNomeProduto').html(), // Descrição do que está sendo vendido
+                    Codigo: $('#codigoProdutoSafeweb').val(), // C?digo do produto que est? sendo vendido
+                    Descricao: $('#dcSpanNomeProduto').html(), // Descri??o do que est? sendo vendido
                     ValorUnitario: $('#precoProdutoSemFormatacao').val(), // Informar decimal como string. (Ex: 1.50)
                     Quantidade: "1" // Informar int como string. (Ex: 15)
                 }],
@@ -220,14 +220,14 @@
 
 
         function callbackError(error) {
-            // Função que será executada quando ocorrer erros no plugin
+            // Fun??o que ser? executada quando ocorrer erros no plugin
 
             console.log(error);
         }
 
         function callbackConclude(response) {
             //console.log(response);
-            // Função que será executada quando a modal do safe2pay for fechada
+            // Fun??o que ser? executada quando a modal do safe2pay for fechada
         }
 
         // Abre wizard
