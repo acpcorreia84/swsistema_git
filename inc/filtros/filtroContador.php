@@ -155,11 +155,37 @@
         <input type="checkbox" name="filtroEscolhePossuiCartao" id="filtroEscolhePossuiCartao" value="sim" >
         <label for="filtroEscolhePossuiCartao">Possui Cart&atilde;o:</label>
     </div>
+    <div class="col-lg-2">
+        <input type="checkbox" name="filtroEscolheSyncSafe" id="filtroEscolheSyncSafe" value="sim" >
+        <label for="filtroEscolheSyncSafe">Sincronizado</label>
+    </div>
 </div>
 <div class="row form-group">
     <div class="col-lg-2">
         <span id="divPossuiCartao"><input type="checkbox" id="filtroPossuiCartao" data-onstyle="success" checked="checked"></span>
     </div>
+
+    <div class="col-lg-2">
+        <span id="divSyncSafe"><input type="checkbox" id="filtroSyncSafe" data-onstyle="success" checked="checked"></span>
+    </div>
+
+    <script>
+        $("#divSyncSafe").css({visibility: 'hidden', display: 'none'});
+
+        $('#filtroEscolheSyncSafe').click (function () {
+            if ($('#filtroEscolheSyncSafe').prop('checked'))
+                $("#divSyncSafe").css({visibility: 'visible', display: 'block'});
+            else
+                $("#divSyncSafe").css({visibility: 'hidden', display: 'none'});
+        });
+
+
+        $("#filtroSyncSafe").bootstrapToggle({
+            on: "Sim",
+            off: "N&atilde;o"
+        });
+
+    </script>
 
     <script>
         $("#divPossuiCartao").css({visibility: 'hidden', display: 'none'});

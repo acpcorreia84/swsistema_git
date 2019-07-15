@@ -95,6 +95,7 @@ function carregarContadoresRelatorioComissao () {
             $dataAte = explode('/', $filtroData[1]);
         }
 
+
         /*
             * SE SELECIONOU CONSULTORES FILTRA POR ELES
             * CASO CONTRARIO MOSTRA TODOS VINCULADOS AO LOCAL DO USUARIO
@@ -122,7 +123,6 @@ function carregarContadoresRelatorioComissao () {
                 $cContador->add(ContadorPeer::POSSUI_CARTAO, 1, Criteria::NOT_EQUAL);
             }
         }
-
 
         /*
          * FILTRA APENAS OS CONTADORES QUE JA TEM COMISSAO REGISTRADA
@@ -438,7 +438,20 @@ function carregarContadores(){
 
         $cContador = new Criteria();
         $cContador->add(ContadorPeer::SITUACAO, -1, Criteria::NOT_EQUAL);
+
+        /*
+* FILTRA APENAS CONTADORES QUE POSSUEM CARTAO
+* */
         $cContador->add(ContadorPeer::SYNC_SAFE, 1);
+        if ($_POST['filtros']['filtroChkSyncSafe']) {
+            if ($_POST['filtros']['filtroChkSyncSafe']=='true')
+                $cContador->add(ContadorPeer::SYNC_SAFE, 1);
+            elseif ($_POST['filtros']['filtroChkSyncSafe']=='false') {
+                $cContador->add(ContadorPeer::SYNC_SAFE, 0);
+            }
+        }
+
+
         if ($_POST['filtros']['filtroChkRecebeComissao']) {
             if ($_POST['filtros']['filtroChkRecebeComissao']=='true')
                 $cContador->add(ContadorPeer::COMISSAO, 1);
@@ -605,23 +618,28 @@ function carregarContadores(){
             else
                 $nomeContador = ($contador->getNome())?utf8_encode($contador->getNome()):'-';
 
+            if ($contador->getSyncSafe() == 1)
+                $sincronizado = '<i class="fa fa-flag-checkered text-info " aria-hidden="true"  title="Sincronizado com a Safe"></i>' ;
+            else
+                $sincronizado = '<i class="fa fa-flag-checkered text-danger" aria-hidden="true"  title="Nao sincronizado"></i>';
+
 
             $contadores[] =  array(' '=>($i++),
                 'Id'=>$contador->getId(), 'Cod.'=>$contador->getCodContador() ? $contador->getCodContador() : '-',
-                'Nome'=>$nomeContador, utf8_encode('Escrit�rio')=>$nomeEscritorio,
+                'Nome'=>$nomeContador, utf8_encode('Escritorio')=>$nomeEscritorio,
                 'Consultor'=> ($contador->getUsuarioId())?utf8_encode($contador->getUsuario()->getNome()):'---',
                 'Local'=>($contador->getLocalId())?utf8_encode($contador->getLocal()->getNome()):'---',
                 'D.Cadas.'=> $contador->getDataCadastro('d/m/Y'),
-                '*'=>$desconto, '**'=>$comissao,
-                utf8_encode('A��o')=>'<button class="btn btn-primary" onclick="carregarModalDetalharContador(\''.$contador->getId().'\',\'sim\'); $(\'#detalharContador\').modal(\'show\'); "><i class="fa fa-arrows"></i></button> '
+                '*'=>$desconto, '**'=>$comissao, '-'=>$sincronizado,
+                utf8_encode('Acao')=>'<button class="btn btn-primary" onclick="carregarModalDetalharContador(\''.$contador->getId().'\',\'sim\'); $(\'#detalharContador\').modal(\'show\'); "><i class="fa fa-arrows"></i></button> '
             );
         }
 
         $colunas = array(
-            array('nome'=>' '),array('nome'=>'Id'),array('nome'=>'Cod.'), array('nome'=>'Nome'), array('nome'=>utf8_encode('Escrit�rio')),array('nome'=>'Consultor'),
+            array('nome'=>' '),array('nome'=>'Id'),array('nome'=>'Cod.'), array('nome'=>'Nome'), array('nome'=>utf8_encode('Escritorio')),array('nome'=>'Consultor'),
             array('nome'=>'Local'),  array('nome'=>'D.Cadas.'),
-            array('nome'=>'**'), array('nome'=>'*'),
-            array('nome'=>utf8_encode('A��o'))
+            array('nome'=>'**'), array('nome'=>'*'), array('nome'=>'-'),
+            array('nome'=>utf8_encode('Acao'))
         );
 
         echo json_encode(
@@ -1863,7 +1881,7 @@ function carregarFiltrosContadores() {
         $usuariosObj = $stmt->fetchAll();
 
         $usuarios = array();
-        $usuarios[] = array("id"=>'', "nome"=>utf8_encode('Selecione o Usu�rio'));
+        $usuarios[] = array("id"=>'', "nome"=>utf8_encode('Selecione o Usuario'));
         foreach ($usuariosObj as $usuario)
             $usuarios[] = array("id"=>$usuario['id'], "nome"=>utf8_encode(strtoupper($usuario['nome'])) . ' ('.$usuario['qtd'].')');
 

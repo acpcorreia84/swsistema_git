@@ -288,6 +288,12 @@ function carregarContadores(paginaSelecionada, qtdItensPorPagina, paginando, car
     } else
         var concedeDesconto = '';
 
+
+    if ($('#filtroEscolheSyncSafe').prop('checked')) {
+        var syncSafe = $('#filtroSyncSafe').prop('checked');
+    } else
+        var syncSafe = '';
+
     if ($('#filtroEscolheTemComissao').prop('checked')) {
         var dataComissaoContador = $('#filtroDataComissaoContador').val();
     } else
@@ -305,9 +311,10 @@ function carregarContadores(paginaSelecionada, qtdItensPorPagina, paginando, car
         'filtroChkConcedeDesconto' : concedeDesconto,
         'filtroConsultores':consultores,
         'filtroData':filtroData,
+        'filtroChkSyncSafe' : syncSafe,
         'campoFiltro' : camposFiltro
     };
-
+console.log(filtros);
     var dadosajax = {
         'funcao' : "carregar_contadores",
         'pagina' : pagina,
