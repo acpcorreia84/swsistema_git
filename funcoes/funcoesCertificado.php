@@ -15,7 +15,7 @@ if($funcao == 'carregar_modal_trocar_produto') { carregarModalTrocarProdutos(); 
 
 /*if($funcao == 'carrregarModalDetalheCertificado') { carrregarModalDetalheCertificado($certificado_id,$usuarioLogado); }*/
 if($funcao == 'carregar_campos_modal_vincular_contador') { carregarModalVincularContador(); }
-//VARIAVEL PARA A FUNÇÃO INSERIR OBSERVAÇÃO
+//VARIAVEL PARA A FUN??O INSERIR OBSERVA??O
 if ($funcao == 'carregarModalPedidoInterno') {carregarModalPedidoInterno(); }
 if($funcao == 'carregar_modal_detalhar_certificado') { detalharCertificado(); }
 /*FUNCAO PARA ABRIR MODAL DE TROCAR PRODUTO E FORMA DE PAGAMENTO E SELECIONAR O PRODUTO*/
@@ -97,6 +97,7 @@ function carregarModalVincularContador() {
     try {
         $cContadores = new Criteria();
         $cContadores->add(ContadorPeer::SITUACAO, 0);
+        $cContadores->add(ContadorPeer::SYNC_SAFE, 1);
         $cContadores->addAscendingOrderByColumn(ContadorPeer::NOME);
         $contadoresObj = ContadorPeer::doSelect($cContadores);
 
@@ -157,7 +158,7 @@ function inserir_observacao($certificado_id,$comentarioObservacao,$usuario_id){
         inserir_situacao($certificado_id,$comentarioSituacao,$usuario_id,$idSituacao);
         echo "0";
 	}catch (Exception $e){
-	    erroEmail($e->getMessage(), removeAcentos("Erro no javascritp de inserir a observação"));
+	    erroEmail($e->getMessage(), removeAcentos("Erro no javascritp de inserir a observa??o"));
 		echo $e->getMessage();
 	}
 };
@@ -410,7 +411,7 @@ function apagarCertificado(){
         $contaReceber->save();
 
 
-		//Gerando Ação
+		//Gerando A??o
 		$idSituacao = 13;
 		$comentarioSituacao = utf8_decode($_POST['motivoExclusao']);
 		inserir_situacao($certificado->getId(),$comentarioSituacao,$usuarioLogado->getId(),$idSituacao);
@@ -426,7 +427,7 @@ function inserirDescontoCertificado($certificado_id,$motivoDesconto,$valor){
 	    $usuarioLogado = ControleAcesso::getUsuarioLogado();
 		$certificado = CertificadoPeer::retrieveByPk($certificado_id);
 		$preco = $certificado->getProduto()->getPreco();
-        /*SE O PERFIL FOR IGUAL A DIRETORIA OU FINANCEIRO PERMITE DAR DESCONTOS ACIMA DE 10% CASO CONTRÁRIO NAO*/
+        /*SE O PERFIL FOR IGUAL A DIRETORIA OU FINANCEIRO PERMITE DAR DESCONTOS ACIMA DE 10% CASO CONTR?RIO NAO*/
         if (($valor <= $preco*0.15) || ($usuarioLogado->getPerfilId()==4) || ($usuarioLogado->getPerfilId()==11)){
             $certificado->setDesconto($valor);
             $certificado->setMotivoDesconto($motivoDesconto);
@@ -439,7 +440,7 @@ function inserirDescontoCertificado($certificado_id,$motivoDesconto,$valor){
 
             $certificado->save();
 
-            //Gerando Ação
+            //Gerando A??o
             $idSituacao = 19;
             $comentarioSituacao = 'Desconto concedido por '.utf8_decode($usuarioLogado->getNome()).' no valor de '.formataMoeda($valor) . '. Motivo: '.$motivoDesconto;
             inserir_situacao($certificado_id,$comentarioSituacao,$usuarioLogado->getId(),$idSituacao);
@@ -454,8 +455,8 @@ function inserirDescontoCertificado($certificado_id,$motivoDesconto,$valor){
 };
 function revogarCertificado ($certificado_id, $retornaJs=true){
 	try{
-		//duplica o cadastro com as mesmas informações (Certificado)
-		//Transfere pagamento e confirmação de pagamento do certificado anterior pro novo registro
+		//duplica o cadastro com as mesmas informa??es (Certificado)
+		//Transfere pagamento e confirma??o de pagamento do certificado anterior pro novo registro
         $usuarioLogado = ControleAcesso::getUsuarioLogado();
 		$certificadoRevogado =  CertificadoPeer::retrieveByPk($certificado_id);
 
@@ -485,22 +486,22 @@ function revogarCertificado ($certificado_id, $retornaJs=true){
         $certificadoNovo->setApagado(0);
 		$certificadoNovo->save();
 
-		/* SALVO SITAUÇÃO NO CADASTRO A ER REVOGADO */
+		/* SALVO SITAU??O NO CADASTRO A ER REVOGADO */
         $idSituacao = 25;
         $comentarioSituacao = $_POST['motivo'];
         inserir_situacao($certificado_id,$comentarioSituacao,$usuarioLogado->getId(),$idSituacao);
 
 		$idSituacao = 26;
-		$comentarioSituacao = "Foi gerado um novo certificado, referente à revogaçao deste. O Código do novo certificado é: ".$certificadoNovo->getId();
+		$comentarioSituacao = "Foi gerado um novo certificado, referente ? revoga?ao deste. O C?digo do novo certificado ?: ".$certificadoNovo->getId();
 		inserir_situacao($certificado_id,$comentarioSituacao,$usuarioLogado->getId(),$idSituacao);
 
-	    /* SITUAÇÕES DO NOVO CADASTRO */
+	    /* SITUA??ES DO NOVO CADASTRO */
 		$idSituacao = 26;
-		$comentarioSituacao = "Certificado gerado através de uma revogação. Certificado Revogado: ".$certificadoRevogado->getId();
+		$comentarioSituacao = "Certificado gerado atrav?s de uma revoga??o. Certificado Revogado: ".$certificadoRevogado->getId();
 		$novoCertificado_id = $certificadoNovo->getId();
 		inserir_situacao($novoCertificado_id,$comentarioSituacao,$usuarioLogado->getId(),$idSituacao);
 
-        /* FIM DAS SITUAÇÃO DO NOVO CADASTRO */
+        /* FIM DAS SITUA??O DO NOVO CADASTRO */
 
         $certificadoRevogado->setConfirmacaoValidacao(4);
 		$certificadoRevogado->save();
@@ -559,7 +560,7 @@ function editar_certificado($certificado_id){
 		$cnpj = $cliente->getCpfCnpj();
 		$vendedor = $certificado->getUsuarioId();
 
-		//Preço
+		//Pre?o
 		$preco = $certificado->getProduto()->getPreco();
 		$desconto = $certificado->getDesconto();
 		$valor = formataMoeda($preco)." - ".formataMoeda($desconto)." = ".formataMoeda($preco-$desconto);
@@ -764,7 +765,7 @@ function recupera_cliente($clienteId,$funcao){
 function editar_cliente($certificado_id){
 
 	try {
-		//Cabeçalho do modal detalhar Certificado
+		//Cabe?alho do modal detalhar Certificado
 		$certificado =  CertificadoPeer::retrieveByPk($certificado_id);
 		$idCliente = $certificado->getClienteId();
 		$retorno = recupera_cliente($idCliente,'editar');
@@ -816,7 +817,7 @@ function alterar_cliente($certificado_id){
 		$emailResponsavel = $_REQUEST['email_responsavel'];
 
 		$resultado = "";
-		//Alteração do cliente
+		//Altera??o do cliente
 		if ($pessoaTipo == "J"){
 			$resultado .= "J-";
 			$razaoSocialAnterior = $cliente->getRazaoSocial();
@@ -896,7 +897,7 @@ function alterar_cliente($certificado_id){
 			$responsavel = ResponsavelPeer::retrieveByPk($idResponsavel);
 
 			$resultado .= "RESPONSAVEL: /n";
-			//Alteração do Responsável
+			//Altera??o do Respons?vel
 
 			$cpfResponsavelAnterior = $responsavel->getCpf();
 			if($cpfResponsavel != $cpfResponsavelAnterior && $cpfResponsavel != " " && $cpfResponsavel != null){
@@ -1082,7 +1083,7 @@ function informarPagamentoExtornoCertificado(){
 };
 function carregar_desconto($certificado_id){
     try {
-        //Cabeçalho do modal detalhar Certificado
+        //Cabe?alho do modal detalhar Certificado
         $certificado =  CertificadoPeer::retrieveByPk($certificado_id);
         $precoFormatado = formataMoeda($certificado->getProduto()->getPreco()) . ' - '. formataMoeda($certificado->getDesconto()) . ' = ' .  formataMoeda($certificado->getProduto()->getPreco()-$certificado->getDesconto());
 		$precoOriginal = $certificado->getProduto()->getPreco();
@@ -1182,8 +1183,8 @@ function salvarBoletoSafeToPay(){
             $endereco = removeEspeciais( utf8_encode($cliente->getEndereco()));
 
 
-        $boleto_url = $_POST['urlBoleto']; // URL do boleto bancário
-        $boleto_barcode = $_POST['codigoBarras']; // código de barras do boleto bancário
+        $boleto_url = $_POST['urlBoleto']; // URL do boleto banc?rio
+        $boleto_barcode = $_POST['codigoBarras']; // c?digo de barras do boleto banc?rio
         $transacaoId = $_POST['tid'];
 
         /*FIM DA MONTAGEM DO BOLETO DO PAGARME*/
@@ -1321,8 +1322,8 @@ function gerarBoletoCertificado($certificado_id){
         ));
 
         $transaction->charge();
-        $boleto_url = $transaction->boleto_url; // URL do boleto bancário
-        $boleto_barcode = $transaction->boleto_barcode; // código de barras do boleto bancário
+        $boleto_url = $transaction->boleto_url; // URL do boleto banc?rio
+        $boleto_barcode = $transaction->boleto_barcode; // c?digo de barras do boleto banc?rio
         $transacaoId = $transaction->id;
 
         /*FIM DA MONTAGEM DO BOLETO DO PAGARME*/
@@ -1511,7 +1512,7 @@ function gerarProtocolo(){
                 /*Contingencia*/
                 ob_start();                      // start capturing output
                 $cnpj = $ws->consultarCNPJ(removeTracoPontoBarra($cpfResponsavelEmpresa), $dataNascimentoResponsavelEmpresa, removeTracoPontoBarra($cnpjEmpresa));
-                //Definição da variavel $cnpj
+                //Defini??o da variavel $cnpj
                 $mensagemErro = ob_get_contents();    // get the contents from the buffer {Mensagem de Erro}
                 ob_end_clean();
 
@@ -1584,7 +1585,7 @@ function gerarProtocolo(){
                         array(),
                         array(),
 						$cpfContador
-                    ); //Criação do Array
+                    ); //Cria??o do Array
 
                     $certificado->setProtocolo($solicitacao);
                     $certificado->save();
@@ -1605,7 +1606,7 @@ function gerarProtocolo(){
                 } // Protocolo sem Erro!
             }
 		}else{
-			echo "Protocolo ja gerado, número do protocolo: ".$certificado->getProtocolo();
+			echo "Protocolo ja gerado, n?mero do protocolo: ".$certificado->getProtocolo();
 		}
     }catch (Exception $e){
         //erroEmail($e->getMessage(),"Erro na funcao de gerar protocolos");
@@ -1615,7 +1616,7 @@ function gerarProtocolo(){
 function detalharCertificado(){
     try {
         $usuarioLogado = ControleAcesso::getUsuarioLogado();
-        //Cabeçalho do modal detalhar Certificado
+        //Cabe?alho do modal detalhar Certificado
         $certificado =  CertificadoPeer::retrieveByPk($_POST['certificado_id']);
 
         $nomeCliente = $certificado->getCliente()->getRazaoSocial();
@@ -1795,7 +1796,7 @@ function detalharCertificado(){
 
 
         /*
-         * SERIALIZEI AS INFORMAÇÕES DO RECIBO PARA USAR NA HORA DO RECIBO
+         * SERIALIZEI AS INFORMA??ES DO RECIBO PARA USAR NA HORA DO RECIBO
          * */
         $telefone = "";
         if ($cliente->getFone1()) {
@@ -1808,7 +1809,7 @@ function detalharCertificado(){
 
         $endereco = $cliente->getEndereco().", ".$cliente->getNumero().", ".$cliente->getBairro() . ', '.$cliente->getCidade() . ' / ' . $cliente->getUf();
 
-        $rodapeNome = "SAFEWEB - SEGURANÇA DA INFORMACAO";
+        $rodapeNome = "SAFEWEB - SEGURAN?A DA INFORMACAO";
         $rodapeCnpj = "CNPJ: 23.917.962/0001-05";
         $rodapeEndereco = "RUA. BERNAL DO COUTO 356 - UMARIZAL CEP: 66.055-080";
         $rodapeCidadeUf = "BELEM - PA";
@@ -1887,17 +1888,17 @@ function detalharCertificado(){
 
                 }
 
-                $boletos[] =  array('Id'=>$boleto->getId(),'Tid'=>$boleto->getTid(), utf8_encode('Situação')=> $situacaoPamento,
+                $boletos[] =  array('Id'=>$boleto->getId(),'Tid'=>$boleto->getTid(), utf8_encode('Situa??o')=> $situacaoPamento,
                     'Venc.'=>$boleto->getVencimento('d/m/Y'),'Dt.Pagt.'=> $dataConfirmacaoPagamento, 'Valor'=>formataMoeda($boleto->getValor()),
                     'Forma'=> utf8_encode($certificado->getFormaPagamento()->getNome()) . ' <a href="'.$boleto->getUrlBoleto().'" target="_blank" title="Visualizar Boleto"><i class="fa fa-barcode" aria-hidden="true"></i></a>',
-                    utf8_encode('Ação')=>$btnPagarExtornar
+                    utf8_encode('A??o')=>$btnPagarExtornar
                 );
             }
 
             $colunas = array(
-                array('nome'=>'Id'),array('nome'=>'Tid'), array('nome'=>utf8_encode('Situação')), array('nome'=>'Dt.Pagt.'),array('nome'=>'Venc.'),
+                array('nome'=>'Id'),array('nome'=>'Tid'), array('nome'=>utf8_encode('Situa??o')), array('nome'=>'Dt.Pagt.'),array('nome'=>'Venc.'),
                 array('nome'=>'Valor'),
-                array('nome'=>'Forma'), array('nome'=>utf8_encode('Ação'))
+                array('nome'=>'Forma'), array('nome'=>utf8_encode('A??o'))
             );
             $dadosPagamento = array('mensagem'=>'Ok','colunasPagamento'=>json_encode($colunas),'pagamento'=>json_encode($boletos), 'comprovantePagamento'=>'');
 
@@ -1981,14 +1982,14 @@ function detalharCertificado(){
 
             }
 
-            $pagamento[] =  array(utf8_encode('Situação')=> $situacaoPamento,
+            $pagamento[] =  array(utf8_encode('Situa??o')=> $situacaoPamento,
                 'Dt.Pagt.'=> $dataConfirmacaoPagamento, 'Valor'=>formataMoeda($certificado->getProduto()->getPreco() - $certificado->getDesconto()),
                 'Forma'=> utf8_encode($certificado->getFormaPagamento()->getNome()),
-                utf8_encode('Ação')=>$btnInformarPagamento . ' '. $btnPagarExtornar
+                utf8_encode('A??o')=>$btnInformarPagamento . ' '. $btnPagarExtornar
             );
             $colunas = array(
-                array('nome'=>utf8_encode('Situação')), array('nome'=>'Dt.Pagt.'), array('nome'=>'Valor'),
-                array('nome'=>'Forma'), array('nome'=>utf8_encode('Ação'))
+                array('nome'=>utf8_encode('Situa??o')), array('nome'=>'Dt.Pagt.'), array('nome'=>'Valor'),
+                array('nome'=>'Forma'), array('nome'=>utf8_encode('A??o'))
             );
 
 
@@ -2012,16 +2013,16 @@ function detalharCertificado(){
         foreach ($situacoesCertificado as $situacaoCertificado) {
             if ($situacaoCertificado->getUsuario()) $nomeUsuario = $situacaoCertificado->getUsuario()->getNome(); else $nomeUsuario = '-';
             $situacoes[] = array('Id' => $situacaoCertificado->getId(),
-                utf8_encode('Usuário') => utf8_encode($nomeUsuario),
+                utf8_encode('Usu?rio') => utf8_encode($nomeUsuario),
                 'Descricao' => utf8_encode($situacaoCertificado->getSituacao()->getNome()),
                 'Data' => $situacaoCertificado->getData('d/m/Y H:i:s'),
-                utf8_encode('Comentário') => utf8_encode($situacaoCertificado->getComentario())
+                utf8_encode('Coment?rio') => utf8_encode($situacaoCertificado->getComentario())
             );
         }
 
         $colunasSituacoes = array(
-            array('nome'=>'Id'), array('nome'=>utf8_encode('Usuário')), array('nome'=>'Descricao'),
-            array('nome'=>'Data'), array('nome'=>utf8_encode('Comentário'))
+            array('nome'=>'Id'), array('nome'=>utf8_encode('Usu?rio')), array('nome'=>'Descricao'),
+            array('nome'=>'Data'), array('nome'=>utf8_encode('Coment?rio'))
         );
         $dadosSituacoes = array('mensagem'=>'Ok','colunasSituacoes'=>json_encode($colunasSituacoes),'situacoes'=>json_encode($situacoes));
         /*
@@ -2076,7 +2077,7 @@ function detalharCertificado(){
             * */
             if ($qtdCertificadosEmAberto >= $usuarioLogado->getLimiteQuantidade() ) {
                 $permissoes['permiteGerarProtocolo'] = 'nao';
-                $mensagemErroGerarProtocolo = utf8_encode('Você possui '. $qtdCertificadosEmAberto . ' certificados em aberto. Porém seu limite é de apenas ' . $usuarioLogado->getLimiteQuantidade());
+                $mensagemErroGerarProtocolo = utf8_encode('Voc? possui '. $qtdCertificadosEmAberto . ' certificados em aberto. Por?m seu limite ? de apenas ' . $usuarioLogado->getLimiteQuantidade());
             }
         }
 
@@ -2155,7 +2156,7 @@ function vincula_contador(){
             $certificado->save();
             $cliente->save();
 
-            /*CRIA NOVA SITUAÇÃO NO CERTIFICADO | SITUACAO: VINCULOU USUARIO AO CERTIFICADO*/
+            /*CRIA NOVA SITUA??O NO CERTIFICADO | SITUACAO: VINCULOU USUARIO AO CERTIFICADO*/
             $cCriteriaSituacao = new Criteria();
             $cCriteriaSituacao->add(SituacaoPeer::SIGLA, 'cd_cont');
             $situacao = SituacaoPeer::doSelectOne($cCriteriaSituacao);
@@ -2391,14 +2392,14 @@ function carregarModalPedidoInterno () {
 
 function autorizar_certificado ($certificado_id,$motivoAutorizacao,$usuario_id){
     try{
-        //duplica o cadastro com as mesmas informações (Certificado)
-        //Transfere pagamento e confirmação de pagamento do certificado anterior pro novo registro
+        //duplica o cadastro com as mesmas informa??es (Certificado)
+        //Transfere pagamento e confirma??o de pagamento do certificado anterior pro novo registro
 
         $certificado =  CertificadoPeer::retrieveByPk($certificado_id);
         $certificado->setAutorizadoVendaSemContador('1');
         $certificado->save();
 
-        /* SALVO SITAUÇÃO NO CADASTRO A ER REVOGADO */
+        /* SALVO SITAU??O NO CADASTRO A ER REVOGADO */
 
         $idSituacao = 30;
         $comentarioSituacao = $motivoAutorizacao;
@@ -2638,7 +2639,7 @@ function carregarCertificados() {
                     $cCertificado->add(CertificadoPeer::DATA_FIM_VALIDADE, $dataDe[2] . '/' . $dataDe[1] . '/' . $dataDe[0] . ' 00:00:00', Criteria::GREATER_EQUAL);
                     $cCertificado->addAnd(CertificadoPeer::DATA_FIM_VALIDADE, $dataAte[2] . '/' . $dataAte[1] . '/' . $dataAte[0] . ' 23:59:59', Criteria::LESS_EQUAL);
                     $cCertificado->addAscendingOrderByColumn(CertificadoPeer::DATA_FIM_VALIDADE);
-                }elseif ($_POST['filtros']['filtroTipoData']==utf8_encode('Validação')) {
+                }elseif ($_POST['filtros']['filtroTipoData']==utf8_encode('Valida??o')) {
                     $cCertificado->add(CertificadoPeer::DATA_VALIDACAO, $dataDe[2] . '/' . $dataDe[1] . '/' . $dataDe[0] . ' 00:00:00', Criteria::GREATER_EQUAL);
                     $cCertificado->addAnd(CertificadoPeer::DATA_VALIDACAO, $dataAte[2] . '/' . $dataAte[1] . '/' . $dataAte[0] . ' 23:59:59', Criteria::LESS_EQUAL);
                     $cCertificado->addDescendingOrderByColumn(CertificadoPeer::DATA_FIM_VALIDADE);
@@ -2663,7 +2664,7 @@ function carregarCertificados() {
                 $cCertificado->addDescendingOrderByColumn(CertificadoPeer::DATA_COMPRA);
             }elseif ($_POST['filtros']['filtroTipoData']=='Vencimento') {
                 $cCertificado->addAscendingOrderByColumn(CertificadoPeer::DATA_FIM_VALIDADE);
-            }elseif ($_POST['filtros']['filtroTipoData']==utf8_encode('Validação')) {
+            }elseif ($_POST['filtros']['filtroTipoData']==utf8_encode('Valida??o')) {
                 $cCertificado->addDescendingOrderByColumn(CertificadoPeer::DATA_FIM_VALIDADE);
             }
         }
@@ -2733,7 +2734,7 @@ function carregarCertificados() {
          * A DATA SELECIONADA FOI DATA DA COMPRA CASO CONTRARIO SEGUE COM OS FILTROS PRINCIPAIS
         */
 
-        if ($_POST['filtros']['filtroTipoData']=='Compra' || $_POST['filtros']['filtroTipoData']=='Vencimento' || $_POST['filtros']['filtroTipoData']==utf8_encode('Validação')) {
+        if ($_POST['filtros']['filtroTipoData']=='Compra' || $_POST['filtros']['filtroTipoData']=='Vencimento' || $_POST['filtros']['filtroTipoData']==utf8_encode('Valida??o')) {
             $cPagamentoNull = $cCertificado->getNewCriterion(CertificadoPeer::DATA_PAGAMENTO, null, Criteria::ISNOTNULL);
             $cPagamentoNotEqual = $cCertificado->getNewCriterion(CertificadoPeer::DATA_PAGAMENTO, '0000-00-00 00:00:00', Criteria::NOT_EQUAL);
 
@@ -2753,7 +2754,7 @@ function carregarCertificados() {
          * SO RELACIONA OS FILTROS DE CERTIFICADO PAGO E NAO PAGO SE
          * A DATA SELECIONADA FOI DATA DA COMPRA CASO CONTRARIO SEGUE COM OS FILTROS PRINCIPAIS
         */
-        if ($_POST['filtros']['filtroTipoData']=='Compra' || $_POST['filtros']['filtroTipoData']=='Vencimento' || $_POST['filtros']['filtroTipoData']==utf8_encode('Validação') ) {
+        if ($_POST['filtros']['filtroTipoData']=='Compra' || $_POST['filtros']['filtroTipoData']=='Vencimento' || $_POST['filtros']['filtroTipoData']==utf8_encode('Valida??o') ) {
             $cCertificadosEmAberto->add(CertificadoPeer::DATA_PAGAMENTO, null, Criteria::ISNULL);
             $cCertificadosEmAberto->addOr(CertificadoPeer::DATA_PAGAMENTO, '0000-00-00 00:00:00');
             $cCertificadosEmAberto->addAnd(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, null, Criteria::ISNULL);
@@ -2857,7 +2858,7 @@ function carregarCertificados() {
                 'Consultor'=>utf8_encode($usuarioConsultor),
                 'Tot'=>formataMoeda($certificado->getProduto()->getPreco() - $certificado->getDesconto()),
                 '.'=>utf8_encode($situacaoValidacao),
-                utf8_encode('Ações')=>$btnDetalhar
+                utf8_encode('A??es')=>$btnDetalhar
 
             );
 
@@ -2867,7 +2868,7 @@ function carregarCertificados() {
              * */
             if (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']=='Vencimento')) {
                 $certificados[$key]['D.Venc.'] = ($certificado->getDataFimValidade('d/m/Y'))?$certificado->getDataFimValidade('d/m/Y'):'-';
-            } elseif (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']==utf8_encode('Validação'))) {
+            } elseif (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']==utf8_encode('Valida??o'))) {
                 $certificados[$key]['D.Val.'] = ($certificado->getDataValidacao('d/m/Y')) ? $certificado->getDataValidacao('d/m/Y') : '-';
             } else {
                 $certificados[$key]['D.Com.'] = ($certificado->getDataCompra('d/m/Y'))?$certificado->getDataCompra('d/m/Y'):'-';
@@ -2879,19 +2880,19 @@ function carregarCertificados() {
         if (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']=='Vencimento')) {
             $colunas = array(
                 array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Venc.'), array('nome'=>'Proto.'),
-                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
+                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('A??es'))
             );
 
-        } elseif (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']==utf8_encode('Validação'))) {
+        } elseif (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']==utf8_encode('Valida??o'))) {
             $colunas = array(
                 array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Val.'), array('nome'=>'Proto.'),
-                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
+                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('A??es'))
             );
 
         } else {
             $colunas = array(
                 array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Com.'), array('nome'=>'Proto.'),
-                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
+                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('A??es'))
             );
         }
 
@@ -3002,7 +3003,7 @@ function carregarFiltrosCertificados() {
 
 
         $usuarios = array();
-        $usuarios[] = array("id"=>'', "nome"=>utf8_encode('Selecione o Usuário'));
+        $usuarios[] = array("id"=>'', "nome"=>utf8_encode('Selecione o Usu?rio'));
         foreach ($usuariosObj as $usuario)
             $usuarios[] = array("id"=>$usuario->getId(), "nome"=>utf8_encode(strtoupper($usuario->getNome())));
 
@@ -3345,7 +3346,7 @@ function importarCertificadosValidados_BKP() {
                         $certSit->setCertificadoId($certificado->getId());
                         $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
                         $certSit->setComentario(
-                            "Conciliação de certificados validados. Parabéns este certificado foi APROVADO. ".$certificado->getProtocolo()
+                            "Concilia??o de certificados validados. Parab?ns este certificado foi APROVADO. ".$certificado->getProtocolo()
                         );
                         $certSit->setData(date('Y-m-d H:i:s'));
                         $certSit->setUsuarioId($usuarioLogado->getId());
@@ -3359,7 +3360,7 @@ function importarCertificadosValidados_BKP() {
                         $certSit->setCertificadoId($certificado->getId());
                         $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
                         $certSit->setComentario(
-                            "Conciliação de certificados validados. Fique atento este certificado foi aprovado com PENDÊNCIA. ".
+                            "Concilia??o de certificados validados. Fique atento este certificado foi aprovado com PEND?NCIA. ".
                             $certificado->getProtocolo()
 
                         );
@@ -3388,8 +3389,8 @@ function importarCertificadosValidados_BKP() {
                         $certSit = new CertificadoSituacao();
                         $certSit->setCertificadoId($certificado->getId());
                         $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
-                        $certSit->setComentario("Conciliação de certificados validados. Infelizmente este certificado foi revogado. 
-                            Reagende com o cliente o quanto antes para emitir um novo. ".$certificado->getProtocolo() . '. motivo da revogação: ' .
+                        $certSit->setComentario("Concilia??o de certificados validados. Infelizmente este certificado foi revogado. 
+                            Reagende com o cliente o quanto antes para emitir um novo. ".$certificado->getProtocolo() . '. motivo da revoga??o: ' .
                             utf8_decode($certificadoValidado['observacao'])
                         );
                         $certSit->setData(date('Y-m-d H:i:s'));
@@ -3410,7 +3411,7 @@ function importarCertificadosValidados_BKP() {
                             'Agr'=>utf8_encode($certificadoValidado['AVP']),
                             'Cliente'=>utf8_encode($certificadoValidado['Nome']),
                             'Status'=>utf8_encode($certificadoValidado['Status']),
-                            utf8_encode('Dt. Início.')=>$certificado->getDataInicioValidade('d/m/Y H:i:s'),
+                            utf8_encode('Dt. In?cio.')=>$certificado->getDataInicioValidade('d/m/Y H:i:s'),
                         );
                         $certificado->save();
                         $cliente->save();
@@ -3430,7 +3431,7 @@ function importarCertificadosValidados_BKP() {
 
         $colunasCertificados = array(
             array('nome'=>'Id'),array('nome'=>'Protocolo'),array('nome'=>'Dt. Validacao'),array('nome'=>'Agr'),
-            array('nome'=>'Cliente'),array('nome'=>utf8_encode('Dt. Início.')), array('nome'=>'Status')
+            array('nome'=>'Cliente'),array('nome'=>utf8_encode('Dt. In?cio.')), array('nome'=>'Status')
         );
 
         $colunasCertificadosNaoImportados = array(
@@ -3740,7 +3741,7 @@ function importarCertificadosValidados() {
                         $certSit->setCertificadoId($certificado->getId());
                         $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
                         $certSit->setComentario(
-                            "Conciliação de certificados validados. Parabéns este certificado foi APROVADO. ".$certificado->getProtocolo()
+                            "Concilia??o de certificados validados. Parab?ns este certificado foi APROVADO. ".$certificado->getProtocolo()
                         );
                         $certSit->setData(date('Y-m-d H:i:s'));
                         $certSit->setUsuarioId($usuarioLogado->getId());
@@ -3754,7 +3755,7 @@ function importarCertificadosValidados() {
                         $certSit->setCertificadoId($certificado->getId());
                         $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
                         $certSit->setComentario(
-                            "Conciliação de certificados validados. Fique atento este certificado foi aprovado com PENDÊNCIA. ".
+                            "Concilia??o de certificados validados. Fique atento este certificado foi aprovado com PEND?NCIA. ".
                             $certificado->getProtocolo()
 
                         );
@@ -3783,8 +3784,8 @@ function importarCertificadosValidados() {
                         $certSit = new CertificadoSituacao();
                         $certSit->setCertificadoId($certificado->getId());
                         $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
-                        $certSit->setComentario("Conciliação de certificados validados. Infelizmente este certificado foi revogado. 
-                            Reagende com o cliente o quanto antes para emitir um novo. ".$certificado->getProtocolo() . '. motivo da revogação: ' .
+                        $certSit->setComentario("Concilia??o de certificados validados. Infelizmente este certificado foi revogado. 
+                            Reagende com o cliente o quanto antes para emitir um novo. ".$certificado->getProtocolo() . '. motivo da revoga??o: ' .
                             utf8_decode($certificadoValidado['observacao'])
                         );
                         $certSit->setData(date('Y-m-d H:i:s'));
@@ -3805,7 +3806,7 @@ function importarCertificadosValidados() {
                             'Agr'=>utf8_encode($certificadoValidado['AVP']),
                             'Cliente'=>utf8_encode($certificadoValidado['Nome']),
                             'Status'=>utf8_encode($certificadoValidado['Status']),
-                            utf8_encode('Dt. Início.')=>$certificado->getDataInicioValidade('d/m/Y H:i:s'),
+                            utf8_encode('Dt. In?cio.')=>$certificado->getDataInicioValidade('d/m/Y H:i:s'),
                         );
                         $certificado->save();
                         $cliente->save();
@@ -3825,7 +3826,7 @@ function importarCertificadosValidados() {
 
         $colunasCertificados = array(
             array('nome'=>'Id'),array('nome'=>'Protocolo'),array('nome'=>'Dt. Validacao'),array('nome'=>'Agr'),
-            array('nome'=>'Cliente'),array('nome'=>utf8_encode('Dt. Início.')), array('nome'=>'Status')
+            array('nome'=>'Cliente'),array('nome'=>utf8_encode('Dt. In?cio.')), array('nome'=>'Status')
         );
 
         $colunasCertificadosNaoImportados = array(
@@ -4135,7 +4136,7 @@ function importarBaixaPagamentoStone() {
                         $certSit->setCertificadoId($certificado->getId());
                         $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
                         $certSit->setComentario(
-                            "Conciliação de certificados validados. Parabéns este certificado foi APROVADO. ".$certificado->getProtocolo()
+                            "Concilia??o de certificados validados. Parab?ns este certificado foi APROVADO. ".$certificado->getProtocolo()
                         );
                         $certSit->setData(date('Y-m-d H:i:s'));
                         $certSit->setUsuarioId($usuarioLogado->getId());
@@ -4149,7 +4150,7 @@ function importarBaixaPagamentoStone() {
                         $certSit->setCertificadoId($certificado->getId());
                         $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
                         $certSit->setComentario(
-                            "Conciliação de certificados validados. Fique atento este certificado foi aprovado com PENDÊNCIA. ".
+                            "Concilia??o de certificados validados. Fique atento este certificado foi aprovado com PEND?NCIA. ".
                             $certificado->getProtocolo()
 
                         );
@@ -4178,8 +4179,8 @@ function importarBaixaPagamentoStone() {
                         $certSit = new CertificadoSituacao();
                         $certSit->setCertificadoId($certificado->getId());
                         $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
-                        $certSit->setComentario("Conciliação de certificados validados. Infelizmente este certificado foi revogado. 
-                            Reagende com o cliente o quanto antes para emitir um novo. ".$certificado->getProtocolo() . '. motivo da revogação: ' .
+                        $certSit->setComentario("Concilia??o de certificados validados. Infelizmente este certificado foi revogado. 
+                            Reagende com o cliente o quanto antes para emitir um novo. ".$certificado->getProtocolo() . '. motivo da revoga??o: ' .
                             utf8_decode($certificadoValidado['observacao'])
                         );
                         $certSit->setData(date('Y-m-d H:i:s'));
@@ -4200,7 +4201,7 @@ function importarBaixaPagamentoStone() {
                             'Agr'=>utf8_encode($certificadoValidado['AVP']),
                             'Cliente'=>utf8_encode($certificadoValidado['Nome']),
                             'Status'=>utf8_encode($certificadoValidado['Status']),
-                            utf8_encode('Dt. Início.')=>$certificado->getDataInicioValidade('d/m/Y H:i:s'),
+                            utf8_encode('Dt. In?cio.')=>$certificado->getDataInicioValidade('d/m/Y H:i:s'),
                         );
                         $certificado->save();
                         $cliente->save();
@@ -4220,7 +4221,7 @@ function importarBaixaPagamentoStone() {
 
         $colunasCertificados = array(
             array('nome'=>'Id'),array('nome'=>'Protocolo'),array('nome'=>'Dt. Validacao'),array('nome'=>'Agr'),
-            array('nome'=>'Cliente'),array('nome'=>utf8_encode('Dt. Início.')), array('nome'=>'Status')
+            array('nome'=>'Cliente'),array('nome'=>utf8_encode('Dt. In?cio.')), array('nome'=>'Status')
         );
 
         $colunasCertificadosNaoImportados = array(
@@ -4341,9 +4342,9 @@ function registrarPagamentoCartaoCredito () {
                     $certificadoPagamento->setValor($_POST['valorProduto']);
                     $certificadoPagamento->setCodigoPagamento($transaction->nsu);
                     $certificadoPagamento->setObservacao(
-                        'nome no cartão: ' . $transaction->card_holder_name . '<br>' .
-                        'tipo do cartão: ' . $transaction->card_brand . '<br>' .
-                        'número do cartãoo: ' . $transaction->card_last_digits . '<br>' .
+                        'nome no cart?o: ' . $transaction->card_holder_name . '<br>' .
+                        'tipo do cart?o: ' . $transaction->card_brand . '<br>' .
+                        'n?mero do cart?oo: ' . $transaction->card_last_digits . '<br>' .
                         'e-mail cliente: ' . $_POST['emailCliente'] . '<br>'.
                         'qtd parcelas: ' . $_POST['qtdParcelas'] . '<br>'
 
@@ -4352,14 +4353,14 @@ function registrarPagamentoCartaoCredito () {
                     $certificadoPagamento->save();
 
 
-                    $mensagemCartao = 'O pagamento com este cart&aacute;o será processado em breve. Aguarde!';
+                    $mensagemCartao = 'O pagamento com este cart&aacute;o ser? processado em breve. Aguarde!';
                     $certSit = new CertificadoSituacao();
                     $certSit->setCertificadoId($certificado->getId());
                     $cSit = new Criteria();
                     $certSit->setUsuarioId($usuarioLogado->getId());
                     $cSit->add(SituacaoPeer::SIGLA, 'em_proc');
                     $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
-                    $certSit->setComentario('Pagamento via cartão de Crédito em processamento. '. $mensagemCartao);
+                    $certSit->setComentario('Pagamento via cart?o de Cr?dito em processamento. '. $mensagemCartao);
                     $certSit->setData(date("Y-m-d H:i:s"));
 
 
@@ -4369,7 +4370,7 @@ function registrarPagamentoCartaoCredito () {
 
                 break;
             case 'authorized':
-                $mensagemCartao = 'Parab&eacute;ns, o pagamento com este cartão foi aprovado!';
+                $mensagemCartao = 'Parab&eacute;ns, o pagamento com este cart?o foi aprovado!';
                 break;
             case 'paid':
                 /*
@@ -4448,7 +4449,7 @@ function registrarPagamentoCartaoCredito () {
                                 $certSit->setUsuarioId($usuarioLogado->getId());
                                 $cSit->add(SituacaoPeer::SIGLA, 'conf_pag');
                                 $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
-                                $certSit->setComentario('Pagamento via Cartão de Crédito. '. $mensagemCartao . $transaction['nsu']);
+                                $certSit->setComentario('Pagamento via Cart?o de Cr?dito. '. $mensagemCartao . $transaction['nsu']);
                                 $certSit->setData(date("Y-m-d H:i:s"));
                             }
 
@@ -4459,7 +4460,7 @@ function registrarPagamentoCartaoCredito () {
                             $contaReceber->save();
                             $lancamentoConta->save();
                             $con->commit();
-                            $mensagemCartao = 'Parab&eacute;ns, o pagamento com este cartão foi aprovado!';
+                            $mensagemCartao = 'Parab&eacute;ns, o pagamento com este cart?o foi aprovado!';
 
                         } else {
                             $con->rollBack();
@@ -4476,13 +4477,13 @@ function registrarPagamentoCartaoCredito () {
 
                 break;
             case 'refunded':
-                $mensagemCartao = 'Por algum motivo, o pagamento com este cartão será reembolsado para o cliente. Procure o financeiro para maiores informa&ccedil;&otilde;es!';
+                $mensagemCartao = 'Por algum motivo, o pagamento com este cart?o ser? reembolsado para o cliente. Procure o financeiro para maiores informa&ccedil;&otilde;es!';
                 break;
             case 'waiting_payment':
-                $mensagemCartao = 'O pagamento com este cartão será processado em breve. Aguarde!';
+                $mensagemCartao = 'O pagamento com este cart?o ser? processado em breve. Aguarde!';
                 break;
             case 'pending_refund':
-                $mensagemCartao = 'O pagamento com este cartão está aguardando para ser reembolsado. Procure o financeiro para maiores informa&ccedil;&otilde;es!';
+                $mensagemCartao = 'O pagamento com este cart?o est? aguardando para ser reembolsado. Procure o financeiro para maiores informa&ccedil;&otilde;es!';
                 break;
             case 'refused':
                 $mensagemCartao = 'Por algum motivo o pagamento com este cart&atilde;o foi recusado. Por favor, verifique com o cliente o motivo';
@@ -4531,11 +4532,11 @@ function carregarModalInformacoesPagamento() {
 
         $cFormas = new Criteria();
         $cFormas->add(FormaPagamentoPeer::NOME, array(
-            'Máquina de Cartão de Crédito',
-            'Depósito em Conta',
-            'Transferência',
+            'M?quina de Cart?o de Cr?dito',
+            'Dep?sito em Conta',
+            'Transfer?ncia',
             'Boleto',
-            'Cartão de Débito',
+            'Cart?o de D?bito',
             ), Criteria::IN
         );
         $formasPagamentoObj = FormaPagamentoPeer::doSelect($cFormas);

@@ -41,7 +41,7 @@ function inserir_observacao(funcao,usuario_id){
 			cache : true,
 
 			error : function (){
-				alert (acentuarMsn('Error TC.JS/95 - Erro na ação de inserir observacao,' + msnPadrao + '.'));
+				alert (acentuarMsn('Error TC.JS/95 - Erro na a??o de inserir observacao,' + msnPadrao + '.'));
                 $("#modalCarregando").modal('hide');
 			},
 			success : function(result){
@@ -51,7 +51,7 @@ function inserir_observacao(funcao,usuario_id){
 					$('#inserirObservacao').modal('hide');
 					$('#edtObservacao').val("");
 				}else{
-				    erroEmail(result,acentuarMsn('Erro na função javascritpt na iserção de observação'));
+				    erroEmail(result,acentuarMsn('Erro na fun??o javascritpt na iser??o de observa??o'));
 					alert('Error TC.JS/102 - Erro ao inserir a sua Observacao,' + msnPadrao + '.');
 					console.log(result);
 				}
@@ -85,7 +85,7 @@ function trocarProdutoCertificado(){
         cache : true,
 
         error : function (){
-            alert ('Error TC.JS/152 - Erro na ação de Trocar o Produto,' + msnPadrao + '.');
+            alert ('Error TC.JS/152 - Erro na a??o de Trocar o Produto,' + msnPadrao + '.');
             $("#modalCarregando").modal('hide');
         },
         success : function(result){
@@ -97,7 +97,7 @@ function trocarProdutoCertificado(){
                 $('#modalTrocarProdutoCerticado').modal('hide');
             }else {
                 alertErro("Opa, Algo Deu Errado, Erro:"+resultado[0]+" entre em contato com sistema@gruposerama.com.br");
-                erroEmail(result,acentuarMsn("Erro na função de trocar o produto, erro:" + result));
+                erroEmail(result,acentuarMsn("Erro na fun??o de trocar o produto, erro:" + result));
                 $("#modalCarregando").modal('hide');
             }
 
@@ -116,7 +116,7 @@ function visualizar_protocolo(certificado_id,funcao){
 			type : 'POST',
 			cache : true,
 			error : function (){
-				alert ('Error TC.JS/165 - Erro na ação visualizar protocolo,' + msnPadrao + '.');
+				alert ('Error TC.JS/165 - Erro na a??o visualizar protocolo,' + msnPadrao + '.');
 			},
 			success : function(result){
                 var certificado = result.split(';');
@@ -153,7 +153,7 @@ function visualizar_protocolo(certificado_id,funcao){
  				    console.log(result);
  				    //erroEmail(result,"Erro no javascritp da tela certificado");
                     //ir_para('telaCertificado.php');
-					alert(acentuarMsn('Error TC.JS/203 - Erro na visualização de protocolo,' + msnPadrao + '.'));
+					alert(acentuarMsn('Error TC.JS/203 - Erro na visualiza??o de protocolo,' + msnPadrao + '.'));
 				}
 			}
 		});
@@ -177,7 +177,7 @@ function inserirDescontoCertificado(){
 		type : 'POST',
 		cache : true,
 		error : function(){
-			alertErro('Error TC.JS/362 - Erro na ação de inserir desconto,' + msnPadrao + '.');
+			alertErro('Error TC.JS/362 - Erro na a??o de inserir desconto,' + msnPadrao + '.');
 		},
 		success : function(result){
 			if (result == 0){
@@ -188,7 +188,7 @@ function inserirDescontoCertificado(){
 			else if (result==1){
 				document.getElementById('mdEdtValor').value='';
 				$('#modalCarregando').modal('hide');
-                alertErro('Você não pode dar um valor maior que 10%')
+                alertErro('Voc? n?o pode dar um valor maior que 10%')
 			}
 			else {
                 alertErro('Error TC.JS/368 - Erro ao dar desconto,' + msnPadrao + '.');
@@ -217,7 +217,7 @@ function revogar_certificado(motivo){
 			type : 'POST',
 			cache : true,
 			error : function(){
-				alertErro('Error TC.JS/433 - Erro na ação de revogar certificado,' + msnPadrao + '.');
+				alertErro('Error TC.JS/433 - Erro na a??o de revogar certificado,' + msnPadrao + '.');
                 $('#modalCarregando').modal('hide');
 			},
 			success : function(result){
@@ -265,7 +265,7 @@ function editar_certificado(certificado_id,funcao,usuario_id){
 			type : 'POST',
 			cache : true,
 			error : function (){
-				alert (acentuarMsn('Error TC.JS/424 - Erro na ação editar certificado,' + msnPadrao + '.'));
+				alert (acentuarMsn('Error TC.JS/424 - Erro na a??o editar certificado,' + msnPadrao + '.'));
 			},
 			success : function(result){
 				if (result) {
@@ -312,7 +312,7 @@ function editar_certificado(certificado_id,funcao,usuario_id){
 						alertSucesso('Certificado alterado com sucesso!');
 					}
 				}else{
-				    erroEmail(result, 'Erro no javascritp na função editar certificado');
+				    erroEmail(result, 'Erro no javascritp na fun??o editar certificado');
 					alert('Error TC.JS/444 - Erro ao editar certificado,' + msnPadrao + '.');
 				}
 			}
@@ -370,7 +370,7 @@ function editar_cliente_certificado(funcao){
 			cache : true,
 			error : function (){
                 $("#modalCarregando").modal('hide');
-                alertErro (acentuarMsn('Error TC.JS/591 - Erro na ação editar cliente,' + msnPadrao + '.'));
+                alertErro (acentuarMsn('Error TC.JS/591 - Erro na a??o editar cliente,' + msnPadrao + '.'));
 			},
 			success : function(result){
                 var certificado = result.split(';');
@@ -427,7 +427,7 @@ function editar_cliente_certificado(funcao){
 				}else{
                     $("#modalCarregando").modal('hide');
 
-                    erroEmail(result,acentuarMsn('Erro no javascritpt na função editar cliente'));
+                    erroEmail(result,acentuarMsn('Erro no javascritpt na fun??o editar cliente'));
 					alertErro('Error TC.JS/636 - Erro ao editar cliente,' + msnPadrao + '.');
 					console.log(result);
 				}
@@ -451,7 +451,7 @@ function gerarProtocoloCertificado() {
 		cache : true,
 
 		error : function (){
-			alertErro ('Error TC.JS/725 - Erro na ação de Gerar Protocolo,' + msnPadrao + '.');
+			alertErro ('Error TC.JS/725 - Erro na a??o de Gerar Protocolo,' + msnPadrao + '.');
 		},
 		success : function(result){
 			var certificado = result.split(';');
@@ -811,7 +811,7 @@ function vincula_contador() {
 		cache : true,
 
 		error : function (){
-            alertErro ('Error US101 - Erro na ação de vincular contador,' + msnPadrao + '.');
+            alertErro ('Error US101 - Erro na a??o de vincular contador,' + msnPadrao + '.');
 		},
 		success : function(result){
             try {
@@ -927,7 +927,7 @@ function procurar_contador(cod_contador){
         cache : true,
 
         error : function (){
-            alert ('Error TC.JS/725 - Erro na ação de Procurar Contador,' + msnPadrao + '.');
+            alert ('Error TC.JS/725 - Erro na a??o de Procurar Contador,' + msnPadrao + '.');
         },
         success : function(result){
             if (result) {
@@ -1409,7 +1409,7 @@ function autorizar_certificado(funcao,usuario_id){
 		type : 'POST',
 		cache : true,
 		error : function(){
-			alert('Error TC.JS/433 - Erro na ação de autorizar certificado,' + msnPadrao + '.');
+			alert('Error TC.JS/433 - Erro na a??o de autorizar certificado,' + msnPadrao + '.');
 		},
 		success : function(result){
 			console.log(result);
@@ -1448,7 +1448,7 @@ function limpar_protocolo(protocolo) {
             cache : true,
 
             error : function (){
-                alertErro ('Error TC.JS/725 - Erro na ação de Gerar Boleto,' + msnPadrao + '.');
+                alertErro ('Error TC.JS/725 - Erro na a??o de Gerar Boleto,' + msnPadrao + '.');
             },
             success : function(result){
 
@@ -2254,7 +2254,7 @@ function desabilitarTelaDetalharCertificados() {
     /*
     * DESABILITA TODAS AS ACOES DA TELA DE DETALHES DO CERTIFICADO,
     * NORMALMENTE PARA DETALHAR OS CERTIFICADOS EM OUTRAS TELAS
-    * ALÉM DISSO, REMOVE A ACAO DO BOTAO FECHAR
+    * AL?M DISSO, REMOVE A ACAO DO BOTAO FECHAR
     * */
 
     $('#detalharCertificado').find('button').each(function (key,btn){

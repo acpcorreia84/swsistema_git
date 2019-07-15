@@ -5,6 +5,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/loader.php';
 
 try{
     $cContadores = new Criteria();
+    $cContadores->add(ContadorPeer::SYNC_SAFE, 1);
     $cContadores->add(ContadorPeer::SITUACAO, -1, Criteria::NOT_EQUAL);
     if ($usuarioLogado->getPerfil()->getNome()!='DIRETORIA')
         $cContadores->add(ContadorPeer::USUARIO_ID, $usuarioLogado->getId());
