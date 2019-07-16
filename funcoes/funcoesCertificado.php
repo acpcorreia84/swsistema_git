@@ -1316,7 +1316,7 @@ function gerarBoletoCertificado($certificado_id){
         $transaction = new PagarMe_Transaction(array(
             "customer" => $customer,
             'amount' => removeTracoPontoBarra($valor_boleto.'.00'),
-            'postback_url' => "http://www.dashboard.serama.com.br/retorno_transacao.php",
+            'postback_url' => "http://www.swsistema.com.br/retorno_transacao.php",
             "boleto_expiration_date"=>$ano.'-'.$mes.'-'.$dia.'T21:54:56.000Z',
             'payment_method' => "boleto"
         ));
