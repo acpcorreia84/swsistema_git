@@ -4531,14 +4531,7 @@ function carregarModalInformacoesPagamento() {
         $certificado = CertificadoPeer::retrieveByPK($_POST['certificado_id']);
 
         $cFormas = new Criteria();
-        $cFormas->add(FormaPagamentoPeer::NOME, array(
-            'M?quina de Cart?o de Cr?dito',
-            'Dep?sito em Conta',
-            'Transfer?ncia',
-            'Boleto',
-            'Cart?o de D?bito',
-            ), Criteria::IN
-        );
+
         $formasPagamentoObj = FormaPagamentoPeer::doSelect($cFormas);
         $formasPagamento = array();
         $formasPagamento[] = array('id'=>'', 'nome'=>utf8_encode('Informe o tipo de comprovante'));

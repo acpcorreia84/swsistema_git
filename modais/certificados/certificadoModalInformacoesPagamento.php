@@ -417,7 +417,7 @@
                                                                         $('#mensagemLoading').html('<i class="fa fa-lg fa-credit-card"></i> Enviando informa&ccedil;&otilde;es do cart&atilde;o');
                                                                         $("#modalCarregando").modal('show');
 
-                                                                        // inicializa um objeto de cartão de crédito e completa
+                                                                        // inicializa um objeto de cart?o de cr?dito e completa
                                                                         // com os dados do form
                                                                         var creditCard = new PagarMe.creditCard();
                                                                         creditCard.cardHolderName = $("#card_holder_name").val();
@@ -426,10 +426,10 @@
                                                                         creditCard.cardNumber = $("#card_number").val();
                                                                         creditCard.cardCVV = $("#card_cvv").val();
 
-                                                                        // pega os erros de validação nos campos do form
+                                                                        // pega os erros de valida??o nos campos do form
                                                                         var fieldErrors = creditCard.fieldErrors();
 
-                                                                        //Verifica se há erros
+                                                                        //Verifica se h? erros
                                                                         var hasErrors = false;
                                                                         for(var field in fieldErrors) { hasErrors = true; break; }
 
@@ -441,7 +441,7 @@
                                                                             alertErro(errors);
                                                                             $("#modalCarregando").modal('hide');
                                                                         } else {
-                                                                            // se não há erros, gera o card_hash...
+                                                                            // se n?o h? erros, gera o card_hash...
                                                                             creditCard.generateHash(function(cardHash) {
                                                                                 // e envia o form
                                                                                 var dadosajax = {
