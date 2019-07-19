@@ -132,7 +132,7 @@ if (
         ($usuarioLogado->getPerfilId() == 78) || //SETOR IM
 		($usuarioLogado->getSetorId() == 3) // SETOR FINANCEIRO
 ){
-	//CONSULTA DOS 6 VENDEDORES COM MAIOR QUANTIDADE DE VENDAS
+	//CONSULTA DOS 10 VENDEDORES COM MAIOR QUANTIDADE DE VENDAS
 	$sql = 'SELECT u.nome,u.foto_avatar, sum(p.preco-cd.desconto) as vendas FROM ';
 	$sql .= '(';
 	$sql .= '((certificado cd join usuario u on u.id = cd.usuario_id) join ';
@@ -141,7 +141,7 @@ if (
 	$sql .= ') ';
 	$sql .= 'where ';
 	$sql .= 's.nome = "vendas" and perfil_id<>1 and ';
-	$sql .= '(cd.data_confirmacao_pagamento >= "'.date("Y").'-'.date("m").'-03 00:00:00" and cd.data_confirmacao_pagamento < "'.date('Y') . '-' . date('m') . '-' . getLastDayOfMonth(date('m'), date('Y')).' 23:59:59")';
+	$sql .= '(cd.data_confirmacao_pagamento >= "'.date("Y").'-'.date("m").'-01 00:00:00" and cd.data_confirmacao_pagamento < "'.date('Y') . '-' . date('m') . '-' . getLastDayOfMonth(date('m'), date('Y')).' 23:59:59")';
 	$sql .= 'group by u.nome order by sum(p.preco-cd.desconto) desc ';
 	$sql .= 'limit 10';
 
