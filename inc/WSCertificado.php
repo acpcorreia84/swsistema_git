@@ -1,7 +1,7 @@
 <?php
 /**
  * Classe para comunicaÃ§Ã£o com o webservice da SafeWeb
- * O objetivo desta classe Ã© fazer a comunicaÃ§Ã£o com o webservice da SafeWeb de forma simples, sem dependÃªncias e de rï¿½pida configuraï¿½ï¿½o.
+ * O objetivo desta classe Ã© fazer a comunicaÃ§Ã£o com o webservice da SafeWeb de forma simples, sem dependÃªncias e de r?pida configura??o.
  *
  * @author MÃ¡rcio Haupenthal
  * @version 1.1 - 27/01/2016
@@ -33,16 +33,16 @@ Class WSCertificado{
 		ini_set('xdebug.var_display_max_data', 1024);
 
 		$this->validator = array(
-			'CPF' 				=> array(self::VALIDATOR_CPF, removeEspeciais('CPF Inválido, deve ser informado somente os números')),
-			'CNPJ' 				=> array(self::VALIDATOR_CPF, removeEspeciais('CNPJ Inválido, deve ser informado somente os números')),
-			'DataNascimento' 	=> array(self::VALIDATOR_DATA_NASCIMENTO, removeEspeciais('"Data de Nascimento inválida, deve ser no formato dd/mm/YYYY')),
+			'CPF' 				=> array(self::VALIDATOR_CPF, removeEspeciais('CPF Inv?lido, deve ser informado somente os n?meros')),
+			'CNPJ' 				=> array(self::VALIDATOR_CPF, removeEspeciais('CNPJ Inv?lido, deve ser informado somente os n?meros')),
+			'DataNascimento' 	=> array(self::VALIDATOR_DATA_NASCIMENTO, removeEspeciais('"Data de Nascimento inv?lida, deve ser no formato dd/mm/YYYY')),
 		);
 	}
 
 	/**
 	 * @param array $campos campos a serem validados
 	 * @return true se passou em todas as validadores
-	 * @throws exception se alguma validação não passou nos testes
+	 * @throws exception se alguma valida??o n?o passou nos testes
 	 */
 	private function isValid($campos){
 		foreach($campos as $campo => $valor){
@@ -58,9 +58,9 @@ Class WSCertificado{
 	}
 
 	/**
-	 * Monta o xml da requisição para enviar ao web service
-	 * @param string $root nome do nó root
-	 * @param array $parametros array de pares com o nome e valor do nó
+	 * Monta o xml da requisi??o para enviar ao web service
+	 * @param string $root nome do n? root
+	 * @param array $parametros array de pares com o nome e valor do n?
 	 * @return string xml
 	 */
 	private function montarXml($root = '', $parametros){
@@ -75,7 +75,7 @@ Class WSCertificado{
 	} 
 
 	/**
-	 * Retorna o xml já formatado para ser enviado ao webservice
+	 * Retorna o xml j? formatado para ser enviado ao webservice
 	 * @param array $array
 	 * @return string xml pronto para ser enviado ao webservice
 	 */
@@ -113,9 +113,9 @@ Class WSCertificado{
 	}
 
 	/**
-	 * Método que faz a chamda ao webservice SOAP da SafeWeb
+	 * M?todo que faz a chamda ao webservice SOAP da SafeWeb
 	 * @param array $request xml do pedido
-	 * @param Método para chamar no SOAP
+	 * @param M?todo para chamar no SOAP
 	 */
 	private function call($request, $requestMethod){
 		if(!isset($this->soapClient)){
@@ -141,11 +141,11 @@ Class WSCertificado{
 		$soapXml = simplexml_load_string($soapResponse->{$resultMethod});
 
 		if(!isset($soapXml->Status)){
-			throw new Exception(utf8_encode("Não foi possível conectar no webservice"), 500);
+			throw new Exception(utf8_encode("N?o foi poss?vel conectar no webservice"), 500);
 		}
 
 		if($soapXml->Status == 'true'){
-			//se for um xml válido, transforma em array e retorna
+			//se for um xml v?lido, transforma em array e retorna
 			$response = simplexml_load_string($soapXml->Value);
 			if($response){
 				$response = json_decode(json_encode($response), true);
@@ -457,7 +457,7 @@ var_dump($solicitacao);
  		'Telefone' => 30180020,
  		'Email' => 'marcio.haup@gmail.com'
  	),
- 	//endereï¿½o empresa
+ 	//endere?o empresa
  	array(
  		'Logradouro' => 'Rua Santo Dumont',
  		'Numero' => '100',
@@ -480,13 +480,13 @@ var_dump($solicitacao);
  		'Telefone' => 30180300,
  		'Email' => 'luiz@gmail.com'
  	),
- 	//titular endereï¿½o
+ 	//titular endere?o
  	array(
  		'Logradouro' => 'Rua Santo Dumont',
  		'Numero' => '100',
  		'Complemento' => 'apto 100',
  		'Bairro' => 'Santos Dumont',
- 		'Cidade' => 'Sï¿½o Leopoldo',
+ 		'Cidade' => 'S?o Leopoldo',
  		'UF' => 'RS',
  		'CEP' => '93115270',
  	),
@@ -524,7 +524,7 @@ try {
  		'Telefone' => 33215050,
  		'Email' => 'correia.antonio@gruposerama.com.br'
  	),
-// 	endereï¿½o
+// 	endere?o
  	array(
  		'Logradouro' => 'Rua Bernal do Couto',
  		'Numero' => '610',
