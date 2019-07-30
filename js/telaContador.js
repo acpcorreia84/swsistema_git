@@ -411,7 +411,7 @@ function carregarModalInserirEditarContador(acao) {
                 montarSelect('ecEdtVendedorContador', resultado.vendedores, 'divVendedorContador', contador.usuario);
 
                 if (acao == 'inserir') {
-                    $('input[name="edtTipoPessoa"][value="J"]').prop('checked', 'checked');
+                    $('input[name="edtTipoPessoa"][value="F"]').prop('checked', 'checked');
                     $('#divEscolhaTipo').css({visibility: 'visible', display: 'block'});
                     $('#ecEdtNome').val('');
                     $('#ecEdtNascimento').val('');
@@ -443,7 +443,6 @@ function carregarModalInserirEditarContador(acao) {
                     $('#spanEdtCodigoDesconto').html(contador.codigoDescontoContador);
                     $('#ecEdtUrl').value = '';
 
-                    $("#chkRecebeComissaoContador").bootstrapToggle('off');
                     $("#chkConcedeDescontoContador").bootstrapToggle('on');
 
                     /*CARREGAR DADOS DO CONTADOR PARA O MODAL DE EDIÇÃO*/
@@ -784,6 +783,7 @@ function carregarModalDetalharContador(contadorId, sincronizarDataFiltro){
                     /*
                     * SE O CONTADOR NAO RECEBE COMISSAO NEM MOSTRA O QUADRO PRA O USUARIO
                     * */
+/*
                     if (contador.mostraQuadroComissao == 'sim') {
                         $('#divDadosComissionamento').css({visibility: 'visible', display: 'block'});
                         if (contador.possuiCartao=='sim') {
@@ -797,6 +797,7 @@ function carregarModalDetalharContador(contadorId, sincronizarDataFiltro){
                     }
                     else
                         $('#divDadosComissionamento').css({visibility: 'hidden', display: 'none'});
+*/
 
 
                     if (dadosComissao) {

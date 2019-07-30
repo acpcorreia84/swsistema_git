@@ -294,13 +294,13 @@ function carregarContadoresRelatorioComissao () {
                 'Localidade'=> utf8_encode($contador->getCidade() .'/' . $contador->getUf()),
                 'Dados'=> utf8_encode($contador->getBanco()). '<br/> (Ag: ' .$contador->getAgencia() .') <strong> CC:' . $contador->getContaCorrente() .'</strong> - Op:'. $contador->getOperacao(),
                 'Registro'=>$descricaoRegistroComissao, 'Pagto.'=>$dataPagamento, 'Valor' =>$valor,
-                utf8_encode('A��o')=>$btnPago
+                utf8_encode('Acao')=>$btnPago
             );
         }/*FIM DO FOR*/
 
         $colunas = array(
             array('nome'=>' '),array('nome'=>'Id'), array('nome'=>'Nome'),array('nome'=>'Consultor'), array('nome'=>'Localidade'),
-            array('nome'=>'Dados'),array('nome'=>'Registro'),  array('nome'=>'Pagto.'),array('nome'=>'Valor'), array('nome'=>utf8_encode('A��o'))
+            array('nome'=>'Dados'),array('nome'=>'Registro'),  array('nome'=>'Pagto.'),array('nome'=>'Valor'), array('nome'=>utf8_encode('Acao'))
         );
 
         echo json_encode(array('mensagem'=>'Ok', 'colunas'=>json_encode($colunas), 'dadosContadores'=>json_encode($contadores), 'quantidadeContadores'=>$quantidadeTotalContadores));
@@ -448,6 +448,7 @@ function carregarContadores(){
                 $cContador->add(ContadorPeer::SYNC_SAFE, 1);
             elseif ($_POST['filtros']['filtroChkSyncSafe']=='false') {
                 $cContador->add(ContadorPeer::SYNC_SAFE, 0);
+                $cContador->addOr(ContadorPeer::SYNC_SAFE, 2);
             }
         }
 
@@ -620,8 +621,10 @@ function carregarContadores(){
 
             if ($contador->getSyncSafe() == 1)
                 $sincronizado = '<i class="fa fa-flag-checkered text-info " aria-hidden="true"  title="Sincronizado com a Safe"></i>' ;
-            else
+            elseif ($contador->getSyncSafe() == 0)
                 $sincronizado = '<i class="fa fa-flag-checkered text-danger" aria-hidden="true"  title="Nao sincronizado"></i>';
+            else
+                $sincronizado = '<i class="fa fa-flag-checkered" style="color:yellow" aria-hidden="true"  title="Editado mas Nao sincronizado"></i>';
 
 
             $contadores[] =  array(' '=>($i++),
@@ -716,6 +719,8 @@ function salvarContador(){
             if (!$contador->getCodContador())
                 $contador->setCodContador(gerarCodigoContador(removeAcentos($_POST['nome'])));
         }
+
+        $contador->setSyncSafe(2);
 
         if (utf8_encode($contador->getNome()) != $_POST['nome'])
             $arrAlteracoes['nome'] = 'O campo nome foi alterado, nome anterior: ' . utf8_encode($contador->getNome()).' novo nome:'.utf8_encode($_POST['nome']);
@@ -1131,7 +1136,7 @@ function detalharContador(){
                 $contatosContador[] =
                     array(
                         "Id"=>$contato->getId(),"Nome"=>utf8_encode($contato->getNome()), "Cargo"=>utf8_encode($contato->getCargo()),
-                        "Telefone"=>$telefone,"Celular"=>$celular, "E-mail"=>$contato->getEmail(), utf8_encode('A��o')=>$btnApagarContato
+                        "Telefone"=>$telefone,"Celular"=>$celular, "E-mail"=>$contato->getEmail(), utf8_encode('Acao')=>$btnApagarContato
                     );
 
             }
@@ -1140,7 +1145,7 @@ function detalharContador(){
 
         $colunasContatos = array(
             array('nome'=>'Id'), array('nome'=>'Nome'), array('nome'=>'Cargo'),
-            array('nome'=>'Telefone'), array('nome'=>'Celular'), array('nome'=>'E-mail'), array('nome'=>utf8_encode('A��o'))
+            array('nome'=>'Telefone'), array('nome'=>'Celular'), array('nome'=>'E-mail'), array('nome'=>utf8_encode('Acao'))
         );
 
         if ($contador->getDesconto()==1)
@@ -1338,7 +1343,7 @@ function detalharContador(){
             $cLancamentosContador->addDescendingOrderByColumn(ContadorLancamentoPeer::DATA_LANCAMENTO);
             $lancamentosComissao = $registroComissao->getContadorLancamentos($cLancamentosContador);
 
-            $quadroResumo[] = array(utf8_encode('Descri��o')=>utf8_encode('Pedidos do contador ('.$registroComissao->getComissaoVenda().'%)'),
+            $quadroResumo[] = array(utf8_encode('Descricao')=>utf8_encode('Pedidos do contador ('.$registroComissao->getComissaoVenda().'%)'),
                 $tituloReceita=>formataMoeda($registroComissao->getVenda() * $coeficienteVenda), 'Despesas'=> '-'
             );
 
@@ -1365,7 +1370,7 @@ function detalharContador(){
                 else
                     $iconeApagar = '';
                 if ($lancamentoComissao->getTipoLancamento() == 'C') {
-                    $quadroResumo[] = array(utf8_encode('Descri��o') => utf8_encode($lancamentoComissao->getDescricao()) . $iconeApagar . $acaoApagar,
+                    $quadroResumo[] = array(utf8_encode('Descricao') => utf8_encode($lancamentoComissao->getDescricao()) . $iconeApagar . $acaoApagar,
                         $tituloReceita => formataMoeda($lancamentoComissao->getValor()), 'Despesas' => '-'
                     );
 
@@ -1373,12 +1378,12 @@ function detalharContador(){
                 }
 
             }
-            $quadroResumo[] = array(utf8_encode('Descri��o')=>'<span class="text-danger">TOTAL PARCIAL (RECEITAS)</span>',
+            $quadroResumo[] = array(utf8_encode('Descricao')=>'<span class="text-danger">TOTAL PARCIAL (RECEITAS)</span>',
                 $tituloReceita=>'<span class="text-danger">'.formataMoeda($somaTotalAcrescimos).'</span>', 'Despesas'=> '-'
             );
 
 
-            $quadroResumo[] = array(utf8_encode('Descri��o')=>'<strong>Descontos</strong>',
+            $quadroResumo[] = array(utf8_encode('Descricao')=>'<strong>Descontos</strong>',
                 $tituloReceita=>'', 'Despesas'=>''
             );
 
@@ -1401,7 +1406,7 @@ function detalharContador(){
                     $iconeApagar = '';
 
                 if ($lancamentoComissao->getTipoLancamento() == 'D') {
-                    $quadroResumo[] = array(utf8_encode('Descri��o') => utf8_encode($lancamentoComissao->getDescricao()) . $iconeApagar . $acaoApagar,
+                    $quadroResumo[] = array(utf8_encode('Descricao') => utf8_encode($lancamentoComissao->getDescricao()) . $iconeApagar . $acaoApagar,
                         $tituloReceita => '-', 'Despesas' => formataMoeda($lancamentoComissao->getValor())
                     );
 
@@ -1410,7 +1415,7 @@ function detalharContador(){
 
             }
 
-            $quadroResumo[] = array(utf8_encode('Descri��o')=>'<span class="text-danger">TOTAL PARCIAL (DESCONTOS)</span>',
+            $quadroResumo[] = array(utf8_encode('Descricao')=>'<span class="text-danger">TOTAL PARCIAL (DESCONTOS)</span>',
                 $tituloReceita=>'-', 'Despesas'=> '<span class="text-danger">'.formataMoeda($somaTotalDescontos).'</span>'
             );
         } else {
@@ -1427,7 +1432,7 @@ function detalharContador(){
 
             $somaTotalAcrescimos += ($somaTotalDescontos) + ($somaProdutosVendidos * $coeficienteVenda);
 
-            $quadroResumo[] = array(utf8_encode('Descri��o') => utf8_encode('Apenas Vendidos ('.($coeficienteVenda*100).'%)'),
+            $quadroResumo[] = array(utf8_encode('Descricao') => utf8_encode('Apenas Vendidos ('.($coeficienteVenda*100).'%)'),
                 $tituloReceita => formataMoeda($somaProdutosVendidos * $coeficienteVenda), 'Despesas' => '-'
             );
 
@@ -1468,7 +1473,7 @@ function detalharContador(){
                  * */
                 $somaTotalAcrescimos += $somaTotalComissoesAnteriores;
 
-                $quadroResumo[] = array(utf8_encode('Descri��o') => utf8_encode('Lan�amentos de comiss�o n�o paga do per�odo de '.
+                $quadroResumo[] = array(utf8_encode('Descricao') => utf8_encode('Lan�amentos de comiss�o n�o paga do per�odo de '.
                     $comissaoAnterior->getPeriodoInicial('d/m/Y') . ' at� ' . $comissaoAnterior->getPeriodoFinal('d/m/Y')),
                     $tituloReceita => formataMoeda($somaTotalComissoesAnteriores), 'Despesas' => '-'
                 );
@@ -1485,11 +1490,11 @@ function detalharContador(){
              * */
 
 
-            $quadroResumo[] = array(utf8_encode('Descri��o') => '<span class="text-danger">TOTAL PARCIAL (RECEITAS)</span>',
+            $quadroResumo[] = array(utf8_encode('Descricao') => '<span class="text-danger">TOTAL PARCIAL (RECEITAS)</span>',
                 $tituloReceita => '<span class="text-danger">' . formataMoeda($somaTotalAcrescimos) . '</span>', 'Despesas' => '-'
             );
 
-            $quadroResumo[] = array(utf8_encode('Descri��o') => '<strong>Descontos</strong>',
+            $quadroResumo[] = array(utf8_encode('Descricao') => '<strong>Descontos</strong>',
                 $tituloReceita => '', 'Despesas' => ''
             );
 
@@ -1498,16 +1503,16 @@ function detalharContador(){
 
         /*SE O SALDO FOR POSITIVO COLOCA O TOTAL NAS RECEITAS E SAO COLOCA NAS DESPESAS*/
         if ($somaTotalAcrescimos-$somaTotalDescontos > 0)
-            $quadroResumo[] = array(utf8_encode('Descri��o')=>'<span class="text-danger">TOTAL GERAL</span>',
+            $quadroResumo[] = array(utf8_encode('Descricao')=>'<span class="text-danger">TOTAL GERAL</span>',
                 $tituloReceita=>'<span class="text-danger">'.formataMoeda($somaTotalAcrescimos-$somaTotalDescontos).'</span>', 'Despesas'=> '-'
             );
         else
-            $quadroResumo[] = array(utf8_encode('Descri��o')=>'<span class="text-danger">TOTAL GERAL</span>',
+            $quadroResumo[] = array(utf8_encode('Descricao')=>'<span class="text-danger">TOTAL GERAL</span>',
                 $tituloReceita=>'-', 'Despesas'=> '<span class="text-danger">'.formataMoeda($somaTotalAcrescimos-$somaTotalDescontos).'</span>'
             );
 
         $colunasQuadroResumo = array(
-            array('nome'=>utf8_encode('Descri��o')), array('nome'=>$tituloReceita), array('nome'=>'Despesas')
+            array('nome'=>utf8_encode('Descricao')), array('nome'=>$tituloReceita), array('nome'=>'Despesas')
         );
 
 
@@ -1538,11 +1543,11 @@ function detalharContador(){
         $detalhesContador = array();
         foreach ($detalhesContadorObj as $detalheContador) {
             $detalhesContador[] = array('Id'=>$detalheContador->getId(), 'Data'=>$detalheContador->getDataCadastro('d/m/Y H:i:s'),
-                utf8_encode('Descri��o')=>utf8_encode($detalheContador->getDescricao()), utf8_encode('Usu�rio')=>utf8_encode($detalheContador->getUsuario()->getNome()),
+                utf8_encode('Descricao')=>utf8_encode($detalheContador->getDescricao()), utf8_encode('Usu�rio')=>utf8_encode($detalheContador->getUsuario()->getNome()),
             );
         }
         $colunasDetalhes = array(
-            array('nome'=>'Id'), array('nome'=>'Data'), array('nome'=>utf8_encode('Descri��o')), array('nome'=>utf8_encode('Usu�rio'))
+            array('nome'=>'Id'), array('nome'=>'Data'), array('nome'=>utf8_encode('Descricao')), array('nome'=>utf8_encode('Usu�rio'))
         );
 
         /*

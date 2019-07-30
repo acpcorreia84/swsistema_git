@@ -27,15 +27,18 @@
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <div class="col-lg-6">
-                                        <div class="btn-group">
+                                        <div class="btn-group" >
                                             <label class="btn btn-default">
-                                                <input type="radio" name="edtTipoPessoa" value="J" autocomplete="off" required="required" checked="checked"> Pessoa Jur&iacute;dica
+                                                <input type="radio" disabled name="edtTipoPessoa" value="J" autocomplete="off" required="required" checked="checked"> Pessoa Jur&iacute;dica
                                             </label>
                                             <label class="btn btn-default">
-                                                <input type="radio" name="edtTipoPessoa" value="F" autocomplete="off" > Pessoa F&iacute;sica
+                                                <input type="radio" disabled name="edtTipoPessoa" value="F" autocomplete="off" > Pessoa F&iacute;sica
                                             </label>
                                         </div>
                                         <script>
+/*
+
+NAO PERMITIR ESCONDER/MOSTRAR QUADRO PJ
                                             $('input[name=edtTipoPessoa]').change(function () {
                                                 if ($('input[name=edtTipoPessoa]:checked').val()=='J') {
                                                     $('#divBotoesTipoProfissional').css( {display:'none', visibility:'hidden'} );
@@ -46,18 +49,19 @@
                                                 }
 
                                             })
+*/
                                         </script>
 
                                     </div>
 
-                                    <div class="col-lg-6 oculto" id="divBotoesTipoProfissional">
+                                    <div class="col-lg-6" id="divBotoesTipoProfissional">
                                         <div class="btn-group" >
                                             <label class="btn btn-default">
-                                                <input type="radio" class="tipoProfissional" name="edtTipoProfissional" value="profissional" autocomplete="off" required="required" checked="checked"> Profissional
+                                                <input type="radio" disabled class="tipoProfissional" name="edtTipoProfissional" id="edtTipoProfissional" value="profissional" autocomplete="off" required="required" checked="checked"> Profissional
                                             </label>
 
                                             <label class="btn btn-default">
-                                                <input type="radio" class="tipoProfissional" name="edtTipoProfissional" value="estudante" autocomplete="off"  > Estudante
+                                                <input type="radio" disabled class="tipoProfissional" name="edtTipoProfissional" id="edtTipoProfissional" value="estudante" autocomplete="off"  > Estudante
                                             </label>
                                         </div>
 
@@ -106,7 +110,7 @@
                                     </div>
 
                                     <div class="col-lg-2">
-                                        <input type="checkbox" id="chkRecebeComissaoContador">
+                                        <input type="checkbox" id="chkRecebeComissaoContador" checked="checked" >
                                         <script>
                                             $(function() {
                                                 $("#chkRecebeComissaoContador").bootstrapToggle({
@@ -147,7 +151,7 @@
 
                     <!--DADOS BANCARIOS DO CONTADOR-->
                     <form id="frmDadosBancariosContador" name="frmDadosBancariosContador" action="">
-                        <div class="panel panel-default oculto" id="divDadosComissionamento">
+                        <div class="panel panel-default" id="divDadosComissionamento">
                             <div class="panel-body" >
                                 <div class="row form-group" >
                                     <div class="col-lg-6">
@@ -158,76 +162,98 @@
                                     <div class="col-lg-6">
                                         <div class="btn-group">
                                             <label class="btn btn-default">
-                                                <input type="radio" name="edtTipoComissionamentoContador" value="cartao" autocomplete="off" checked="checked"> Cart&atilde;o <a href="#"><i class="fa fa-question-circle" aria-hidden="true" title="Selecione esta op&ccedil;&atilde;o caso o contador receba o comissionamento no cart&atilde;o contador amigo."></i></a>
+                                                <input type="radio" name="edtTipoComissionamentoContador" value="banco" autocomplete="off" disabled="disabled" checked="checked" > Banco <a href="#"><i class="fa fa-question-circle" aria-hidden="true" title="Selecione esta op&ccedil;&atilde;o caso o contador receba o comissionamento em sua conta banc&aacute;ria."></i></a>
                                             </label>
+
                                             <label class="btn btn-default">
-                                                <input type="radio" name="edtTipoComissionamentoContador" value="banco" autocomplete="off" > Banco <a href="#"><i class="fa fa-question-circle" aria-hidden="true" title="Selecione esta op&ccedil;&atilde;o caso o contador receba o comissionamento em sua conta banc&aacute;ria."></i></a>
+                                                <input type="radio" name="edtTipoComissionamentoContador" value="cartao" autocomplete="off"  disabled="disabled"> Cart&atilde;o <a href="#"><i class="fa fa-question-circle" aria-hidden="true" title="Selecione esta op&ccedil;&atilde;o caso o contador receba o comissionamento no cart&atilde;o contador amigo."></i></a>
                                             </label>
                                         </div>
 
                                         <script>
-                                            $('input[name=edtTipoComissionamentoContador]').change(function () {
+                                           /*
+                                           CODIGO DE DIMINUIR DADOS BANCARIOS DO CONTADOR
+                                           $('input[name=edtTipoComissionamentoContador]').change(function () {
                                                 if ($('input[name=edtTipoComissionamentoContador]:checked').val()=='cartao') {
                                                     $('#divDadosBancariosContador').css( {display:'none', visibility:'hidden'} );
                                                 } else {
                                                     $('#divDadosBancariosContador').css( {display:'block', visibility:'visible'} );
                                                 }
 
-                                            })
+                                            })*/
                                         </script>
 
                                     </div>
                                 </div>
-                                <div id="divDadosBancariosContador" class="oculto">
+                                <div id="divDadosBancariosContador">
                                     <div class="row">
                                         <div class="col-lg-6">
-                                            <label for="ecEdtBanco">Banco: <span id="spanContadorBancoAntigo"></span></label>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <label for="ecEdtCpfCnpjConta">CPF DA CONTA</label>
+                                            <label for="ecEdtBanco" STYLE="color:darkred">Banco* <span id="spanContadorBancoAntigo"></span></label>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6 campoValidar">
                                             <select name="ecEdtBanco" id="ecEdtBanco" class="form-control">
                                                 <option value="">Selecione o banco</option>
-                                                <option value="003-BASA" >BANCO DA AMAZONIA</option>
-                                                <option value="001-BANCO DO BRASIL" >BANCO DO BRASIL</option>
-                                                <option value="037-BANPARA" >BANPARA</option>
-                                                <option value="237-BRADESCO" >BRADESCO</option>
-                                                <option value="104-CAIXA ECONOMICA" >CAIXA ECONOMICA</option>
-                                                <option value="341-ITAU" >ITAU</option>
-                                                <option value="074-SAFRA" >SAFRA</option>
-                                                <option value="033-SANTANDER" >SANTANDER</option>
-                                                <option value="748-SICREDI" >SICREDI</option>
-                                                <option value="756-SICOOB" >SICOOB</option>
+                                                <option value="003" >BANCO DA AMAZONIA</option>
+                                                <option value="001" >BANCO DO BRASIL</option>
+                                                <option value="037" >BANPARA</option>
+                                                <option value="237" >BRADESCO</option>
+                                                <option value="104" >CAIXA ECONOMICA</option>
+                                                <option value="341" >ITAU</option>
+                                                <option value="212" >ORIGINAL</option>
+                                                <option value="074" >SAFRA</option>
+                                                <option value="033" >SANTANDER</option>
+                                                <option value="748" >SICREDI</option>
+                                                <option value="756" >SICOOB</option>
                                             </select>
 
                                         </div>
-                                        <div class="col-lg-6 campoValidar">
+<!--                                        <div class="col-lg-6 campoValidar">
                                             <input type="text" class="form-control" id="ecEdtCpfCnpjConta" name="ecEdtCpfCnpjConta" onkeypress="formatar(this, 'cpf')" onblur="formatarBlur(this, 'cpf')">
                                         </div>
+-->                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <label for="ecEdtAg" STYLE="color:darkred">Agencia* (s&oacute; n&uacute;meros)</label>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label for="ecEdtDigitoAg">D&iacute;gito</label>
+                                        </div>
+
+                                        <div class="col-lg-3" STYLE="color:darkred">
+                                            <label for="ecEdtCc">C. Corrente* (s&oacute; n&uacute;meros)</label>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <label for="ecEdtDigitoCc">D&iacute;gito</label>
+                                        </div>
+
+                                        <div class="col-lg-2" STYLE="color:darkred">
+                                            <label for="ecEdtOpConta">Opera&ccedil;&atilde;o*</label>
+                                        </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-4">
-                                            <label for="ecEdtAg">Agencia:</label>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <label for="ecEdtCc">Conta Corrente:</label>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <label for="ecEdtOpConta">Opera&ccedil;&atilde;o:</label>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-4 campoValidar">
+                                        <div class="col-lg-3 campoValidar">
                                             <input type="text" class="form-control" id="ecEdtAg" name="ecEdtAg">
                                         </div>
-                                        <div class="col-lg-4 campoValidar">
+                                        <div class="col-lg-1 campoValidar">
+                                            <input type="text" class="form-control" id="ecEdtDigitoAg" name="ecEdtDigitoAg">
+                                        </div>
+                                        <div class="col-lg-3 campoValidar">
                                             <input type="text" class="form-control" id="ecEdtCc" name="ecEdtCc">
                                         </div>
-                                        <div class="col-lg-4">
-                                            <input type="text" class="form-control" id="ecEdtOpConta" name="ecEdtOpConta">
+                                        <div class="col-lg-1 campoValidar">
+                                            <input type="text" class="form-control" id="ecEdtDigitoCc" name="ecEdtDigitoCc">
+                                        </div>
+
+                                        <div class="col-lg-2">
+                                            <select name="ecEdtOpConta" id="ecEdtOpConta" class="form-control" >
+                                                <option value="">Selecione</option>
+                                                <option value="CC" >CONTA CORRENTE</option>
+                                                <option value="PP" >CONTA POUPAN&Ccedil;A</option>
+
+                                            </select>
+
                                         </div>
                                     </div>
                                 </div>
@@ -248,13 +274,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <label for="ecEdtNome">Nome *</label>
+                                        <label for="ecEdtNome" STYLE="color:darkred">Nome *</label>
                                     </div>
                                     <div class="col-lg-3">
-                                        <label for="ecEdtNascimento">Nascimento *</label>
+                                        <label for="ecEdtNascimento" STYLE="color:darkred">Nascimento *</label>
                                     </div>
                                     <div class="col-lg-3">
-                                        <label for="ecEdtCpf">CPF *</label>
+                                        <label for="ecEdtCpf" STYLE="color:darkred">CPF *</label>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -271,10 +297,10 @@
                                 <br/>
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <label for="ecEdtEmailContador">Email do contador *</label>
+                                        <label for="ecEdtEmailContador" STYLE="color:darkred">Email do contador *</label>
                                     </div>
                                     <div class="col-lg-3">
-                                        <label for="ecEdtCrc">CRC *</label>
+                                        <label for="ecEdtCrc" STYLE="color:darkred">CRC *</label>
                                     </div>
                                     <div class="col-lg-3">
                                         <label for="ecEdtCodigoDesconto">C&oacute;digo Contador</label>
@@ -300,6 +326,102 @@
                     </form>
                     <!--FIM DOS DADOS DO CONTADOR-->
 
+                    <!--ENDERECO DO CONTADOR-->
+                    <form id="frmEnderecoContador" name="frmEnderecoContador" action="">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h4>ENDERE&ccedil;O:</h4>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <label for="ecEdtCep" style="color:darkred">Cep *</label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="ecEdtEndereco" style="color:darkred">Endere&ccedil;o *</label>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label for="ecEdtNumero" style="color:darkred">N&uacute;mero *</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 campoValidar" >
+                                        <input type="text" name="ecEdtCep" id="ecEdtCep" class="form-control"  onkeypress="formatar(this,'cep');" onblur="formatarBlur(this,'cep');
+                                        pesquisa_cep_padrao($('#ecEdtCep').val(), 'ecEdtEndereco', 'ecEdtCidade', 'ecEdtBairro', 'ecEdtUfContador', 'ecEdtComplemento');" placeholder="Cep da empresa">
+                                    </div>
+                                    <div class="col-lg-6 campoValidar">
+                                        <input type="text" name="ecEdtEndereco" id="ecEdtEndereco" class="form-control" >
+                                    </div>
+                                    <div class="col-lg-3 campoValidar">
+                                        <input type="text" name="ecEdtNumero" id="ecEdtNumero" class="form-control" >
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-4" >
+                                        <label for="ecEdtComplemento">Complemento </label>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label for="ecEdtBairro" style="color:darkred">Bairro *</label>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label for="ecEdtCidade" style="color:darkred">Cidade *</label>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label for="ecEdtUfContador" style="color:darkred">UF *</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4 campoValidar">
+                                        <input type="text" name="ecEdtComplemento" id="ecEdtComplemento" class="form-control">
+                                    </div>
+                                    <div class="col-lg-3 campoValidar">
+                                        <input type="text" name="ecEdtBairro" id="ecEdtBairro" class="form-control" >
+                                    </div>
+                                    <div class="col-lg-3 campoValidar">
+                                        <input type="text" name="ecEdtCidade" id="ecEdtCidade" class="form-control">
+                                    </div>
+                                    <div class="col-lg-2 campoValidar">
+                                        <select name="ecEdtUfContador" id="ecEdtUfContador" class="form-control" >
+                                            <option value="">Selecione</option>
+                                            <option value="AC" >AC</option>
+                                            <option value="AL" >AL</option>
+                                            <option value="AP" >AP</option>
+                                            <option value="AM" >AM</option>
+                                            <option value="BA" >BA</option>
+                                            <option value="CE" >CE</option>
+                                            <option value="DF" >DF</option>
+                                            <option value="ES" >ES</option>
+                                            <option value="GO" >GO</option>
+                                            <option value="MA" >MA</option>
+                                            <option value="MT" >MT</option>
+                                            <option value="MS" >MS</option>
+                                            <option value="MG" >MG</option>
+                                            <option value="PA" >PA</option>
+                                            <option value="PB" >PB</option>
+                                            <option value="PR" >PR</option>
+                                            <option value="PE" >PE</option>
+                                            <option value="PI" >PI</option>
+                                            <option value="RJ" >RJ</option>
+                                            <option value="RN" >RN</option>
+                                            <option value="RS" >RS</option>
+                                            <option value="RO" >RO</option>
+                                            <option value="RR" >RR</option>
+                                            <option value="SC" >SC</option>
+                                            <option value="SP" >SP</option>
+                                            <option value="SE" >SE</option>
+                                            <option value="TO" >TO</option>
+                                        </select>
+                                    </div>
+                                </div> <!--DIV CLASS row-->
+
+                            </div>
+                        </div>
+                    </form>
+                    <!--FIM DO ENDERECO DO CONTADOR-->
 
                     <!--CONTATOS DO CONTADOR-->
                     <form id="frmContatosContador" name="frmContatosContador" method="post" >
@@ -320,7 +442,7 @@
                                 <div id="divContatos col-lg-12">
                                     <div id="divContato" class="divContato">
                                         <div class="row form-group">
-                                            <div class="col-lg-2">
+                                            <div class="col-lg-2" >
                                                 <label>Nome:</label>
                                             </div>
                                             <div class="col-lg-4">
@@ -374,102 +496,6 @@
                     </form>
                     <!--FIM DOS CONTATOS DO CONTADOR-->
 
-                    <!--ENDERECO DO CONTADOR-->
-                    <form id="frmEnderecoContador" name="frmEnderecoContador" action="">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <h4>ENDERE&Ccedil;O:</h4>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3">
-                                        <label for="ecEdtCep">Cep *</label>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <label for="ecEdtEndereco">Endere&ccedil;o *</label>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <label for="ecEdtNumero">Numero *</label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-3 campoValidar">
-                                        <input type="text" name="ecEdtCep" id="ecEdtCep" class="form-control"  onkeypress="formatar(this,'cep');" onblur="formatarBlur(this,'cep');
-                                        pesquisa_cep_padrao($('#ecEdtCep').val(), 'ecEdtEndereco', 'ecEdtCidade', 'ecEdtBairro', 'ecEdtUfContador', 'ecEdtComplemento');" placeholder="Cep da empresa">
-                                    </div>
-                                    <div class="col-lg-6 campoValidar">
-                                        <input type="text" name="ecEdtEndereco" id="ecEdtEndereco" class="form-control" >
-                                    </div>
-                                    <div class="col-lg-3 campoValidar">
-                                        <input type="text" name="ecEdtNumero" id="ecEdtNumero" class="form-control" >
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <label for="ecEdtComplemento">Complemento *</label>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <label for="ecEdtBairro">Bairro *</label>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <label for="ecEdtCidade">Cidade *</label>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <label for="ecEdtUfContador">UF *</label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-4 campoValidar">
-                                        <input type="text" name="ecEdtComplemento" id="ecEdtComplemento" class="form-control">
-                                    </div>
-                                    <div class="col-lg-3 campoValidar">
-                                        <input type="text" name="ecEdtBairro" id="ecEdtBairro" class="form-control" >
-                                    </div>
-                                    <div class="col-lg-3 campoValidar">
-                                        <input type="text" name="ecEdtCidade" id="ecEdtCidade" class="form-control">
-                                    </div>
-                                    <div class="col-lg-2 campoValidar">
-                                        <select name="ecEdtUfContador" id="ecEdtUfContador" class="form-control" >
-                                            <option value="">Selecione</option>
-                                            <option value="AC" >AC</option>
-                                            <option value="AL" >AL</option>
-                                            <option value="AP" >AP</option>
-                                            <option value="AM" >AM</option>
-                                            <option value="BA" >BA</option>
-                                            <option value="CE" >CE</option>
-                                            <option value="DF" >DF</option>
-                                            <option value="ES" >ES</option>
-                                            <option value="GO" >GO</option>
-                                            <option value="MA" >MA</option>
-                                            <option value="MT" >MT</option>
-                                            <option value="MS" >MS</option>
-                                            <option value="MG" >MG</option>
-                                            <option value="PA" >PA</option>
-                                            <option value="PB" >PB</option>
-                                            <option value="PR" >PR</option>
-                                            <option value="PE" >PE</option>
-                                            <option value="PI" >PI</option>
-                                            <option value="RJ" >RJ</option>
-                                            <option value="RN" >RN</option>
-                                            <option value="RS" >RS</option>
-                                            <option value="RO" >RO</option>
-                                            <option value="RR" >RR</option>
-                                            <option value="SC" >SC</option>
-                                            <option value="SP" >SP</option>
-                                            <option value="SE" >SE</option>
-                                            <option value="TO" >TO</option>
-                                        </select>
-                                    </div>
-                                </div> <!--DIV CLASS row-->
-
-                            </div>
-                        </div>
-                    </form>
-                    <!--FIM DO ENDERECO DO CONTADOR-->
 
                     <!--ENDERECO ESCRITORIO-->
                     <form id="frmEscritorioContador" name="frmEscritorioContador" action="">
@@ -595,20 +621,23 @@
                 ecEdtBanco: {
                     required: true,
                 },
-                ecEdtCpfCnpjConta: {
-                    required: true,
-                    cpf:true,
-                    validaCpf:true
+                ecEdtDigitoAg: {
+                    alphanumeric: true
                 },
-                ecEdtBanco: {
-                    required: true,
+                ecEdtDigitoCc: {
+                    alphanumeric: true
                 },
                 ecEdtAg: {
-                    required: true,
+                    integer: true,
+                    required: true
                 },
                 ecEdtCc:{
                     required: true,
+                    integer: true
                 },
+                ecEdtOpConta:{
+                    required: true,
+                }
 
             },
             errorElement: "em",
@@ -666,11 +695,11 @@
 
         $("#frmContatosContador").validate({
             rules: {
-                edtNomeContatoContador: {required:true},
-                edtCargoContatoContador: {required:true},
-                edtTelefoneContatoContador: {required:true, telefone:true},
+                edtNomeContatoContador: {alphanumeric:true},
+                edtCargoContatoContador: {alphanumeric:true},
+                edtTelefoneContatoContador: {telefone:true},
                 edtCelularContatoContador: {celular: true},
-                edtEmailContatoContador: {required:true, email: true}
+                edtEmailContatoContador: {email: true}
             },
             errorElement: "em",
             errorPlacement: function (error, element) {
@@ -688,10 +717,13 @@
 
         $("#frmEscritorioContador").validate({
             rules: {
-                ecEdtRazaoSocial: {required:true},
-                ecEdtCnpj: {required:true},
-                ecEdtFone1: {required:true, telefone:true},
-                ecEdtFone2: {celular:true, celular: true},
+                ecEdtCnpj: {
+                    cnpj:true,
+                    validaCnpj: true,
+                },
+
+                ecEdtFone1: {telefone:true},
+                ecEdtFone2: {celular: true},
             },
             errorElement: "em",
             errorPlacement: function (error, element) {
@@ -725,11 +757,17 @@
                 /*
                  * SE PESSOA JURIDICA ESTIVER MARCADO VALIDAR FORMULARIO DE PESSOA JURIDICA
                  * */
-                if ($('input[name=edtTipoPessoa]:checked').val()=='J') {
-                    if ($("#frmEscritorioContador").valid()=== false)
-                        return false;
-                }
-                
+
+                if ($("#frmEscritorioContador").valid()=== false)
+                    return false;
+
+                /*
+                                if ($('input[name=edtTipoPessoa]:checked').val()=='J') {
+                                    if ($("#frmEscritorioContador").valid()=== false)
+                                        return false;
+                                }
+                */
+
                 salvarContador($('#acaoContador').val());
 
 

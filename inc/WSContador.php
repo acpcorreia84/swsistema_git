@@ -12,7 +12,8 @@ require_once $_SERVER['DOCUMENT_ROOT']."/inc/uteis.php";
 Class WSContador{
     const WSDL = 'https://gestao.contadorparceirosafeweb.com.br/api/ContadorParceiro/AddContadorParceiro';
 
-    const LOCAL_CERT =  'C:/xampp/htdocs/swsistema/inc/cert/SwDigital.pem'; // caminho para o certificado
+    //const LOCAL_CERT =  'C:/xampp/htdocs/swsistema/inc/cert/SwDigital.pem'; // caminho para o certificado
+    //const LOCAL_CERT =  ''; // caminho para o certificado
     const ID_PARCEIRO = '385'; //id do parceiro, cadastrado na safeweb
     const ENCODING = ''; //'utf8_encode' ou 'utf8_decode' ou '' para nao alterar o encoding
 
@@ -22,6 +23,7 @@ Class WSContador{
     private $soapClient;
 
     public function __construct(){
+
 		ini_set('soap.wsdl_cache_enabled',0);
 		ini_set('soap.wsdl_cache_ttl',0);
 
@@ -117,10 +119,11 @@ Class WSContador{
 	private function call($request, $requestMethod){
 		if(!isset($this->soapClient)){
 			try {
-				$options = array(
+				/*$options = array(
 				    'local_cert' => self::LOCAL_CERT,
-				);
-				$this->soapClient = new SoapClient(self::WSDL, $options);
+				);*/
+
+				$this->soapClient = new SoapClient(self::WSDL);
 			} catch (SoapFault $excp) {
 				echo $excp;
 				exit();
@@ -138,7 +141,7 @@ Class WSContador{
 		$soapXml = simplexml_load_string($soapResponse->{$resultMethod});
 
 		if(!isset($soapXml->Status)){
-			throw new Exception(utf8_encode("N?o foi poss?vel conectar no webservice"), 500);
+			throw new Exception(utf8_encode("N?o foi possivel conectar no webservice"), 500);
 		}
 
 		if($soapXml->Status == 'true'){
@@ -159,8 +162,6 @@ Class WSContador{
 
     public function postContador ( $nome, $cpf, $dataNascimento, $crc, $email, $fone,
 								   $genero, $endereco){
-
-
         $request = array(
             'Nome' 				=> $nome,
             'CPF' 				=> $cpf,
@@ -173,24 +174,24 @@ Class WSContador{
 
             //Endereco
             'Endereco' => array(
-                'Logradouro' 	=> isset($endereco['logradouro']) ? $endereco['logradouro'] : null,
-                'CEP' 			=> isset($endereco['cep']) ? $endereco['cep'] : null,
+                'Logradouro' 	=> isset($endereco['Logradouro']) ? $endereco['Logradouro'] : null,
+                'CEP' 			=> isset($endereco['CEP']) ? $endereco['CEP'] : null,
                 'Cidade' 		=> array (
-                	'CodigoIBGE'	=> isset($endereco['cidadeIBGE']) ? $endereco['cidadeIBGE'] : null,
+                	'CodigoIBGE'	=> isset($endereco['Cidade']['CodigoIBGE']) ? $endereco['Cidade']['CodigoIBGE'] : null,
 					'Uf'		=> array(
-						'CodigoIBGE' => isset($endereco['ufIBGE']) ? $endereco['ufIBGE'] : null,
+						'CodigoIBGE' => isset($endereco['UF']['CodigoIBGE']) ? $endereco['UF']['CodigoIBGE'] : null,
 					),
 				),
-                'Bairro' 		=> isset($endereco['bairro']) ? $endereco['bairro'] : null,
-                'Numero' 		=> isset($endereco['numero']) ? $endereco['numero'] : null,
+                'Bairro' 		=> isset($endereco['Bairro']) ? $endereco['Bairro'] : null,
+                'Numero' 		=> isset($endereco['Numero']) ? $endereco['Numero'] : null,
                 'Uf'		=> array(
-                    'CodigoIBGE' => isset($endereco['ufIBGE']) ? $endereco['ufIBGE'] : null,
+                    'CodigoIBGE' => isset($endereco['UF']['CodigoIBGE']) ? $endereco['UF']['CodigoIBGE'] : null,
                 ),
             ),
 
         );
 
-
+//var_dump($request);
         //montagem do xml
         $xml = $this->montarXml('AddContadorParceiro', $request);
         //montagem do array de requisi??o
@@ -203,11 +204,22 @@ Class WSContador{
 
 }
 
+try {
+    ini_set('soap.wsdl_cache_enabled',0);
+    ini_set('soap.wsdl_cache_ttl',0);
 
+    ini_set('xdebug.var_display_max_depth', 5);
+    ini_set('xdebug.var_display_max_children', 256);
+    ini_set('xdebug.var_display_max_data', 1024);
 
+    $this->soapClient = new SoapClient('https://gestao.contadorparceirosafeweb.com.br/api/ContadorParceiro/AddContadorParceiro/');
+} catch (SoapFault $excp) {
+    echo $excp;
+    exit();
+}
+exit;
 //Exemplos de uso
 $cont = new WSContador();
-
 
 //solicitar protocolo para pf
 /*
@@ -228,7 +240,7 @@ $solicitacao = $cont->postContador(
  	array(
  		'Logradouro' => 'Rua Santo Dumont',
  		'CEP' => '93115270',
-		array(
+		'Cidade'=>array(
 			'CodigoIBGE'=>'4314902',
 			'UF'=>array('CodigoIBGE'=>'43'),
 		),
@@ -238,7 +250,7 @@ $solicitacao = $cont->postContador(
  	)
  );
 
-var_dump($solicitacao);
+//var_dump($solicitacao);
 
 
 
@@ -323,4 +335,119 @@ e-CNPJ A3 + etoken
 
 e-CNPJ A3 + etoken
 */
+?>
+
+
+<?php
+/*
+function CallAPI($method, $url, $data = false)
+{
+    $curl = curl_init();
+
+    switch ($method)
+    {
+        case "POST":
+            curl_setopt($curl, CURLOPT_POST, 1);
+
+            if ($data)
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+            break;
+        case "PUT":
+            curl_setopt($curl, CURLOPT_PUT, 1);
+            break;
+        default:
+            if ($data)
+                $url = sprintf("%s?%s", $url, http_build_query($data));
+    }
+
+    // Optional Authentication:
+
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+    $result = curl_exec($curl);
+
+    curl_close($curl);
+
+    return $result;
+}
+
+
+$request = array(
+    'Nome' 				=> 'Antonio Carlos',
+    'CPF' 				=> '51397862220',
+    'DataNascimento' 	=> '03/03/1984',
+    'CRC'				=> '5637-2',
+    'Email'				=> 'antoniocpcorreia@gmail.com',
+    'Telefone' 			=> '91991049465',
+    'Profissao' 		=> 'Contador',
+    'Genero'			=> 'M',
+    'Entidade'			=> array('idEntidade'=> '385'),
+
+    //Endereco
+    'Endereco' => array(
+        'Logradouro' 	=> 'Rua tal',
+        'CEP' 			=> '66055080',
+        'Cidade' 		=> array (
+            'CodigoIBGE'	=> '4314902',
+            'Uf'		=> array(
+                'CodigoIBGE' => '43',
+            ),
+        ),
+        'Bairro' 		=> 'Umarizal',
+        'Numero' 		=> '265',
+        'Uf'		=> array(
+            'CodigoIBGE' => '43',
+        ),
+    ),
+
+);*/
+
+/*$xml = '
+{  
+   "Nome":"Nome Contador",
+   "CPF":"08914982068",
+   "DataNascimento":"1990-12-29T02:00:00.000Z",
+   "CRC":"019195",
+   "Email":"safeweb@safeweb.com.br",
+   "Profissao":"CONTADOR",
+   "ConsultorComercial":"Nenhum",
+   "Genero":"Masculino",
+   "Entidade":{  
+      "IdEntidade":"385"
+   },
+   "TimeCoracao":{  
+      "IdTimeCoracao":"42"
+   },
+   "FicouSabendo":{  
+      "IdFicouSabendo":"1"
+   },
+   "Escritorio":{  
+      "Endereco":{  
+         "Cidade":{  
+            "UF":{  
+
+            }
+         }
+      }
+   },
+   "Endereco":{  
+      "Logradouro":"Rua Prisma",
+      "CEP":"90840130",
+      "Cidade":{  
+         "CodigoIBGE":"4314902",
+         "UF":{  
+            "CodigoIBGE":"43"
+         }
+      },
+      "Bairro":"Santa Tereza",
+      "Numero":"90840130",
+      "UF":{  
+         "CodigoIBGE":"43"
+      }
+   }
+';*/
+
+//echo CallAPI('POST', 'https://gestao.contadorparceirosafeweb.com.br/api/ContadorParceiro/AddContadorParceiro', json_encode($request));
+
 ?>
