@@ -237,13 +237,13 @@ NAO PERMITIR ESCONDER/MOSTRAR QUADRO PJ
                                             <input type="text" class="form-control" id="ecEdtAg" name="ecEdtAg">
                                         </div>
                                         <div class="col-lg-1 campoValidar">
-                                            <input type="text" class="form-control" id="ecEdtDigitoAg" name="ecEdtDigitoAg">
+                                            <input type="text" class="form-control" id="ecEdtDigitoAg" name="ecEdtDigitoAg" maxlength="1">
                                         </div>
                                         <div class="col-lg-3 campoValidar">
                                             <input type="text" class="form-control" id="ecEdtCc" name="ecEdtCc">
                                         </div>
                                         <div class="col-lg-1 campoValidar">
-                                            <input type="text" class="form-control" id="ecEdtDigitoCc" name="ecEdtDigitoCc">
+                                            <input type="text" class="form-control" id="ecEdtDigitoCc" name="ecEdtDigitoCc" maxlength="1">
                                         </div>
 
                                         <div class="col-lg-2">
