@@ -50,10 +50,10 @@
                     <div class="row ">
                         <div class="form-group col-lg-12">
                             <div class="col-lg-4">
-                                <label for="edtCelularNovoContato">Celular:</label>
+                                <label for="edtCelularNovoContato">Celular (xx 9xxxx-xxxx):</label>
                             </div>
                             <div class="col-lg-4">
-                                <label for="edtTelefoneNovoContato">Telefone:</label>
+                                <label for="edtTelefoneNovoContato">Telefone (xx xxxx-xxxx):</label>
                             </div>
                             <div class="col-lg-4">
                                 <label for="edtEmailNovoContato">E-mail:</label>

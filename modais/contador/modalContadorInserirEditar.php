@@ -423,79 +423,6 @@ NAO PERMITIR ESCONDER/MOSTRAR QUADRO PJ
                     </form>
                     <!--FIM DO ENDERECO DO CONTADOR-->
 
-                    <!--CONTATOS DO CONTADOR-->
-                    <form id="frmContatosContador" name="frmContatosContador" method="post" >
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <div class="row form-group">
-                                    <h4>CONTATOS: <!--<small>Qtd:<span id="spanContadorContatos">1</span></small>--></h4><!--<button type="button" onclick="dados = obterDadosComponente('divContato',['nome', 'cargo', 'fone', 'email'], 'spanContadorContatos'); console.log(dados, JSON.stringify(dados));">teste</button>-->
-                                    <div class="col-lg-12">
-<!--                                        <button type="button" class="btn btn-success" id="btnNovoContatoContador" name="btnNovoContatoContador"><i class="fa fa-plus-square-o" aria-hidden="true"></i> Adicionar Contato</button>
-                                        <script>
-                                            $('#btnNovoContatoContador').click(function (){
-                                                duplicarComponente('divContatos', 'divContato', 'divBotaoApagar', 'Excluir Contato', 'spanContadorContatos'  );
-                                            });
-                                        </script>
--->
-                                    </div>
-                                </div>
-                                <div id="divContatos col-lg-12">
-                                    <div id="divContato" class="divContato">
-                                        <div class="row form-group">
-                                            <div class="col-lg-2" >
-                                                <label>Nome:</label>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <label >Cargo:</label>
-                                            </div>
-                                            <div class="col-lg-2">
-                                                <label >Celular:</label>
-                                            </div>
-                                            <div class="col-lg-2">
-                                                <label >Telefone:</label>
-                                            </div>
-                                            <div class="col-lg-2">
-                                                <label >E-mail:</label>
-                                            </div>
-                                        </div>
-
-                                        <div class="row form-group">
-                                            <div class="col-lg-2 form-group campoValidar">
-                                                <input type="text" class="form-control" name="edtNomeContatoContador" id="edtNomeContatoContador">
-                                            </div>
-                                            <div class="col-lg-4 form-group campoValidar">
-                                                <select id="edtCargoContatoContador" name="edtCargoContatoContador" class="selectpicker" data-live-search="true">
-                                                    <option data-tokens="Selecione o cargo do contato" name="" value='' selected="selected">Selecione o cargo do contato</option>
-                                                    <option data-tokens="DEPARTAMENTO CONT&Aacute;BIL" name="DEPARTAMENTO CONTABIL">DEPARTAMENTO CONT&Aacute;BIL</option>
-                                                    <option data-tokens="DEPARTAMENTO DE CADASTROS" name="DEPARTAMENTO DE CADASTROS">DEPARTAMENTO DE CADASTROS</option>
-                                                    <option data-tokens="RECURSOS HUMANOS" name="DEPARTAMENTO DE RECURSOS HUMANOS">RECURSOS HUMANOS</option>
-                                                    <option data-tokens="DEPARTAMENTO FISCAL" name="DEPARTAMENTO FISCAL">DEPARTAMENTO FISCAL</option>
-                                                    <option data-tokens="DEPARTAMENTO PESSOAL" name="DEPARTAMENTO PESSOAL">DEPARTAMENTO PESSOAL</option>
-                                                    <option data-tokens="DIRETOR" name="DIRETOR">DIRETOR</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-2 form-group campoValidar">
-                                                <input type="text" class="form-control" name="edtCelularContatoContador" id="edtCelularContatoContador" onblur="formatarBlur(this, 'celular')" onkeypress="formatar(this, 'celular')">
-                                            </div>
-                                            <div class="col-lg-2 form-group campoValidar">
-                                                <input type="text" class="form-control" name="edtTelefoneContatoContador" id="edtTelefoneContatoContador" onblur="formatarBlur(this, 'fone')" onkeypress="formatar(this, 'fone')">
-                                            </div>
-
-                                            <div class="col-lg-2 form-group campoValidar">
-                                                <input type="text" class="form-control" name="edtEmailContatoContador" id="edtEmailContatoContador">
-                                            </div>
-
-                                            <div class="col-lg-1 form-group" id="divBotaoApagar"></div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </form>
-                    <!--FIM DOS CONTATOS DO CONTADOR-->
-
 
                     <!--ENDERECO ESCRITORIO-->
                     <form id="frmEscritorioContador" name="frmEscritorioContador" action="">
@@ -529,10 +456,10 @@ NAO PERMITIR ESCONDER/MOSTRAR QUADRO PJ
                                         <label for="ecEdtNomeFantasia">Nome Fantasia</label>
                                     </div>
                                     <div class="col-lg-3">
-                                        <label for="ecEdtFone1">Telefone</label>
+                                        <label for="ecEdtFone1">Telefone (xx xxxx-xxxx)</label>
                                     </div>
                                     <div class="col-lg-3">
-                                        <label for="ecEdtFone2">Celular</label>
+                                        <label for="ecEdtFone2">Celular (xx 9xxxx-xxxx)</label>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -718,7 +645,6 @@ NAO PERMITIR ESCONDER/MOSTRAR QUADRO PJ
         $("#frmEscritorioContador").validate({
             rules: {
                 ecEdtCnpj: {
-                    cnpj:true,
                     validaCnpj: true,
                 },
 
