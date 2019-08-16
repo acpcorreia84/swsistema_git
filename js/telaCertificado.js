@@ -1741,7 +1741,9 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
         },
         success : function(result){
             try {
+            	//console.log(result);
                 var resultado = JSON.parse(result);
+                console.log(result, resultado);
                 var certificado = JSON.parse(resultado.dadosCertificado);
                 var pagamentos = JSON.parse(resultado.dadosPagamento);
                 var situacoes = JSON.parse(resultado.dadosSituacoes);
@@ -1782,7 +1784,6 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
                         $('#btnGerarProtocolo').prop("disabled",true);
                         $('#btnGerarProtocolo').prop("title", resultado.mensagemErroGerarProtocolo);
                     }
-
 
                     /*
                      * HABILITA O BOTAO DE RECIBO SE
@@ -1861,8 +1862,6 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
                     $('#dcSpanConsultor').html(certificado.consultor);
                     $('#dcSpanAgrValidacao').html(certificado.agr);
                     $('#dcSpanValidadeCertificado').html(certificado.validade);
-
-
 
 
                     /*
@@ -2288,6 +2287,7 @@ function importarCertificadosValidados(){
         },
         success : function(result){
             try {
+//            	console.log(result);return;
                 var resultado = JSON.parse(result);
 
                 if (resultado.mensagem == 'Ok') {

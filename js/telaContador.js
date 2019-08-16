@@ -442,6 +442,10 @@ function carregarModalInserirEditarContador(acao) {
                     $('#ecEdtCodigoDesconto').val(contador.codigoDescontoContador);
                     $('#spanEdtCodigoDesconto').html(contador.codigoDescontoContador);
                     $('#ecEdtUrl').value = '';
+                    $('#ecEdtDigitoAg').value = '';
+                    $('#ecEdtDigitoCc').value = '';
+
+
 
                     $("#chkConcedeDescontoContador").bootstrapToggle('on');
 
@@ -475,8 +479,8 @@ function carregarModalInserirEditarContador(acao) {
                         $('#ecEdtBairro').val(contador.bairro);
                         $('#ecEdtCidade').val(contador.cidade);
                         $('#ecEdtUfContador').val(contador.uf);
-                        $('#ecEdtFone1').val(contador.telefone),
-                        $('#ecEdtCelular').val(contador.celular),
+                        $('#ecEdtFone1').val(contador.telefone);
+                        $('#ecEdtCelular').val(contador.celular);
                         $('#ecEdtEmailEscritorio').val(contador.emailPj);
                         $('#ecEdtCrc').val(contador.crc);
                         $('#spanContadorBancoAntigo').html(contador.banco);
@@ -486,6 +490,9 @@ function carregarModalInserirEditarContador(acao) {
                         $('#ecEdtCpfCnpjConta').val(contador.cpfCnpjConta);
                         $('#ecEdtCodigoDesconto').val(contador.codigoDescontoContador);
                         $('#spanEdtCodigoDesconto').html(contador.codigoDescontoContador);
+                        $('#ecEdtDigitoAg').html(contador.digitoAgencia);
+                        $('#ecEdtDigitoCc').html(contador.digitoConta);
+
 
                         if (contador.comissao == '1')
                             $("#chkRecebeComissaoContador").bootstrapToggle('on');
@@ -578,6 +585,8 @@ function salvarContador(acao){
         'telefoneContato':$('#edtTelefoneContatoContador').val(),
         'celularContato':$('#edtCelularContatoContador').val(),
         'emailContato':$('#edtEmailContatoContador').val(),
+        'digitoAgencia':$('#ecEdtDigitoAg').val(),
+        'digitoConta':$('#ecEdtDigitoCc').val(),
         'possuiCartao' : possuiCartao
     };
 
@@ -753,7 +762,9 @@ function carregarModalDetalharContador(contadorId, sincronizarDataFiltro){
         },
         success : function(result){
             $('#modalCarregando').modal('hide');
+
             try {
+
                 var contador = JSON.parse(result);
                 var dadosComissao = JSON.parse(contador.dadosComissao);
 
@@ -856,7 +867,6 @@ function carregarModalDetalharContador(contadorId, sincronizarDataFiltro){
                     }
 
                 }
-
             } catch (e) {
                 $('#modalCarregando').modal('hide');
                 console.log(result, e);

@@ -55,10 +55,22 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 	protected $conta_corrente;
 
 	/**
+	 * The value for the digitoconta field.
+	 * @var        string
+	 */
+	protected $digitoconta;
+
+	/**
 	 * The value for the agencia field.
 	 * @var        string
 	 */
 	protected $agencia;
+
+	/**
+	 * The value for the digitoagencia field.
+	 * @var        string
+	 */
+	protected $digitoagencia;
 
 	/**
 	 * The value for the operacao field.
@@ -444,6 +456,16 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 	}
 
 	/**
+	 * Get the [digitoconta] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getDigitoconta()
+	{
+		return $this->digitoconta;
+	}
+
+	/**
 	 * Get the [agencia] column value.
 	 * 
 	 * @return     string
@@ -451,6 +473,16 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 	public function getAgencia()
 	{
 		return $this->agencia;
+	}
+
+	/**
+	 * Get the [digitoagencia] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getDigitoagencia()
+	{
+		return $this->digitoagencia;
 	}
 
 	/**
@@ -1024,6 +1056,26 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 	} // setContaCorrente()
 
 	/**
+	 * Set the value of [digitoconta] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     Contador The current object (for fluent API support)
+	 */
+	public function setDigitoconta($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->digitoconta !== $v) {
+			$this->digitoconta = $v;
+			$this->modifiedColumns[] = ContadorPeer::DIGITOCONTA;
+		}
+
+		return $this;
+	} // setDigitoconta()
+
+	/**
 	 * Set the value of [agencia] column.
 	 * 
 	 * @param      string $v new value
@@ -1042,6 +1094,26 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 
 		return $this;
 	} // setAgencia()
+
+	/**
+	 * Set the value of [digitoagencia] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     Contador The current object (for fluent API support)
+	 */
+	public function setDigitoagencia($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->digitoagencia !== $v) {
+			$this->digitoagencia = $v;
+			$this->modifiedColumns[] = ContadorPeer::DIGITOAGENCIA;
+		}
+
+		return $this;
+	} // setDigitoagencia()
 
 	/**
 	 * Set the value of [operacao] column.
@@ -1927,46 +1999,48 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 			$this->desconto = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->banco = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
 			$this->conta_corrente = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-			$this->agencia = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-			$this->operacao = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-			$this->cpf_cnpj_conta = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-			$this->responsavel_id = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
-			$this->usuario_id = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
-			$this->data_cadastro = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-			$this->nome = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
-			$this->nascimento = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
-			$this->cpf = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
-			$this->celular = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
-			$this->email = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
-			$this->razao_social = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
-			$this->cnpj = ($row[$startcol + 18] !== null) ? (string) $row[$startcol + 18] : null;
-			$this->nome_fantasia = ($row[$startcol + 19] !== null) ? (string) $row[$startcol + 19] : null;
-			$this->endereco = ($row[$startcol + 20] !== null) ? (string) $row[$startcol + 20] : null;
-			$this->numero = ($row[$startcol + 21] !== null) ? (string) $row[$startcol + 21] : null;
-			$this->bairro = ($row[$startcol + 22] !== null) ? (string) $row[$startcol + 22] : null;
-			$this->complemento = ($row[$startcol + 23] !== null) ? (string) $row[$startcol + 23] : null;
-			$this->cidade = ($row[$startcol + 24] !== null) ? (string) $row[$startcol + 24] : null;
-			$this->email_empresa = ($row[$startcol + 25] !== null) ? (string) $row[$startcol + 25] : null;
-			$this->uf = ($row[$startcol + 26] !== null) ? (string) $row[$startcol + 26] : null;
-			$this->cep = ($row[$startcol + 27] !== null) ? (string) $row[$startcol + 27] : null;
-			$this->fone1 = ($row[$startcol + 28] !== null) ? (string) $row[$startcol + 28] : null;
-			$this->fone2 = ($row[$startcol + 29] !== null) ? (string) $row[$startcol + 29] : null;
-			$this->pessoa_tipo = ($row[$startcol + 30] !== null) ? (string) $row[$startcol + 30] : null;
-			$this->crc = ($row[$startcol + 31] !== null) ? (string) $row[$startcol + 31] : null;
-			$this->cod_contador = ($row[$startcol + 32] !== null) ? (string) $row[$startcol + 32] : null;
-			$this->situacao = ($row[$startcol + 33] !== null) ? (int) $row[$startcol + 33] : null;
-			$this->url = ($row[$startcol + 34] !== null) ? (string) $row[$startcol + 34] : null;
-			$this->logo = ($row[$startcol + 35] !== null) ? (string) $row[$startcol + 35] : null;
-			$this->localidade = ($row[$startcol + 36] !== null) ? (string) $row[$startcol + 36] : null;
-			$this->contato1_nome = ($row[$startcol + 37] !== null) ? (string) $row[$startcol + 37] : null;
-			$this->contato1_cargo = ($row[$startcol + 38] !== null) ? (string) $row[$startcol + 38] : null;
-			$this->contato1_fone = ($row[$startcol + 39] !== null) ? (string) $row[$startcol + 39] : null;
-			$this->contato2_nome = ($row[$startcol + 40] !== null) ? (string) $row[$startcol + 40] : null;
-			$this->contato2_cargo = ($row[$startcol + 41] !== null) ? (string) $row[$startcol + 41] : null;
-			$this->contato2_fone = ($row[$startcol + 42] !== null) ? (string) $row[$startcol + 42] : null;
-			$this->tipo_contador = ($row[$startcol + 43] !== null) ? (string) $row[$startcol + 43] : null;
-			$this->possui_cartao = ($row[$startcol + 44] !== null) ? (int) $row[$startcol + 44] : null;
-			$this->sync_safe = ($row[$startcol + 45] !== null) ? (int) $row[$startcol + 45] : null;
+			$this->digitoconta = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+			$this->agencia = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+			$this->digitoagencia = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+			$this->operacao = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+			$this->cpf_cnpj_conta = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+			$this->responsavel_id = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
+			$this->usuario_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
+			$this->data_cadastro = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+			$this->nome = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
+			$this->nascimento = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+			$this->cpf = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
+			$this->celular = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
+			$this->email = ($row[$startcol + 18] !== null) ? (string) $row[$startcol + 18] : null;
+			$this->razao_social = ($row[$startcol + 19] !== null) ? (string) $row[$startcol + 19] : null;
+			$this->cnpj = ($row[$startcol + 20] !== null) ? (string) $row[$startcol + 20] : null;
+			$this->nome_fantasia = ($row[$startcol + 21] !== null) ? (string) $row[$startcol + 21] : null;
+			$this->endereco = ($row[$startcol + 22] !== null) ? (string) $row[$startcol + 22] : null;
+			$this->numero = ($row[$startcol + 23] !== null) ? (string) $row[$startcol + 23] : null;
+			$this->bairro = ($row[$startcol + 24] !== null) ? (string) $row[$startcol + 24] : null;
+			$this->complemento = ($row[$startcol + 25] !== null) ? (string) $row[$startcol + 25] : null;
+			$this->cidade = ($row[$startcol + 26] !== null) ? (string) $row[$startcol + 26] : null;
+			$this->email_empresa = ($row[$startcol + 27] !== null) ? (string) $row[$startcol + 27] : null;
+			$this->uf = ($row[$startcol + 28] !== null) ? (string) $row[$startcol + 28] : null;
+			$this->cep = ($row[$startcol + 29] !== null) ? (string) $row[$startcol + 29] : null;
+			$this->fone1 = ($row[$startcol + 30] !== null) ? (string) $row[$startcol + 30] : null;
+			$this->fone2 = ($row[$startcol + 31] !== null) ? (string) $row[$startcol + 31] : null;
+			$this->pessoa_tipo = ($row[$startcol + 32] !== null) ? (string) $row[$startcol + 32] : null;
+			$this->crc = ($row[$startcol + 33] !== null) ? (string) $row[$startcol + 33] : null;
+			$this->cod_contador = ($row[$startcol + 34] !== null) ? (string) $row[$startcol + 34] : null;
+			$this->situacao = ($row[$startcol + 35] !== null) ? (int) $row[$startcol + 35] : null;
+			$this->url = ($row[$startcol + 36] !== null) ? (string) $row[$startcol + 36] : null;
+			$this->logo = ($row[$startcol + 37] !== null) ? (string) $row[$startcol + 37] : null;
+			$this->localidade = ($row[$startcol + 38] !== null) ? (string) $row[$startcol + 38] : null;
+			$this->contato1_nome = ($row[$startcol + 39] !== null) ? (string) $row[$startcol + 39] : null;
+			$this->contato1_cargo = ($row[$startcol + 40] !== null) ? (string) $row[$startcol + 40] : null;
+			$this->contato1_fone = ($row[$startcol + 41] !== null) ? (string) $row[$startcol + 41] : null;
+			$this->contato2_nome = ($row[$startcol + 42] !== null) ? (string) $row[$startcol + 42] : null;
+			$this->contato2_cargo = ($row[$startcol + 43] !== null) ? (string) $row[$startcol + 43] : null;
+			$this->contato2_fone = ($row[$startcol + 44] !== null) ? (string) $row[$startcol + 44] : null;
+			$this->tipo_contador = ($row[$startcol + 45] !== null) ? (string) $row[$startcol + 45] : null;
+			$this->possui_cartao = ($row[$startcol + 46] !== null) ? (int) $row[$startcol + 46] : null;
+			$this->sync_safe = ($row[$startcol + 47] !== null) ? (int) $row[$startcol + 47] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1976,7 +2050,7 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 46; // 46 = ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 48; // 48 = ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Contador object", $e);
@@ -2437,7 +2511,9 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(ContadorPeer::DESCONTO)) $criteria->add(ContadorPeer::DESCONTO, $this->desconto);
 		if ($this->isColumnModified(ContadorPeer::BANCO)) $criteria->add(ContadorPeer::BANCO, $this->banco);
 		if ($this->isColumnModified(ContadorPeer::CONTA_CORRENTE)) $criteria->add(ContadorPeer::CONTA_CORRENTE, $this->conta_corrente);
+		if ($this->isColumnModified(ContadorPeer::DIGITOCONTA)) $criteria->add(ContadorPeer::DIGITOCONTA, $this->digitoconta);
 		if ($this->isColumnModified(ContadorPeer::AGENCIA)) $criteria->add(ContadorPeer::AGENCIA, $this->agencia);
+		if ($this->isColumnModified(ContadorPeer::DIGITOAGENCIA)) $criteria->add(ContadorPeer::DIGITOAGENCIA, $this->digitoagencia);
 		if ($this->isColumnModified(ContadorPeer::OPERACAO)) $criteria->add(ContadorPeer::OPERACAO, $this->operacao);
 		if ($this->isColumnModified(ContadorPeer::CPF_CNPJ_CONTA)) $criteria->add(ContadorPeer::CPF_CNPJ_CONTA, $this->cpf_cnpj_conta);
 		if ($this->isColumnModified(ContadorPeer::RESPONSAVEL_ID)) $criteria->add(ContadorPeer::RESPONSAVEL_ID, $this->responsavel_id);
@@ -2541,7 +2617,11 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 
 		$copyObj->setContaCorrente($this->conta_corrente);
 
+		$copyObj->setDigitoconta($this->digitoconta);
+
 		$copyObj->setAgencia($this->agencia);
+
+		$copyObj->setDigitoagencia($this->digitoagencia);
 
 		$copyObj->setOperacao($this->operacao);
 

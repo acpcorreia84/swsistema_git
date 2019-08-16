@@ -620,27 +620,7 @@ NAO PERMITIR ESCONDER/MOSTRAR QUADRO PJ
         });
 
 
-        $("#frmContatosContador").validate({
-            rules: {
-                edtNomeContatoContador: {alphanumeric:true},
-                edtCargoContatoContador: {alphanumeric:true},
-                edtTelefoneContatoContador: {telefone:true},
-                edtCelularContatoContador: {celular: true},
-                edtEmailContatoContador: {email: true}
-            },
-            errorElement: "em",
-            errorPlacement: function (error, element) {
-                // Add the `help-block` class to the error element
-                error.addClass("help-block");
-                error.insertAfter(element);
-            },
-            highlight: function (element, errorClass, validClass) {
-                $(element).parents(".campoValidar").addClass("has-error").removeClass("has-success");
-            },
-            unhighlight: function (element, errorClass, validClass) {
-                $(element).parents(".campoValidar").addClass("has-success").removeClass("has-error");
-            }
-        });
+
 
         $("#frmEscritorioContador").validate({
             rules: {
@@ -679,7 +659,7 @@ NAO PERMITIR ESCONDER/MOSTRAR QUADRO PJ
             }
 
 
-            if ($("#frmDadosContador").valid() && $("#frmContatosContador").valid() && $("#frmEnderecoContador").valid() ) {
+            if ($("#frmDadosContador").valid()  && $("#frmEnderecoContador").valid() ) {
                 /*
                  * SE PESSOA JURIDICA ESTIVER MARCADO VALIDAR FORMULARIO DE PESSOA JURIDICA
                  * */

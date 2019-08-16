@@ -42,7 +42,9 @@ class ContadorTableMap extends TableMap {
 		$this->addColumn('DESCONTO', 'Desconto', 'INTEGER', false, null, null);
 		$this->addColumn('BANCO', 'Banco', 'VARCHAR', false, 50, null);
 		$this->addColumn('CONTA_CORRENTE', 'ContaCorrente', 'VARCHAR', false, 12, null);
-		$this->addColumn('AGENCIA', 'Agencia', 'VARCHAR', false, 8, null);
+		$this->addColumn('DIGITOCONTA', 'Digitoconta', 'VARCHAR', false, 12, null);
+		$this->addColumn('AGENCIA', 'Agencia', 'VARCHAR', false, 1, null);
+		$this->addColumn('DIGITOAGENCIA', 'Digitoagencia', 'VARCHAR', false, 1, null);
 		$this->addColumn('OPERACAO', 'Operacao', 'VARCHAR', false, 5, null);
 		$this->addColumn('CPF_CNPJ_CONTA', 'CpfCnpjConta', 'VARCHAR', false, 20, null);
 		$this->addForeignKey('RESPONSAVEL_ID', 'ResponsavelId', 'INTEGER', 'responsavel', 'ID', false, null, null);

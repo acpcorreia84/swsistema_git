@@ -1685,7 +1685,6 @@ function detalharCertificado(){
             $dataValidacaoCertificado = '-';
         }
 
-
         if ($certificado->getFormaPagamento())
         	$formaPagamento = utf8_encode($certificado->getFormaPagamento()->getNome());
 
@@ -1728,6 +1727,7 @@ function detalharCertificado(){
 
             $contatosCliente[] = array("Tipo"=>$tipoContato, "Telefone"=>($telefone) ? $telefone : '-', "Celular"=>($celular) ? $celular : '-', "E-mail"=>$certificado->getCliente()->getEmail() );
         }
+
 
         if ($certificado->getCliente()->getPessoaTipo() == 'J') {
             $telefone = '';
@@ -1778,7 +1778,6 @@ function detalharCertificado(){
         $colunasContatos = array(
             array('nome'=>'Tipo'), array('nome'=>'Telefone'), array('nome'=>'Celular'), array('nome'=>'E-mail')
         );
-
 
 
         $dadosCertificado = array(
@@ -1837,6 +1836,7 @@ function detalharCertificado(){
         /*
          * SE A FORMA DE PAGAMENTO FOR BOLETO, LISTA TODOS OS BOLETOS EMITIDOS
          * */
+/////////////////////////////PAREI AQUI////////////////////////
         if($certificado->getFormaPagamentoId() ==1){
             $cBoleto = new Criteria();
             $cBoleto->add(BoletoPeer::CERTIFICADO_ID, $_POST['certificado_id']);
@@ -2003,7 +2003,6 @@ function detalharCertificado(){
         /*
          * MONTANDO INFORMACOES SITUACAO
          * */
-
         $cSituacao = new criteria();
         $cSituacao->add(CertificadoSituacaoPeer::CERTIFICADO_ID, $_POST['certificado_id']);
         $cSituacao->addDescendingOrderByColumn(CertificadoSituacaoPeer::DATA);
@@ -3503,12 +3502,12 @@ function importarCertificadosValidados() {
 
         foreach ($certificadosValidados as $certificadoValidado) {
             $dataAvp = explode('/',substr($certificadoValidado['DtInclusao'],0, 10));
+
             if (substr($certificadoValidado['DtInclusao'],10))
                 $hora = substr($certificadoValidado['DtInclusao'],10);
             else
                 $hora = '00:00:00';
-
-            $dataAvp = new DateTime($dataAvp[2].'-'.$dataAvp[1].'-'.$dataAvp[0] . ' ' . $hora);
+            $dataAvp = new DateTime($dataAvp[2].'-'.$dataAvp[1].'-'.$dataAvp[0] );
 
             /*
              * PEGA A MENOR DATA DE VALIDACAO E A MAIOR PARA INFORMAR NA IMPORTACAO
@@ -3534,6 +3533,7 @@ function importarCertificadosValidados() {
                     $certificado = clone $certificadoObj;
                 }
             }
+
             /*
              * CASO O PROTOCOLO A SER IMPORTADO NAO SEJA ENCONTRADO OU NA BASE DE CERTIFICADOS OU NA BASE DE USUARIOS
              * ALERTAR PARA ENTENDERMOS O PROBLEMA E CORRIGIR ALEM DE JOGAR NA TABELA DE CERTIFICADOS VALIDADOS FORA DO SISTEMA
@@ -3619,9 +3619,11 @@ function importarCertificadosValidados() {
                         /*
                          * PEGA A VALIDADE PARA SOMAR NA DATA FINAL
                          *  */
-                        $validade = substr($certificadoValidado['Validade'], 0, 1);
-                        $dataFimValidadeRevogado = new DateTime($dataAvp->format('Y-m-d H:i:s'));
+                        //var_dump($certificadoValidado);exit;
+                        $validade = substr($certificadoValidado['DtInclusao'], 0, 1);
+                        $dataFimValidadeRevogado = new DateTime($certificado->getDataInicioValidade('Y-m-d H:i:s'));
                         $dataFimValidadeRevogado->add(new DateInterval('P'.$validade.'Y'));
+
                         $certificado->setDataFimValidade($dataFimValidadeRevogado->format('Y-m-d H:i:s'));
                     }
                 }
@@ -3746,7 +3748,7 @@ function importarCertificadosValidados() {
                         $certSit->setData(date('Y-m-d H:i:s'));
                         $certSit->setUsuarioId($usuarioLogado->getId());
 
-                    } elseif ($certificadoValidado['Status'] == 'PENDENTE') {
+                    } elseif ($certificadoValidado['Status'] == 'Pendente') {
                         $certificado->setConfirmacaoValidacao(2);
 
                         $cSit = new Criteria();
@@ -3810,7 +3812,6 @@ function importarCertificadosValidados() {
                         );
                         $certificado->save();
                         $cliente->save();
-//var_dump($quantidadeTotalImportada, $certificadoValidado['Status']);
                         $certSit->save();
 
                         $quantidadeTotalImportada += 1;
@@ -3819,7 +3820,6 @@ function importarCertificadosValidados() {
             } /* FIM DO SE ENCONTROU O CERTIFICADO */
         } /* FIM DO FOREACH */
         /*}*/
-
 
 
         $con->commit();
@@ -3847,6 +3847,7 @@ function importarCertificadosValidados() {
         );
 
     } catch (Exception $e) {
+        var_dump($e);
         $con->rollBack();
         echo $e->getMessage();
     }

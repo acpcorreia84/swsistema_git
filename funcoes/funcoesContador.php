@@ -898,10 +898,13 @@ function salvarContador(){
                 ' | depois: '.utf8_encode($_POST['contaCorrente']);
 
         $contador->setContaCorrente($_POST['contaCorrente']);
+        $contador->setDigitoconta($_POST['digitoConta']);
 
         if ($contador->getAgencia() != $_POST['agencia'])
             $arrAlteracoes['agencia'] = 'A agencia do contador foi alterada, anterior: ' . utf8_encode($contador->getAgencia()).
                 ' | depois: '.utf8_encode($_POST['agencia']);
+
+        $contador->setDigitoagencia($_POST['digitoAgencia']);
 
         $contador->setAgencia($_POST['agencia']);
         $contador->setOperacao($_POST['operacao']);
@@ -1142,7 +1145,6 @@ function detalharContador(){
             }
         } else
             $contatosContador = '';
-
         $colunasContatos = array(
             array('nome'=>'Id'), array('nome'=>'Nome'), array('nome'=>'Cargo'),
             array('nome'=>'Telefone'), array('nome'=>'Celular'), array('nome'=>'E-mail'), array('nome'=>utf8_encode('Acao'))
@@ -1226,7 +1228,10 @@ function detalharContador(){
             else
                 $situacao = ' <a data-toggle="modal" data-target="#detalharCertificado" title="Detalhar Certificado" id="btnDetalharCertificado" onclick="$(\'#modalCarregando\').modal(\'show\'); carregarModalDetalharCertificado('.$certificado->getId().'); "> <i class="fa fa-arrows"></i> </a>';
             //$certificado = new Certificado();
-            $nomeCliente = ($certificado->getCliente()->getRazaoSocial() != '')?utf8_encode($certificado->getCliente()->getRazaoSocial()):utf8_encode($certificado->getCliente()->getNomeFantasia());
+
+            if ($certificado->getCliente())
+                $nomeCliente = ($certificado->getCliente()->getRazaoSocial() != '')?utf8_encode($certificado->getCliente()->getRazaoSocial()):utf8_encode($certificado->getCliente()->getNomeFantasia());
+
             $usuarioConsultor = $certificado->getUsuario()?$certificado->getUsuario()->getNome():'---';
             $produto = ($certificado->getProduto()) ? $certificado->getProduto()->getNome() : '---';
 
@@ -1820,7 +1825,8 @@ function carregarModalInserirEditarContador () {
             'telefone'=>$contador->getFone1(), 'celular'=>$contador->getCelular(),
             'emailPj'=>$contador->getEmailEmpresa(), 'crc'=> $contador->getCrc(),'banco' =>utf8_encode($contador->getBanco()), 'agencia'=> $contador->getAgencia(),
             'conta'=> $contador->getContaCorrente(),'cpfCnpjConta'=> $contador->getCpfCnpjConta(), 'comissao'=>$contador->getComissao(), 'desconto'=>$contador->getDesconto(),
-            'codigoDescontoContador'=>$codigoDescontoContador, 'tipoProfissional'=>$contador->getTipoContador(), 'pessoaTipo'=>$contador->getPessoaTipo()
+            'codigoDescontoContador'=>$codigoDescontoContador, 'tipoProfissional'=>$contador->getTipoContador(), 'pessoaTipo'=>$contador->getPessoaTipo(),
+            'digitoAgencia'=>$contador->getDigitoAgencia(),'digitoConta'=>$contador->getDigitoConta()
         );
 
         $retorno = array(
