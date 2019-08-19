@@ -1826,7 +1826,7 @@ function carregarModalInserirEditarContador () {
             'emailPj'=>$contador->getEmailEmpresa(), 'crc'=> $contador->getCrc(),'banco' =>utf8_encode($contador->getBanco()), 'agencia'=> $contador->getAgencia(),
             'conta'=> $contador->getContaCorrente(),'cpfCnpjConta'=> $contador->getCpfCnpjConta(), 'comissao'=>$contador->getComissao(), 'desconto'=>$contador->getDesconto(),
             'codigoDescontoContador'=>$codigoDescontoContador, 'tipoProfissional'=>$contador->getTipoContador(), 'pessoaTipo'=>$contador->getPessoaTipo(),
-            'digitoAgencia'=>$contador->getDigitoAgencia(),'digitoConta'=>$contador->getDigitoConta()
+            'digitoAgencia'=>$contador->getDigitoAgencia(),'digitoConta'=>$contador->getDigitoConta(), 'operacao'=> $contador->getOperacao()
         );
 
         $retorno = array(

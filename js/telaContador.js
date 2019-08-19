@@ -442,8 +442,9 @@ function carregarModalInserirEditarContador(acao) {
                     $('#ecEdtCodigoDesconto').val(contador.codigoDescontoContador);
                     $('#spanEdtCodigoDesconto').html(contador.codigoDescontoContador);
                     $('#ecEdtUrl').value = '';
-                    $('#ecEdtDigitoAg').value = '';
-                    $('#ecEdtDigitoCc').value = '';
+                    $('#ecEdtDigitoAg').val('');
+                    $('#ecEdtDigitoCc').val( '');
+                    $('#ecEdtOpConta').val( '');
 
 
 
@@ -490,8 +491,10 @@ function carregarModalInserirEditarContador(acao) {
                         $('#ecEdtCpfCnpjConta').val(contador.cpfCnpjConta);
                         $('#ecEdtCodigoDesconto').val(contador.codigoDescontoContador);
                         $('#spanEdtCodigoDesconto').html(contador.codigoDescontoContador);
-                        $('#ecEdtDigitoAg').html(contador.digitoAgencia);
-                        $('#ecEdtDigitoCc').html(contador.digitoConta);
+                        $('#ecEdtOpConta').val(contador.operacao);
+
+                        $('#ecEdtDigitoAg').val(contador.digitoAgencia);
+                        $('#ecEdtDigitoCc').val( contador.digitoConta);
 
 
                         if (contador.comissao == '1')
