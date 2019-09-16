@@ -1419,8 +1419,9 @@ function gerarProtocolo(){
                     $contadorCd = $certificado->getContador();
                     $cpfContador = '';
                     if ($contadorCd)
-                        if ($contadorCd->getCpf())
-                            $cpfContador = removeTracoPontoBarra( $contadorCd->getCpf());
+                    	if ($contadorCd->getComissao() == 1) //SO MANDA O CPF SE O CARA RECEBE COMISSAO
+							if ($contadorCd->getCpf())
+								$cpfContador = removeTracoPontoBarra( $contadorCd->getCpf());
 
                     //var_dump($cpf);
                     /*EMISSAO EM CONTINGENCIA RFB FORA DO AR*/
@@ -3507,6 +3508,12 @@ function importarCertificadosValidados() {
                 $hora = substr($certificadoValidado['DtInclusao'],10);
             else
                 $hora = '00:00:00';
+
+/*            //DEBUG
+            if ($certificadoValidado['DtInclusao'] == '') {
+            	var_dump($certificadoValidado);
+            	var_dump(dataAvp, $certificadoValidado['DtInclusao']);
+            }*/
             $dataAvp = new DateTime($dataAvp[2].'-'.$dataAvp[1].'-'.$dataAvp[0] );
 
             /*
@@ -3734,7 +3741,8 @@ function importarCertificadosValidados() {
                      * PENDENTE
                      * REVOGADO
                      * */
-                    if ($certificadoValidado['Status'] == 'EMITIDO' || $certificadoValidado['Status'] == 'APROVADO') {
+
+                    if (strtoupper($certificadoValidado['Status']) == 'EMITIDO' || strtoupper($certificadoValidado['Status']) == 'APROVADO') {
                         $certificado->setConfirmacaoValidacao(1);
 
                         $cSit = new Criteria();
@@ -3748,7 +3756,7 @@ function importarCertificadosValidados() {
                         $certSit->setData(date('Y-m-d H:i:s'));
                         $certSit->setUsuarioId($usuarioLogado->getId());
 
-                    } elseif ($certificadoValidado['Status'] == 'Pendente') {
+                    } elseif (strtoupper($certificadoValidado['Status']) == 'PENDENTE') {
                         $certificado->setConfirmacaoValidacao(2);
 
                         $cSit = new Criteria();
@@ -3763,7 +3771,7 @@ function importarCertificadosValidados() {
                         );
                         $certSit->setData(date('Y-m-d H:i:s'));
                         $certSit->setUsuarioId($usuarioLogado->getId());
-                    } elseif ($certificadoValidado['Status'] == 'REVOGADO') {
+                    } elseif (strtoupper($certificadoValidado['Status']) == 'REVOGADO') {
                         /*
                          * CHAMA A FUNCAO DE REVOGACAO DE CERTIFICADO E PASSA O SEGUNDO PARAMETRO COMO FALSE
                          * PARA NAO PRINTAR UM ECHO NA TELA
@@ -3812,6 +3820,9 @@ function importarCertificadosValidados() {
                         );
                         $certificado->save();
                         $cliente->save();
+                        /*var_dump('CERTIFICADO:', $certificado);
+                        var_dump('CLIENTE:', $cliente);
+                        var_dump('SITUACAO:', $certSit);*/
                         $certSit->save();
 
                         $quantidadeTotalImportada += 1;

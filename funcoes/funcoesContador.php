@@ -898,13 +898,20 @@ function salvarContador(){
                 ' | depois: '.utf8_encode($_POST['contaCorrente']);
 
         $contador->setContaCorrente($_POST['contaCorrente']);
-        $contador->setDigitoconta($_POST['digitoConta']);
+
+        if ($_POST['digitoConta']!='')
+            $contador->setDigitoconta($_POST['digitoConta']);
+        else
+            $contador->setDigitoconta(null);
 
         if ($contador->getAgencia() != $_POST['agencia'])
             $arrAlteracoes['agencia'] = 'A agencia do contador foi alterada, anterior: ' . utf8_encode($contador->getAgencia()).
                 ' | depois: '.utf8_encode($_POST['agencia']);
 
-        $contador->setDigitoagencia($_POST['digitoAgencia']);
+        if ($_POST['digitoAgencia']!='')
+            $contador->setDigitoagencia($_POST['digitoAgencia']);
+        else
+            $contador->setDigitoagencia(null);
 
         $contador->setAgencia($_POST['agencia']);
         $contador->setOperacao($_POST['operacao']);

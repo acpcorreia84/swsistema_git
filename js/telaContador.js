@@ -605,6 +605,7 @@ function salvarContador(acao){
         },
         success : function(result){
             try {
+                console.log(result);
                 var resultado = JSON.parse(result);
 
                 if (resultado.mensagem == 'Ok') {
