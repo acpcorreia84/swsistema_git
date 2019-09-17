@@ -62,6 +62,7 @@ if($funcao == 'apagar_registro_comissao_contador') {apagarRegistroComissaoContad
  * */
 
 if($funcao == 'carregar_contadores_relatorio_comissao') {carregarContadoresRelatorioComissao();}
+if($funcao == 'carregar_contadores_relatorio_mensal') {carregarContadoresRelatorioMensal();}
 if($funcao == 'informar_pagamento_extorno_comissao_contador') {informarPagamentoExtornoComissaoContador();}
 
 if($funcao == 'inserir_observacao_comissao_contador') {inserirObservacaoComissaoContador();}
@@ -78,6 +79,121 @@ function inserirObservacaoComissaoContador() {
     }
 
 }
+
+function carregarContadoresRelatorioMensal() {
+    try {
+        $usuarioLogado = UsuarioPeer::retrieveByPK($_POST['usuarioLogadoId']);
+
+        if ($_POST['filtros']['filtroPeriodoComissao'])
+            $filtroData = explode(',',$_POST['filtros']['filtroPeriodoComissao']);
+
+
+        $condicaoSql = '';
+
+        if ($_POST['filtros']['campoFiltro']) {
+            $campoFiltro = key($_POST['filtros']['campoFiltro']);
+            $valorCampoFiltro = $_POST['filtros']['campoFiltro'][key($_POST['filtros']['campoFiltro'])];
+            if ($campoFiltro)
+                $condicaoSql .= ' and '.$campoFiltro .' like "%' .$valorCampoFiltro . '%"';
+//            $cContador->add($campoFiltro, $valorCampoFiltro . '%', Criteria::LIKE);
+        }
+
+        if ($filtroData) {
+            $dataDe = explode('/', $filtroData[0]);
+            $dataAte = explode('/', $filtroData[1]);
+        }
+
+
+        /*
+            * SE SELECIONOU CONSULTORES FILTRA POR ELES
+            * CASO CONTRARIO MOSTRA TODOS VINCULADOS AO LOCAL DO USUARIO
+           */
+        $condicaoSqlConsultores = '';
+
+        if ($_POST['filtros']['filtroConsultores']) {
+
+            $i = 1;
+            foreach ($_POST['filtros']['filtroConsultores'] as $consultoresObj) {
+
+                if ($i==1) {
+                    $condicaoSqlConsultores .= ' and (usuario.id = ' . $consultoresObj['id'];
+                    $i++;
+                }
+                else
+                    $condicaoSqlConsultores .= ' or usuario.id = ' . $consultoresObj['id'];
+            }
+            $condicaoSqlConsultores .= ')';
+
+        }
+
+
+        //CONSULTA DO FATURAMENTO PARA O GRAFICO NO PAINEL
+        $sql = 'select contador.id, contador.nome, contador.cpf as cpf, contador.banco, contador.agencia, contador.digitoAgencia, ';
+        $sql .=' contador.conta_corrente, contador.digitoConta, contador.operacao ,sum(produto.preco) as faturamento, usuario.nome as consultor';
+        $sql .= ' from (((contador join certificado on contador.id = certificado.contador_id) ';
+        $sql .= ' join produto on certificado.produto_id = produto.id) ';
+        $sql .= ' join usuario on usuario.id = certificado.usuario_id)';
+        $sql .= ' where';
+        if ($usuarioLogado && $usuarioLogado->getPerfilId() != 4)
+            $sql .= ' usuario.id = ' . $usuarioLogado->getId() . ' and ';
+
+        $sql .= ' certificado.data_confirmacao_pagamento >= "'.$dataDe[2] . '/' . $dataDe[1] . '/' . $dataDe[0] .' 00:00:00" and ';
+        $sql .= ' certificado.data_confirmacao_pagamento <= "'.$dataAte[2] . '/' . $dataAte[1] . '/' . $dataAte[0].' 23:59:59" and';
+        $sql .= ' contador.comissao = 1 and';
+        $sql .= ' certificado.apagado = 0';
+        //INSERE AS CONDICOES DE FILTRO
+        $sql .= $condicaoSql;
+        $sql .= $condicaoSqlConsultores;
+        $sql .= ' group by contador.id';
+        $sql .= ' order by contador.nome';
+
+        //echo $sql;
+        $con = Propel::getConnection();
+        $stmt = $con->prepare($sql);
+        $stmt->execute();
+        $contadoresArr = $stmt->fetchAll();
+
+
+        $contadores = array();
+
+        $i = 0;
+        $totalFaturamento = 0.0;
+        $totalComissao = 0.0;
+        foreach ($contadoresArr as $key=>$contador) {
+            $totalComissao += $contador['faturamento']*0.12;
+            $totalFaturamento += $contador['faturamento'];
+
+            $contadores[] =  array(' '=>($i++),'Id'=>$contador['id'],'Contador'=>utf8_decode($contador['nome']),
+                'Consultor'=>utf8_decode($contador['consultor']), 'CPF'=>$contador['cpf'],
+
+                'Banco'=> $contador['banco'], 'Ag.'=> $contador['agencia'],'Dig. A.'=> $contador['digitoAgencia'], 'Conta'=> $contador['conta_corrente'],
+                'Dig. C.'=> $contador['digitoConta'],'Op.'=> $contador['operacao'], 'Faturamento'=>formataMoeda($contador['faturamento']*0.12),
+            );
+
+            $contadoresRep[] = array('Contador'=>utf8_decode($contador['nome']), 'CPF'=>removeTracoPontoBarra($contador['cpf']),
+
+                'Banco'=> $contador['banco'], 'Agencia'=> $contador['agencia'],'DigitoAgencia'=> $contador['digitoAgencia'], 'Conta'=> $contador['conta_corrente'],
+                'DigitoConta'=> $contador['digitoConta'],'Operacao'=> $contador['operacao'], 'Faturamento'=>$contador['faturamento']*0.12,
+            );
+
+        }
+
+        $colunas = array(
+            array('nome'=>' '),array('nome'=>'Id'), array('nome'=>'Contador'), array('nome'=>'CPF'), array('nome'=>'Consultor'), array('nome'=>'Banco'),
+            array('nome'=>'Ag.'),array('nome'=>'Dig. A.'),  array('nome'=>'Conta'),array('nome'=>'Dig. C.'),
+            array('nome'=>utf8_encode('Op.')), array('nome'=>utf8_encode('Faturamento'))
+        );
+        //DEGUB
+
+        echo json_encode(array('mensagem'=>'Ok', 'colunas'=>json_encode($colunas), 'dadosRelatorio'=>json_encode($contadoresRep), 'dadosContadores'=>json_encode($contadores), 'quantidadeContadores'=>count($contadores),
+            'totalFaturamento' => formataMoeda($totalFaturamento), 'totalComissao'=>formataMoeda($totalComissao)
+        ));
+    } catch (Exception $e ) {
+        echo var_dump($e->getMessage());
+    }
+
+}
+
 function carregarContadoresRelatorioComissao () {
     try {
         $cContador = new Criteria();

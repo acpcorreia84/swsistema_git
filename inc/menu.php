@@ -179,6 +179,9 @@ require_once 'modais/modalListaProdutos.php';
                     <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#relatorios"><i class="fa fa-bar-chart"></i> Relat&oacute;rios <i class="fa fa-fw fa-chevron-down"></i></a>
                         <ul id="relatorios" class="collapse">
+                            <li>
+                                <a href="telaComissionamentoMensalContadorRep.php"><i class="glyphicon glyphicon-signal"></i> Relat&oacute;rio individual de comiss&atilde;o de contadores</a>
+                            </li>
 
                             <? if (array_search('telaRelatorioRankingContador.php', $arrTelasMenu)!==false) {?>
                             <li>

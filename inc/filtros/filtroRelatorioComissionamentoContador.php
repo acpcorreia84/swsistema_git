@@ -35,59 +35,9 @@
         <label id='labelPedidosEm'>Pedidos em:</label>
     </div>
 
-    <div class="col-lg-2">
-        <input type="checkbox" name="filtroEscolheTemRegistro" id="filtroEscolheTemRegistro" value="sim" >
-        <label for="filtroEscolheTemRegistro">Registrada:</label>
 
-        <script>
-            $(function() {
-                $("#divPossuiRegistro").css({visibility: 'hidden',  display: 'none'});
-                $("#divEscolheComissaoPaga").css({visibility: 'hidden', display: 'none'});
 
-                $('#filtroEscolheTemRegistro').click (function () {
-                    $('#labelPedidosEm').html('Registrada em:');
-                    if ($('#filtroEscolheTemRegistro').prop('checked')) {
-                        $("#divPossuiRegistro").css({visibility: 'visible', display: 'block'});
-                        $("#divEscolheComissaoPaga").css({visibility: 'visible', display: 'block'});
-                    }
-                    else {
-                        $('#labelPedidosEm').html('Pedidos em:');
-                        $("#divPossuiRegistro").css({visibility: 'hidden', display: 'none'});
-                        $("#divEscolheComissaoPaga").css({visibility: 'hidden', display: 'none'});
-                    }
-                });
 
-                $("#filtroChkTemRegistro").bootstrapToggle({
-                    on: "Sim",
-                    off: "N&atilde;o"
-                });
-            });
-        </script>
-
-    </div>
-
-    <div class="col-lg-2" id="divEscolheComissaoPaga">
-        <input type="checkbox" name="filtroEscolheComissaoPaga" id="filtroEscolheComissaoPaga" value="sim" >
-        <label for="filtroEscolheComissaoPaga">Pago?</label>
-
-        <script>
-            $(function() {
-                $("#divFiltroComissaoPaga").css({visibility: 'hidden',  display: 'none'});
-
-                $('#filtroEscolheComissaoPaga').click (function () {
-                    if ($('#filtroEscolheComissaoPaga').prop('checked'))
-                        $("#divFiltroComissaoPaga").css({visibility: 'visible', display: 'block'});
-                    else
-                        $("#divFiltroComissaoPaga").css({visibility: 'hidden', display: 'none'});
-                });
-
-                $("#filtroChkComissaoPaga").bootstrapToggle({
-                    on: "Sim",
-                    off: "N&atilde;o"
-                });
-            });
-        </script>
-    </div>
 
 </div>
 
@@ -109,29 +59,18 @@
         </script>
     </div>
 
-    <div class="col-lg-2">
-        <div >
-            <span id="divPossuiRegistro"><input type="checkbox" id="filtroChkTemRegistro" data-onstyle="success" checked="checked"></span>
-        </div>
-    </div>
-
-    <div class="col-lg-2">
-        <div >
-            <span id="divFiltroComissaoPaga"><input type="checkbox" id="filtroChkComissaoPaga" data-onstyle="success" checked="checked" data-offstyle="danger"></span>
-        </div>
-    </div>
 
 </div>
 
-<div class="row form-group">
+<!--<div class="row form-group">
     <div class="col-lg-2">
         <input type="checkbox" name="filtroEscolhePossuiCartao" id="filtroEscolhePossuiCartao" value="sim" >
         <label for="filtroEscolhePossuiCartao">Possui Cart&atilde;o:</label>
     </div>
 
-</div>
+</div>-->
 <div class="row form-group">
-    <div class="col-lg-2">
+<!--    <div class="col-lg-2">
         <span id="divPossuiCartao"><input type="checkbox" id="filtroPossuiCartao" data-onstyle="success" checked="checked"></span>
     </div>
 
@@ -152,9 +91,12 @@
         });
 
     </script>
-
+-->
     <div class="col-lg-1">
         <button name="btnFiltrarContadores" id="btnFiltrarContadores" class="btn btn-primary">Filtrar</button>
+    </div>
+    <div class="col-lg-1">
+        <button name="btnExportar" id="btnExportar" class="btn btn-warning"><i class="glyphicon glyphicon-cloud-download"></i> Exportar</button>
     </div>
 
 </div>
@@ -165,10 +107,23 @@
     </div>
 </div>
 
+
+<form id="frmExportar" method="post" target="_blank" action="exportarRelatorioContadores.php">
+    <input type="hidden" name="dadosPlanilha" id="dadosPlanilha"/>
+</form>
+
+
 <script>
     $('#btnFiltrarContadores').click(function () {
-        carregarContadoresRelatorioComissao(0, 50);
+        carregarRelatorioComissaoGeralMensalContadores(true);
+    })
+
+    $('#btnExportar').click(function () {
+        frmExportar.submit();
+
     })
 
 </script>
 <!--END ROW-->
+
+<input type="hidden" id="usuarioLogadoId" name="usuarioLogadoId" value="<?=$usuarioLogado->getId()?>">

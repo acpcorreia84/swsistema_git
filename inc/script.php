@@ -144,6 +144,16 @@
             <script src="inc/bootstrap-toggle-master/js/bootstrap-toggle.min.js"></script>';
             break;
 
+        case 'telaComissionamentoMensalContadorRep.php':
+            echo '<script src="../js/telaContador.js" charset="utf-8"></script>
+            <script src="../js/telaComissionamentoMensalContadorRep.js"></script>
+            <script type="text/javascript" src="inc/jquery-validation-1.15.0/dist/jquery.validate.js"></script>
+            <script type="text/javascript" src="inc/jquery-validation-1.15.0/dist/additional-methods.js"></script>
+            <script type="text/javascript" src="inc/jquery-validation-1.15.0/dist/localization/messages_pt_BR.min.js"></script>
+
+            <link href="inc/bootstrap-toggle-master/css/bootstrap-toggle.min.css" rel="stylesheet">
+            <script src="inc/bootstrap-toggle-master/js/bootstrap-toggle.min.js"></script>';
+            break;
 
         case 'telaAlterarFotoPerfil.php':
             echo '
