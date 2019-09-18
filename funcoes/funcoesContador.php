@@ -139,8 +139,9 @@ function carregarContadoresRelatorioMensal() {
 
         $sql .= ' certificado.data_confirmacao_pagamento >= "'.$dataDe[2] . '/' . $dataDe[1] . '/' . $dataDe[0] .' 00:00:00" and ';
         $sql .= ' certificado.data_confirmacao_pagamento <= "'.$dataAte[2] . '/' . $dataAte[1] . '/' . $dataAte[0].' 23:59:59" and';
-        $sql .= ' contador.comissao = 1 and';
-        $sql .= ' certificado.apagado = 0';
+        $sql .= ' contador.comissao = 1 and ';
+        $sql .= ' certificado.apagado = 0 and ';
+        $sql .= ' certificado.data_validacao is not null and certificado.data_validacao <> "0000-00-00 00:00:00"';
         //INSERE AS CONDICOES DE FILTRO
         $sql .= $condicaoSql;
         $sql .= $condicaoSqlConsultores;
@@ -166,8 +167,13 @@ function carregarContadoresRelatorioMensal() {
             $contadores[] =  array(' '=>($i++),'Id'=>$contador['id'],'Contador'=>utf8_decode($contador['nome']),
                 'Consultor'=>utf8_decode($contador['consultor']), 'CPF'=>$contador['cpf'],
 
-                'Banco'=> $contador['banco'], 'Ag.'=> $contador['agencia'],'Dig. A.'=> $contador['digitoAgencia'], 'Conta'=> $contador['conta_corrente'],
-                'Dig. C.'=> $contador['digitoConta'],'Op.'=> $contador['operacao'], 'Faturamento'=>formataMoeda($contador['faturamento']*0.12),
+                'Banco'=> (strpos($contador['banco'], '-'))? '<div style="background-color: #9f2b1e; color: #fff;">'.$contador['banco'].'</div>' : $contador['banco'],
+                'Ag.'=> (strpos($contador['agencia'], '-'))?'<div style="background-color: #9f2b1e; color: #fff;">'.$contador['agencia'].'</div>': $contador['agencia'],
+                'Dig. A.'=> (strpos($contador['digitoAgencia'], '-'))?'<div style="background-color: #9f2b1e; color: #fff;">'.$contador['digitoAgencia'].'</div>':$contador['digitoAgencia'],
+                'Conta'=> (strpos($contador['conta_corrente'], '-'))?'<div style="background-color: #9f2b1e; color: #fff;">'.$contador['conta_corrente'].'</div>':$contador['conta_corrente'],
+                'Dig. C.'=> ((strpos($contador['digitoConta'], '-'))||($contador['digitoConta']===''))?'<div style="background-color: #9f2b1e; color: #fff;">'.$contador['digitoConta'].'&nbsp;</div>':$contador['digitoConta'],
+                'Op.'=> (($contador['operacao']!='PP')&&($contador['operacao']!='CC'))?'<div style="background-color: #9f2b1e; color: #fff;"> '.$contador['operacao'].'&nbsp;</div>':$contador['operacao'],
+                'Faturamento'=>formataMoeda($contador['faturamento']*0.12),
             );
 
             $contadoresRep[] = array('Contador'=>utf8_decode($contador['nome']), 'CPF'=>removeTracoPontoBarra($contador['cpf']),
