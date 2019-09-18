@@ -97,7 +97,7 @@ function carregarModalVincularContador() {
     try {
         $cContadores = new Criteria();
         $cContadores->add(ContadorPeer::SITUACAO, 0);
-        $cContadores->add(ContadorPeer::SYNC_SAFE, 1);
+        //$cContadores->add(ContadorPeer::SYNC_SAFE, 1);
         $cContadores->addAscendingOrderByColumn(ContadorPeer::NOME);
         $contadoresObj = ContadorPeer::doSelect($cContadores);
 
