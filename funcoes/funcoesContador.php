@@ -168,10 +168,10 @@ function carregarContadoresRelatorioMensal() {
                 'Consultor'=>utf8_decode($contador['consultor']), 'CPF'=>$contador['cpf'],
 
                 'Banco'=> (strpos($contador['banco'], '-'))? '<div style="background-color: #9f2b1e; color: #fff;">'.$contador['banco'].'</div>' : $contador['banco'],
-                'Ag.'=> (strpos($contador['agencia'], '-'))?'<div style="background-color: #9f2b1e; color: #fff;">'.$contador['agencia'].'</div>': $contador['agencia'],
-                'Dig. A.'=> (strpos($contador['digitoAgencia'], '-'))?'<div style="background-color: #9f2b1e; color: #fff;">'.$contador['digitoAgencia'].'</div>':$contador['digitoAgencia'],
-                'Conta'=> (strpos($contador['conta_corrente'], '-'))?'<div style="background-color: #9f2b1e; color: #fff;">'.$contador['conta_corrente'].'</div>':$contador['conta_corrente'],
-                'Dig. C.'=> ((strpos($contador['digitoConta'], '-'))||($contador['digitoConta']===''))?'<div style="background-color: #9f2b1e; color: #fff;">'.$contador['digitoConta'].'&nbsp;</div>':$contador['digitoConta'],
+                'Ag.'=> (strpos($contador['agencia'], '-') || (!is_numeric($contador['agencia'])))?'<div style="background-color: #9f2b1e; color: #fff;">'.$contador['agencia'].'</div>': $contador['agencia'],
+                'Dig. A.'=> (strpos($contador['digitoAgencia'], '-')|| (!is_numeric($contador['digitoAgencia'])&&strtoupper($contador['digitoAgencia'])!='X'))?'<div style="background-color: #9f2b1e; color: #fff;">'.$contador['digitoAgencia'].'</div>':$contador['digitoAgencia'],
+                'Conta'=> (strpos($contador['conta_corrente'], '-')|| (!is_numeric($contador['conta_corrente'])))?'<div style="background-color: #9f2b1e; color: #fff;">'.$contador['conta_corrente'].'</div>':$contador['conta_corrente'],
+                'Dig. C.'=> ((strpos($contador['digitoConta'], '-'))||($contador['digitoConta']==='')|| (!is_numeric($contador['digitoConta'])&&strtoupper($contador['digitoConta'])!='X'))?'<div style="background-color: #9f2b1e; color: #fff;">'.$contador['digitoConta'].'&nbsp;</div>':$contador['digitoConta'],
                 'Op.'=> (($contador['operacao']!='PP')&&($contador['operacao']!='CC'))?'<div style="background-color: #9f2b1e; color: #fff;"> '.$contador['operacao'].'&nbsp;</div>':$contador['operacao'],
                 'Faturamento'=>formataMoeda($contador['faturamento']*0.12),
             );
