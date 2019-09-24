@@ -1791,7 +1791,7 @@ function detalharCertificado(){
             'validade'=>$validade, 'contatosCliente'=>json_encode($contatosCliente), 'colunasContatos'=>json_encode($colunasContatos),
             'documento'=>removeTracoPontoBarra($cliente->getCpfCnpj()), 'logradouro'=>$cliente->getEndereco(), 'numero'=>$cliente->getNumero(),
 			'bairro'=>$cliente->getBairro(),'complemento'=>$cliente->getComplemento(),'cep'=>removeTracoPontoBarra($cliente->getCep()), 'cidade'=>$cliente->getCidade()  ,'uf'=>$cliente->getUf(),
-            'precoProdutoSemFormatacao'=>$preco, 'codigoProdutoSafeweb'=>$certificado->getProduto()->getProdutoId()
+            'precoProdutoSemFormatacao'=>$valor, 'codigoProdutoSafeweb'=>$certificado->getProduto()->getProdutoId()
         );
 
 
