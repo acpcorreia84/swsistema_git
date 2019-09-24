@@ -781,6 +781,33 @@ CREATE TABLE `certificado_fora_sistema`
 )Type=MyISAM;
 
 #-----------------------------------------------------------------------------
+#-- certificado_cupom
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `certificado_cupom`;
+
+
+CREATE TABLE `certificado_cupom`
+(
+	`id` INTEGER  NOT NULL AUTO_INCREMENT,
+	`codigo` VARCHAR(10)  NOT NULL,
+	`data_vencimento` DATETIME  NOT NULL,
+	`data_emissao` DATETIME  NOT NULL,
+	`data_utilizacao` DATETIME  NOT NULL,
+	`certificado_id` INTEGER,
+	`valor_cupom` FLOAT  NOT NULL,
+	`valor_final` FLOAT  NOT NULL,
+	`descricao` VARCHAR(150),
+	`observacao` VARCHAR(150),
+	PRIMARY KEY (`id`),
+	INDEX `FI__cupom_certificado` (`certificado_id`),
+	CONSTRAINT `Rel_cupom_certificado`
+		FOREIGN KEY (`certificado_id`)
+		REFERENCES `certificado` (`id`)
+		ON DELETE RESTRICT
+)Type=MyISAM;
+
+#-----------------------------------------------------------------------------
 #-- certificado
 #-----------------------------------------------------------------------------
 

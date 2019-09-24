@@ -91,6 +91,7 @@ class CertificadoTableMap extends TableMap {
     $this->addRelation('Agendamento', 'Agendamento', RelationMap::ONE_TO_MANY, array('id' => 'certificado_id', ), 'RESTRICT', null);
     $this->addRelation('CertificadoSituacao', 'CertificadoSituacao', RelationMap::ONE_TO_MANY, array('id' => 'certificado_id', ), 'RESTRICT', null);
     $this->addRelation('CuponsDescontoCertificado', 'CuponsDescontoCertificado', RelationMap::ONE_TO_MANY, array('id' => 'certificado_id', ), 'RESTRICT', null);
+    $this->addRelation('CertificadoCupom', 'CertificadoCupom', RelationMap::ONE_TO_MANY, array('id' => 'certificado_id', ), 'RESTRICT', null);
     $this->addRelation('CertificadoRelatedByCertificadoRenovado', 'Certificado', RelationMap::ONE_TO_MANY, array('id' => 'certificado_renovado', ), 'RESTRICT', null);
     $this->addRelation('CertificadoPagamento', 'CertificadoPagamento', RelationMap::ONE_TO_MANY, array('id' => 'certificado_id', ), 'RESTRICT', null);
     $this->addRelation('Boleto', 'Boleto', RelationMap::ONE_TO_MANY, array('id' => 'certificado_id', ), 'RESTRICT', null);

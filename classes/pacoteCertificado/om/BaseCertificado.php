@@ -268,6 +268,16 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 	private $lastCuponsDescontoCertificadoCriteria = null;
 
 	/**
+	 * @var        array CertificadoCupom[] Collection to store aggregation of CertificadoCupom objects.
+	 */
+	protected $collCertificadoCupoms;
+
+	/**
+	 * @var        Criteria The criteria used to select the current contents of collCertificadoCupoms.
+	 */
+	private $lastCertificadoCupomCriteria = null;
+
+	/**
 	 * @var        array Certificado[] Collection to store aggregation of Certificado objects.
 	 */
 	protected $collCertificadosRelatedByCertificadoRenovado;
@@ -1947,6 +1957,9 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 			$this->collCuponsDescontoCertificados = null;
 			$this->lastCuponsDescontoCertificadoCriteria = null;
 
+			$this->collCertificadoCupoms = null;
+			$this->lastCertificadoCupomCriteria = null;
+
 			$this->collCertificadosRelatedByCertificadoRenovado = null;
 			$this->lastCertificadoRelatedByCertificadoRenovadoCriteria = null;
 
@@ -2190,6 +2203,14 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 				}
 			}
 
+			if ($this->collCertificadoCupoms !== null) {
+				foreach ($this->collCertificadoCupoms as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
+			}
+
 			if ($this->collCertificadosRelatedByCertificadoRenovado !== null) {
 				foreach ($this->collCertificadosRelatedByCertificadoRenovado as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
@@ -2395,6 +2416,14 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 
 				if ($this->collCuponsDescontoCertificados !== null) {
 					foreach ($this->collCuponsDescontoCertificados as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
+
+				if ($this->collCertificadoCupoms !== null) {
+					foreach ($this->collCertificadoCupoms as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -2633,6 +2662,12 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 			foreach ($this->getCuponsDescontoCertificados() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 					$copyObj->addCuponsDescontoCertificado($relObj->copy($deepCopy));
+				}
+			}
+
+			foreach ($this->getCertificadoCupoms() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addCertificadoCupom($relObj->copy($deepCopy));
 				}
 			}
 
@@ -3908,6 +3943,160 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 		$this->lastCuponsDescontoCertificadoCriteria = $criteria;
 
 		return $this->collCuponsDescontoCertificados;
+	}
+
+	/**
+	 * Clears out the collCertificadoCupoms collection (array).
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addCertificadoCupoms()
+	 */
+	public function clearCertificadoCupoms()
+	{
+		$this->collCertificadoCupoms = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collCertificadoCupoms collection (array).
+	 *
+	 * By default this just sets the collCertificadoCupoms collection to an empty array (like clearcollCertificadoCupoms());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @return     void
+	 */
+	public function initCertificadoCupoms()
+	{
+		$this->collCertificadoCupoms = array();
+	}
+
+	/**
+	 * Gets an array of CertificadoCupom objects which contain a foreign key that references this object.
+	 *
+	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
+	 * Otherwise if this Certificado has previously been saved, it will retrieve
+	 * related CertificadoCupoms from storage. If this Certificado is new, it will return
+	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 *
+	 * @param      PropelPDO $con
+	 * @param      Criteria $criteria
+	 * @return     array CertificadoCupom[]
+	 * @throws     PropelException
+	 */
+	public function getCertificadoCupoms($criteria = null, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(CertificadoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificadoCupoms === null) {
+			if ($this->isNew()) {
+			   $this->collCertificadoCupoms = array();
+			} else {
+
+				$criteria->add(CertificadoCupomPeer::CERTIFICADO_ID, $this->id);
+
+				CertificadoCupomPeer::addSelectColumns($criteria);
+				$this->collCertificadoCupoms = CertificadoCupomPeer::doSelect($criteria, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return the collection.
+
+
+				$criteria->add(CertificadoCupomPeer::CERTIFICADO_ID, $this->id);
+
+				CertificadoCupomPeer::addSelectColumns($criteria);
+				if (!isset($this->lastCertificadoCupomCriteria) || !$this->lastCertificadoCupomCriteria->equals($criteria)) {
+					$this->collCertificadoCupoms = CertificadoCupomPeer::doSelect($criteria, $con);
+				}
+			}
+		}
+		$this->lastCertificadoCupomCriteria = $criteria;
+		return $this->collCertificadoCupoms;
+	}
+
+	/**
+	 * Returns the number of related CertificadoCupom objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related CertificadoCupom objects.
+	 * @throws     PropelException
+	 */
+	public function countCertificadoCupoms(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(CertificadoPeer::DATABASE_NAME);
+		} else {
+			$criteria = clone $criteria;
+		}
+
+		if ($distinct) {
+			$criteria->setDistinct();
+		}
+
+		$count = null;
+
+		if ($this->collCertificadoCupoms === null) {
+			if ($this->isNew()) {
+				$count = 0;
+			} else {
+
+				$criteria->add(CertificadoCupomPeer::CERTIFICADO_ID, $this->id);
+
+				$count = CertificadoCupomPeer::doCount($criteria, false, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return count of the collection.
+
+
+				$criteria->add(CertificadoCupomPeer::CERTIFICADO_ID, $this->id);
+
+				if (!isset($this->lastCertificadoCupomCriteria) || !$this->lastCertificadoCupomCriteria->equals($criteria)) {
+					$count = CertificadoCupomPeer::doCount($criteria, false, $con);
+				} else {
+					$count = count($this->collCertificadoCupoms);
+				}
+			} else {
+				$count = count($this->collCertificadoCupoms);
+			}
+		}
+		return $count;
+	}
+
+	/**
+	 * Method called to associate a CertificadoCupom object to this object
+	 * through the CertificadoCupom foreign key attribute.
+	 *
+	 * @param      CertificadoCupom $l CertificadoCupom
+	 * @return     void
+	 * @throws     PropelException
+	 */
+	public function addCertificadoCupom(CertificadoCupom $l)
+	{
+		if ($this->collCertificadoCupoms === null) {
+			$this->initCertificadoCupoms();
+		}
+		if (!in_array($l, $this->collCertificadoCupoms, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collCertificadoCupoms, $l);
+			$l->setCertificado($this);
+		}
 	}
 
 	/**
@@ -6143,6 +6332,11 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 					$o->clearAllReferences($deep);
 				}
 			}
+			if ($this->collCertificadoCupoms) {
+				foreach ((array) $this->collCertificadoCupoms as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 			if ($this->collCertificadosRelatedByCertificadoRenovado) {
 				foreach ((array) $this->collCertificadosRelatedByCertificadoRenovado as $o) {
 					$o->clearAllReferences($deep);
@@ -6183,6 +6377,7 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 		$this->collAgendamentos = null;
 		$this->collCertificadoSituacaos = null;
 		$this->collCuponsDescontoCertificados = null;
+		$this->collCertificadoCupoms = null;
 		$this->collCertificadosRelatedByCertificadoRenovado = null;
 		$this->collCertificadoPagamentos = null;
 		$this->collBoletos = null;

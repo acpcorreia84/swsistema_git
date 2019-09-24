@@ -183,6 +183,12 @@ require_once 'modais/modalListaProdutos.php';
                                 <a href="telaComissionamentoMensalContadorRep.php"><i class="glyphicon glyphicon-signal"></i> Relat&oacute;rio individual de comiss&atilde;o de contadores</a>
                             </li>
 
+                            <? if (array_search('telaGeracaoCampanhaMkt.php', $arrTelasMenu)!==false) {?>
+                            <li>
+                                <a href="telaGeracaoCampanhaMkt.php"><i class="fa fa-whatsapp"></i> Gerador de campanhas para whatsapp</a>
+                            </li>
+                            <? }?>
+
                             <? if (array_search('telaRelatorioRankingContador.php', $arrTelasMenu)!==false) {?>
                             <li>
                                 <a href="telaRelatorioRankingContador.php"><i class="fa fa-trophy"></i> Ranking Contadores</a>
