@@ -83,7 +83,7 @@
 </div>
 
 
-<form id="frmExportar" method="post" target="_blank" action="exportarRelatorioCampanha.php">
+<form id="frmExportar" method="post" target="_blank" action="exportarRelatorioCampanha.php" enctype="application/x-www-form-urlencoded">
     <input type="hidden" name="dadosPlanilha" id="dadosPlanilha"/>
 </form>
 

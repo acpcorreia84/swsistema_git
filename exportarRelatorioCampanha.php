@@ -11,8 +11,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/loader.php';
 function exportarContadoresRelatorioMensal ($dados) {
     header("Content-Type: text/csv");
     header("Content-Disposition: attachment; filename=relatorioCampanha.csv");
-
-    $dados = json_decode($dados);
+    $dados = json_decode(str_replace("\\","", $dados));
 
     $informacoes = array();
 

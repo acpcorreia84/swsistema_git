@@ -229,7 +229,7 @@ function carregarDadosRelatorioCampanha () {
                     'Celular'=>$celularFormatado
                 );
 
-                $nomes = explode(" ",trim(utf8_encode($responsavelCliente->getNome())));
+                $nomes = explode(" ",trim($responsavelCliente->getNome()));
 
                 if ($celularFormatado) $dadosExportacao[] = array(
                     'Nome'=>trim($nomes[0]),
@@ -244,7 +244,7 @@ function carregarDadosRelatorioCampanha () {
                     'Celular'=>$celularFormatado
                 );
 
-                $nomes = explode(" ",trim(utf8_encode($clienteCertificado->getNomeFantasia())));
+                $nomes = explode(" ",trim($clienteCertificado->getNomeFantasia()));
 
                 if ($celularFormatado) $dadosExportacao[] = array(
                     'Nome'=>trim($nomes[0]),
