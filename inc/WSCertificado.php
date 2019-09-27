@@ -281,7 +281,7 @@ Class WSCertificado{
 
 		//montagem do xml
 		$xml = $this->montarXml('SolicitacaoCPF', $request);
-        var_dump('aqui',$xml);
+
 		//montagem do array de requisi??o
 		$request = array();
 		$request['parametro'] = $xml;
