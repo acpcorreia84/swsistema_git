@@ -200,6 +200,12 @@ function carregarDadosRelatorioCampanha () {
         $dados = array();
         $dadosExportacao = array();
         foreach ($certificados as $certificado) {
+            //VERIFICA SE EXISTE CUPOM VINCULADO AQUELE CERTIFICADO
+            $cupons = $certificado->getCertificadoCupoms();
+            $cupom = $cupons[0];
+            if ($cupons)
+                $cupom = $cupom->getCodigo();
+
             $clienteCertificado = $certificado->getCliente();
             $responsavelCliente = $clienteCertificado->getResponsavel();
 
@@ -224,7 +230,11 @@ function carregarDadosRelatorioCampanha () {
 
                 $dados[] =  array(
                     ' '=>$i++,
-                    'Id'=>(!$celularFormatado) ? '<div style="background-color: #9f2b1e; color: #fff;">'.$responsavelCliente->getId().'</div>' : $responsavelCliente->getId(),
+                    'Id. Cert.' => $certificado->getId(),
+                    'Acao' => "<button class='btn btn-primary' onclick='window.open(\"telaCertificado.php?cupom=".$cupom."&funcao=aplica_cupom&idCertificado=".$certificado->getId()."\")' ><i class='fa fa-arrows' / ></button>",
+                    'Id Cli.' => "<a href='#' >".$certificado->getCliente()->getId().'</a>',
+                    'Cupom' => $cupom,
+                    'Cod. Resp.'=>(!$celularFormatado) ? '<div style="background-color: #9f2b1e; color: #fff;">'.$responsavelCliente->getId().'</div>' : $responsavelCliente->getId(),
                     'Nome'=>(!$celularFormatado) ? '<div style="background-color: #9f2b1e; color: #fff;">'.utf8_encode($responsavelCliente->getNome()).'</div>' : utf8_encode($responsavelCliente->getNome()),
                     'Celular'=>$celularFormatado
                 );
@@ -239,7 +249,11 @@ function carregarDadosRelatorioCampanha () {
             } else {
                 $dados[] =  array(
                     ' '=>$i++,
-                    'Id'=>(!$celularFormatado) ? '<div style="background-color: #9f2b1e; color: #fff;">'.$clienteCertificado->getId().'</div>' : $clienteCertificado->getId(),
+                    'Id. Cert.' => $certificado->getId(),
+                    'Acao' => "<button class='btn btn-primary' onclick='window.open(\"telaCertificado.php?cupom=".$cupom."&funcao=aplica_cupom&idCertificado=".$certificado->getId()."\")' ><i class='fa fa-arrows' / ></button>",
+                    'Id Cli.' => "<a href='#' >".$certificado->getCliente()->getId().'</a>',
+                    'Cupom' => $cupom,
+                    'Cod. Resp.'=>(!$celularFormatado) ? '<div style="background-color: #9f2b1e; color: #fff;">'.$clienteCertificado->getId().'</div>' : $clienteCertificado->getId(),
                     'Nome'=>(!$celularFormatado) ? '<div style="background-color: #9f2b1e; color: #fff;">'.utf8_encode($clienteCertificado->getNomeFantasia()).'</div>' : utf8_encode($clienteCertificado->getNomeFantasia()),
                     'Celular'=>$celularFormatado
                 );
@@ -257,7 +271,7 @@ function carregarDadosRelatorioCampanha () {
         }
 
         $colunas = array(
-            array('nome'=>' '), array('nome'=>'Id'), array('nome'=>'Nome'), array('nome'=>'Celular')
+            array('nome'=>' '),array('nome'=>'Id Cli.'), array('nome'=>'Cupom'), array('nome'=>'Cod. Resp.'), array('nome'=>'Nome'), array('nome'=>'Celular'), array('nome'=>'Id. Cert.'), array('nome'=>'Acao')
         );
 
         $retorno =     array(

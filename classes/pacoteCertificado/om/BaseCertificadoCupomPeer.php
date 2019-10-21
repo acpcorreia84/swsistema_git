@@ -25,13 +25,19 @@ abstract class BaseCertificadoCupomPeer {
 	const TM_CLASS = 'CertificadoCupomTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 10;
+	const NUM_COLUMNS = 11;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** the column name for the ID field */
 	const ID = 'certificado_cupom.ID';
+
+	/** the column name for the CERTIFICADO_ID field */
+	const CERTIFICADO_ID = 'certificado_cupom.CERTIFICADO_ID';
+
+	/** the column name for the CLIENTE_ID field */
+	const CLIENTE_ID = 'certificado_cupom.CLIENTE_ID';
 
 	/** the column name for the CODIGO field */
 	const CODIGO = 'certificado_cupom.CODIGO';
@@ -44,9 +50,6 @@ abstract class BaseCertificadoCupomPeer {
 
 	/** the column name for the DATA_UTILIZACAO field */
 	const DATA_UTILIZACAO = 'certificado_cupom.DATA_UTILIZACAO';
-
-	/** the column name for the CERTIFICADO_ID field */
-	const CERTIFICADO_ID = 'certificado_cupom.CERTIFICADO_ID';
 
 	/** the column name for the VALOR_CUPOM field */
 	const VALOR_CUPOM = 'certificado_cupom.VALOR_CUPOM';
@@ -76,11 +79,11 @@ abstract class BaseCertificadoCupomPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'Codigo', 'DataVencimento', 'DataEmissao', 'DataUtilizacao', 'CertificadoId', 'ValorCupom', 'ValorFinal', 'Descricao', 'Observacao', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'codigo', 'dataVencimento', 'dataEmissao', 'dataUtilizacao', 'certificadoId', 'valorCupom', 'valorFinal', 'descricao', 'observacao', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::CODIGO, self::DATA_VENCIMENTO, self::DATA_EMISSAO, self::DATA_UTILIZACAO, self::CERTIFICADO_ID, self::VALOR_CUPOM, self::VALOR_FINAL, self::DESCRICAO, self::OBSERVACAO, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'codigo', 'data_vencimento', 'data_emissao', 'data_utilizacao', 'certificado_id', 'valor_cupom', 'valor_final', 'descricao', 'observacao', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'CertificadoId', 'ClienteId', 'Codigo', 'DataVencimento', 'DataEmissao', 'DataUtilizacao', 'ValorCupom', 'ValorFinal', 'Descricao', 'Observacao', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'certificadoId', 'clienteId', 'codigo', 'dataVencimento', 'dataEmissao', 'dataUtilizacao', 'valorCupom', 'valorFinal', 'descricao', 'observacao', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::CERTIFICADO_ID, self::CLIENTE_ID, self::CODIGO, self::DATA_VENCIMENTO, self::DATA_EMISSAO, self::DATA_UTILIZACAO, self::VALOR_CUPOM, self::VALOR_FINAL, self::DESCRICAO, self::OBSERVACAO, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'certificado_id', 'cliente_id', 'codigo', 'data_vencimento', 'data_emissao', 'data_utilizacao', 'valor_cupom', 'valor_final', 'descricao', 'observacao', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
 	);
 
 	/**
@@ -90,11 +93,11 @@ abstract class BaseCertificadoCupomPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Codigo' => 1, 'DataVencimento' => 2, 'DataEmissao' => 3, 'DataUtilizacao' => 4, 'CertificadoId' => 5, 'ValorCupom' => 6, 'ValorFinal' => 7, 'Descricao' => 8, 'Observacao' => 9, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'codigo' => 1, 'dataVencimento' => 2, 'dataEmissao' => 3, 'dataUtilizacao' => 4, 'certificadoId' => 5, 'valorCupom' => 6, 'valorFinal' => 7, 'descricao' => 8, 'observacao' => 9, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::CODIGO => 1, self::DATA_VENCIMENTO => 2, self::DATA_EMISSAO => 3, self::DATA_UTILIZACAO => 4, self::CERTIFICADO_ID => 5, self::VALOR_CUPOM => 6, self::VALOR_FINAL => 7, self::DESCRICAO => 8, self::OBSERVACAO => 9, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'codigo' => 1, 'data_vencimento' => 2, 'data_emissao' => 3, 'data_utilizacao' => 4, 'certificado_id' => 5, 'valor_cupom' => 6, 'valor_final' => 7, 'descricao' => 8, 'observacao' => 9, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'CertificadoId' => 1, 'ClienteId' => 2, 'Codigo' => 3, 'DataVencimento' => 4, 'DataEmissao' => 5, 'DataUtilizacao' => 6, 'ValorCupom' => 7, 'ValorFinal' => 8, 'Descricao' => 9, 'Observacao' => 10, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'certificadoId' => 1, 'clienteId' => 2, 'codigo' => 3, 'dataVencimento' => 4, 'dataEmissao' => 5, 'dataUtilizacao' => 6, 'valorCupom' => 7, 'valorFinal' => 8, 'descricao' => 9, 'observacao' => 10, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::CERTIFICADO_ID => 1, self::CLIENTE_ID => 2, self::CODIGO => 3, self::DATA_VENCIMENTO => 4, self::DATA_EMISSAO => 5, self::DATA_UTILIZACAO => 6, self::VALOR_CUPOM => 7, self::VALOR_FINAL => 8, self::DESCRICAO => 9, self::OBSERVACAO => 10, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'certificado_id' => 1, 'cliente_id' => 2, 'codigo' => 3, 'data_vencimento' => 4, 'data_emissao' => 5, 'data_utilizacao' => 6, 'valor_cupom' => 7, 'valor_final' => 8, 'descricao' => 9, 'observacao' => 10, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
 	);
 
 	/**
@@ -165,11 +168,12 @@ abstract class BaseCertificadoCupomPeer {
 	public static function addSelectColumns(Criteria $criteria)
 	{
 		$criteria->addSelectColumn(CertificadoCupomPeer::ID);
+		$criteria->addSelectColumn(CertificadoCupomPeer::CERTIFICADO_ID);
+		$criteria->addSelectColumn(CertificadoCupomPeer::CLIENTE_ID);
 		$criteria->addSelectColumn(CertificadoCupomPeer::CODIGO);
 		$criteria->addSelectColumn(CertificadoCupomPeer::DATA_VENCIMENTO);
 		$criteria->addSelectColumn(CertificadoCupomPeer::DATA_EMISSAO);
 		$criteria->addSelectColumn(CertificadoCupomPeer::DATA_UTILIZACAO);
-		$criteria->addSelectColumn(CertificadoCupomPeer::CERTIFICADO_ID);
 		$criteria->addSelectColumn(CertificadoCupomPeer::VALOR_CUPOM);
 		$criteria->addSelectColumn(CertificadoCupomPeer::VALOR_FINAL);
 		$criteria->addSelectColumn(CertificadoCupomPeer::DESCRICAO);
@@ -470,6 +474,56 @@ abstract class BaseCertificadoCupomPeer {
 
 
 	/**
+	 * Returns the number of rows matching criteria, joining the related Cliente table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinCliente(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(CertificadoCupomPeer::TABLE_NAME);
+
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			CertificadoCupomPeer::addSelectColumns($criteria);
+		}
+		
+		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+		
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(CertificadoCupomPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+
+		$criteria->addJoin(CertificadoCupomPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
+	}
+
+
+	/**
 	 * Selects a collection of CertificadoCupom objects pre-filled with their Certificado objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -536,6 +590,72 @@ abstract class BaseCertificadoCupomPeer {
 
 
 	/**
+	 * Selects a collection of CertificadoCupom objects pre-filled with their Cliente objects.
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of CertificadoCupom objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinCliente(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CertificadoCupomPeer::addSelectColumns($criteria);
+		$startcol = (CertificadoCupomPeer::NUM_COLUMNS - CertificadoCupomPeer::NUM_LAZY_LOAD_COLUMNS);
+		ClientePeer::addSelectColumns($criteria);
+
+		$criteria->addJoin(CertificadoCupomPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CertificadoCupomPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CertificadoCupomPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+
+				$cls = CertificadoCupomPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CertificadoCupomPeer::addInstanceToPool($obj1, $key1);
+			} // if $obj1 already loaded
+
+			$key2 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol);
+			if ($key2 !== null) {
+				$obj2 = ClientePeer::getInstanceFromPool($key2);
+				if (!$obj2) {
+
+					$cls = ClientePeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol);
+					ClientePeer::addInstanceToPool($obj2, $key2);
+				} // if obj2 already loaded
+				
+				// Add the $obj1 (CertificadoCupom) to $obj2 (Cliente)
+				$obj2->addCertificadoCupom($obj1);
+
+			} // if joined row was not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
 	 * Returns the number of rows matching criteria, joining all related tables
 	 *
 	 * @param      Criteria $criteria
@@ -573,6 +693,8 @@ abstract class BaseCertificadoCupomPeer {
 
 		$criteria->addJoin(CertificadoCupomPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
 
+		$criteria->addJoin(CertificadoCupomPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -609,7 +731,12 @@ abstract class BaseCertificadoCupomPeer {
 		CertificadoPeer::addSelectColumns($criteria);
 		$startcol3 = $startcol2 + (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
 
+		ClientePeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+
 		$criteria->addJoin(CertificadoCupomPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoCupomPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
 
 		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
@@ -645,6 +772,270 @@ abstract class BaseCertificadoCupomPeer {
 				// Add the $obj1 (CertificadoCupom) to the collection in $obj2 (Certificado)
 				$obj2->addCertificadoCupom($obj1);
 			} // if joined row not null
+
+			// Add objects for joined Cliente rows
+
+			$key3 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol3);
+			if ($key3 !== null) {
+				$obj3 = ClientePeer::getInstanceFromPool($key3);
+				if (!$obj3) {
+
+					$cls = ClientePeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					ClientePeer::addInstanceToPool($obj3, $key3);
+				} // if obj3 loaded
+
+				// Add the $obj1 (CertificadoCupom) to the collection in $obj3 (Cliente)
+				$obj3->addCertificadoCupom($obj1);
+			} // if joined row not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Returns the number of rows matching criteria, joining the related Certificado table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinAllExceptCertificado(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(CertificadoCupomPeer::TABLE_NAME);
+		
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			CertificadoCupomPeer::addSelectColumns($criteria);
+		}
+		
+		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
+		
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(CertificadoCupomPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+	
+		$criteria->addJoin(CertificadoCupomPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
+	}
+
+
+	/**
+	 * Returns the number of rows matching criteria, joining the related Cliente table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinAllExceptCliente(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(CertificadoCupomPeer::TABLE_NAME);
+		
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			CertificadoCupomPeer::addSelectColumns($criteria);
+		}
+		
+		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
+		
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(CertificadoCupomPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+	
+		$criteria->addJoin(CertificadoCupomPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
+	}
+
+
+	/**
+	 * Selects a collection of CertificadoCupom objects pre-filled with all related objects except Certificado.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of CertificadoCupom objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptCertificado(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CertificadoCupomPeer::addSelectColumns($criteria);
+		$startcol2 = (CertificadoCupomPeer::NUM_COLUMNS - CertificadoCupomPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ClientePeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(CertificadoCupomPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CertificadoCupomPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CertificadoCupomPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = CertificadoCupomPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CertificadoCupomPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Cliente rows
+
+				$key2 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = ClientePeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = ClientePeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					ClientePeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (CertificadoCupom) to the collection in $obj2 (Cliente)
+				$obj2->addCertificadoCupom($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of CertificadoCupom objects pre-filled with all related objects except Cliente.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of CertificadoCupom objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptCliente(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CertificadoCupomPeer::addSelectColumns($criteria);
+		$startcol2 = (CertificadoCupomPeer::NUM_COLUMNS - CertificadoCupomPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		CertificadoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(CertificadoCupomPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CertificadoCupomPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CertificadoCupomPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = CertificadoCupomPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CertificadoCupomPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Certificado rows
+
+				$key2 = CertificadoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = CertificadoPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = CertificadoPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					CertificadoPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (CertificadoCupom) to the collection in $obj2 (Certificado)
+				$obj2->addCertificadoCupom($obj1);
+
+			} // if joined row is not null
 
 			$results[] = $obj1;
 		}

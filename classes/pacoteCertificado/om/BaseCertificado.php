@@ -4099,6 +4099,53 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 		}
 	}
 
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Certificado is new, it will return
+	 * an empty collection; or if this Certificado has previously
+	 * been saved, it will retrieve related CertificadoCupoms from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Certificado.
+	 */
+	public function getCertificadoCupomsJoinCliente($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(CertificadoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificadoCupoms === null) {
+			if ($this->isNew()) {
+				$this->collCertificadoCupoms = array();
+			} else {
+
+				$criteria->add(CertificadoCupomPeer::CERTIFICADO_ID, $this->id);
+
+				$this->collCertificadoCupoms = CertificadoCupomPeer::doSelectJoinCliente($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(CertificadoCupomPeer::CERTIFICADO_ID, $this->id);
+
+			if (!isset($this->lastCertificadoCupomCriteria) || !$this->lastCertificadoCupomCriteria->equals($criteria)) {
+				$this->collCertificadoCupoms = CertificadoCupomPeer::doSelectJoinCliente($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastCertificadoCupomCriteria = $criteria;
+
+		return $this->collCertificadoCupoms;
+	}
+
 	/**
 	 * Clears out the collCertificadosRelatedByCertificadoRenovado collection (array).
 	 *

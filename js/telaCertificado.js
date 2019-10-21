@@ -2,6 +2,7 @@ var msnPadrao = 'entre em contato com o administrador do sistema (3321-5061)';
 
 // var urlPadrao = 'funcoes/certificado/';
 var pageUrl = 'funcoes/funcoesCertificado.php';
+
 function liberaBtn(src1 , src2){
 	if(src1.value != "" && src1.value != null){
 		$("#"+src2).css('visibility','visible');
@@ -1743,7 +1744,6 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
             try {
             	//console.log(result);
                 var resultado = JSON.parse(result);
-                console.log(result, resultado);
                 var certificado = JSON.parse(resultado.dadosCertificado);
                 var pagamentos = JSON.parse(resultado.dadosPagamento);
                 var situacoes = JSON.parse(resultado.dadosSituacoes);
@@ -1849,6 +1849,7 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
                     $('#dcSpanDataCompra').html(certificado.dataCompra);
                     $('#dcSpanCodCertificado').html(certificado.id);
                     $('#dcSpanIdCliente').html(certificado.clienteId);
+                    $('#idCliente').val(certificado.clienteId);
                     $('#tcSpanNomeContador').html(certificado.nomeContador);
                     $('#dcSpanNomeCliente').html(certificado.nomeCliente);
                     $('#dcSpanProtocolo').html(certificado.protocolo);
@@ -2265,6 +2266,8 @@ function desabilitarTelaDetalharCertificados() {
     });
     $('#btnFecharDetalhesCertificado').prop("disabled",false);
     $('#btnFecharDetalhesCertificado').prop('onclick', '');
+
+    $('#btnCupomDesconto').prop("disabled",false);
 }
 
 
@@ -2437,6 +2440,118 @@ function salvarComprovantePagamento (formulario) {
 
             } catch (e) {
                 alertErro('Error CD60002 - Erro ao tentar salvar o comprovante, Erro:' + result + e+ '. '+ msnPadrao + '.')
+                console.log(e, result);
+                $("#modalCarregando").modal('hide');
+            }
+        }
+    });
+}
+
+function carregarModalCupomDesconto() {
+
+	if ($('#edtCodigoCupom').val() == '') {
+		alertErro('Informe o c&oacute;digo do cupom para carregar as informa&ccedil;&otilde;es');
+		return;
+    }
+    $('#spCupomDesconto').html($('#hdCupom').val());
+
+    $('#mensagemLoading').html('<i class="fa fa-lg fa-money"></i> Carregar tela de cupom de desconto');
+    $("#modalCarregando").modal('show');
+
+	var dadosajax = {
+		'cupom': $('#hdCupom').val(),
+		'idCertificado': $('#idCertificado').val(),
+        'idCliente': $('#idCliente').val(),
+		funcao: 'carregar_dados_tela_cupom'
+	}
+
+    $.ajax({
+        url: pageUrl,
+        data : dadosajax,
+        type : 'POST',
+        cache : true,
+        error : function(){
+            alertErro('Error CD23010 - Erro ao tentar carregar cupom, Erro:' + e+ '. '+ msnPadrao + '.')
+            $("#modalCarregando").modal('hide');
+        },
+        success : function(result){
+            try {
+                $("#modalCarregando").modal('hide');
+                console.log(result);
+                var resultado = JSON.parse(result);
+
+                if (resultado.mensagem == 'Ok') {
+                	var dadosCupom = JSON.parse(resultado.dadosCupom);
+                	console.log(dadosCupom);
+                    $('#spRepresentanteLegal').html(dadosCupom.representanteLegal);
+                    $('#spCupomDesconto').html(dadosCupom.codigo);
+                    $('#edtCodigoCupom').val(dadosCupom.codigo);
+
+                    $('#spDataValidade').html(dadosCupom.dataValidade);
+                    $('#spDataEmissao').html(dadosCupom.dataEmissao);
+                    $('#spCupomProduto').html(dadosCupom.produto);
+                    $('#spCupomPreco').html(dadosCupom.preco);
+                    $('#spValorDesconto').html(dadosCupom.descontoValor);
+
+                    $('#percentualDesconto').val(dadosCupom.percentualDescontoSemFormatacao);
+                    $('#spPercentualDesconto').html(dadosCupom.percentualDesconto);
+                    $('#edtDescricaoCampanha').html(dadosCupom.descricaoCampanha);
+
+                } else if (resultado.mensagem == 'erro') {
+                    alertErro('Ocorreu algum erro carregar a tela de cupom!');
+                    $("#modalInserirCupom").modal('hide');
+                }
+                else if (resultado.mensagem == 'semcupom') {
+                    alertErro('N&atilde;o existe cupom vinculado a este certificado, vincule primeiro!');
+                    $("#modalInserirCupom").modal('hide');
+				}
+
+            } catch (e) {
+                alertErro('Error CD23012 - Erro ao tentar carregar cupom, Erro:' + result + e+ '. '+ msnPadrao + '.')
+                console.log(e, result);
+                $("#modalCarregando").modal('hide');
+            }
+        }
+    });
+}
+
+function usarCupom() {
+    $('#mensagemLoading').html('<i class="fa fa-lg fa-money"></i> Aplicando cupom de desconto');
+    $("#modalCarregando").modal('show');
+
+    var dadosajax = {
+        'cupom': $('#edtCodigoCupom').val(),
+        'idCertificado': $('#idCertificado').val(),
+        'idCliente': $('#idCliente').val(),
+		'percentualDesconto': $('#percentualDesconto').val(),
+        funcao: 'usarCupomDesconto'
+    }
+
+    $.ajax({
+        url: pageUrl,
+        data : dadosajax,
+        type : 'POST',
+        cache : true,
+        error : function(){
+            alertErro('Error CD24010 - Erro ao tentar usar o cupom, Erro:' + e+ '. '+ msnPadrao + '.')
+            $("#modalCarregando").modal('hide');
+        },
+        success : function(result){
+            try {
+                $("#modalCarregando").modal('hide');
+                console.log(result);
+                var resultado = JSON.parse(result);
+
+                if (resultado.mensagem == 'Ok') {
+                    alertSucesso('Cupom de desconto aplicado com sucesso!');
+                    carregarModalDetalharCertificado($('#idCertificado').val());
+                    $("#modalInserirCupom").modal('hide');
+                } else{
+                    alertErro(resultado.mensagem);
+                }
+
+            } catch (e) {
+                alertErro('Error CD24012 - Erro ao tentar usar o cupom, Erro:' + result + e+ '. '+ msnPadrao + '.')
                 console.log(e, result);
                 $("#modalCarregando").modal('hide');
             }

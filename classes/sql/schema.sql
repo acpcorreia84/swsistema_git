@@ -790,13 +790,14 @@ DROP TABLE IF EXISTS `certificado_cupom`;
 CREATE TABLE `certificado_cupom`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
+	`certificado_id` INTEGER,
+	`cliente_id` INTEGER,
 	`codigo` VARCHAR(10)  NOT NULL,
 	`data_vencimento` DATETIME  NOT NULL,
-	`data_emissao` DATETIME  NOT NULL,
-	`data_utilizacao` DATETIME  NOT NULL,
-	`certificado_id` INTEGER,
-	`valor_cupom` FLOAT  NOT NULL,
-	`valor_final` FLOAT  NOT NULL,
+	`data_emissao` DATETIME,
+	`data_utilizacao` DATETIME,
+	`valor_cupom` FLOAT,
+	`valor_final` FLOAT,
 	`descricao` VARCHAR(150),
 	`observacao` VARCHAR(150),
 	PRIMARY KEY (`id`),
@@ -804,6 +805,11 @@ CREATE TABLE `certificado_cupom`
 	CONSTRAINT `Rel_cupom_certificado`
 		FOREIGN KEY (`certificado_id`)
 		REFERENCES `certificado` (`id`)
+		ON DELETE RESTRICT,
+	INDEX `FI__cupom_cliente` (`cliente_id`),
+	CONSTRAINT `Rel_cupom_cliente`
+		FOREIGN KEY (`cliente_id`)
+		REFERENCES `cliente` (`id`)
 		ON DELETE RESTRICT
 )Type=MyISAM;
 

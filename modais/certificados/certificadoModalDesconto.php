@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class ="col-lg-10">
-                    <h3><i class="fa fa-lg fa-tag "></i> Inserir desconto </h3>
+                    <h3><i class="fa fa-hand-scissors-o "></i> CUPOM DE DESCONTO </h3>
                 </div>
 
                 <div class ="col-lg-2">

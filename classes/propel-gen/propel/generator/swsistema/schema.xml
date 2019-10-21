@@ -542,18 +542,22 @@
         <table name="certificado_cupom" package="pacoteCertificado">
 
         <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="certificado_id"  type="INTEGER" />
+        <column name="cliente_id"  type="INTEGER" />
         <column name="codigo" type="VARCHAR"  required="true" size="10"/>
         <column name="data_vencimento"  type="TIMESTAMP" required="true" />
-        <column name="data_emissao"  type="TIMESTAMP" required="true" />
-        <column name="data_utilizacao"  type="TIMESTAMP" required="true" />
-        <column name="certificado_id"  type="INTEGER" required="false" />
-        <column name="valor_cupom" type="FLOAT" required="true"/>
-        <column name="valor_final" type="FLOAT" required="true"/>
+        <column name="data_emissao"  type="TIMESTAMP"  />
+        <column name="data_utilizacao"  type="TIMESTAMP"  />
+        <column name="valor_cupom" type="FLOAT" />
+        <column name="valor_final" type="FLOAT" />
         <column name="descricao" type="VARCHAR" size="150"/>
         <column name="observacao" type="VARCHAR" size="150"/>
 
         <foreign-key foreignTable="certificado" name="Rel_cupom_certificado" onDelete="restrict">
             <reference local="certificado_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="cliente" name="Rel_cupom_cliente" onDelete="restrict">
+            <reference local="cliente_id" foreign="id"/>
         </foreign-key>
 
     </table>

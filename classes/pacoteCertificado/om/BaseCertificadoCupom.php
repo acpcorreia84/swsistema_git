@@ -25,6 +25,18 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 	protected $id;
 
 	/**
+	 * The value for the certificado_id field.
+	 * @var        int
+	 */
+	protected $certificado_id;
+
+	/**
+	 * The value for the cliente_id field.
+	 * @var        int
+	 */
+	protected $cliente_id;
+
+	/**
 	 * The value for the codigo field.
 	 * @var        string
 	 */
@@ -47,12 +59,6 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 	 * @var        string
 	 */
 	protected $data_utilizacao;
-
-	/**
-	 * The value for the certificado_id field.
-	 * @var        int
-	 */
-	protected $certificado_id;
 
 	/**
 	 * The value for the valor_cupom field.
@@ -84,6 +90,11 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 	protected $aCertificado;
 
 	/**
+	 * @var        Cliente
+	 */
+	protected $aCliente;
+
+	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
 	 * @var        boolean
@@ -105,6 +116,26 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 	public function getId()
 	{
 		return $this->id;
+	}
+
+	/**
+	 * Get the [certificado_id] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getCertificadoId()
+	{
+		return $this->certificado_id;
+	}
+
+	/**
+	 * Get the [cliente_id] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getClienteId()
+	{
+		return $this->cliente_id;
 	}
 
 	/**
@@ -232,16 +263,6 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [certificado_id] column value.
-	 * 
-	 * @return     int
-	 */
-	public function getCertificadoId()
-	{
-		return $this->certificado_id;
-	}
-
-	/**
 	 * Get the [valor_cupom] column value.
 	 * 
 	 * @return     double
@@ -300,6 +321,54 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 
 		return $this;
 	} // setId()
+
+	/**
+	 * Set the value of [certificado_id] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     CertificadoCupom The current object (for fluent API support)
+	 */
+	public function setCertificadoId($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->certificado_id !== $v) {
+			$this->certificado_id = $v;
+			$this->modifiedColumns[] = CertificadoCupomPeer::CERTIFICADO_ID;
+		}
+
+		if ($this->aCertificado !== null && $this->aCertificado->getId() !== $v) {
+			$this->aCertificado = null;
+		}
+
+		return $this;
+	} // setCertificadoId()
+
+	/**
+	 * Set the value of [cliente_id] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     CertificadoCupom The current object (for fluent API support)
+	 */
+	public function setClienteId($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->cliente_id !== $v) {
+			$this->cliente_id = $v;
+			$this->modifiedColumns[] = CertificadoCupomPeer::CLIENTE_ID;
+		}
+
+		if ($this->aCliente !== null && $this->aCliente->getId() !== $v) {
+			$this->aCliente = null;
+		}
+
+		return $this;
+	} // setClienteId()
 
 	/**
 	 * Set the value of [codigo] column.
@@ -469,30 +538,6 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 	} // setDataUtilizacao()
 
 	/**
-	 * Set the value of [certificado_id] column.
-	 * 
-	 * @param      int $v new value
-	 * @return     CertificadoCupom The current object (for fluent API support)
-	 */
-	public function setCertificadoId($v)
-	{
-		if ($v !== null) {
-			$v = (int) $v;
-		}
-
-		if ($this->certificado_id !== $v) {
-			$this->certificado_id = $v;
-			$this->modifiedColumns[] = CertificadoCupomPeer::CERTIFICADO_ID;
-		}
-
-		if ($this->aCertificado !== null && $this->aCertificado->getId() !== $v) {
-			$this->aCertificado = null;
-		}
-
-		return $this;
-	} // setCertificadoId()
-
-	/**
 	 * Set the value of [valor_cupom] column.
 	 * 
 	 * @param      double $v new value
@@ -605,15 +650,16 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 		try {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-			$this->codigo = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-			$this->data_vencimento = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-			$this->data_emissao = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-			$this->data_utilizacao = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-			$this->certificado_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-			$this->valor_cupom = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
-			$this->valor_final = ($row[$startcol + 7] !== null) ? (double) $row[$startcol + 7] : null;
-			$this->descricao = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-			$this->observacao = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+			$this->certificado_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+			$this->cliente_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+			$this->codigo = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+			$this->data_vencimento = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+			$this->data_emissao = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+			$this->data_utilizacao = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+			$this->valor_cupom = ($row[$startcol + 7] !== null) ? (double) $row[$startcol + 7] : null;
+			$this->valor_final = ($row[$startcol + 8] !== null) ? (double) $row[$startcol + 8] : null;
+			$this->descricao = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+			$this->observacao = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -623,7 +669,7 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 10; // 10 = CertificadoCupomPeer::NUM_COLUMNS - CertificadoCupomPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 11; // 11 = CertificadoCupomPeer::NUM_COLUMNS - CertificadoCupomPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating CertificadoCupom object", $e);
@@ -648,6 +694,9 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 
 		if ($this->aCertificado !== null && $this->certificado_id !== $this->aCertificado->getId()) {
 			$this->aCertificado = null;
+		}
+		if ($this->aCliente !== null && $this->cliente_id !== $this->aCliente->getId()) {
+			$this->aCliente = null;
 		}
 	} // ensureConsistency
 
@@ -689,6 +738,7 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 		if ($deep) {  // also de-associate any related objects?
 
 			$this->aCertificado = null;
+			$this->aCliente = null;
 		} // if (deep)
 	}
 
@@ -809,6 +859,13 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 				$this->setCertificado($this->aCertificado);
 			}
 
+			if ($this->aCliente !== null) {
+				if ($this->aCliente->isModified() || $this->aCliente->isNew()) {
+					$affectedRows += $this->aCliente->save($con);
+				}
+				$this->setCliente($this->aCliente);
+			}
+
 			if ($this->isNew() ) {
 				$this->modifiedColumns[] = CertificadoCupomPeer::ID;
 			}
@@ -908,6 +965,12 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 				}
 			}
 
+			if ($this->aCliente !== null) {
+				if (!$this->aCliente->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->aCliente->getValidationFailures());
+				}
+			}
+
 
 			if (($retval = CertificadoCupomPeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
@@ -931,11 +994,12 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 		$criteria = new Criteria(CertificadoCupomPeer::DATABASE_NAME);
 
 		if ($this->isColumnModified(CertificadoCupomPeer::ID)) $criteria->add(CertificadoCupomPeer::ID, $this->id);
+		if ($this->isColumnModified(CertificadoCupomPeer::CERTIFICADO_ID)) $criteria->add(CertificadoCupomPeer::CERTIFICADO_ID, $this->certificado_id);
+		if ($this->isColumnModified(CertificadoCupomPeer::CLIENTE_ID)) $criteria->add(CertificadoCupomPeer::CLIENTE_ID, $this->cliente_id);
 		if ($this->isColumnModified(CertificadoCupomPeer::CODIGO)) $criteria->add(CertificadoCupomPeer::CODIGO, $this->codigo);
 		if ($this->isColumnModified(CertificadoCupomPeer::DATA_VENCIMENTO)) $criteria->add(CertificadoCupomPeer::DATA_VENCIMENTO, $this->data_vencimento);
 		if ($this->isColumnModified(CertificadoCupomPeer::DATA_EMISSAO)) $criteria->add(CertificadoCupomPeer::DATA_EMISSAO, $this->data_emissao);
 		if ($this->isColumnModified(CertificadoCupomPeer::DATA_UTILIZACAO)) $criteria->add(CertificadoCupomPeer::DATA_UTILIZACAO, $this->data_utilizacao);
-		if ($this->isColumnModified(CertificadoCupomPeer::CERTIFICADO_ID)) $criteria->add(CertificadoCupomPeer::CERTIFICADO_ID, $this->certificado_id);
 		if ($this->isColumnModified(CertificadoCupomPeer::VALOR_CUPOM)) $criteria->add(CertificadoCupomPeer::VALOR_CUPOM, $this->valor_cupom);
 		if ($this->isColumnModified(CertificadoCupomPeer::VALOR_FINAL)) $criteria->add(CertificadoCupomPeer::VALOR_FINAL, $this->valor_final);
 		if ($this->isColumnModified(CertificadoCupomPeer::DESCRICAO)) $criteria->add(CertificadoCupomPeer::DESCRICAO, $this->descricao);
@@ -994,6 +1058,10 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 	public function copyInto($copyObj, $deepCopy = false)
 	{
 
+		$copyObj->setCertificadoId($this->certificado_id);
+
+		$copyObj->setClienteId($this->cliente_id);
+
 		$copyObj->setCodigo($this->codigo);
 
 		$copyObj->setDataVencimento($this->data_vencimento);
@@ -1001,8 +1069,6 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 		$copyObj->setDataEmissao($this->data_emissao);
 
 		$copyObj->setDataUtilizacao($this->data_utilizacao);
-
-		$copyObj->setCertificadoId($this->certificado_id);
 
 		$copyObj->setValorCupom($this->valor_cupom);
 
@@ -1107,6 +1173,55 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 	}
 
 	/**
+	 * Declares an association between this object and a Cliente object.
+	 *
+	 * @param      Cliente $v
+	 * @return     CertificadoCupom The current object (for fluent API support)
+	 * @throws     PropelException
+	 */
+	public function setCliente(Cliente $v = null)
+	{
+		if ($v === null) {
+			$this->setClienteId(NULL);
+		} else {
+			$this->setClienteId($v->getId());
+		}
+
+		$this->aCliente = $v;
+
+		// Add binding for other direction of this n:n relationship.
+		// If this object has already been added to the Cliente object, it will not be re-added.
+		if ($v !== null) {
+			$v->addCertificadoCupom($this);
+		}
+
+		return $this;
+	}
+
+
+	/**
+	 * Get the associated Cliente object
+	 *
+	 * @param      PropelPDO Optional Connection object.
+	 * @return     Cliente The associated Cliente object.
+	 * @throws     PropelException
+	 */
+	public function getCliente(PropelPDO $con = null)
+	{
+		if ($this->aCliente === null && ($this->cliente_id !== null)) {
+			$this->aCliente = ClientePeer::retrieveByPk($this->cliente_id);
+			/* The following can be used additionally to
+			   guarantee the related object contains a reference
+			   to this object.  This level of coupling may, however, be
+			   undesirable since it could result in an only partially populated collection
+			   in the referenced object.
+			   $this->aCliente->addCertificadoCupoms($this);
+			 */
+		}
+		return $this->aCliente;
+	}
+
+	/**
 	 * Resets all collections of referencing foreign keys.
 	 *
 	 * This method is a user-space workaround for PHP's inability to garbage collect objects
@@ -1121,6 +1236,7 @@ abstract class BaseCertificadoCupom extends BaseObject  implements Persistent {
 		} // if ($deep)
 
 			$this->aCertificado = null;
+			$this->aCliente = null;
 	}
 
 } // BaseCertificadoCupom

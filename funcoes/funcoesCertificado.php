@@ -11,6 +11,9 @@
 if($funcao == 'carregar_filtros_certificados') { carregarFiltrosCertificados(); }
 if($funcao == 'carregar_certificados') { carregarCertificados(); }
 if($funcao == 'carregar_modal_trocar_produto') { carregarModalTrocarProdutos(); }
+if($funcao == 'carregar_dados_tela_cupom') { carregarDadosTelaCupom(); }
+if($funcao == 'usarCupomDesconto') { usarCupomDesconto(); }
+
 
 
 /*if($funcao == 'carrregarModalDetalheCertificado') { carrregarModalDetalheCertificado($certificado_id,$usuarioLogado); }*/
@@ -2858,7 +2861,7 @@ function carregarCertificados() {
                 'Consultor'=>utf8_encode($usuarioConsultor),
                 'Tot'=>formataMoeda($certificado->getProduto()->getPreco() - $certificado->getDesconto()),
                 '.'=>utf8_encode($situacaoValidacao),
-                utf8_encode('A??es')=>$btnDetalhar
+                utf8_encode('Ações')=>$btnDetalhar
 
             );
 
@@ -2880,19 +2883,19 @@ function carregarCertificados() {
         if (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']=='Vencimento')) {
             $colunas = array(
                 array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Venc.'), array('nome'=>'Proto.'),
-                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('A??es'))
+                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
             );
 
         } elseif (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']==utf8_encode('Valida??o'))) {
             $colunas = array(
                 array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Val.'), array('nome'=>'Proto.'),
-                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('A??es'))
+                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
             );
 
         } else {
             $colunas = array(
                 array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Com.'), array('nome'=>'Proto.'),
-                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('A??es'))
+                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
             );
         }
 
@@ -3893,5 +3896,139 @@ function carregarProdutoSelecionado() {
         var_dump($e);
     }
 }
-?>
 
+function carregarDadosTelaCupom() {
+    try {
+    	$cCupom = new Criteria();
+    	$cCupom->add(CertificadoCupomPeer::CODIGO, $_POST['cupom']);
+        $cCupom->add(CertificadoCupomPeer::CLIENTE_ID, $_POST['idCliente']);
+        $cupom = CertificadoCupomPeer::doSelectOne($cCupom);
+
+        $mensagem = array('mensagem' => 'Ok');
+        if ($cupom) {
+            $certificado = CertificadoPeer::retrieveByPK($_POST['idCertificado']);
+
+            //SO PERMITE APLICAR DESCONTO NO CERTIFICADO SE ELE NAO TIVER PAGO
+            if (($certificado->getDataConfirmacaoPagamento() !== null) || ($certificado->getDataConfirmacaoPagamento() !== '0000-00-00 00:00:00')) {
+                $mensagem = array('mensagem' => 'N&atilde;o se pode aplicar um cupom a um certificado j&aacute; pago');
+
+            } else {
+                //VERIFICA SE O CUPOM ESTA DENTRO DA VALIDADE
+                $vencimentoCupom = $cupom->getDataVencimento();
+                $dataAtual = new DateTime();
+                if ($dataAtual > $vencimentoCupom) {
+                    $mensagem = array('mensagem' => 'Este cupom est&aacute; fora da validade!');
+                } else {
+
+                    //VERIFICA SE O CUPOM JA FOI UTILIZADO (QUEIMADO)
+                    if (($cupom->setDataUtilizacao()) !== null && ($cupom->setDataUtilizacao() !== '0000-00-00 00:00:00'))
+                        $mensagem = array('mensagem' => 'Este cupom est&aacute; fora da validade!');
+
+                }
+
+            }
+
+			$valor = $certificado->getProduto()->getPreco();
+
+			if ($valor < 300 ) {
+				$desconto = 0.09;
+			} elseif ($valor < 400 ) {
+				$desconto = 0.05;
+			} elseif ($valor <= 540) {
+				$desconto = 0.03;
+			}
+
+			$descontoValor = $valor - ($valor * $desconto);
+
+			$cliente = $certificado->getCliente();
+			if ($cliente->getPessoaTipo() == 'J')
+				$representante = $cliente->getResponsavel();
+
+			$informacoesCupom = array(
+				'codigo'=>$cupom->getCodigo(),
+				'representanteLegal'=>(($cliente->getPessoaTipo() == 'J')?utf8_encode($representante->getNome()):utf8_encode($cliente->getNomeFantasia())),
+				'dataValidade'=>$cupom->getDataVencimento('d/m/Y'),
+				'dataEmissao'=>$cupom->getDataEmissao('d/m/Y'),
+				'produto'=>utf8_encode($certificado->getProduto()->getNome()),
+				'preco'=>formataMoeda($valor),
+				'descontoValor'=>formataMoeda($descontoValor),
+				'percentualDescontoSemFormatacao'=>$desconto,
+				'percentualDesconto'=>($desconto*100).'%',
+				'descricaoCampanha'=>$cupom->getDescricao(),
+			);
+
+			$mensagem = array('mensagem' => 'Ok', 'dadosCupom'=>json_encode($informacoesCupom));
+        } else {
+            //NAO TEM CUPOM VINCULADO A ESTE CLIENTE
+            $mensagem = array('mensagem' => 'semcupom');
+		}
+
+        echo json_encode($mensagem);
+    } catch (Exception $e) {
+        echo json_encode(array('mensagem' => 'Erro'));
+        var_dump($e);
+    }
+}
+
+function usarCupomDesconto() {
+    try {
+    	$usuarioLogado = ControleAcesso::getUsuarioLogado();
+        $cCupom = new Criteria();
+        $cCupom->add(CertificadoCupomPeer::CODIGO, $_POST['cupom']);
+        $cCupom->add(CertificadoCupomPeer::CLIENTE_ID, $_POST['idCliente']);
+        $cupom = CertificadoCupomPeer::doSelectOne($cCupom);
+
+        $mensagem = array('mensagem' => 'Ok');
+        if ($cupom) {
+            $certificado = CertificadoPeer::retrieveByPK($_POST['idCertificado']);
+
+            //SO PERMITE APLICAR DESCONTO NO CERTIFICADO SE ELE NAO TIVER PAGO
+            if (($certificado->getDataConfirmacaoPagamento() !== null) || ($certificado->getDataConfirmacaoPagamento() !== '0000-00-00 00:00:00')) {
+                $mensagem = array('mensagem' => 'N&atilde;o se pode aplicar um cupom a um certificado j&aacute; pago');
+
+            } else {
+                //VERIFICA SE O CUPOM ESTA DENTRO DA VALIDADE
+                $vencimentoCupom = $cupom->getDataVencimento();
+                $dataAtual = new DateTime();
+                if ($dataAtual > $vencimentoCupom) {
+                    $mensagem = array('mensagem' => 'Este cupom est&aacute; fora da validade!');
+                } else {
+
+                    //VERIFICA SE O CUPOM JA FOI UTILIZADO (QUEIMADO)
+                    if (($cupom->setDataUtilizacao()) !== null && ($cupom->setDataUtilizacao() !== '0000-00-00 00:00:00'))
+                        $mensagem = array('mensagem' => 'Este cupom est&aacute; fora da validade!');
+
+                }
+
+            }
+
+
+			$valor = $certificado->getProduto()->getPreco() ;
+
+			$percentualDesconto = floatval($_POST['percentualDesconto']);
+			$certificado->setDesconto($percentualDesconto * $certificado->getProduto()->getPreco());
+
+			$descontoValor = $valor - ($valor * $percentualDesconto);
+
+			$dataHoje = new DateTime();
+			$cupom->setDataUtilizacao($dataHoje);
+
+			$cupom->save();
+			$certificado->save();
+
+			$idSituacao = 37;
+			inserir_situacao($certificado->getId(),'Foi vinculado ao certificado '. $certificado->getId() . ' o cupom de desconto '. $cupom->getCodigo(). ' que garantiu um desconto de '. formataMoeda( $certificado->getDesconto()) . ' ao preco final de '. formataMoeda($certificado->getProduto()->getPreco()),$usuarioLogado->getId(),$idSituacao);
+
+
+        } else {
+            $mensagem = array('mensagem' => 'Cupom n&atilde;o encontrado!');
+		}
+
+        echo json_encode($mensagem);
+    } catch (Exception $e) {
+        echo json_encode(array('mensagem' => 'Erro'));
+        var_dump($e);
+    }
+}
+
+?>

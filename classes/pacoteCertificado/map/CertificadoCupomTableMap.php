@@ -37,13 +37,14 @@ class CertificadoCupomTableMap extends TableMap {
 		$this->setUseIdGenerator(true);
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
+		$this->addForeignKey('CERTIFICADO_ID', 'CertificadoId', 'INTEGER', 'certificado', 'ID', false, null, null);
+		$this->addForeignKey('CLIENTE_ID', 'ClienteId', 'INTEGER', 'cliente', 'ID', false, null, null);
 		$this->addColumn('CODIGO', 'Codigo', 'VARCHAR', true, 10, null);
 		$this->addColumn('DATA_VENCIMENTO', 'DataVencimento', 'TIMESTAMP', true, null, null);
-		$this->addColumn('DATA_EMISSAO', 'DataEmissao', 'TIMESTAMP', true, null, null);
-		$this->addColumn('DATA_UTILIZACAO', 'DataUtilizacao', 'TIMESTAMP', true, null, null);
-		$this->addForeignKey('CERTIFICADO_ID', 'CertificadoId', 'INTEGER', 'certificado', 'ID', false, null, null);
-		$this->addColumn('VALOR_CUPOM', 'ValorCupom', 'FLOAT', true, null, null);
-		$this->addColumn('VALOR_FINAL', 'ValorFinal', 'FLOAT', true, null, null);
+		$this->addColumn('DATA_EMISSAO', 'DataEmissao', 'TIMESTAMP', false, null, null);
+		$this->addColumn('DATA_UTILIZACAO', 'DataUtilizacao', 'TIMESTAMP', false, null, null);
+		$this->addColumn('VALOR_CUPOM', 'ValorCupom', 'FLOAT', false, null, null);
+		$this->addColumn('VALOR_FINAL', 'ValorFinal', 'FLOAT', false, null, null);
 		$this->addColumn('DESCRICAO', 'Descricao', 'VARCHAR', false, 150, null);
 		$this->addColumn('OBSERVACAO', 'Observacao', 'VARCHAR', false, 150, null);
 		// validators
@@ -55,6 +56,7 @@ class CertificadoCupomTableMap extends TableMap {
 	public function buildRelations()
 	{
     $this->addRelation('Certificado', 'Certificado', RelationMap::MANY_TO_ONE, array('certificado_id' => 'id', ), 'RESTRICT', null);
+    $this->addRelation('Cliente', 'Cliente', RelationMap::MANY_TO_ONE, array('cliente_id' => 'id', ), 'RESTRICT', null);
 	} // buildRelations()
 
 } // CertificadoCupomTableMap

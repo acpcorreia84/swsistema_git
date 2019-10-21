@@ -107,6 +107,8 @@ include 'inc/script.php';
     <? require_once 'modais/modalImportarBaixaStone.php' ?>
     <? require_once 'modais/modalImportarCertificadosValidados.php'?>
     <? include 'modais/certificados/certificadoModalDetalharCertificado.php';?>
+    <? include 'modais/certificados/certificadoInserirCupom.php';?>
+
     <? include 'modais/certificados/certificadoModalInformacoesPagamento.php'?>
 
 

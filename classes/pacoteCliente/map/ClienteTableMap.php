@@ -79,6 +79,7 @@ class ClienteTableMap extends TableMap {
     $this->addRelation('Local', 'Local', RelationMap::MANY_TO_ONE, array('local_id' => 'id', ), 'RESTRICT', null);
     $this->addRelation('Contador', 'Contador', RelationMap::MANY_TO_ONE, array('contador_id' => 'id', ), 'RESTRICT', null);
     $this->addRelation('Responsavel', 'Responsavel', RelationMap::MANY_TO_ONE, array('responsavel_id' => 'id', ), 'RESTRICT', null);
+    $this->addRelation('CertificadoCupom', 'CertificadoCupom', RelationMap::ONE_TO_MANY, array('id' => 'cliente_id', ), 'RESTRICT', null);
     $this->addRelation('Certificado', 'Certificado', RelationMap::ONE_TO_MANY, array('id' => 'cliente_id', ), 'RESTRICT', null);
     $this->addRelation('ClienteContato', 'ClienteContato', RelationMap::ONE_TO_MANY, array('id' => 'cliente_id', ), 'RESTRICT', null);
     $this->addRelation('ClienteHistorico', 'ClienteHistorico', RelationMap::ONE_TO_MANY, array('id' => 'cliente_id', ), 'RESTRICT', null);
