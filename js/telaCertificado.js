@@ -181,6 +181,7 @@ function inserirDescontoCertificado(){
 			alertErro('Error TC.JS/362 - Erro na a??o de inserir desconto,' + msnPadrao + '.');
 		},
 		success : function(result){
+			console.log('iniciou desconto...');
 			if (result == 0){
 				alertSucesso('Desconto inserido com Sucesso!');
                 $('#modalDesconto').modal('hide');
@@ -2295,7 +2296,7 @@ function importarBaixaPagamentosStone(){
 
                     $('#spanQuantidadeCertificadosImportados').html(resultado.quantidadeTotalImportada);
 
-                    alertSucesso('Certificados validados importados com sucesso!');
+                    alertSucesso('Baixa de pagamento stone concluida!');
                     $('#divTabelaCertificadosImportados').html('<h4>Importacao finalizada!</h4>');
                 }
 

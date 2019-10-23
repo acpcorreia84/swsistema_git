@@ -124,6 +124,7 @@
     });
 
     $('#btnSalvarDesconto').click(function () {
+        console.log('clicou no btn');
         if ($('#frmDescontoCertificado').valid())
             inserirDescontoCertificado();
     });
