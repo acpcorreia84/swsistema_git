@@ -113,7 +113,7 @@
 
         <td>
             <p class="name">
-                <a href="../php-excel-reader-2.21/importacaoCertificado.php?nomeArquivo={%=file.name%}" title="{%=file.name%}" >{%=file.name%}</a>
+                <a href="../php-excel-reader-2.21/importacaoStone.php?nomeArquivo={%=file.name%}" title="{%=file.name%}" >{%=file.name%}</a>
             </p>
             {% if (file.error) { %}
                 <div><span class="label label-danger">Error</span> {%=file.error%}</div>
@@ -124,7 +124,7 @@
         </td>
         <td>
 
-        <a class="btn btn-success" href="../php-excel-reader-2.21/importacaoCertificado.php?nomeArquivo={%=file.name%}">
+        <a class="btn btn-success" href="../php-excel-reader-2.21/importacaoStone.php?nomeArquivo={%=file.name%}">
             <i class="glyphicon glyphicon-download"></i>
             <span>Importar</span>
         </a>
@@ -166,7 +166,7 @@
 <script src="js/jquery.fileupload-ui.js"></script>
 <script type="text/javascript" src="../../js/bootstrap-dialog.min.js"></script>
 <!-- The main application script -->
-<script src="js/importacaoCertificados.js"></script>
+<script src="js/importacaoStone.js"></script>
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
 <!--[if (gte IE 8)&(lt IE 10)]>
 <script src="js/cors/jquery.xdr-transport.js"></script>

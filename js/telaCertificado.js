@@ -2270,6 +2270,44 @@ function desabilitarTelaDetalharCertificados() {
     $('#btnCupomDesconto').prop("disabled",false);
 }
 
+function importarBaixaPagamentosStone(){
+    var dadosajax = {
+        'certificadoId' : $('#idCertificado').val(),
+        'funcao' : 'importar_baixa_pagamento_stone'
+    };
+    $.ajax ({
+        url : '../../funcoes/funcoesCertificado.php',
+        data : dadosajax,
+        type : 'POST',
+        cache : true,
+        beforeSend: function () {
+            /*CHAMA A TELA QUE CARREGA O FILTRO DE USUARIOS*/
+            $('#divTabelaCertificadosImportados').html('<i class="fa fa-5x fa-circle-o-notch fa-spin text-info"></i>').css({'text-align':'center'});
+        },
+        error : function (){
+            alert ('Error CD30001 - Erro ao tentar importar os certificados validados,' + msnPadrao + '.');
+        },
+        success : function(result){
+            try {
+                var resultado = JSON.parse(result);
+
+                if (resultado.mensagem == 'Ok') {
+
+                    $('#spanQuantidadeCertificadosImportados').html(resultado.quantidadeTotalImportada);
+
+                    alertSucesso('Certificados validados importados com sucesso!');
+                    $('#divTabelaCertificadosImportados').html('<h4>Importacao finalizada!</h4>');
+                }
+
+            } catch (e) {
+                console.log(result, e);
+                alertErro('Error CD30002 - Erro ao tentar importar os certificados validados, Erro:' + e+ '. '+ msnPadrao + '.')
+            }
+        }
+
+
+    });
+};
 
 function importarCertificadosValidados(){
     var dadosajax = {

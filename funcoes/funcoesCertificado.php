@@ -88,6 +88,8 @@ if($funcao == 'carregar_modal_alterar_consultor_certificado'){ carregarModalAlte
 if($funcao == 'alterar_consultor_certificado'){ alterarConsultorCertificado();}
 
 if ($funcao == 'importar_certificados_validados') importarCertificadosValidados();
+if ($funcao == 'importar_baixa_pagamento_stone') importarBaixaPagamentoStone();
+
 if ($funcao == 'registrar_pagamento_cartao_credito') registrarPagamentoCartaoCredito();
 if ($funcao == 'carregar_modal_informacoes_pagamento') carregarModalInformacoesPagamento();
 
@@ -3063,6 +3065,76 @@ function alterarConsultorCertificado() {
 }
 
 
+function importarBaixaPagamentoStone() {
+    try {
+        ini_set('memory_limit', '256M');
+        set_time_limit(180);
+        $usuarioLogado = ControleAcesso::getUsuarioLogado();
+        if ($_SESSION['arrayPagamentosCartao'])
+            $pagamentosStone = unserialize($_SESSION['arrayPagamentosCartao']);
+
+        $arrPagamentosStone = array();
+        $arrPagamentosStoneIndex = array();
+
+        foreach ($pagamentosStone as $pagamentoStone ) {
+            $arrPagamentosStone[] = $pagamentoStone['STONE ID'];
+            $arrPagamentosStoneIndex[$pagamentoStone['STONE ID']] = $pagamentoStone['HORA DA VENDA'];
+        }
+        //var_dump(count($arrPagamentosStone), count($arrPagamentosStoneIndex));
+
+        /*
+         * BUSCA TODOS OS CERTIFICADOS QUE TEM STONE ID INFORMADO
+         * */
+
+        $cCert = new Criteria();
+        $cCert->add(CertificadoPagamentoPeer::CODIGO_PAGAMENTO, $arrPagamentosStone, Criteria::IN);
+        $cCert->addDescendingOrderByColumn(CertificadoPagamentoPeer::CERTIFICADO_ID);
+        $certificadosPagamentos = CertificadoPagamentoPeer::doSelect($cCert);
+
+
+        foreach ($certificadosPagamentos as $certificadoPagamento) {
+            $certificado = CertificadoPeer::retrieveByPK($certificadoPagamento->getCertificadoId());
+
+            $dataHoraStone = $arrPagamentosStoneIndex[$certificadoPagamento->getCodigoPagamento()];
+            $dataHora = explode(' ',$dataHoraStone);
+            $data = explode('/',$dataHora[0]);
+            $dataHoraFinal = $data[2] . '/' . $data[1] . '/' . $data[0] .' ' .  $dataHora[1];
+
+            if ($dataHoraStone) {
+
+                $certificado->setDataConfirmacaoPagamento($dataHoraFinal);
+
+                //GRAVA O RETORNO DE PAGAMENTO NO SISTEMA
+                $certSit = new CertificadoSituacao();
+                $certSit->setCertificadoId($certificado->getId());
+                $cSit = new Criteria();
+
+                //INSERI UM USUARIO NO SISTEMA CHAMADO SAFE2PAY QUE IRA GERAR A SITUACAO DE RETORNO
+                $certSit->setUsuarioId($usuarioLogado->getId());
+
+                $cSit->add(SituacaoPeer::SIGLA, 'stone');
+                $situacao = SituacaoPeer::doSelectOne($cSit);
+                $certSit->setSituacao($situacao);
+                $certSit->setData(date("Y-m-d H:i:s",mtime()));
+                $certSit->setComentario($situacao->getDescricao());
+                $certSit->save();
+            }
+
+        } /* FIM DO FOREACH */
+        /*}*/
+
+        echo json_encode(array('mensagem'=>'Ok',
+                'quantidadeTotalImportada'=>count($certificadosPagamentos)
+            )
+        );
+
+    } catch (Exception $e) {
+        var_dump($e);
+        echo $e->getMessage();
+    }
+
+}
+
 function importarCertificadosValidados() {
     try {
         ini_set('memory_limit', '256M');
@@ -3798,7 +3870,8 @@ function salvarComprovantePagamento() {
         $certificado = CertificadoPeer::retrieveByPK($_POST['certificado_id']);
         $itemPedidos = $certificado->getItemPedidos();
         //var_dump($itemPedidos);
-        $pedido = $itemPedidos[0]->getPedido();
+        if ($itemPedidos)
+            $pedido = $itemPedidos[0]->getPedido();
 
         $comprovante = new CertificadoPagamento();
         $comprovante->setValor($_POST['valor']);
@@ -3809,7 +3882,9 @@ function salvarComprovantePagamento() {
 
         $comprovante->setDataPagamento($dataComprovante[2] . '/'. $dataComprovante[1] .'/'. $dataComprovante[0]);
 
-        $comprovante->setPedidoId($pedido->getId());
+        if ($pedido)
+            $comprovante->setPedidoId($pedido->getId());
+
         $comprovante->setCodigoPagamento($_POST['edtCodigoPagamento']);
 
         if ($_POST['edtQuantidadeParcelasComprovante'])
@@ -4030,5 +4105,7 @@ function usarCupomDesconto() {
         var_dump($e);
     }
 }
+
+
 
 ?>
