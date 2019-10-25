@@ -36,7 +36,6 @@
 
 
 <div class="row form-group">
-
     <div class="col-lg-3">
         <label>Dt.<span id="spanTipoData">Compra</span></label>
         <span class="maisOpcoes" data-toggle="popover" data-mysettings="#someid" data-original-title="Tipo da data"> <i class="fa fa-bars"></i></span>
@@ -172,8 +171,12 @@
     </div>
 
 </div>
-
-
+<div class="row form-group">
+    <div class="col-lg-2" >Forma Pagto.</div>
+</div>
+<div class="row form-group">
+    <div class="col-lg-2" id="divFiltroFormaPagamentos"></div>
+</div>
 <div class="row">
     <div class="col-lg-12" id="divUsuariosCertificados"></div>
 </div>

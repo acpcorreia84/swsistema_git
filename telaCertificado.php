@@ -14,9 +14,24 @@ include 'inc/script.php';
                 <!--PAINEL DE FILTROS-->
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Filtros
+                        <i class="fa fa-filter" aria-hidden="true"></i> Filtros <a href="#"> <i class="fa fa-bars" id="btnFiltroCd" ></i></a>
                     </div>
-                    <div class="panel-body" >
+
+                    <script>
+                        $('#btnFiltroCd').click (function () {
+                            var visivel  = $('#divFiltrosCertificados').is(':visible');
+                            if (visivel) {
+                                $("#divFiltrosCertificados").css({visibility: 'hidden', display: 'none'});
+                            }
+
+                            else {
+                                $("#divFiltrosCertificados").css({visibility: 'visible', display: 'block'});
+                                carregarFiltrosCertificados($('#filtroUsuariosCertificados').val());
+                            };
+                        });
+
+                    </script>
+                    <div class="panel-body oculto" id="divFiltrosCertificados">
                         <div id="divFiltros"></div>
                         <? include 'inc/filtros/filtroCertificado.php';?>
                     </div>
@@ -98,7 +113,6 @@ include 'inc/script.php';
 
 <script>
     $(document).ready(function () {
-        carregarFiltrosCertificados($('#filtroUsuariosCertificados').val());
         carregarCertificados(undefined,undefined,undefined,'sim');
     });
 </script>

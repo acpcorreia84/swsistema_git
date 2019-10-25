@@ -2466,6 +2466,10 @@ function carregarCertificados() {
 
             }
 
+            if ($_POST['filtros']['filtroFormasPagamento']!='') {
+                $cCertificado->add(CertificadoPeer::FORMA_PAGAMENTO_ID, $_POST['filtros']['filtroFormasPagamento']);
+            }
+
             if ($_POST['filtros']['filtroValidado']=='true') {
                 $cValidacaoNull = $cCertificado->getNewCriterion(CertificadoPeer::DATA_VALIDACAO, null, Criteria::ISNOTNULL);
                 $cValidacaoNotEqual = $cCertificado->getNewCriterion(CertificadoPeer::DATA_VALIDACAO, '0000-00-00 00:00:00', Criteria::NOT_EQUAL);
@@ -3008,12 +3012,19 @@ function carregarFiltrosCertificados() {
 
 
         $usuarios = array();
-        $usuarios[] = array("id"=>'', "nome"=>utf8_encode('Selecione o Usu?rio'));
+        $usuarios[] = array("id"=>'', "nome"=>utf8_encode('Selecione o Usu&aacute;rio'));
         foreach ($usuariosObj as $usuario)
             $usuarios[] = array("id"=>$usuario->getId(), "nome"=>utf8_encode(strtoupper($usuario->getNome())));
 
+        $cFormasPagamento = new Criteria();
+        $formasPagamento = FormaPagamentoPeer::doSelect($cFormasPagamento);
+        $arrFormasPagamento = array();
+        $arrFormasPagamento[] = array("id"=>'', "nome"=>'Selecione a forma de pagamento');
+        foreach ($formasPagamento as $forma)
+            $arrFormasPagamento[] = array("id"=>$forma->getId(), "nome"=>utf8_encode(strtoupper($forma->getNome())));
+
         $resultado = array(
-            'mensagem'=>'Ok', 'usuarios'=>json_encode( $usuarios),
+            'mensagem'=>'Ok', 'usuarios'=>json_encode( $usuarios),'formasPagamento'=>json_encode( $arrFormasPagamento),
         );
 
         echo json_encode($resultado);
@@ -3103,6 +3114,7 @@ function importarBaixaPagamentoStone() {
             if ($dataHoraStone) {
 
                 $certificado->setDataConfirmacaoPagamento($dataHoraFinal);
+                $certificado->save();
 
                 //GRAVA O RETORNO DE PAGAMENTO NO SISTEMA
                 $certSit = new CertificadoSituacao();

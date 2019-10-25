@@ -1625,6 +1625,7 @@ function carregarCertificados(paginaSelecionada, qtdItensPorPagina, paginando, c
         var escolheFiltroValidado = $('#filtroChkApenasValidados').prop('checked');
     }
 
+
     filtros = {
         'filtroConsultores':consultores,
         'filtroProdutos':produtos,
@@ -1633,6 +1634,7 @@ function carregarCertificados(paginaSelecionada, qtdItensPorPagina, paginando, c
         'filtroPago':escolheFiltroPago,
         'filtroNaoPago':$('#filtroChkApenasNaoPagos').prop('checked'),
         'filtroValidado':escolheFiltroValidado,
+        'filtroFormasPagamento': $('#filtroFormasPagamento').val(),
         'campoFiltro' : camposFiltro
     };
 
@@ -2166,6 +2168,7 @@ function carregarFiltrosCertificados(filtroUsuarioSelecionado) {
 
                 if (resultado.mensagem == 'Ok') {
                     montarSelectMultiplo('filtroUsuariosCertificados', resultado.usuarios, 'divFiltroConsultores', filtroUsuarioSelecionado, 'divUsuariosCertificados');
+                    montarSelectMultiplo('filtroFormasPagamento', resultado.formasPagamento, 'divFiltroFormaPagamentos', filtroUsuarioSelecionado);
                 }
             } catch (e){
                 $('#modalCarregando').modal('hide');

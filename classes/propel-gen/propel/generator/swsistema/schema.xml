@@ -822,9 +822,9 @@
         <!--DADOS BANCARIOS-->
         <column name="banco" type="VARCHAR" size="50"/>
         <column name="conta_corrente" type="VARCHAR" size="12"/>
-        <column name="digitoConta" type="VARCHAR" size="12"/>
+        <column name="digitoConta" type="CHAR" size="1"/>
         <column name="agencia" type="VARCHAR" size="1"/>
-        <column name="digitoAgencia" type="VARCHAR" size="1"/>
+        <column name="digitoAgencia" type="CHAR" size="1"/>
         <column name="operacao" type="VARCHAR" size="5"/>
         <column name="cpf_cnpj_conta" type="VARCHAR" size="20"/>
 
