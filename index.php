@@ -13,9 +13,6 @@
 
     <title>SW - GUIAR</title>
 
-
-    <script type="text/javascript" src="inc/uteis.js"></script>
-
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
 
@@ -42,6 +39,7 @@
 
     <!-- Custom Fonts -->
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
     <script>
         function login() {
             $('.card').css('width', '450px');
@@ -64,6 +62,7 @@
                     try {
                         console.log('saida login:', result);
                         var resultado = JSON.parse(result);
+                        console.log(resultado);
 
                         if (resultado.mensagem == 'Ok') {
                             $('#loginbox').html('<i class="fa fa-5x fas fa fa-check text-success"></i> <span class="fa-2x text-success">Login Ok, acessando...</span>').css({'text-align':'center'});
@@ -78,18 +77,25 @@
                             }
 
                             ir('home.php');
-                        } else{
-                            alertErro(resultado.mensagem);
+                        } else if (resultado.mensagem == 'Erro'){
+                            //caso tenha acontecido algum erro
+                            $('#loginbox').html('<i class="fa fa-5x fas fa-exclamation-triangle text-danger"></i> </br><span class="fa-1x text-danger">'+resultado.descricaoErro+'</span></br></br><button class="btn btn-primary" onclick="ir(\'index.php\')"><i class="icon-arrow-left"></i> Voltar</button>').css({'text-align':'center'});
+                        }
+                        else if (resultado.mensagem == 'redirecionar'){
+                            $('#loginbox').html('<i class="fa fa-5x icon-share-alt text-success"></i> </br><span class="fa-1x text-success">'+resultado.descricaoMensagem+'</span></br></br><button class="btn btn-success" onclick="ir(\''+resultado.url+'\')"><i class="icon-arrow-left"></i> Trocar senha</button>').css({'text-align':'center'});
+
                         }
 
                     } catch (e) {
-                        alertErro('Error LOGIN - Erro na tentativa de logar no sistema, Erro:' + result + e+ '. '+ msnPadrao + '.')
+                        console.log('Error LOGIN - Erro na tentativa de logar no sistema, Erro:' + result + e+ '. '+ msnPadrao + '.')
                         console.log(e, result);
                     }
                 }
             });
         }
     </script>
+    <script type="text/javascript" src="inc/uteis.js"></script>
+
 </head>
 
 <style>
