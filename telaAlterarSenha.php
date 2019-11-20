@@ -9,8 +9,6 @@ if ($_GET['motivoTroca']) {
         $motivo = 'A sua senha expirou em: ' . $_GET['dataExpiracao']. ". Sua pr&oacute;xima senha ir&aacute; expirar em: " . date('d/m/Y', $proximaDataExpiracao);
     } elseif ($_GET['motivoTroca']=='2') {
         $motivo = 'No seu primeiro login voc&ecirc; dever&aacute; trocar a senha padr&atilde;o';
-    } elseif ($_GET['motivoTroca']=='3') {
-        $motivo = 'Foi definida uma senha padr&atilde;o para que voc&ecirc; possa alter&aacute;-la';
     }
 }
 if ((isset($_POST)) && ($_POST['acao']=='alterarSenha') ) {
