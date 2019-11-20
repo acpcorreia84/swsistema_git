@@ -90,115 +90,12 @@ QUADRO DE INDICADORES
 -->
 <div class="panel panel-success">
     <div class="panel-heading">
-        <h4><i class="fa fa-line-chart" aria-hidden="true"></i> 1.Indicadores <span title="Abrir Filtros" class="maisOpcoes" data-toggle="collapse" data-target="#divFiltrosIndicadores"> <i class="fa fa-bars"></i></span></h4>
+        <h4><i class="fa fa-line-chart" aria-hidden="true"></i> 1.Indicadores <span title="Abrir Filtros" class="maisOpcoes" data-toggle="collapse" data-target="#divFiltrosIndicadores" onclick="carregarFiltrosCertificados(); carregarGraficoRenovacoes(); carregarGraficosPedidos('nao');"> <i class="fa fa-bars"></i></span></h4>
     </div>
     <div class="panel-body">
         <?php include 'inc/filtros/filtroHomeGraficosDiretoria.php';?>
 
-        <div class="row">
-            <!--GRAFICO DE RENOVACAO-->
-            <div class="col-lg-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-pie-chart fa-fw"></i> Gr&aacute;fico de Renova&ccedil;&otilde;es </h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="col-lg-12">
-                            <div class="row">
-                                <label>Total de Renova&ccedil;&otilde;es:</label> <span id="totalRenovacoes"></span>
 
-                            </div>
-                        </div>
-                        <hr>
-                        <div id="divLoadingGraficoRenovacao" ></div>
-                        <div id="graficoRenovacoes" ></div><br>
-                        <div class="text-left">
-                            <button id='btnListarCertificados' title="Listar Certificados do Gr&aacute;fico" class="btn btn-success" data-toggle="modal" data-target="#modalHomeListarCertificados" ><i class="fa fa-search-plus" aria-hidden="true"></i> </button>
-                        </div>
-                        <script>
-                            $('#btnListarCertificados').click(function () {
-
-                                carregarListaCertificadosRenovados();
-                            });
-                        </script>
-                    </div>
-                </div>
-            </div>
-            <!--FIM DO GRAFICO DE RENOVACAO-->
-
-            <!--GRAFICO DE TIPOS DE VENDAS-->
-            <div class="col-lg-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-pie-chart fa-fw"></i> Gr&aacute;fico de Tipos de Venda</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="col-lg-12">
-                            <div class="row">
-                                <label>Total de Pedidos:</label> <span id="totalTipoPedidos"></span>
-
-                            </div>
-                        </div>
-                        <hr>
-                        <div id="divLoadingGraficoTipoPedidos" ></div>
-                        <div id="graficoTipoPedidos" ></div><br><br><br>
-                    </div>
-                </div>
-            </div>
-
-            <!--FIM DO GRAFICO DE TIPOS DE VENDAS-->
-
-
-        </div>
-
-        <div class="row">
-            <!--GRAFICO DE FORMA DE PAGAMENTO-->
-            <div class="col-lg-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-pie-chart fa-fw"></i> Gr&aacute;fico Formas Pagtos.</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div id="divLoadingGraficoFormas" ></div>
-                        <div id="graficoFormas" ></div><br>
-                    </div>
-                </div>
-            </div>
-
-            <!--FIM DO GRAFICO DE TIPOS DE VENDAS-->
-
-            <!--GRAFICO DE PEDIDOS POR CONTADOR-->
-            <div class="col-lg-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-pie-chart fa-fw"></i> Gr&aacute;fico Pedidos de Contadores</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="col-lg-12">
-                            <div class="row text-center">
-                                <button id="btnCarregarContadores" title="Carregar Gr&aacute;fico de Pedidos de contadores" class="btn btn-primary" onclick="carregarGraficoContadores()"><i class="fa fa-refresh fa-5x" aria-hidden="true"></i></button>
-                            </div>
-                            <div class="row">
-                                <span id="totalContadoresCadastrados"></span>
-                            </div>
-
-                            <div class="row">
-                                <span id="totalContadores"></span>
-
-                            </div>
-
-                        </div>
-                        <hr>
-
-                        <div id="divLoadingGraficoContadores" ></div>
-                        <div id="graficoContadores" ></div><br>
-                    </div>
-                </div>
-            </div>
-
-            <!--GRAFICO DE PEDIDOS POR CONTADOR-->
-
-        </div>
 
 
     </div>
@@ -452,10 +349,3 @@ FIM DO QUADRO DE INDICADORES
 </div> <!-- /.row -->
 
 <!--FIM TOPS-->
-<script>
-    $(document).ready(function () {
-        carregarFiltrosCertificados();
-        carregarGraficoRenovacoes();
-        carregarGraficosPedidos('nao');
-    });
-</script>
