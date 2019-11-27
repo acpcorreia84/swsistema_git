@@ -851,7 +851,13 @@ CREATE TABLE `certificado`
 	`certificado_renovado` INTEGER,
 	`apagado` INTEGER  NOT NULL,
 	`parceiro_id` INTEGER,
+	`status_followup` INTEGER,
 	PRIMARY KEY (`id`),
+	INDEX `FI__certificado_followup` (`status_followup`),
+	CONSTRAINT `Rel_certificado_followup`
+		FOREIGN KEY (`status_followup`)
+		REFERENCES `situacao` (`id`)
+		ON DELETE RESTRICT,
 	INDEX `FI__certificado_parceiro` (`parceiro_id`),
 	CONSTRAINT `Rel_certificado_parceiro`
 		FOREIGN KEY (`parceiro_id`)
@@ -1105,9 +1111,9 @@ CREATE TABLE `contador`
 	`desconto` INTEGER,
 	`banco` VARCHAR(50),
 	`conta_corrente` VARCHAR(12),
-	`digitoConta` VARCHAR(12),
+	`digitoConta` CHAR(1),
 	`agencia` VARCHAR(1),
-	`digitoAgencia` VARCHAR(1),
+	`digitoAgencia` CHAR(1),
 	`operacao` VARCHAR(5),
 	`cpf_cnpj_conta` VARCHAR(20),
 	`responsavel_id` INTEGER,

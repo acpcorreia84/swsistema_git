@@ -53,6 +53,16 @@ abstract class BaseSituacao extends BaseObject  implements Persistent {
 	private $lastCertificadoSituacaoCriteria = null;
 
 	/**
+	 * @var        array Certificado[] Collection to store aggregation of Certificado objects.
+	 */
+	protected $collCertificados;
+
+	/**
+	 * @var        Criteria The criteria used to select the current contents of collCertificados.
+	 */
+	private $lastCertificadoCriteria = null;
+
+	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
 	 * @var        boolean
@@ -296,6 +306,9 @@ abstract class BaseSituacao extends BaseObject  implements Persistent {
 			$this->collCertificadoSituacaos = null;
 			$this->lastCertificadoSituacaoCriteria = null;
 
+			$this->collCertificados = null;
+			$this->lastCertificadoCriteria = null;
+
 		} // if (deep)
 	}
 
@@ -434,6 +447,14 @@ abstract class BaseSituacao extends BaseObject  implements Persistent {
 				}
 			}
 
+			if ($this->collCertificados !== null) {
+				foreach ($this->collCertificados as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
+			}
+
 			$this->alreadyInSave = false;
 
 		}
@@ -507,6 +528,14 @@ abstract class BaseSituacao extends BaseObject  implements Persistent {
 
 				if ($this->collCertificadoSituacaos !== null) {
 					foreach ($this->collCertificadoSituacaos as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
+
+				if ($this->collCertificados !== null) {
+					foreach ($this->collCertificados as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -602,6 +631,12 @@ abstract class BaseSituacao extends BaseObject  implements Persistent {
 			foreach ($this->getCertificadoSituacaos() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 					$copyObj->addCertificadoSituacao($relObj->copy($deepCopy));
+				}
+			}
+
+			foreach ($this->getCertificados() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addCertificado($relObj->copy($deepCopy));
 				}
 			}
 
@@ -901,6 +936,583 @@ abstract class BaseSituacao extends BaseObject  implements Persistent {
 	}
 
 	/**
+	 * Clears out the collCertificados collection (array).
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addCertificados()
+	 */
+	public function clearCertificados()
+	{
+		$this->collCertificados = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collCertificados collection (array).
+	 *
+	 * By default this just sets the collCertificados collection to an empty array (like clearcollCertificados());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @return     void
+	 */
+	public function initCertificados()
+	{
+		$this->collCertificados = array();
+	}
+
+	/**
+	 * Gets an array of Certificado objects which contain a foreign key that references this object.
+	 *
+	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
+	 * Otherwise if this Situacao has previously been saved, it will retrieve
+	 * related Certificados from storage. If this Situacao is new, it will return
+	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 *
+	 * @param      PropelPDO $con
+	 * @param      Criteria $criteria
+	 * @return     array Certificado[]
+	 * @throws     PropelException
+	 */
+	public function getCertificados($criteria = null, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(SituacaoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificados === null) {
+			if ($this->isNew()) {
+			   $this->collCertificados = array();
+			} else {
+
+				$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+				CertificadoPeer::addSelectColumns($criteria);
+				$this->collCertificados = CertificadoPeer::doSelect($criteria, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return the collection.
+
+
+				$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+				CertificadoPeer::addSelectColumns($criteria);
+				if (!isset($this->lastCertificadoCriteria) || !$this->lastCertificadoCriteria->equals($criteria)) {
+					$this->collCertificados = CertificadoPeer::doSelect($criteria, $con);
+				}
+			}
+		}
+		$this->lastCertificadoCriteria = $criteria;
+		return $this->collCertificados;
+	}
+
+	/**
+	 * Returns the number of related Certificado objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related Certificado objects.
+	 * @throws     PropelException
+	 */
+	public function countCertificados(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(SituacaoPeer::DATABASE_NAME);
+		} else {
+			$criteria = clone $criteria;
+		}
+
+		if ($distinct) {
+			$criteria->setDistinct();
+		}
+
+		$count = null;
+
+		if ($this->collCertificados === null) {
+			if ($this->isNew()) {
+				$count = 0;
+			} else {
+
+				$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+				$count = CertificadoPeer::doCount($criteria, false, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return count of the collection.
+
+
+				$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+				if (!isset($this->lastCertificadoCriteria) || !$this->lastCertificadoCriteria->equals($criteria)) {
+					$count = CertificadoPeer::doCount($criteria, false, $con);
+				} else {
+					$count = count($this->collCertificados);
+				}
+			} else {
+				$count = count($this->collCertificados);
+			}
+		}
+		return $count;
+	}
+
+	/**
+	 * Method called to associate a Certificado object to this object
+	 * through the Certificado foreign key attribute.
+	 *
+	 * @param      Certificado $l Certificado
+	 * @return     void
+	 * @throws     PropelException
+	 */
+	public function addCertificado(Certificado $l)
+	{
+		if ($this->collCertificados === null) {
+			$this->initCertificados();
+		}
+		if (!in_array($l, $this->collCertificados, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collCertificados, $l);
+			$l->setSituacao($this);
+		}
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Situacao is new, it will return
+	 * an empty collection; or if this Situacao has previously
+	 * been saved, it will retrieve related Certificados from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Situacao.
+	 */
+	public function getCertificadosJoinParceiro($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(SituacaoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificados === null) {
+			if ($this->isNew()) {
+				$this->collCertificados = array();
+			} else {
+
+				$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+				$this->collCertificados = CertificadoPeer::doSelectJoinParceiro($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+			if (!isset($this->lastCertificadoCriteria) || !$this->lastCertificadoCriteria->equals($criteria)) {
+				$this->collCertificados = CertificadoPeer::doSelectJoinParceiro($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastCertificadoCriteria = $criteria;
+
+		return $this->collCertificados;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Situacao is new, it will return
+	 * an empty collection; or if this Situacao has previously
+	 * been saved, it will retrieve related Certificados from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Situacao.
+	 */
+	public function getCertificadosJoinContador($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(SituacaoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificados === null) {
+			if ($this->isNew()) {
+				$this->collCertificados = array();
+			} else {
+
+				$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+				$this->collCertificados = CertificadoPeer::doSelectJoinContador($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+			if (!isset($this->lastCertificadoCriteria) || !$this->lastCertificadoCriteria->equals($criteria)) {
+				$this->collCertificados = CertificadoPeer::doSelectJoinContador($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastCertificadoCriteria = $criteria;
+
+		return $this->collCertificados;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Situacao is new, it will return
+	 * an empty collection; or if this Situacao has previously
+	 * been saved, it will retrieve related Certificados from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Situacao.
+	 */
+	public function getCertificadosJoinLocal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(SituacaoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificados === null) {
+			if ($this->isNew()) {
+				$this->collCertificados = array();
+			} else {
+
+				$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+				$this->collCertificados = CertificadoPeer::doSelectJoinLocal($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+			if (!isset($this->lastCertificadoCriteria) || !$this->lastCertificadoCriteria->equals($criteria)) {
+				$this->collCertificados = CertificadoPeer::doSelectJoinLocal($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastCertificadoCriteria = $criteria;
+
+		return $this->collCertificados;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Situacao is new, it will return
+	 * an empty collection; or if this Situacao has previously
+	 * been saved, it will retrieve related Certificados from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Situacao.
+	 */
+	public function getCertificadosJoinFormaPagamento($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(SituacaoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificados === null) {
+			if ($this->isNew()) {
+				$this->collCertificados = array();
+			} else {
+
+				$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+				$this->collCertificados = CertificadoPeer::doSelectJoinFormaPagamento($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+			if (!isset($this->lastCertificadoCriteria) || !$this->lastCertificadoCriteria->equals($criteria)) {
+				$this->collCertificados = CertificadoPeer::doSelectJoinFormaPagamento($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastCertificadoCriteria = $criteria;
+
+		return $this->collCertificados;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Situacao is new, it will return
+	 * an empty collection; or if this Situacao has previously
+	 * been saved, it will retrieve related Certificados from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Situacao.
+	 */
+	public function getCertificadosJoinProduto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(SituacaoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificados === null) {
+			if ($this->isNew()) {
+				$this->collCertificados = array();
+			} else {
+
+				$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+				$this->collCertificados = CertificadoPeer::doSelectJoinProduto($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+			if (!isset($this->lastCertificadoCriteria) || !$this->lastCertificadoCriteria->equals($criteria)) {
+				$this->collCertificados = CertificadoPeer::doSelectJoinProduto($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastCertificadoCriteria = $criteria;
+
+		return $this->collCertificados;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Situacao is new, it will return
+	 * an empty collection; or if this Situacao has previously
+	 * been saved, it will retrieve related Certificados from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Situacao.
+	 */
+	public function getCertificadosJoinCliente($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(SituacaoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificados === null) {
+			if ($this->isNew()) {
+				$this->collCertificados = array();
+			} else {
+
+				$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+				$this->collCertificados = CertificadoPeer::doSelectJoinCliente($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+			if (!isset($this->lastCertificadoCriteria) || !$this->lastCertificadoCriteria->equals($criteria)) {
+				$this->collCertificados = CertificadoPeer::doSelectJoinCliente($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastCertificadoCriteria = $criteria;
+
+		return $this->collCertificados;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Situacao is new, it will return
+	 * an empty collection; or if this Situacao has previously
+	 * been saved, it will retrieve related Certificados from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Situacao.
+	 */
+	public function getCertificadosJoinUsuarioRelatedByUsuarioId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(SituacaoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificados === null) {
+			if ($this->isNew()) {
+				$this->collCertificados = array();
+			} else {
+
+				$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+				$this->collCertificados = CertificadoPeer::doSelectJoinUsuarioRelatedByUsuarioId($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+			if (!isset($this->lastCertificadoCriteria) || !$this->lastCertificadoCriteria->equals($criteria)) {
+				$this->collCertificados = CertificadoPeer::doSelectJoinUsuarioRelatedByUsuarioId($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastCertificadoCriteria = $criteria;
+
+		return $this->collCertificados;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Situacao is new, it will return
+	 * an empty collection; or if this Situacao has previously
+	 * been saved, it will retrieve related Certificados from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Situacao.
+	 */
+	public function getCertificadosJoinUsuarioRelatedByUsuarioValidouId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(SituacaoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificados === null) {
+			if ($this->isNew()) {
+				$this->collCertificados = array();
+			} else {
+
+				$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+				$this->collCertificados = CertificadoPeer::doSelectJoinUsuarioRelatedByUsuarioValidouId($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+			if (!isset($this->lastCertificadoCriteria) || !$this->lastCertificadoCriteria->equals($criteria)) {
+				$this->collCertificados = CertificadoPeer::doSelectJoinUsuarioRelatedByUsuarioValidouId($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastCertificadoCriteria = $criteria;
+
+		return $this->collCertificados;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Situacao is new, it will return
+	 * an empty collection; or if this Situacao has previously
+	 * been saved, it will retrieve related Certificados from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Situacao.
+	 */
+	public function getCertificadosJoinCertificadoRelatedByCertificadoRenovado($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(SituacaoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificados === null) {
+			if ($this->isNew()) {
+				$this->collCertificados = array();
+			} else {
+
+				$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+				$this->collCertificados = CertificadoPeer::doSelectJoinCertificadoRelatedByCertificadoRenovado($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->id);
+
+			if (!isset($this->lastCertificadoCriteria) || !$this->lastCertificadoCriteria->equals($criteria)) {
+				$this->collCertificados = CertificadoPeer::doSelectJoinCertificadoRelatedByCertificadoRenovado($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastCertificadoCriteria = $criteria;
+
+		return $this->collCertificados;
+	}
+
+	/**
 	 * Resets all collections of referencing foreign keys.
 	 *
 	 * This method is a user-space workaround for PHP's inability to garbage collect objects
@@ -917,9 +1529,15 @@ abstract class BaseSituacao extends BaseObject  implements Persistent {
 					$o->clearAllReferences($deep);
 				}
 			}
+			if ($this->collCertificados) {
+				foreach ((array) $this->collCertificados as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 		} // if ($deep)
 
 		$this->collCertificadoSituacaos = null;
+		$this->collCertificados = null;
 	}
 
 } // BaseSituacao

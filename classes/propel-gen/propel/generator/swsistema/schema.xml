@@ -621,6 +621,11 @@
         <column name="certificado_renovado" type="INTEGER"/>
         <column name="apagado" type="INTEGER"  required="true"/>
         <column name="parceiro_id" type="INTEGER"/>
+        <column name="status_followup" type="INTEGER"/>
+
+        <foreign-key foreignTable="situacao" name="Rel_certificado_followup" onDelete="restrict">
+            <reference local="status_followup" foreign="id"/>
+        </foreign-key>
 
         <foreign-key foreignTable="parceiro" name="Rel_certificado_parceiro" onDelete="restrict">
             <reference local="parceiro_id" foreign="id"/>

@@ -193,6 +193,17 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 	protected $parceiro_id;
 
 	/**
+	 * The value for the status_followup field.
+	 * @var        int
+	 */
+	protected $status_followup;
+
+	/**
+	 * @var        Situacao
+	 */
+	protected $aSituacao;
+
+	/**
 	 * @var        Parceiro
 	 */
 	protected $aParceiro;
@@ -901,6 +912,16 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 	public function getParceiroId()
 	{
 		return $this->parceiro_id;
+	}
+
+	/**
+	 * Get the [status_followup] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getStatusFollowup()
+	{
+		return $this->status_followup;
 	}
 
 	/**
@@ -1781,6 +1802,30 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 	} // setParceiroId()
 
 	/**
+	 * Set the value of [status_followup] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     Certificado The current object (for fluent API support)
+	 */
+	public function setStatusFollowup($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->status_followup !== $v) {
+			$this->status_followup = $v;
+			$this->modifiedColumns[] = CertificadoPeer::STATUS_FOLLOWUP;
+		}
+
+		if ($this->aSituacao !== null && $this->aSituacao->getId() !== $v) {
+			$this->aSituacao = null;
+		}
+
+		return $this;
+	} // setStatusFollowup()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1841,6 +1886,7 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 			$this->certificado_renovado = ($row[$startcol + 26] !== null) ? (int) $row[$startcol + 26] : null;
 			$this->apagado = ($row[$startcol + 27] !== null) ? (int) $row[$startcol + 27] : null;
 			$this->parceiro_id = ($row[$startcol + 28] !== null) ? (int) $row[$startcol + 28] : null;
+			$this->status_followup = ($row[$startcol + 29] !== null) ? (int) $row[$startcol + 29] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1850,7 +1896,7 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 29; // 29 = CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 30; // 30 = CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Certificado object", $e);
@@ -1900,6 +1946,9 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 		if ($this->aParceiro !== null && $this->parceiro_id !== $this->aParceiro->getId()) {
 			$this->aParceiro = null;
 		}
+		if ($this->aSituacao !== null && $this->status_followup !== $this->aSituacao->getId()) {
+			$this->aSituacao = null;
+		}
 	} // ensureConsistency
 
 	/**
@@ -1939,6 +1988,7 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
+			$this->aSituacao = null;
 			$this->aParceiro = null;
 			$this->aContador = null;
 			$this->aLocal = null;
@@ -2093,6 +2143,13 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 			// were passed to this object by their coresponding set
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
+
+			if ($this->aSituacao !== null) {
+				if ($this->aSituacao->isModified() || $this->aSituacao->isNew()) {
+					$affectedRows += $this->aSituacao->save($con);
+				}
+				$this->setSituacao($this->aSituacao);
+			}
 
 			if ($this->aParceiro !== null) {
 				if ($this->aParceiro->isModified() || $this->aParceiro->isNew()) {
@@ -2338,6 +2395,12 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
+			if ($this->aSituacao !== null) {
+				if (!$this->aSituacao->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->aSituacao->getValidationFailures());
+				}
+			}
+
 			if ($this->aParceiro !== null) {
 				if (!$this->aParceiro->validate($columns)) {
 					$failureMap = array_merge($failureMap, $this->aParceiro->getValidationFailures());
@@ -2531,6 +2594,7 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(CertificadoPeer::CERTIFICADO_RENOVADO)) $criteria->add(CertificadoPeer::CERTIFICADO_RENOVADO, $this->certificado_renovado);
 		if ($this->isColumnModified(CertificadoPeer::APAGADO)) $criteria->add(CertificadoPeer::APAGADO, $this->apagado);
 		if ($this->isColumnModified(CertificadoPeer::PARCEIRO_ID)) $criteria->add(CertificadoPeer::PARCEIRO_ID, $this->parceiro_id);
+		if ($this->isColumnModified(CertificadoPeer::STATUS_FOLLOWUP)) $criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->status_followup);
 
 		return $criteria;
 	}
@@ -2640,6 +2704,8 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 		$copyObj->setApagado($this->apagado);
 
 		$copyObj->setParceiroId($this->parceiro_id);
+
+		$copyObj->setStatusFollowup($this->status_followup);
 
 
 		if ($deepCopy) {
@@ -2758,6 +2824,55 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 			self::$peer = new CertificadoPeer();
 		}
 		return self::$peer;
+	}
+
+	/**
+	 * Declares an association between this object and a Situacao object.
+	 *
+	 * @param      Situacao $v
+	 * @return     Certificado The current object (for fluent API support)
+	 * @throws     PropelException
+	 */
+	public function setSituacao(Situacao $v = null)
+	{
+		if ($v === null) {
+			$this->setStatusFollowup(NULL);
+		} else {
+			$this->setStatusFollowup($v->getId());
+		}
+
+		$this->aSituacao = $v;
+
+		// Add binding for other direction of this n:n relationship.
+		// If this object has already been added to the Situacao object, it will not be re-added.
+		if ($v !== null) {
+			$v->addCertificado($this);
+		}
+
+		return $this;
+	}
+
+
+	/**
+	 * Get the associated Situacao object
+	 *
+	 * @param      PropelPDO Optional Connection object.
+	 * @return     Situacao The associated Situacao object.
+	 * @throws     PropelException
+	 */
+	public function getSituacao(PropelPDO $con = null)
+	{
+		if ($this->aSituacao === null && ($this->status_followup !== null)) {
+			$this->aSituacao = SituacaoPeer::retrieveByPk($this->status_followup);
+			/* The following can be used additionally to
+			   guarantee the related object contains a reference
+			   to this object.  This level of coupling may, however, be
+			   undesirable since it could result in an only partially populated collection
+			   in the referenced object.
+			   $this->aSituacao->addCertificados($this);
+			 */
+		}
+		return $this->aSituacao;
 	}
 
 	/**
@@ -4298,6 +4413,53 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 			array_push($this->collCertificadosRelatedByCertificadoRenovado, $l);
 			$l->setCertificadoRelatedByCertificadoRenovado($this);
 		}
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Certificado is new, it will return
+	 * an empty collection; or if this Certificado has previously
+	 * been saved, it will retrieve related CertificadosRelatedByCertificadoRenovado from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Certificado.
+	 */
+	public function getCertificadosRelatedByCertificadoRenovadoJoinSituacao($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(CertificadoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificadosRelatedByCertificadoRenovado === null) {
+			if ($this->isNew()) {
+				$this->collCertificadosRelatedByCertificadoRenovado = array();
+			} else {
+
+				$criteria->add(CertificadoPeer::CERTIFICADO_RENOVADO, $this->id);
+
+				$this->collCertificadosRelatedByCertificadoRenovado = CertificadoPeer::doSelectJoinSituacao($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(CertificadoPeer::CERTIFICADO_RENOVADO, $this->id);
+
+			if (!isset($this->lastCertificadoRelatedByCertificadoRenovadoCriteria) || !$this->lastCertificadoRelatedByCertificadoRenovadoCriteria->equals($criteria)) {
+				$this->collCertificadosRelatedByCertificadoRenovado = CertificadoPeer::doSelectJoinSituacao($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastCertificadoRelatedByCertificadoRenovadoCriteria = $criteria;
+
+		return $this->collCertificadosRelatedByCertificadoRenovado;
 	}
 
 
@@ -6432,6 +6594,7 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 		$this->collItemPedidos = null;
 		$this->collContasRecebers = null;
 		$this->collProspects = null;
+			$this->aSituacao = null;
 			$this->aParceiro = null;
 			$this->aContador = null;
 			$this->aLocal = null;

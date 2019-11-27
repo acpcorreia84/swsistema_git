@@ -2648,11 +2648,17 @@ function carregarCertificados() {
                     $cCertificado->add(CertificadoPeer::DATA_FIM_VALIDADE, $dataDe[2] . '/' . $dataDe[1] . '/' . $dataDe[0] . ' 00:00:00', Criteria::GREATER_EQUAL);
                     $cCertificado->addAnd(CertificadoPeer::DATA_FIM_VALIDADE, $dataAte[2] . '/' . $dataAte[1] . '/' . $dataAte[0] . ' 23:59:59', Criteria::LESS_EQUAL);
                     $cCertificado->addAscendingOrderByColumn(CertificadoPeer::DATA_FIM_VALIDADE);
-                }elseif ($_POST['filtros']['filtroTipoData']==utf8_encode('Valida??o')) {
+                }elseif ($_POST['filtros']['filtroTipoData']==utf8_encode('Validação')) {
                     $cCertificado->add(CertificadoPeer::DATA_VALIDACAO, $dataDe[2] . '/' . $dataDe[1] . '/' . $dataDe[0] . ' 00:00:00', Criteria::GREATER_EQUAL);
                     $cCertificado->addAnd(CertificadoPeer::DATA_VALIDACAO, $dataAte[2] . '/' . $dataAte[1] . '/' . $dataAte[0] . ' 23:59:59', Criteria::LESS_EQUAL);
                     $cCertificado->addDescendingOrderByColumn(CertificadoPeer::DATA_FIM_VALIDADE);
+                }elseif ($_POST['filtros']['filtroTipoData']==utf8_encode('Em aberto')) {
+                    $cCertificado->add(CertificadoPeer::DATA_COMPRA, $dataDe[2] . '/' . $dataDe[1] . '/' . $dataDe[0] . ' 00:00:00', Criteria::GREATER_EQUAL);
+                    $cCertificado->addAnd(CertificadoPeer::DATA_COMPRA, $dataAte[2] . '/' . $dataAte[1] . '/' . $dataAte[0] . ' 23:59:59', Criteria::LESS_EQUAL);
+                    $cCertificado->add(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, null, Criteria::ISNULL);
+                    $cCertificado->addDescendingOrderByColumn(CertificadoPeer::DATA_COMPRA);
                 }
+
 
 
 
@@ -2673,8 +2679,10 @@ function carregarCertificados() {
                 $cCertificado->addDescendingOrderByColumn(CertificadoPeer::DATA_COMPRA);
             }elseif ($_POST['filtros']['filtroTipoData']=='Vencimento') {
                 $cCertificado->addAscendingOrderByColumn(CertificadoPeer::DATA_FIM_VALIDADE);
-            }elseif ($_POST['filtros']['filtroTipoData']==utf8_encode('Valida??o')) {
+            }elseif ($_POST['filtros']['filtroTipoData']==utf8_encode('Validação')) {
                 $cCertificado->addDescendingOrderByColumn(CertificadoPeer::DATA_FIM_VALIDADE);
+            }elseif ($_POST['filtros']['filtroTipoData']==utf8_encode('Em aberto')) {
+                $cCertificado->addDescendingOrderByColumn(CertificadoPeer::DATA_COMPRA);
             }
         }
 
@@ -2743,7 +2751,7 @@ function carregarCertificados() {
          * A DATA SELECIONADA FOI DATA DA COMPRA CASO CONTRARIO SEGUE COM OS FILTROS PRINCIPAIS
         */
 
-        if ($_POST['filtros']['filtroTipoData']=='Compra' || $_POST['filtros']['filtroTipoData']=='Vencimento' || $_POST['filtros']['filtroTipoData']==utf8_encode('Valida??o')) {
+        if ($_POST['filtros']['filtroTipoData']=='Compra' || $_POST['filtros']['filtroTipoData']=='Vencimento' || $_POST['filtros']['filtroTipoData']==utf8_encode('Validação') || $_POST['filtros']['filtroTipoData']=='Em aberto' ) {
             $cPagamentoNull = $cCertificado->getNewCriterion(CertificadoPeer::DATA_PAGAMENTO, null, Criteria::ISNOTNULL);
             $cPagamentoNotEqual = $cCertificado->getNewCriterion(CertificadoPeer::DATA_PAGAMENTO, '0000-00-00 00:00:00', Criteria::NOT_EQUAL);
 
@@ -2763,7 +2771,7 @@ function carregarCertificados() {
          * SO RELACIONA OS FILTROS DE CERTIFICADO PAGO E NAO PAGO SE
          * A DATA SELECIONADA FOI DATA DA COMPRA CASO CONTRARIO SEGUE COM OS FILTROS PRINCIPAIS
         */
-        if ($_POST['filtros']['filtroTipoData']=='Compra' || $_POST['filtros']['filtroTipoData']=='Vencimento' || $_POST['filtros']['filtroTipoData']==utf8_encode('Valida??o') ) {
+        if ($_POST['filtros']['filtroTipoData']=='Compra' || $_POST['filtros']['filtroTipoData']=='Vencimento' || $_POST['filtros']['filtroTipoData']==utf8_encode('Validação')|| $_POST['filtros']['filtroTipoData']=='Em aberto' ) {
             $cCertificadosEmAberto->add(CertificadoPeer::DATA_PAGAMENTO, null, Criteria::ISNULL);
             $cCertificadosEmAberto->addOr(CertificadoPeer::DATA_PAGAMENTO, '0000-00-00 00:00:00');
             $cCertificadosEmAberto->addAnd(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, null, Criteria::ISNULL);

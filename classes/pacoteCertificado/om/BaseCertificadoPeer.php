@@ -25,7 +25,7 @@ abstract class BaseCertificadoPeer {
 	const TM_CLASS = 'CertificadoTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 29;
+	const NUM_COLUMNS = 30;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -117,6 +117,9 @@ abstract class BaseCertificadoPeer {
 	/** the column name for the PARCEIRO_ID field */
 	const PARCEIRO_ID = 'certificado.PARCEIRO_ID';
 
+	/** the column name for the STATUS_FOLLOWUP field */
+	const STATUS_FOLLOWUP = 'certificado.STATUS_FOLLOWUP';
+
 	/**
 	 * An identiy map to hold any loaded instances of Certificado objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -133,11 +136,11 @@ abstract class BaseCertificadoPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'ProdutoId', 'ClienteId', 'FormaPagamentoId', 'UsuarioId', 'FuncionarioValidouId', 'UsuarioValidouId', 'LocalId', 'ContadorId', 'AutorizadoVendaSemContador', 'CodigoDocumento', 'Protocolo', 'Voucher', 'Desconto', 'MotivoDesconto', 'Observacao', 'DataCompra', 'DataUltimaValidacao', 'DataPagamento', 'DataValidacao', 'DataConfirmacaoPagamento', 'DataRevogacao', 'DataInicioValidade', 'DataFimValidade', 'DataSincronizacaoAc', 'ConfirmacaoValidacao', 'CertificadoRenovado', 'Apagado', 'ParceiroId', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'produtoId', 'clienteId', 'formaPagamentoId', 'usuarioId', 'funcionarioValidouId', 'usuarioValidouId', 'localId', 'contadorId', 'autorizadoVendaSemContador', 'codigoDocumento', 'protocolo', 'voucher', 'desconto', 'motivoDesconto', 'observacao', 'dataCompra', 'dataUltimaValidacao', 'dataPagamento', 'dataValidacao', 'dataConfirmacaoPagamento', 'dataRevogacao', 'dataInicioValidade', 'dataFimValidade', 'dataSincronizacaoAc', 'confirmacaoValidacao', 'certificadoRenovado', 'apagado', 'parceiroId', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::PRODUTO_ID, self::CLIENTE_ID, self::FORMA_PAGAMENTO_ID, self::USUARIO_ID, self::FUNCIONARIO_VALIDOU_ID, self::USUARIO_VALIDOU_ID, self::LOCAL_ID, self::CONTADOR_ID, self::AUTORIZADO_VENDA_SEM_CONTADOR, self::CODIGO_DOCUMENTO, self::PROTOCOLO, self::VOUCHER, self::DESCONTO, self::MOTIVO_DESCONTO, self::OBSERVACAO, self::DATA_COMPRA, self::DATA_ULTIMA_VALIDACAO, self::DATA_PAGAMENTO, self::DATA_VALIDACAO, self::DATA_CONFIRMACAO_PAGAMENTO, self::DATA_REVOGACAO, self::DATA_INICIO_VALIDADE, self::DATA_FIM_VALIDADE, self::DATA_SINCRONIZACAO_AC, self::CONFIRMACAO_VALIDACAO, self::CERTIFICADO_RENOVADO, self::APAGADO, self::PARCEIRO_ID, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'produto_id', 'cliente_id', 'forma_pagamento_id', 'usuario_id', 'funcionario_validou_id', 'usuario_validou_id', 'local_id', 'contador_id', 'autorizado_venda_sem_contador', 'codigo_documento', 'protocolo', 'voucher', 'desconto', 'motivo_desconto', 'observacao', 'data_compra', 'data_ultima_validacao', 'data_pagamento', 'data_validacao', 'data_confirmacao_pagamento', 'data_revogacao', 'data_inicio_validade', 'data_fim_validade', 'data_sincronizacao_ac', 'confirmacao_validacao', 'certificado_renovado', 'apagado', 'parceiro_id', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'ProdutoId', 'ClienteId', 'FormaPagamentoId', 'UsuarioId', 'FuncionarioValidouId', 'UsuarioValidouId', 'LocalId', 'ContadorId', 'AutorizadoVendaSemContador', 'CodigoDocumento', 'Protocolo', 'Voucher', 'Desconto', 'MotivoDesconto', 'Observacao', 'DataCompra', 'DataUltimaValidacao', 'DataPagamento', 'DataValidacao', 'DataConfirmacaoPagamento', 'DataRevogacao', 'DataInicioValidade', 'DataFimValidade', 'DataSincronizacaoAc', 'ConfirmacaoValidacao', 'CertificadoRenovado', 'Apagado', 'ParceiroId', 'StatusFollowup', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'produtoId', 'clienteId', 'formaPagamentoId', 'usuarioId', 'funcionarioValidouId', 'usuarioValidouId', 'localId', 'contadorId', 'autorizadoVendaSemContador', 'codigoDocumento', 'protocolo', 'voucher', 'desconto', 'motivoDesconto', 'observacao', 'dataCompra', 'dataUltimaValidacao', 'dataPagamento', 'dataValidacao', 'dataConfirmacaoPagamento', 'dataRevogacao', 'dataInicioValidade', 'dataFimValidade', 'dataSincronizacaoAc', 'confirmacaoValidacao', 'certificadoRenovado', 'apagado', 'parceiroId', 'statusFollowup', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::PRODUTO_ID, self::CLIENTE_ID, self::FORMA_PAGAMENTO_ID, self::USUARIO_ID, self::FUNCIONARIO_VALIDOU_ID, self::USUARIO_VALIDOU_ID, self::LOCAL_ID, self::CONTADOR_ID, self::AUTORIZADO_VENDA_SEM_CONTADOR, self::CODIGO_DOCUMENTO, self::PROTOCOLO, self::VOUCHER, self::DESCONTO, self::MOTIVO_DESCONTO, self::OBSERVACAO, self::DATA_COMPRA, self::DATA_ULTIMA_VALIDACAO, self::DATA_PAGAMENTO, self::DATA_VALIDACAO, self::DATA_CONFIRMACAO_PAGAMENTO, self::DATA_REVOGACAO, self::DATA_INICIO_VALIDADE, self::DATA_FIM_VALIDADE, self::DATA_SINCRONIZACAO_AC, self::CONFIRMACAO_VALIDACAO, self::CERTIFICADO_RENOVADO, self::APAGADO, self::PARCEIRO_ID, self::STATUS_FOLLOWUP, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'produto_id', 'cliente_id', 'forma_pagamento_id', 'usuario_id', 'funcionario_validou_id', 'usuario_validou_id', 'local_id', 'contador_id', 'autorizado_venda_sem_contador', 'codigo_documento', 'protocolo', 'voucher', 'desconto', 'motivo_desconto', 'observacao', 'data_compra', 'data_ultima_validacao', 'data_pagamento', 'data_validacao', 'data_confirmacao_pagamento', 'data_revogacao', 'data_inicio_validade', 'data_fim_validade', 'data_sincronizacao_ac', 'confirmacao_validacao', 'certificado_renovado', 'apagado', 'parceiro_id', 'status_followup', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, )
 	);
 
 	/**
@@ -147,11 +150,11 @@ abstract class BaseCertificadoPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ProdutoId' => 1, 'ClienteId' => 2, 'FormaPagamentoId' => 3, 'UsuarioId' => 4, 'FuncionarioValidouId' => 5, 'UsuarioValidouId' => 6, 'LocalId' => 7, 'ContadorId' => 8, 'AutorizadoVendaSemContador' => 9, 'CodigoDocumento' => 10, 'Protocolo' => 11, 'Voucher' => 12, 'Desconto' => 13, 'MotivoDesconto' => 14, 'Observacao' => 15, 'DataCompra' => 16, 'DataUltimaValidacao' => 17, 'DataPagamento' => 18, 'DataValidacao' => 19, 'DataConfirmacaoPagamento' => 20, 'DataRevogacao' => 21, 'DataInicioValidade' => 22, 'DataFimValidade' => 23, 'DataSincronizacaoAc' => 24, 'ConfirmacaoValidacao' => 25, 'CertificadoRenovado' => 26, 'Apagado' => 27, 'ParceiroId' => 28, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'produtoId' => 1, 'clienteId' => 2, 'formaPagamentoId' => 3, 'usuarioId' => 4, 'funcionarioValidouId' => 5, 'usuarioValidouId' => 6, 'localId' => 7, 'contadorId' => 8, 'autorizadoVendaSemContador' => 9, 'codigoDocumento' => 10, 'protocolo' => 11, 'voucher' => 12, 'desconto' => 13, 'motivoDesconto' => 14, 'observacao' => 15, 'dataCompra' => 16, 'dataUltimaValidacao' => 17, 'dataPagamento' => 18, 'dataValidacao' => 19, 'dataConfirmacaoPagamento' => 20, 'dataRevogacao' => 21, 'dataInicioValidade' => 22, 'dataFimValidade' => 23, 'dataSincronizacaoAc' => 24, 'confirmacaoValidacao' => 25, 'certificadoRenovado' => 26, 'apagado' => 27, 'parceiroId' => 28, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PRODUTO_ID => 1, self::CLIENTE_ID => 2, self::FORMA_PAGAMENTO_ID => 3, self::USUARIO_ID => 4, self::FUNCIONARIO_VALIDOU_ID => 5, self::USUARIO_VALIDOU_ID => 6, self::LOCAL_ID => 7, self::CONTADOR_ID => 8, self::AUTORIZADO_VENDA_SEM_CONTADOR => 9, self::CODIGO_DOCUMENTO => 10, self::PROTOCOLO => 11, self::VOUCHER => 12, self::DESCONTO => 13, self::MOTIVO_DESCONTO => 14, self::OBSERVACAO => 15, self::DATA_COMPRA => 16, self::DATA_ULTIMA_VALIDACAO => 17, self::DATA_PAGAMENTO => 18, self::DATA_VALIDACAO => 19, self::DATA_CONFIRMACAO_PAGAMENTO => 20, self::DATA_REVOGACAO => 21, self::DATA_INICIO_VALIDADE => 22, self::DATA_FIM_VALIDADE => 23, self::DATA_SINCRONIZACAO_AC => 24, self::CONFIRMACAO_VALIDACAO => 25, self::CERTIFICADO_RENOVADO => 26, self::APAGADO => 27, self::PARCEIRO_ID => 28, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'produto_id' => 1, 'cliente_id' => 2, 'forma_pagamento_id' => 3, 'usuario_id' => 4, 'funcionario_validou_id' => 5, 'usuario_validou_id' => 6, 'local_id' => 7, 'contador_id' => 8, 'autorizado_venda_sem_contador' => 9, 'codigo_documento' => 10, 'protocolo' => 11, 'voucher' => 12, 'desconto' => 13, 'motivo_desconto' => 14, 'observacao' => 15, 'data_compra' => 16, 'data_ultima_validacao' => 17, 'data_pagamento' => 18, 'data_validacao' => 19, 'data_confirmacao_pagamento' => 20, 'data_revogacao' => 21, 'data_inicio_validade' => 22, 'data_fim_validade' => 23, 'data_sincronizacao_ac' => 24, 'confirmacao_validacao' => 25, 'certificado_renovado' => 26, 'apagado' => 27, 'parceiro_id' => 28, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ProdutoId' => 1, 'ClienteId' => 2, 'FormaPagamentoId' => 3, 'UsuarioId' => 4, 'FuncionarioValidouId' => 5, 'UsuarioValidouId' => 6, 'LocalId' => 7, 'ContadorId' => 8, 'AutorizadoVendaSemContador' => 9, 'CodigoDocumento' => 10, 'Protocolo' => 11, 'Voucher' => 12, 'Desconto' => 13, 'MotivoDesconto' => 14, 'Observacao' => 15, 'DataCompra' => 16, 'DataUltimaValidacao' => 17, 'DataPagamento' => 18, 'DataValidacao' => 19, 'DataConfirmacaoPagamento' => 20, 'DataRevogacao' => 21, 'DataInicioValidade' => 22, 'DataFimValidade' => 23, 'DataSincronizacaoAc' => 24, 'ConfirmacaoValidacao' => 25, 'CertificadoRenovado' => 26, 'Apagado' => 27, 'ParceiroId' => 28, 'StatusFollowup' => 29, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'produtoId' => 1, 'clienteId' => 2, 'formaPagamentoId' => 3, 'usuarioId' => 4, 'funcionarioValidouId' => 5, 'usuarioValidouId' => 6, 'localId' => 7, 'contadorId' => 8, 'autorizadoVendaSemContador' => 9, 'codigoDocumento' => 10, 'protocolo' => 11, 'voucher' => 12, 'desconto' => 13, 'motivoDesconto' => 14, 'observacao' => 15, 'dataCompra' => 16, 'dataUltimaValidacao' => 17, 'dataPagamento' => 18, 'dataValidacao' => 19, 'dataConfirmacaoPagamento' => 20, 'dataRevogacao' => 21, 'dataInicioValidade' => 22, 'dataFimValidade' => 23, 'dataSincronizacaoAc' => 24, 'confirmacaoValidacao' => 25, 'certificadoRenovado' => 26, 'apagado' => 27, 'parceiroId' => 28, 'statusFollowup' => 29, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PRODUTO_ID => 1, self::CLIENTE_ID => 2, self::FORMA_PAGAMENTO_ID => 3, self::USUARIO_ID => 4, self::FUNCIONARIO_VALIDOU_ID => 5, self::USUARIO_VALIDOU_ID => 6, self::LOCAL_ID => 7, self::CONTADOR_ID => 8, self::AUTORIZADO_VENDA_SEM_CONTADOR => 9, self::CODIGO_DOCUMENTO => 10, self::PROTOCOLO => 11, self::VOUCHER => 12, self::DESCONTO => 13, self::MOTIVO_DESCONTO => 14, self::OBSERVACAO => 15, self::DATA_COMPRA => 16, self::DATA_ULTIMA_VALIDACAO => 17, self::DATA_PAGAMENTO => 18, self::DATA_VALIDACAO => 19, self::DATA_CONFIRMACAO_PAGAMENTO => 20, self::DATA_REVOGACAO => 21, self::DATA_INICIO_VALIDADE => 22, self::DATA_FIM_VALIDADE => 23, self::DATA_SINCRONIZACAO_AC => 24, self::CONFIRMACAO_VALIDACAO => 25, self::CERTIFICADO_RENOVADO => 26, self::APAGADO => 27, self::PARCEIRO_ID => 28, self::STATUS_FOLLOWUP => 29, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'produto_id' => 1, 'cliente_id' => 2, 'forma_pagamento_id' => 3, 'usuario_id' => 4, 'funcionario_validou_id' => 5, 'usuario_validou_id' => 6, 'local_id' => 7, 'contador_id' => 8, 'autorizado_venda_sem_contador' => 9, 'codigo_documento' => 10, 'protocolo' => 11, 'voucher' => 12, 'desconto' => 13, 'motivo_desconto' => 14, 'observacao' => 15, 'data_compra' => 16, 'data_ultima_validacao' => 17, 'data_pagamento' => 18, 'data_validacao' => 19, 'data_confirmacao_pagamento' => 20, 'data_revogacao' => 21, 'data_inicio_validade' => 22, 'data_fim_validade' => 23, 'data_sincronizacao_ac' => 24, 'confirmacao_validacao' => 25, 'certificado_renovado' => 26, 'apagado' => 27, 'parceiro_id' => 28, 'status_followup' => 29, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, )
 	);
 
 	/**
@@ -250,6 +253,7 @@ abstract class BaseCertificadoPeer {
 		$criteria->addSelectColumn(CertificadoPeer::CERTIFICADO_RENOVADO);
 		$criteria->addSelectColumn(CertificadoPeer::APAGADO);
 		$criteria->addSelectColumn(CertificadoPeer::PARCEIRO_ID);
+		$criteria->addSelectColumn(CertificadoPeer::STATUS_FOLLOWUP);
 	}
 
 	/**
@@ -494,6 +498,56 @@ abstract class BaseCertificadoPeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+
+	/**
+	 * Returns the number of rows matching criteria, joining the related Situacao table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinSituacao(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(CertificadoPeer::TABLE_NAME);
+
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			CertificadoPeer::addSelectColumns($criteria);
+		}
+		
+		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+		
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(CertificadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
+	}
+
 
 	/**
 	 * Returns the number of rows matching criteria, joining the related Parceiro table
@@ -892,6 +946,72 @@ abstract class BaseCertificadoPeer {
 		}
 		$stmt->closeCursor();
 		return $count;
+	}
+
+
+	/**
+	 * Selects a collection of Certificado objects pre-filled with their Situacao objects.
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Certificado objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinSituacao(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CertificadoPeer::addSelectColumns($criteria);
+		$startcol = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+		SituacaoPeer::addSelectColumns($criteria);
+
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+
+				$cls = CertificadoPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CertificadoPeer::addInstanceToPool($obj1, $key1);
+			} // if $obj1 already loaded
+
+			$key2 = SituacaoPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			if ($key2 !== null) {
+				$obj2 = SituacaoPeer::getInstanceFromPool($key2);
+				if (!$obj2) {
+
+					$cls = SituacaoPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol);
+					SituacaoPeer::addInstanceToPool($obj2, $key2);
+				} // if obj2 already loaded
+				
+				// Add the $obj1 (Certificado) to $obj2 (Situacao)
+				$obj2->addCertificado($obj1);
+
+			} // if joined row was not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
 	}
 
 
@@ -1459,6 +1579,8 @@ abstract class BaseCertificadoPeer {
 			$con = Propel::getConnection(CertificadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
 		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
@@ -1508,29 +1630,34 @@ abstract class BaseCertificadoPeer {
 		CertificadoPeer::addSelectColumns($criteria);
 		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
 
+		SituacaoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (SituacaoPeer::NUM_COLUMNS - SituacaoPeer::NUM_LAZY_LOAD_COLUMNS);
+
 		ParceiroPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol4 = $startcol3 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		ContadorPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol5 = $startcol4 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		LocalPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol6 = $startcol5 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		FormaPagamentoPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol7 = $startcol6 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		ProdutoPeer::addSelectColumns($criteria);
-		$startcol7 = $startcol6 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol8 = $startcol7 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		ClientePeer::addSelectColumns($criteria);
-		$startcol8 = $startcol7 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
-
-		UsuarioPeer::addSelectColumns($criteria);
-		$startcol9 = $startcol8 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol9 = $startcol8 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
 
 		UsuarioPeer::addSelectColumns($criteria);
 		$startcol10 = $startcol9 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol11 = $startcol10 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
 
@@ -1565,130 +1692,130 @@ abstract class BaseCertificadoPeer {
 				CertificadoPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined Parceiro rows
+			// Add objects for joined Situacao rows
 
-			$key2 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = SituacaoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = ParceiroPeer::getInstanceFromPool($key2);
+				$obj2 = SituacaoPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = ParceiroPeer::getOMClass(false);
+					$cls = SituacaoPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					ParceiroPeer::addInstanceToPool($obj2, $key2);
+					SituacaoPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (Certificado) to the collection in $obj2 (Parceiro)
+				// Add the $obj1 (Certificado) to the collection in $obj2 (Situacao)
 				$obj2->addCertificado($obj1);
+			} // if joined row not null
+
+			// Add objects for joined Parceiro rows
+
+			$key3 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+			if ($key3 !== null) {
+				$obj3 = ParceiroPeer::getInstanceFromPool($key3);
+				if (!$obj3) {
+
+					$cls = ParceiroPeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					ParceiroPeer::addInstanceToPool($obj3, $key3);
+				} // if obj3 loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj3 (Parceiro)
+				$obj3->addCertificado($obj1);
 			} // if joined row not null
 
 			// Add objects for joined Contador rows
 
-			$key3 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-			if ($key3 !== null) {
-				$obj3 = ContadorPeer::getInstanceFromPool($key3);
-				if (!$obj3) {
+			$key4 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+			if ($key4 !== null) {
+				$obj4 = ContadorPeer::getInstanceFromPool($key4);
+				if (!$obj4) {
 
 					$cls = ContadorPeer::getOMClass(false);
 
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					ContadorPeer::addInstanceToPool($obj3, $key3);
-				} // if obj3 loaded
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					ContadorPeer::addInstanceToPool($obj4, $key4);
+				} // if obj4 loaded
 
-				// Add the $obj1 (Certificado) to the collection in $obj3 (Contador)
-				$obj3->addCertificado($obj1);
+				// Add the $obj1 (Certificado) to the collection in $obj4 (Contador)
+				$obj4->addCertificado($obj1);
 			} // if joined row not null
 
 			// Add objects for joined Local rows
 
-			$key4 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-			if ($key4 !== null) {
-				$obj4 = LocalPeer::getInstanceFromPool($key4);
-				if (!$obj4) {
+			$key5 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+			if ($key5 !== null) {
+				$obj5 = LocalPeer::getInstanceFromPool($key5);
+				if (!$obj5) {
 
 					$cls = LocalPeer::getOMClass(false);
 
-					$obj4 = new $cls();
-					$obj4->hydrate($row, $startcol4);
-					LocalPeer::addInstanceToPool($obj4, $key4);
-				} // if obj4 loaded
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					LocalPeer::addInstanceToPool($obj5, $key5);
+				} // if obj5 loaded
 
-				// Add the $obj1 (Certificado) to the collection in $obj4 (Local)
-				$obj4->addCertificado($obj1);
+				// Add the $obj1 (Certificado) to the collection in $obj5 (Local)
+				$obj5->addCertificado($obj1);
 			} // if joined row not null
 
 			// Add objects for joined FormaPagamento rows
 
-			$key5 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-			if ($key5 !== null) {
-				$obj5 = FormaPagamentoPeer::getInstanceFromPool($key5);
-				if (!$obj5) {
+			$key6 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+			if ($key6 !== null) {
+				$obj6 = FormaPagamentoPeer::getInstanceFromPool($key6);
+				if (!$obj6) {
 
 					$cls = FormaPagamentoPeer::getOMClass(false);
 
-					$obj5 = new $cls();
-					$obj5->hydrate($row, $startcol5);
-					FormaPagamentoPeer::addInstanceToPool($obj5, $key5);
-				} // if obj5 loaded
+					$obj6 = new $cls();
+					$obj6->hydrate($row, $startcol6);
+					FormaPagamentoPeer::addInstanceToPool($obj6, $key6);
+				} // if obj6 loaded
 
-				// Add the $obj1 (Certificado) to the collection in $obj5 (FormaPagamento)
-				$obj5->addCertificado($obj1);
+				// Add the $obj1 (Certificado) to the collection in $obj6 (FormaPagamento)
+				$obj6->addCertificado($obj1);
 			} // if joined row not null
 
 			// Add objects for joined Produto rows
 
-			$key6 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-			if ($key6 !== null) {
-				$obj6 = ProdutoPeer::getInstanceFromPool($key6);
-				if (!$obj6) {
+			$key7 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+			if ($key7 !== null) {
+				$obj7 = ProdutoPeer::getInstanceFromPool($key7);
+				if (!$obj7) {
 
 					$cls = ProdutoPeer::getOMClass(false);
 
-					$obj6 = new $cls();
-					$obj6->hydrate($row, $startcol6);
-					ProdutoPeer::addInstanceToPool($obj6, $key6);
-				} // if obj6 loaded
+					$obj7 = new $cls();
+					$obj7->hydrate($row, $startcol7);
+					ProdutoPeer::addInstanceToPool($obj7, $key7);
+				} // if obj7 loaded
 
-				// Add the $obj1 (Certificado) to the collection in $obj6 (Produto)
-				$obj6->addCertificado($obj1);
+				// Add the $obj1 (Certificado) to the collection in $obj7 (Produto)
+				$obj7->addCertificado($obj1);
 			} // if joined row not null
 
 			// Add objects for joined Cliente rows
 
-			$key7 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol7);
-			if ($key7 !== null) {
-				$obj7 = ClientePeer::getInstanceFromPool($key7);
-				if (!$obj7) {
+			$key8 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol8);
+			if ($key8 !== null) {
+				$obj8 = ClientePeer::getInstanceFromPool($key8);
+				if (!$obj8) {
 
 					$cls = ClientePeer::getOMClass(false);
 
-					$obj7 = new $cls();
-					$obj7->hydrate($row, $startcol7);
-					ClientePeer::addInstanceToPool($obj7, $key7);
-				} // if obj7 loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj7 (Cliente)
-				$obj7->addCertificado($obj1);
-			} // if joined row not null
-
-			// Add objects for joined Usuario rows
-
-			$key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
-			if ($key8 !== null) {
-				$obj8 = UsuarioPeer::getInstanceFromPool($key8);
-				if (!$obj8) {
-
-					$cls = UsuarioPeer::getOMClass(false);
-
 					$obj8 = new $cls();
 					$obj8->hydrate($row, $startcol8);
-					UsuarioPeer::addInstanceToPool($obj8, $key8);
+					ClientePeer::addInstanceToPool($obj8, $key8);
 				} // if obj8 loaded
 
-				// Add the $obj1 (Certificado) to the collection in $obj8 (Usuario)
-				$obj8->addCertificadoRelatedByUsuarioId($obj1);
+				// Add the $obj1 (Certificado) to the collection in $obj8 (Cliente)
+				$obj8->addCertificado($obj1);
 			} // if joined row not null
 
 			// Add objects for joined Usuario rows
@@ -1706,13 +1833,95 @@ abstract class BaseCertificadoPeer {
 				} // if obj9 loaded
 
 				// Add the $obj1 (Certificado) to the collection in $obj9 (Usuario)
-				$obj9->addCertificadoRelatedByUsuarioValidouId($obj1);
+				$obj9->addCertificadoRelatedByUsuarioId($obj1);
+			} // if joined row not null
+
+			// Add objects for joined Usuario rows
+
+			$key10 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol10);
+			if ($key10 !== null) {
+				$obj10 = UsuarioPeer::getInstanceFromPool($key10);
+				if (!$obj10) {
+
+					$cls = UsuarioPeer::getOMClass(false);
+
+					$obj10 = new $cls();
+					$obj10->hydrate($row, $startcol10);
+					UsuarioPeer::addInstanceToPool($obj10, $key10);
+				} // if obj10 loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj10 (Usuario)
+				$obj10->addCertificadoRelatedByUsuarioValidouId($obj1);
 			} // if joined row not null
 
 			$results[] = $obj1;
 		}
 		$stmt->closeCursor();
 		return $results;
+	}
+
+
+	/**
+	 * Returns the number of rows matching criteria, joining the related Situacao table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinAllExceptSituacao(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(CertificadoPeer::TABLE_NAME);
+		
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			CertificadoPeer::addSelectColumns($criteria);
+		}
+		
+		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
+		
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(CertificadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+	
+		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_VALIDOU_ID, UsuarioPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
 	}
 
 
@@ -1752,6 +1961,8 @@ abstract class BaseCertificadoPeer {
 			$con = Propel::getConnection(CertificadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
 		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
@@ -1814,6 +2025,8 @@ abstract class BaseCertificadoPeer {
 			$con = Propel::getConnection(CertificadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
 		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
@@ -1876,6 +2089,8 @@ abstract class BaseCertificadoPeer {
 			$con = Propel::getConnection(CertificadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
 		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
@@ -1938,6 +2153,8 @@ abstract class BaseCertificadoPeer {
 			$con = Propel::getConnection(CertificadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
 		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
@@ -2000,6 +2217,8 @@ abstract class BaseCertificadoPeer {
 			$con = Propel::getConnection(CertificadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
 		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
@@ -2062,6 +2281,8 @@ abstract class BaseCertificadoPeer {
 			$con = Propel::getConnection(CertificadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
 		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
@@ -2124,6 +2345,8 @@ abstract class BaseCertificadoPeer {
 			$con = Propel::getConnection(CertificadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
 		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
@@ -2184,6 +2407,8 @@ abstract class BaseCertificadoPeer {
 			$con = Propel::getConnection(CertificadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
 		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
@@ -2244,6 +2469,8 @@ abstract class BaseCertificadoPeer {
 			$con = Propel::getConnection(CertificadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
 		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
@@ -2273,7 +2500,7 @@ abstract class BaseCertificadoPeer {
 
 
 	/**
-	 * Selects a collection of Certificado objects pre-filled with all related objects except Parceiro.
+	 * Selects a collection of Certificado objects pre-filled with all related objects except Situacao.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -2282,1695 +2509,7 @@ abstract class BaseCertificadoPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptParceiro(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$criteria = clone $criteria;
-
-		// Set the correct dbName if it has not been overridden
-		// $criteria->getDbName() will return the same object if not set to another value
-		// so == check is okay and faster
-		if ($criteria->getDbName() == Propel::getDefaultDB()) {
-			$criteria->setDbName(self::DATABASE_NAME);
-		}
-
-		CertificadoPeer::addSelectColumns($criteria);
-		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ContadorPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		LocalPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		FormaPagamentoPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ProdutoPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ClientePeer::addSelectColumns($criteria);
-		$startcol7 = $startcol6 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
-
-		UsuarioPeer::addSelectColumns($criteria);
-		$startcol8 = $startcol7 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		UsuarioPeer::addSelectColumns($criteria);
-		$startcol9 = $startcol8 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::USUARIO_VALIDOU_ID, UsuarioPeer::ID, $join_behavior);
-
-
-		$stmt = BasePeer::doSelect($criteria, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-				$cls = CertificadoPeer::getOMClass(false);
-
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				CertificadoPeer::addInstanceToPool($obj1, $key1);
-			} // if obj1 already loaded
-
-				// Add objects for joined Contador rows
-
-				$key2 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = ContadorPeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = ContadorPeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol2);
-					ContadorPeer::addInstanceToPool($obj2, $key2);
-				} // if $obj2 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj2 (Contador)
-				$obj2->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Local rows
-
-				$key3 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-				if ($key3 !== null) {
-					$obj3 = LocalPeer::getInstanceFromPool($key3);
-					if (!$obj3) {
-	
-						$cls = LocalPeer::getOMClass(false);
-
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					LocalPeer::addInstanceToPool($obj3, $key3);
-				} // if $obj3 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj3 (Local)
-				$obj3->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined FormaPagamento rows
-
-				$key4 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-				if ($key4 !== null) {
-					$obj4 = FormaPagamentoPeer::getInstanceFromPool($key4);
-					if (!$obj4) {
-	
-						$cls = FormaPagamentoPeer::getOMClass(false);
-
-					$obj4 = new $cls();
-					$obj4->hydrate($row, $startcol4);
-					FormaPagamentoPeer::addInstanceToPool($obj4, $key4);
-				} // if $obj4 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj4 (FormaPagamento)
-				$obj4->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Produto rows
-
-				$key5 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-				if ($key5 !== null) {
-					$obj5 = ProdutoPeer::getInstanceFromPool($key5);
-					if (!$obj5) {
-	
-						$cls = ProdutoPeer::getOMClass(false);
-
-					$obj5 = new $cls();
-					$obj5->hydrate($row, $startcol5);
-					ProdutoPeer::addInstanceToPool($obj5, $key5);
-				} // if $obj5 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj5 (Produto)
-				$obj5->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Cliente rows
-
-				$key6 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol6);
-				if ($key6 !== null) {
-					$obj6 = ClientePeer::getInstanceFromPool($key6);
-					if (!$obj6) {
-	
-						$cls = ClientePeer::getOMClass(false);
-
-					$obj6 = new $cls();
-					$obj6->hydrate($row, $startcol6);
-					ClientePeer::addInstanceToPool($obj6, $key6);
-				} // if $obj6 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj6 (Cliente)
-				$obj6->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Usuario rows
-
-				$key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-				if ($key7 !== null) {
-					$obj7 = UsuarioPeer::getInstanceFromPool($key7);
-					if (!$obj7) {
-	
-						$cls = UsuarioPeer::getOMClass(false);
-
-					$obj7 = new $cls();
-					$obj7->hydrate($row, $startcol7);
-					UsuarioPeer::addInstanceToPool($obj7, $key7);
-				} // if $obj7 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj7 (Usuario)
-				$obj7->addCertificadoRelatedByUsuarioId($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Usuario rows
-
-				$key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
-				if ($key8 !== null) {
-					$obj8 = UsuarioPeer::getInstanceFromPool($key8);
-					if (!$obj8) {
-	
-						$cls = UsuarioPeer::getOMClass(false);
-
-					$obj8 = new $cls();
-					$obj8->hydrate($row, $startcol8);
-					UsuarioPeer::addInstanceToPool($obj8, $key8);
-				} // if $obj8 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj8 (Usuario)
-				$obj8->addCertificadoRelatedByUsuarioValidouId($obj1);
-
-			} // if joined row is not null
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
-
-	/**
-	 * Selects a collection of Certificado objects pre-filled with all related objects except Contador.
-	 *
-	 * @param      Criteria  $criteria
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Certificado objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinAllExceptContador(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$criteria = clone $criteria;
-
-		// Set the correct dbName if it has not been overridden
-		// $criteria->getDbName() will return the same object if not set to another value
-		// so == check is okay and faster
-		if ($criteria->getDbName() == Propel::getDefaultDB()) {
-			$criteria->setDbName(self::DATABASE_NAME);
-		}
-
-		CertificadoPeer::addSelectColumns($criteria);
-		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ParceiroPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		LocalPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		FormaPagamentoPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ProdutoPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ClientePeer::addSelectColumns($criteria);
-		$startcol7 = $startcol6 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
-
-		UsuarioPeer::addSelectColumns($criteria);
-		$startcol8 = $startcol7 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		UsuarioPeer::addSelectColumns($criteria);
-		$startcol9 = $startcol8 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::USUARIO_VALIDOU_ID, UsuarioPeer::ID, $join_behavior);
-
-
-		$stmt = BasePeer::doSelect($criteria, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-				$cls = CertificadoPeer::getOMClass(false);
-
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				CertificadoPeer::addInstanceToPool($obj1, $key1);
-			} // if obj1 already loaded
-
-				// Add objects for joined Parceiro rows
-
-				$key2 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = ParceiroPeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = ParceiroPeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol2);
-					ParceiroPeer::addInstanceToPool($obj2, $key2);
-				} // if $obj2 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj2 (Parceiro)
-				$obj2->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Local rows
-
-				$key3 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-				if ($key3 !== null) {
-					$obj3 = LocalPeer::getInstanceFromPool($key3);
-					if (!$obj3) {
-	
-						$cls = LocalPeer::getOMClass(false);
-
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					LocalPeer::addInstanceToPool($obj3, $key3);
-				} // if $obj3 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj3 (Local)
-				$obj3->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined FormaPagamento rows
-
-				$key4 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-				if ($key4 !== null) {
-					$obj4 = FormaPagamentoPeer::getInstanceFromPool($key4);
-					if (!$obj4) {
-	
-						$cls = FormaPagamentoPeer::getOMClass(false);
-
-					$obj4 = new $cls();
-					$obj4->hydrate($row, $startcol4);
-					FormaPagamentoPeer::addInstanceToPool($obj4, $key4);
-				} // if $obj4 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj4 (FormaPagamento)
-				$obj4->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Produto rows
-
-				$key5 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-				if ($key5 !== null) {
-					$obj5 = ProdutoPeer::getInstanceFromPool($key5);
-					if (!$obj5) {
-	
-						$cls = ProdutoPeer::getOMClass(false);
-
-					$obj5 = new $cls();
-					$obj5->hydrate($row, $startcol5);
-					ProdutoPeer::addInstanceToPool($obj5, $key5);
-				} // if $obj5 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj5 (Produto)
-				$obj5->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Cliente rows
-
-				$key6 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol6);
-				if ($key6 !== null) {
-					$obj6 = ClientePeer::getInstanceFromPool($key6);
-					if (!$obj6) {
-	
-						$cls = ClientePeer::getOMClass(false);
-
-					$obj6 = new $cls();
-					$obj6->hydrate($row, $startcol6);
-					ClientePeer::addInstanceToPool($obj6, $key6);
-				} // if $obj6 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj6 (Cliente)
-				$obj6->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Usuario rows
-
-				$key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-				if ($key7 !== null) {
-					$obj7 = UsuarioPeer::getInstanceFromPool($key7);
-					if (!$obj7) {
-	
-						$cls = UsuarioPeer::getOMClass(false);
-
-					$obj7 = new $cls();
-					$obj7->hydrate($row, $startcol7);
-					UsuarioPeer::addInstanceToPool($obj7, $key7);
-				} // if $obj7 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj7 (Usuario)
-				$obj7->addCertificadoRelatedByUsuarioId($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Usuario rows
-
-				$key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
-				if ($key8 !== null) {
-					$obj8 = UsuarioPeer::getInstanceFromPool($key8);
-					if (!$obj8) {
-	
-						$cls = UsuarioPeer::getOMClass(false);
-
-					$obj8 = new $cls();
-					$obj8->hydrate($row, $startcol8);
-					UsuarioPeer::addInstanceToPool($obj8, $key8);
-				} // if $obj8 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj8 (Usuario)
-				$obj8->addCertificadoRelatedByUsuarioValidouId($obj1);
-
-			} // if joined row is not null
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
-
-	/**
-	 * Selects a collection of Certificado objects pre-filled with all related objects except Local.
-	 *
-	 * @param      Criteria  $criteria
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Certificado objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinAllExceptLocal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$criteria = clone $criteria;
-
-		// Set the correct dbName if it has not been overridden
-		// $criteria->getDbName() will return the same object if not set to another value
-		// so == check is okay and faster
-		if ($criteria->getDbName() == Propel::getDefaultDB()) {
-			$criteria->setDbName(self::DATABASE_NAME);
-		}
-
-		CertificadoPeer::addSelectColumns($criteria);
-		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ParceiroPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ContadorPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		FormaPagamentoPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ProdutoPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ClientePeer::addSelectColumns($criteria);
-		$startcol7 = $startcol6 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
-
-		UsuarioPeer::addSelectColumns($criteria);
-		$startcol8 = $startcol7 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		UsuarioPeer::addSelectColumns($criteria);
-		$startcol9 = $startcol8 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::USUARIO_VALIDOU_ID, UsuarioPeer::ID, $join_behavior);
-
-
-		$stmt = BasePeer::doSelect($criteria, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-				$cls = CertificadoPeer::getOMClass(false);
-
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				CertificadoPeer::addInstanceToPool($obj1, $key1);
-			} // if obj1 already loaded
-
-				// Add objects for joined Parceiro rows
-
-				$key2 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = ParceiroPeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = ParceiroPeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol2);
-					ParceiroPeer::addInstanceToPool($obj2, $key2);
-				} // if $obj2 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj2 (Parceiro)
-				$obj2->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Contador rows
-
-				$key3 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-				if ($key3 !== null) {
-					$obj3 = ContadorPeer::getInstanceFromPool($key3);
-					if (!$obj3) {
-	
-						$cls = ContadorPeer::getOMClass(false);
-
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					ContadorPeer::addInstanceToPool($obj3, $key3);
-				} // if $obj3 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj3 (Contador)
-				$obj3->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined FormaPagamento rows
-
-				$key4 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-				if ($key4 !== null) {
-					$obj4 = FormaPagamentoPeer::getInstanceFromPool($key4);
-					if (!$obj4) {
-	
-						$cls = FormaPagamentoPeer::getOMClass(false);
-
-					$obj4 = new $cls();
-					$obj4->hydrate($row, $startcol4);
-					FormaPagamentoPeer::addInstanceToPool($obj4, $key4);
-				} // if $obj4 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj4 (FormaPagamento)
-				$obj4->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Produto rows
-
-				$key5 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-				if ($key5 !== null) {
-					$obj5 = ProdutoPeer::getInstanceFromPool($key5);
-					if (!$obj5) {
-	
-						$cls = ProdutoPeer::getOMClass(false);
-
-					$obj5 = new $cls();
-					$obj5->hydrate($row, $startcol5);
-					ProdutoPeer::addInstanceToPool($obj5, $key5);
-				} // if $obj5 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj5 (Produto)
-				$obj5->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Cliente rows
-
-				$key6 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol6);
-				if ($key6 !== null) {
-					$obj6 = ClientePeer::getInstanceFromPool($key6);
-					if (!$obj6) {
-	
-						$cls = ClientePeer::getOMClass(false);
-
-					$obj6 = new $cls();
-					$obj6->hydrate($row, $startcol6);
-					ClientePeer::addInstanceToPool($obj6, $key6);
-				} // if $obj6 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj6 (Cliente)
-				$obj6->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Usuario rows
-
-				$key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-				if ($key7 !== null) {
-					$obj7 = UsuarioPeer::getInstanceFromPool($key7);
-					if (!$obj7) {
-	
-						$cls = UsuarioPeer::getOMClass(false);
-
-					$obj7 = new $cls();
-					$obj7->hydrate($row, $startcol7);
-					UsuarioPeer::addInstanceToPool($obj7, $key7);
-				} // if $obj7 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj7 (Usuario)
-				$obj7->addCertificadoRelatedByUsuarioId($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Usuario rows
-
-				$key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
-				if ($key8 !== null) {
-					$obj8 = UsuarioPeer::getInstanceFromPool($key8);
-					if (!$obj8) {
-	
-						$cls = UsuarioPeer::getOMClass(false);
-
-					$obj8 = new $cls();
-					$obj8->hydrate($row, $startcol8);
-					UsuarioPeer::addInstanceToPool($obj8, $key8);
-				} // if $obj8 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj8 (Usuario)
-				$obj8->addCertificadoRelatedByUsuarioValidouId($obj1);
-
-			} // if joined row is not null
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
-
-	/**
-	 * Selects a collection of Certificado objects pre-filled with all related objects except FormaPagamento.
-	 *
-	 * @param      Criteria  $criteria
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Certificado objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinAllExceptFormaPagamento(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$criteria = clone $criteria;
-
-		// Set the correct dbName if it has not been overridden
-		// $criteria->getDbName() will return the same object if not set to another value
-		// so == check is okay and faster
-		if ($criteria->getDbName() == Propel::getDefaultDB()) {
-			$criteria->setDbName(self::DATABASE_NAME);
-		}
-
-		CertificadoPeer::addSelectColumns($criteria);
-		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ParceiroPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ContadorPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		LocalPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ProdutoPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ClientePeer::addSelectColumns($criteria);
-		$startcol7 = $startcol6 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
-
-		UsuarioPeer::addSelectColumns($criteria);
-		$startcol8 = $startcol7 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		UsuarioPeer::addSelectColumns($criteria);
-		$startcol9 = $startcol8 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::USUARIO_VALIDOU_ID, UsuarioPeer::ID, $join_behavior);
-
-
-		$stmt = BasePeer::doSelect($criteria, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-				$cls = CertificadoPeer::getOMClass(false);
-
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				CertificadoPeer::addInstanceToPool($obj1, $key1);
-			} // if obj1 already loaded
-
-				// Add objects for joined Parceiro rows
-
-				$key2 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = ParceiroPeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = ParceiroPeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol2);
-					ParceiroPeer::addInstanceToPool($obj2, $key2);
-				} // if $obj2 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj2 (Parceiro)
-				$obj2->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Contador rows
-
-				$key3 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-				if ($key3 !== null) {
-					$obj3 = ContadorPeer::getInstanceFromPool($key3);
-					if (!$obj3) {
-	
-						$cls = ContadorPeer::getOMClass(false);
-
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					ContadorPeer::addInstanceToPool($obj3, $key3);
-				} // if $obj3 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj3 (Contador)
-				$obj3->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Local rows
-
-				$key4 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-				if ($key4 !== null) {
-					$obj4 = LocalPeer::getInstanceFromPool($key4);
-					if (!$obj4) {
-	
-						$cls = LocalPeer::getOMClass(false);
-
-					$obj4 = new $cls();
-					$obj4->hydrate($row, $startcol4);
-					LocalPeer::addInstanceToPool($obj4, $key4);
-				} // if $obj4 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj4 (Local)
-				$obj4->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Produto rows
-
-				$key5 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-				if ($key5 !== null) {
-					$obj5 = ProdutoPeer::getInstanceFromPool($key5);
-					if (!$obj5) {
-	
-						$cls = ProdutoPeer::getOMClass(false);
-
-					$obj5 = new $cls();
-					$obj5->hydrate($row, $startcol5);
-					ProdutoPeer::addInstanceToPool($obj5, $key5);
-				} // if $obj5 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj5 (Produto)
-				$obj5->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Cliente rows
-
-				$key6 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol6);
-				if ($key6 !== null) {
-					$obj6 = ClientePeer::getInstanceFromPool($key6);
-					if (!$obj6) {
-	
-						$cls = ClientePeer::getOMClass(false);
-
-					$obj6 = new $cls();
-					$obj6->hydrate($row, $startcol6);
-					ClientePeer::addInstanceToPool($obj6, $key6);
-				} // if $obj6 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj6 (Cliente)
-				$obj6->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Usuario rows
-
-				$key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-				if ($key7 !== null) {
-					$obj7 = UsuarioPeer::getInstanceFromPool($key7);
-					if (!$obj7) {
-	
-						$cls = UsuarioPeer::getOMClass(false);
-
-					$obj7 = new $cls();
-					$obj7->hydrate($row, $startcol7);
-					UsuarioPeer::addInstanceToPool($obj7, $key7);
-				} // if $obj7 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj7 (Usuario)
-				$obj7->addCertificadoRelatedByUsuarioId($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Usuario rows
-
-				$key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
-				if ($key8 !== null) {
-					$obj8 = UsuarioPeer::getInstanceFromPool($key8);
-					if (!$obj8) {
-	
-						$cls = UsuarioPeer::getOMClass(false);
-
-					$obj8 = new $cls();
-					$obj8->hydrate($row, $startcol8);
-					UsuarioPeer::addInstanceToPool($obj8, $key8);
-				} // if $obj8 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj8 (Usuario)
-				$obj8->addCertificadoRelatedByUsuarioValidouId($obj1);
-
-			} // if joined row is not null
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
-
-	/**
-	 * Selects a collection of Certificado objects pre-filled with all related objects except Produto.
-	 *
-	 * @param      Criteria  $criteria
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Certificado objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinAllExceptProduto(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$criteria = clone $criteria;
-
-		// Set the correct dbName if it has not been overridden
-		// $criteria->getDbName() will return the same object if not set to another value
-		// so == check is okay and faster
-		if ($criteria->getDbName() == Propel::getDefaultDB()) {
-			$criteria->setDbName(self::DATABASE_NAME);
-		}
-
-		CertificadoPeer::addSelectColumns($criteria);
-		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ParceiroPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ContadorPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		LocalPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		FormaPagamentoPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ClientePeer::addSelectColumns($criteria);
-		$startcol7 = $startcol6 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
-
-		UsuarioPeer::addSelectColumns($criteria);
-		$startcol8 = $startcol7 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		UsuarioPeer::addSelectColumns($criteria);
-		$startcol9 = $startcol8 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::USUARIO_VALIDOU_ID, UsuarioPeer::ID, $join_behavior);
-
-
-		$stmt = BasePeer::doSelect($criteria, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-				$cls = CertificadoPeer::getOMClass(false);
-
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				CertificadoPeer::addInstanceToPool($obj1, $key1);
-			} // if obj1 already loaded
-
-				// Add objects for joined Parceiro rows
-
-				$key2 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = ParceiroPeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = ParceiroPeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol2);
-					ParceiroPeer::addInstanceToPool($obj2, $key2);
-				} // if $obj2 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj2 (Parceiro)
-				$obj2->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Contador rows
-
-				$key3 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-				if ($key3 !== null) {
-					$obj3 = ContadorPeer::getInstanceFromPool($key3);
-					if (!$obj3) {
-	
-						$cls = ContadorPeer::getOMClass(false);
-
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					ContadorPeer::addInstanceToPool($obj3, $key3);
-				} // if $obj3 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj3 (Contador)
-				$obj3->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Local rows
-
-				$key4 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-				if ($key4 !== null) {
-					$obj4 = LocalPeer::getInstanceFromPool($key4);
-					if (!$obj4) {
-	
-						$cls = LocalPeer::getOMClass(false);
-
-					$obj4 = new $cls();
-					$obj4->hydrate($row, $startcol4);
-					LocalPeer::addInstanceToPool($obj4, $key4);
-				} // if $obj4 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj4 (Local)
-				$obj4->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined FormaPagamento rows
-
-				$key5 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-				if ($key5 !== null) {
-					$obj5 = FormaPagamentoPeer::getInstanceFromPool($key5);
-					if (!$obj5) {
-	
-						$cls = FormaPagamentoPeer::getOMClass(false);
-
-					$obj5 = new $cls();
-					$obj5->hydrate($row, $startcol5);
-					FormaPagamentoPeer::addInstanceToPool($obj5, $key5);
-				} // if $obj5 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj5 (FormaPagamento)
-				$obj5->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Cliente rows
-
-				$key6 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol6);
-				if ($key6 !== null) {
-					$obj6 = ClientePeer::getInstanceFromPool($key6);
-					if (!$obj6) {
-	
-						$cls = ClientePeer::getOMClass(false);
-
-					$obj6 = new $cls();
-					$obj6->hydrate($row, $startcol6);
-					ClientePeer::addInstanceToPool($obj6, $key6);
-				} // if $obj6 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj6 (Cliente)
-				$obj6->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Usuario rows
-
-				$key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-				if ($key7 !== null) {
-					$obj7 = UsuarioPeer::getInstanceFromPool($key7);
-					if (!$obj7) {
-	
-						$cls = UsuarioPeer::getOMClass(false);
-
-					$obj7 = new $cls();
-					$obj7->hydrate($row, $startcol7);
-					UsuarioPeer::addInstanceToPool($obj7, $key7);
-				} // if $obj7 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj7 (Usuario)
-				$obj7->addCertificadoRelatedByUsuarioId($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Usuario rows
-
-				$key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
-				if ($key8 !== null) {
-					$obj8 = UsuarioPeer::getInstanceFromPool($key8);
-					if (!$obj8) {
-	
-						$cls = UsuarioPeer::getOMClass(false);
-
-					$obj8 = new $cls();
-					$obj8->hydrate($row, $startcol8);
-					UsuarioPeer::addInstanceToPool($obj8, $key8);
-				} // if $obj8 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj8 (Usuario)
-				$obj8->addCertificadoRelatedByUsuarioValidouId($obj1);
-
-			} // if joined row is not null
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
-
-	/**
-	 * Selects a collection of Certificado objects pre-filled with all related objects except Cliente.
-	 *
-	 * @param      Criteria  $criteria
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Certificado objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinAllExceptCliente(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$criteria = clone $criteria;
-
-		// Set the correct dbName if it has not been overridden
-		// $criteria->getDbName() will return the same object if not set to another value
-		// so == check is okay and faster
-		if ($criteria->getDbName() == Propel::getDefaultDB()) {
-			$criteria->setDbName(self::DATABASE_NAME);
-		}
-
-		CertificadoPeer::addSelectColumns($criteria);
-		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ParceiroPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ContadorPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		LocalPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		FormaPagamentoPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ProdutoPeer::addSelectColumns($criteria);
-		$startcol7 = $startcol6 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		UsuarioPeer::addSelectColumns($criteria);
-		$startcol8 = $startcol7 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		UsuarioPeer::addSelectColumns($criteria);
-		$startcol9 = $startcol8 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::USUARIO_VALIDOU_ID, UsuarioPeer::ID, $join_behavior);
-
-
-		$stmt = BasePeer::doSelect($criteria, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-				$cls = CertificadoPeer::getOMClass(false);
-
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				CertificadoPeer::addInstanceToPool($obj1, $key1);
-			} // if obj1 already loaded
-
-				// Add objects for joined Parceiro rows
-
-				$key2 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = ParceiroPeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = ParceiroPeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol2);
-					ParceiroPeer::addInstanceToPool($obj2, $key2);
-				} // if $obj2 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj2 (Parceiro)
-				$obj2->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Contador rows
-
-				$key3 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-				if ($key3 !== null) {
-					$obj3 = ContadorPeer::getInstanceFromPool($key3);
-					if (!$obj3) {
-	
-						$cls = ContadorPeer::getOMClass(false);
-
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					ContadorPeer::addInstanceToPool($obj3, $key3);
-				} // if $obj3 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj3 (Contador)
-				$obj3->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Local rows
-
-				$key4 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-				if ($key4 !== null) {
-					$obj4 = LocalPeer::getInstanceFromPool($key4);
-					if (!$obj4) {
-	
-						$cls = LocalPeer::getOMClass(false);
-
-					$obj4 = new $cls();
-					$obj4->hydrate($row, $startcol4);
-					LocalPeer::addInstanceToPool($obj4, $key4);
-				} // if $obj4 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj4 (Local)
-				$obj4->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined FormaPagamento rows
-
-				$key5 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-				if ($key5 !== null) {
-					$obj5 = FormaPagamentoPeer::getInstanceFromPool($key5);
-					if (!$obj5) {
-	
-						$cls = FormaPagamentoPeer::getOMClass(false);
-
-					$obj5 = new $cls();
-					$obj5->hydrate($row, $startcol5);
-					FormaPagamentoPeer::addInstanceToPool($obj5, $key5);
-				} // if $obj5 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj5 (FormaPagamento)
-				$obj5->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Produto rows
-
-				$key6 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-				if ($key6 !== null) {
-					$obj6 = ProdutoPeer::getInstanceFromPool($key6);
-					if (!$obj6) {
-	
-						$cls = ProdutoPeer::getOMClass(false);
-
-					$obj6 = new $cls();
-					$obj6->hydrate($row, $startcol6);
-					ProdutoPeer::addInstanceToPool($obj6, $key6);
-				} // if $obj6 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj6 (Produto)
-				$obj6->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Usuario rows
-
-				$key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-				if ($key7 !== null) {
-					$obj7 = UsuarioPeer::getInstanceFromPool($key7);
-					if (!$obj7) {
-	
-						$cls = UsuarioPeer::getOMClass(false);
-
-					$obj7 = new $cls();
-					$obj7->hydrate($row, $startcol7);
-					UsuarioPeer::addInstanceToPool($obj7, $key7);
-				} // if $obj7 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj7 (Usuario)
-				$obj7->addCertificadoRelatedByUsuarioId($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Usuario rows
-
-				$key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
-				if ($key8 !== null) {
-					$obj8 = UsuarioPeer::getInstanceFromPool($key8);
-					if (!$obj8) {
-	
-						$cls = UsuarioPeer::getOMClass(false);
-
-					$obj8 = new $cls();
-					$obj8->hydrate($row, $startcol8);
-					UsuarioPeer::addInstanceToPool($obj8, $key8);
-				} // if $obj8 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj8 (Usuario)
-				$obj8->addCertificadoRelatedByUsuarioValidouId($obj1);
-
-			} // if joined row is not null
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
-
-	/**
-	 * Selects a collection of Certificado objects pre-filled with all related objects except UsuarioRelatedByUsuarioId.
-	 *
-	 * @param      Criteria  $criteria
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Certificado objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinAllExceptUsuarioRelatedByUsuarioId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$criteria = clone $criteria;
-
-		// Set the correct dbName if it has not been overridden
-		// $criteria->getDbName() will return the same object if not set to another value
-		// so == check is okay and faster
-		if ($criteria->getDbName() == Propel::getDefaultDB()) {
-			$criteria->setDbName(self::DATABASE_NAME);
-		}
-
-		CertificadoPeer::addSelectColumns($criteria);
-		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ParceiroPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ContadorPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		LocalPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		FormaPagamentoPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ProdutoPeer::addSelectColumns($criteria);
-		$startcol7 = $startcol6 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ClientePeer::addSelectColumns($criteria);
-		$startcol8 = $startcol7 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
-
-
-		$stmt = BasePeer::doSelect($criteria, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-				$cls = CertificadoPeer::getOMClass(false);
-
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				CertificadoPeer::addInstanceToPool($obj1, $key1);
-			} // if obj1 already loaded
-
-				// Add objects for joined Parceiro rows
-
-				$key2 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = ParceiroPeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = ParceiroPeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol2);
-					ParceiroPeer::addInstanceToPool($obj2, $key2);
-				} // if $obj2 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj2 (Parceiro)
-				$obj2->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Contador rows
-
-				$key3 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-				if ($key3 !== null) {
-					$obj3 = ContadorPeer::getInstanceFromPool($key3);
-					if (!$obj3) {
-	
-						$cls = ContadorPeer::getOMClass(false);
-
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					ContadorPeer::addInstanceToPool($obj3, $key3);
-				} // if $obj3 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj3 (Contador)
-				$obj3->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Local rows
-
-				$key4 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-				if ($key4 !== null) {
-					$obj4 = LocalPeer::getInstanceFromPool($key4);
-					if (!$obj4) {
-	
-						$cls = LocalPeer::getOMClass(false);
-
-					$obj4 = new $cls();
-					$obj4->hydrate($row, $startcol4);
-					LocalPeer::addInstanceToPool($obj4, $key4);
-				} // if $obj4 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj4 (Local)
-				$obj4->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined FormaPagamento rows
-
-				$key5 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-				if ($key5 !== null) {
-					$obj5 = FormaPagamentoPeer::getInstanceFromPool($key5);
-					if (!$obj5) {
-	
-						$cls = FormaPagamentoPeer::getOMClass(false);
-
-					$obj5 = new $cls();
-					$obj5->hydrate($row, $startcol5);
-					FormaPagamentoPeer::addInstanceToPool($obj5, $key5);
-				} // if $obj5 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj5 (FormaPagamento)
-				$obj5->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Produto rows
-
-				$key6 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-				if ($key6 !== null) {
-					$obj6 = ProdutoPeer::getInstanceFromPool($key6);
-					if (!$obj6) {
-	
-						$cls = ProdutoPeer::getOMClass(false);
-
-					$obj6 = new $cls();
-					$obj6->hydrate($row, $startcol6);
-					ProdutoPeer::addInstanceToPool($obj6, $key6);
-				} // if $obj6 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj6 (Produto)
-				$obj6->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Cliente rows
-
-				$key7 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol7);
-				if ($key7 !== null) {
-					$obj7 = ClientePeer::getInstanceFromPool($key7);
-					if (!$obj7) {
-	
-						$cls = ClientePeer::getOMClass(false);
-
-					$obj7 = new $cls();
-					$obj7->hydrate($row, $startcol7);
-					ClientePeer::addInstanceToPool($obj7, $key7);
-				} // if $obj7 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj7 (Cliente)
-				$obj7->addCertificado($obj1);
-
-			} // if joined row is not null
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
-
-	/**
-	 * Selects a collection of Certificado objects pre-filled with all related objects except UsuarioRelatedByUsuarioValidouId.
-	 *
-	 * @param      Criteria  $criteria
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Certificado objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinAllExceptUsuarioRelatedByUsuarioValidouId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$criteria = clone $criteria;
-
-		// Set the correct dbName if it has not been overridden
-		// $criteria->getDbName() will return the same object if not set to another value
-		// so == check is okay and faster
-		if ($criteria->getDbName() == Propel::getDefaultDB()) {
-			$criteria->setDbName(self::DATABASE_NAME);
-		}
-
-		CertificadoPeer::addSelectColumns($criteria);
-		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ParceiroPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ContadorPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		LocalPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		FormaPagamentoPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ProdutoPeer::addSelectColumns($criteria);
-		$startcol7 = $startcol6 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ClientePeer::addSelectColumns($criteria);
-		$startcol8 = $startcol7 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
-
-
-		$stmt = BasePeer::doSelect($criteria, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-				$cls = CertificadoPeer::getOMClass(false);
-
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				CertificadoPeer::addInstanceToPool($obj1, $key1);
-			} // if obj1 already loaded
-
-				// Add objects for joined Parceiro rows
-
-				$key2 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = ParceiroPeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = ParceiroPeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol2);
-					ParceiroPeer::addInstanceToPool($obj2, $key2);
-				} // if $obj2 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj2 (Parceiro)
-				$obj2->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Contador rows
-
-				$key3 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-				if ($key3 !== null) {
-					$obj3 = ContadorPeer::getInstanceFromPool($key3);
-					if (!$obj3) {
-	
-						$cls = ContadorPeer::getOMClass(false);
-
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					ContadorPeer::addInstanceToPool($obj3, $key3);
-				} // if $obj3 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj3 (Contador)
-				$obj3->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Local rows
-
-				$key4 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-				if ($key4 !== null) {
-					$obj4 = LocalPeer::getInstanceFromPool($key4);
-					if (!$obj4) {
-	
-						$cls = LocalPeer::getOMClass(false);
-
-					$obj4 = new $cls();
-					$obj4->hydrate($row, $startcol4);
-					LocalPeer::addInstanceToPool($obj4, $key4);
-				} // if $obj4 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj4 (Local)
-				$obj4->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined FormaPagamento rows
-
-				$key5 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-				if ($key5 !== null) {
-					$obj5 = FormaPagamentoPeer::getInstanceFromPool($key5);
-					if (!$obj5) {
-	
-						$cls = FormaPagamentoPeer::getOMClass(false);
-
-					$obj5 = new $cls();
-					$obj5->hydrate($row, $startcol5);
-					FormaPagamentoPeer::addInstanceToPool($obj5, $key5);
-				} // if $obj5 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj5 (FormaPagamento)
-				$obj5->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Produto rows
-
-				$key6 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-				if ($key6 !== null) {
-					$obj6 = ProdutoPeer::getInstanceFromPool($key6);
-					if (!$obj6) {
-	
-						$cls = ProdutoPeer::getOMClass(false);
-
-					$obj6 = new $cls();
-					$obj6->hydrate($row, $startcol6);
-					ProdutoPeer::addInstanceToPool($obj6, $key6);
-				} // if $obj6 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj6 (Produto)
-				$obj6->addCertificado($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Cliente rows
-
-				$key7 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol7);
-				if ($key7 !== null) {
-					$obj7 = ClientePeer::getInstanceFromPool($key7);
-					if (!$obj7) {
-	
-						$cls = ClientePeer::getOMClass(false);
-
-					$obj7 = new $cls();
-					$obj7->hydrate($row, $startcol7);
-					ClientePeer::addInstanceToPool($obj7, $key7);
-				} // if $obj7 already loaded
-
-				// Add the $obj1 (Certificado) to the collection in $obj7 (Cliente)
-				$obj7->addCertificado($obj1);
-
-			} // if joined row is not null
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
-
-	/**
-	 * Selects a collection of Certificado objects pre-filled with all related objects except CertificadoRelatedByCertificadoRenovado.
-	 *
-	 * @param      Criteria  $criteria
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Certificado objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinAllExceptCertificadoRelatedByCertificadoRenovado(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptSituacao(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -4191,6 +2730,2151 @@ abstract class BaseCertificadoPeer {
 
 				// Add the $obj1 (Certificado) to the collection in $obj9 (Usuario)
 				$obj9->addCertificadoRelatedByUsuarioValidouId($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Certificado objects pre-filled with all related objects except Parceiro.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Certificado objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptParceiro(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CertificadoPeer::addSelectColumns($criteria);
+		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		SituacaoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (SituacaoPeer::NUM_COLUMNS - SituacaoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ContadorPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		LocalPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		FormaPagamentoPeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ProdutoPeer::addSelectColumns($criteria);
+		$startcol7 = $startcol6 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ClientePeer::addSelectColumns($criteria);
+		$startcol8 = $startcol7 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol9 = $startcol8 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol10 = $startcol9 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_VALIDOU_ID, UsuarioPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = CertificadoPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CertificadoPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Situacao rows
+
+				$key2 = SituacaoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = SituacaoPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = SituacaoPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					SituacaoPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj2 (Situacao)
+				$obj2->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Contador rows
+
+				$key3 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				if ($key3 !== null) {
+					$obj3 = ContadorPeer::getInstanceFromPool($key3);
+					if (!$obj3) {
+	
+						$cls = ContadorPeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					ContadorPeer::addInstanceToPool($obj3, $key3);
+				} // if $obj3 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj3 (Contador)
+				$obj3->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Local rows
+
+				$key4 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				if ($key4 !== null) {
+					$obj4 = LocalPeer::getInstanceFromPool($key4);
+					if (!$obj4) {
+	
+						$cls = LocalPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					LocalPeer::addInstanceToPool($obj4, $key4);
+				} // if $obj4 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj4 (Local)
+				$obj4->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined FormaPagamento rows
+
+				$key5 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+				if ($key5 !== null) {
+					$obj5 = FormaPagamentoPeer::getInstanceFromPool($key5);
+					if (!$obj5) {
+	
+						$cls = FormaPagamentoPeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					FormaPagamentoPeer::addInstanceToPool($obj5, $key5);
+				} // if $obj5 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj5 (FormaPagamento)
+				$obj5->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Produto rows
+
+				$key6 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+				if ($key6 !== null) {
+					$obj6 = ProdutoPeer::getInstanceFromPool($key6);
+					if (!$obj6) {
+	
+						$cls = ProdutoPeer::getOMClass(false);
+
+					$obj6 = new $cls();
+					$obj6->hydrate($row, $startcol6);
+					ProdutoPeer::addInstanceToPool($obj6, $key6);
+				} // if $obj6 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj6 (Produto)
+				$obj6->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Cliente rows
+
+				$key7 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol7);
+				if ($key7 !== null) {
+					$obj7 = ClientePeer::getInstanceFromPool($key7);
+					if (!$obj7) {
+	
+						$cls = ClientePeer::getOMClass(false);
+
+					$obj7 = new $cls();
+					$obj7->hydrate($row, $startcol7);
+					ClientePeer::addInstanceToPool($obj7, $key7);
+				} // if $obj7 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj7 (Cliente)
+				$obj7->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
+				if ($key8 !== null) {
+					$obj8 = UsuarioPeer::getInstanceFromPool($key8);
+					if (!$obj8) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj8 = new $cls();
+					$obj8->hydrate($row, $startcol8);
+					UsuarioPeer::addInstanceToPool($obj8, $key8);
+				} // if $obj8 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj8 (Usuario)
+				$obj8->addCertificadoRelatedByUsuarioId($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key9 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol9);
+				if ($key9 !== null) {
+					$obj9 = UsuarioPeer::getInstanceFromPool($key9);
+					if (!$obj9) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj9 = new $cls();
+					$obj9->hydrate($row, $startcol9);
+					UsuarioPeer::addInstanceToPool($obj9, $key9);
+				} // if $obj9 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj9 (Usuario)
+				$obj9->addCertificadoRelatedByUsuarioValidouId($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Certificado objects pre-filled with all related objects except Contador.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Certificado objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptContador(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CertificadoPeer::addSelectColumns($criteria);
+		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		SituacaoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (SituacaoPeer::NUM_COLUMNS - SituacaoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ParceiroPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		LocalPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		FormaPagamentoPeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ProdutoPeer::addSelectColumns($criteria);
+		$startcol7 = $startcol6 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ClientePeer::addSelectColumns($criteria);
+		$startcol8 = $startcol7 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol9 = $startcol8 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol10 = $startcol9 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_VALIDOU_ID, UsuarioPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = CertificadoPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CertificadoPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Situacao rows
+
+				$key2 = SituacaoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = SituacaoPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = SituacaoPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					SituacaoPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj2 (Situacao)
+				$obj2->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Parceiro rows
+
+				$key3 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				if ($key3 !== null) {
+					$obj3 = ParceiroPeer::getInstanceFromPool($key3);
+					if (!$obj3) {
+	
+						$cls = ParceiroPeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					ParceiroPeer::addInstanceToPool($obj3, $key3);
+				} // if $obj3 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj3 (Parceiro)
+				$obj3->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Local rows
+
+				$key4 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				if ($key4 !== null) {
+					$obj4 = LocalPeer::getInstanceFromPool($key4);
+					if (!$obj4) {
+	
+						$cls = LocalPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					LocalPeer::addInstanceToPool($obj4, $key4);
+				} // if $obj4 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj4 (Local)
+				$obj4->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined FormaPagamento rows
+
+				$key5 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+				if ($key5 !== null) {
+					$obj5 = FormaPagamentoPeer::getInstanceFromPool($key5);
+					if (!$obj5) {
+	
+						$cls = FormaPagamentoPeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					FormaPagamentoPeer::addInstanceToPool($obj5, $key5);
+				} // if $obj5 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj5 (FormaPagamento)
+				$obj5->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Produto rows
+
+				$key6 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+				if ($key6 !== null) {
+					$obj6 = ProdutoPeer::getInstanceFromPool($key6);
+					if (!$obj6) {
+	
+						$cls = ProdutoPeer::getOMClass(false);
+
+					$obj6 = new $cls();
+					$obj6->hydrate($row, $startcol6);
+					ProdutoPeer::addInstanceToPool($obj6, $key6);
+				} // if $obj6 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj6 (Produto)
+				$obj6->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Cliente rows
+
+				$key7 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol7);
+				if ($key7 !== null) {
+					$obj7 = ClientePeer::getInstanceFromPool($key7);
+					if (!$obj7) {
+	
+						$cls = ClientePeer::getOMClass(false);
+
+					$obj7 = new $cls();
+					$obj7->hydrate($row, $startcol7);
+					ClientePeer::addInstanceToPool($obj7, $key7);
+				} // if $obj7 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj7 (Cliente)
+				$obj7->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
+				if ($key8 !== null) {
+					$obj8 = UsuarioPeer::getInstanceFromPool($key8);
+					if (!$obj8) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj8 = new $cls();
+					$obj8->hydrate($row, $startcol8);
+					UsuarioPeer::addInstanceToPool($obj8, $key8);
+				} // if $obj8 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj8 (Usuario)
+				$obj8->addCertificadoRelatedByUsuarioId($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key9 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol9);
+				if ($key9 !== null) {
+					$obj9 = UsuarioPeer::getInstanceFromPool($key9);
+					if (!$obj9) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj9 = new $cls();
+					$obj9->hydrate($row, $startcol9);
+					UsuarioPeer::addInstanceToPool($obj9, $key9);
+				} // if $obj9 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj9 (Usuario)
+				$obj9->addCertificadoRelatedByUsuarioValidouId($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Certificado objects pre-filled with all related objects except Local.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Certificado objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptLocal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CertificadoPeer::addSelectColumns($criteria);
+		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		SituacaoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (SituacaoPeer::NUM_COLUMNS - SituacaoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ParceiroPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ContadorPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		FormaPagamentoPeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ProdutoPeer::addSelectColumns($criteria);
+		$startcol7 = $startcol6 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ClientePeer::addSelectColumns($criteria);
+		$startcol8 = $startcol7 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol9 = $startcol8 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol10 = $startcol9 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_VALIDOU_ID, UsuarioPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = CertificadoPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CertificadoPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Situacao rows
+
+				$key2 = SituacaoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = SituacaoPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = SituacaoPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					SituacaoPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj2 (Situacao)
+				$obj2->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Parceiro rows
+
+				$key3 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				if ($key3 !== null) {
+					$obj3 = ParceiroPeer::getInstanceFromPool($key3);
+					if (!$obj3) {
+	
+						$cls = ParceiroPeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					ParceiroPeer::addInstanceToPool($obj3, $key3);
+				} // if $obj3 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj3 (Parceiro)
+				$obj3->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Contador rows
+
+				$key4 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				if ($key4 !== null) {
+					$obj4 = ContadorPeer::getInstanceFromPool($key4);
+					if (!$obj4) {
+	
+						$cls = ContadorPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					ContadorPeer::addInstanceToPool($obj4, $key4);
+				} // if $obj4 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj4 (Contador)
+				$obj4->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined FormaPagamento rows
+
+				$key5 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+				if ($key5 !== null) {
+					$obj5 = FormaPagamentoPeer::getInstanceFromPool($key5);
+					if (!$obj5) {
+	
+						$cls = FormaPagamentoPeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					FormaPagamentoPeer::addInstanceToPool($obj5, $key5);
+				} // if $obj5 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj5 (FormaPagamento)
+				$obj5->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Produto rows
+
+				$key6 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+				if ($key6 !== null) {
+					$obj6 = ProdutoPeer::getInstanceFromPool($key6);
+					if (!$obj6) {
+	
+						$cls = ProdutoPeer::getOMClass(false);
+
+					$obj6 = new $cls();
+					$obj6->hydrate($row, $startcol6);
+					ProdutoPeer::addInstanceToPool($obj6, $key6);
+				} // if $obj6 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj6 (Produto)
+				$obj6->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Cliente rows
+
+				$key7 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol7);
+				if ($key7 !== null) {
+					$obj7 = ClientePeer::getInstanceFromPool($key7);
+					if (!$obj7) {
+	
+						$cls = ClientePeer::getOMClass(false);
+
+					$obj7 = new $cls();
+					$obj7->hydrate($row, $startcol7);
+					ClientePeer::addInstanceToPool($obj7, $key7);
+				} // if $obj7 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj7 (Cliente)
+				$obj7->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
+				if ($key8 !== null) {
+					$obj8 = UsuarioPeer::getInstanceFromPool($key8);
+					if (!$obj8) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj8 = new $cls();
+					$obj8->hydrate($row, $startcol8);
+					UsuarioPeer::addInstanceToPool($obj8, $key8);
+				} // if $obj8 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj8 (Usuario)
+				$obj8->addCertificadoRelatedByUsuarioId($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key9 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol9);
+				if ($key9 !== null) {
+					$obj9 = UsuarioPeer::getInstanceFromPool($key9);
+					if (!$obj9) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj9 = new $cls();
+					$obj9->hydrate($row, $startcol9);
+					UsuarioPeer::addInstanceToPool($obj9, $key9);
+				} // if $obj9 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj9 (Usuario)
+				$obj9->addCertificadoRelatedByUsuarioValidouId($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Certificado objects pre-filled with all related objects except FormaPagamento.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Certificado objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptFormaPagamento(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CertificadoPeer::addSelectColumns($criteria);
+		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		SituacaoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (SituacaoPeer::NUM_COLUMNS - SituacaoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ParceiroPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ContadorPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		LocalPeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ProdutoPeer::addSelectColumns($criteria);
+		$startcol7 = $startcol6 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ClientePeer::addSelectColumns($criteria);
+		$startcol8 = $startcol7 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol9 = $startcol8 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol10 = $startcol9 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_VALIDOU_ID, UsuarioPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = CertificadoPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CertificadoPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Situacao rows
+
+				$key2 = SituacaoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = SituacaoPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = SituacaoPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					SituacaoPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj2 (Situacao)
+				$obj2->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Parceiro rows
+
+				$key3 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				if ($key3 !== null) {
+					$obj3 = ParceiroPeer::getInstanceFromPool($key3);
+					if (!$obj3) {
+	
+						$cls = ParceiroPeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					ParceiroPeer::addInstanceToPool($obj3, $key3);
+				} // if $obj3 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj3 (Parceiro)
+				$obj3->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Contador rows
+
+				$key4 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				if ($key4 !== null) {
+					$obj4 = ContadorPeer::getInstanceFromPool($key4);
+					if (!$obj4) {
+	
+						$cls = ContadorPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					ContadorPeer::addInstanceToPool($obj4, $key4);
+				} // if $obj4 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj4 (Contador)
+				$obj4->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Local rows
+
+				$key5 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+				if ($key5 !== null) {
+					$obj5 = LocalPeer::getInstanceFromPool($key5);
+					if (!$obj5) {
+	
+						$cls = LocalPeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					LocalPeer::addInstanceToPool($obj5, $key5);
+				} // if $obj5 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj5 (Local)
+				$obj5->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Produto rows
+
+				$key6 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+				if ($key6 !== null) {
+					$obj6 = ProdutoPeer::getInstanceFromPool($key6);
+					if (!$obj6) {
+	
+						$cls = ProdutoPeer::getOMClass(false);
+
+					$obj6 = new $cls();
+					$obj6->hydrate($row, $startcol6);
+					ProdutoPeer::addInstanceToPool($obj6, $key6);
+				} // if $obj6 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj6 (Produto)
+				$obj6->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Cliente rows
+
+				$key7 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol7);
+				if ($key7 !== null) {
+					$obj7 = ClientePeer::getInstanceFromPool($key7);
+					if (!$obj7) {
+	
+						$cls = ClientePeer::getOMClass(false);
+
+					$obj7 = new $cls();
+					$obj7->hydrate($row, $startcol7);
+					ClientePeer::addInstanceToPool($obj7, $key7);
+				} // if $obj7 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj7 (Cliente)
+				$obj7->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
+				if ($key8 !== null) {
+					$obj8 = UsuarioPeer::getInstanceFromPool($key8);
+					if (!$obj8) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj8 = new $cls();
+					$obj8->hydrate($row, $startcol8);
+					UsuarioPeer::addInstanceToPool($obj8, $key8);
+				} // if $obj8 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj8 (Usuario)
+				$obj8->addCertificadoRelatedByUsuarioId($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key9 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol9);
+				if ($key9 !== null) {
+					$obj9 = UsuarioPeer::getInstanceFromPool($key9);
+					if (!$obj9) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj9 = new $cls();
+					$obj9->hydrate($row, $startcol9);
+					UsuarioPeer::addInstanceToPool($obj9, $key9);
+				} // if $obj9 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj9 (Usuario)
+				$obj9->addCertificadoRelatedByUsuarioValidouId($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Certificado objects pre-filled with all related objects except Produto.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Certificado objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptProduto(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CertificadoPeer::addSelectColumns($criteria);
+		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		SituacaoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (SituacaoPeer::NUM_COLUMNS - SituacaoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ParceiroPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ContadorPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		LocalPeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		FormaPagamentoPeer::addSelectColumns($criteria);
+		$startcol7 = $startcol6 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ClientePeer::addSelectColumns($criteria);
+		$startcol8 = $startcol7 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol9 = $startcol8 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol10 = $startcol9 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_VALIDOU_ID, UsuarioPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = CertificadoPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CertificadoPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Situacao rows
+
+				$key2 = SituacaoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = SituacaoPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = SituacaoPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					SituacaoPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj2 (Situacao)
+				$obj2->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Parceiro rows
+
+				$key3 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				if ($key3 !== null) {
+					$obj3 = ParceiroPeer::getInstanceFromPool($key3);
+					if (!$obj3) {
+	
+						$cls = ParceiroPeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					ParceiroPeer::addInstanceToPool($obj3, $key3);
+				} // if $obj3 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj3 (Parceiro)
+				$obj3->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Contador rows
+
+				$key4 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				if ($key4 !== null) {
+					$obj4 = ContadorPeer::getInstanceFromPool($key4);
+					if (!$obj4) {
+	
+						$cls = ContadorPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					ContadorPeer::addInstanceToPool($obj4, $key4);
+				} // if $obj4 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj4 (Contador)
+				$obj4->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Local rows
+
+				$key5 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+				if ($key5 !== null) {
+					$obj5 = LocalPeer::getInstanceFromPool($key5);
+					if (!$obj5) {
+	
+						$cls = LocalPeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					LocalPeer::addInstanceToPool($obj5, $key5);
+				} // if $obj5 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj5 (Local)
+				$obj5->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined FormaPagamento rows
+
+				$key6 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+				if ($key6 !== null) {
+					$obj6 = FormaPagamentoPeer::getInstanceFromPool($key6);
+					if (!$obj6) {
+	
+						$cls = FormaPagamentoPeer::getOMClass(false);
+
+					$obj6 = new $cls();
+					$obj6->hydrate($row, $startcol6);
+					FormaPagamentoPeer::addInstanceToPool($obj6, $key6);
+				} // if $obj6 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj6 (FormaPagamento)
+				$obj6->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Cliente rows
+
+				$key7 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol7);
+				if ($key7 !== null) {
+					$obj7 = ClientePeer::getInstanceFromPool($key7);
+					if (!$obj7) {
+	
+						$cls = ClientePeer::getOMClass(false);
+
+					$obj7 = new $cls();
+					$obj7->hydrate($row, $startcol7);
+					ClientePeer::addInstanceToPool($obj7, $key7);
+				} // if $obj7 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj7 (Cliente)
+				$obj7->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
+				if ($key8 !== null) {
+					$obj8 = UsuarioPeer::getInstanceFromPool($key8);
+					if (!$obj8) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj8 = new $cls();
+					$obj8->hydrate($row, $startcol8);
+					UsuarioPeer::addInstanceToPool($obj8, $key8);
+				} // if $obj8 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj8 (Usuario)
+				$obj8->addCertificadoRelatedByUsuarioId($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key9 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol9);
+				if ($key9 !== null) {
+					$obj9 = UsuarioPeer::getInstanceFromPool($key9);
+					if (!$obj9) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj9 = new $cls();
+					$obj9->hydrate($row, $startcol9);
+					UsuarioPeer::addInstanceToPool($obj9, $key9);
+				} // if $obj9 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj9 (Usuario)
+				$obj9->addCertificadoRelatedByUsuarioValidouId($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Certificado objects pre-filled with all related objects except Cliente.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Certificado objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptCliente(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CertificadoPeer::addSelectColumns($criteria);
+		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		SituacaoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (SituacaoPeer::NUM_COLUMNS - SituacaoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ParceiroPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ContadorPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		LocalPeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		FormaPagamentoPeer::addSelectColumns($criteria);
+		$startcol7 = $startcol6 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ProdutoPeer::addSelectColumns($criteria);
+		$startcol8 = $startcol7 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol9 = $startcol8 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol10 = $startcol9 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_VALIDOU_ID, UsuarioPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = CertificadoPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CertificadoPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Situacao rows
+
+				$key2 = SituacaoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = SituacaoPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = SituacaoPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					SituacaoPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj2 (Situacao)
+				$obj2->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Parceiro rows
+
+				$key3 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				if ($key3 !== null) {
+					$obj3 = ParceiroPeer::getInstanceFromPool($key3);
+					if (!$obj3) {
+	
+						$cls = ParceiroPeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					ParceiroPeer::addInstanceToPool($obj3, $key3);
+				} // if $obj3 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj3 (Parceiro)
+				$obj3->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Contador rows
+
+				$key4 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				if ($key4 !== null) {
+					$obj4 = ContadorPeer::getInstanceFromPool($key4);
+					if (!$obj4) {
+	
+						$cls = ContadorPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					ContadorPeer::addInstanceToPool($obj4, $key4);
+				} // if $obj4 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj4 (Contador)
+				$obj4->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Local rows
+
+				$key5 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+				if ($key5 !== null) {
+					$obj5 = LocalPeer::getInstanceFromPool($key5);
+					if (!$obj5) {
+	
+						$cls = LocalPeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					LocalPeer::addInstanceToPool($obj5, $key5);
+				} // if $obj5 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj5 (Local)
+				$obj5->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined FormaPagamento rows
+
+				$key6 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+				if ($key6 !== null) {
+					$obj6 = FormaPagamentoPeer::getInstanceFromPool($key6);
+					if (!$obj6) {
+	
+						$cls = FormaPagamentoPeer::getOMClass(false);
+
+					$obj6 = new $cls();
+					$obj6->hydrate($row, $startcol6);
+					FormaPagamentoPeer::addInstanceToPool($obj6, $key6);
+				} // if $obj6 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj6 (FormaPagamento)
+				$obj6->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Produto rows
+
+				$key7 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+				if ($key7 !== null) {
+					$obj7 = ProdutoPeer::getInstanceFromPool($key7);
+					if (!$obj7) {
+	
+						$cls = ProdutoPeer::getOMClass(false);
+
+					$obj7 = new $cls();
+					$obj7->hydrate($row, $startcol7);
+					ProdutoPeer::addInstanceToPool($obj7, $key7);
+				} // if $obj7 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj7 (Produto)
+				$obj7->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
+				if ($key8 !== null) {
+					$obj8 = UsuarioPeer::getInstanceFromPool($key8);
+					if (!$obj8) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj8 = new $cls();
+					$obj8->hydrate($row, $startcol8);
+					UsuarioPeer::addInstanceToPool($obj8, $key8);
+				} // if $obj8 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj8 (Usuario)
+				$obj8->addCertificadoRelatedByUsuarioId($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key9 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol9);
+				if ($key9 !== null) {
+					$obj9 = UsuarioPeer::getInstanceFromPool($key9);
+					if (!$obj9) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj9 = new $cls();
+					$obj9->hydrate($row, $startcol9);
+					UsuarioPeer::addInstanceToPool($obj9, $key9);
+				} // if $obj9 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj9 (Usuario)
+				$obj9->addCertificadoRelatedByUsuarioValidouId($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Certificado objects pre-filled with all related objects except UsuarioRelatedByUsuarioId.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Certificado objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptUsuarioRelatedByUsuarioId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CertificadoPeer::addSelectColumns($criteria);
+		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		SituacaoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (SituacaoPeer::NUM_COLUMNS - SituacaoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ParceiroPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ContadorPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		LocalPeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		FormaPagamentoPeer::addSelectColumns($criteria);
+		$startcol7 = $startcol6 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ProdutoPeer::addSelectColumns($criteria);
+		$startcol8 = $startcol7 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ClientePeer::addSelectColumns($criteria);
+		$startcol9 = $startcol8 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = CertificadoPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CertificadoPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Situacao rows
+
+				$key2 = SituacaoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = SituacaoPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = SituacaoPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					SituacaoPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj2 (Situacao)
+				$obj2->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Parceiro rows
+
+				$key3 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				if ($key3 !== null) {
+					$obj3 = ParceiroPeer::getInstanceFromPool($key3);
+					if (!$obj3) {
+	
+						$cls = ParceiroPeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					ParceiroPeer::addInstanceToPool($obj3, $key3);
+				} // if $obj3 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj3 (Parceiro)
+				$obj3->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Contador rows
+
+				$key4 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				if ($key4 !== null) {
+					$obj4 = ContadorPeer::getInstanceFromPool($key4);
+					if (!$obj4) {
+	
+						$cls = ContadorPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					ContadorPeer::addInstanceToPool($obj4, $key4);
+				} // if $obj4 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj4 (Contador)
+				$obj4->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Local rows
+
+				$key5 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+				if ($key5 !== null) {
+					$obj5 = LocalPeer::getInstanceFromPool($key5);
+					if (!$obj5) {
+	
+						$cls = LocalPeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					LocalPeer::addInstanceToPool($obj5, $key5);
+				} // if $obj5 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj5 (Local)
+				$obj5->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined FormaPagamento rows
+
+				$key6 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+				if ($key6 !== null) {
+					$obj6 = FormaPagamentoPeer::getInstanceFromPool($key6);
+					if (!$obj6) {
+	
+						$cls = FormaPagamentoPeer::getOMClass(false);
+
+					$obj6 = new $cls();
+					$obj6->hydrate($row, $startcol6);
+					FormaPagamentoPeer::addInstanceToPool($obj6, $key6);
+				} // if $obj6 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj6 (FormaPagamento)
+				$obj6->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Produto rows
+
+				$key7 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+				if ($key7 !== null) {
+					$obj7 = ProdutoPeer::getInstanceFromPool($key7);
+					if (!$obj7) {
+	
+						$cls = ProdutoPeer::getOMClass(false);
+
+					$obj7 = new $cls();
+					$obj7->hydrate($row, $startcol7);
+					ProdutoPeer::addInstanceToPool($obj7, $key7);
+				} // if $obj7 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj7 (Produto)
+				$obj7->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Cliente rows
+
+				$key8 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol8);
+				if ($key8 !== null) {
+					$obj8 = ClientePeer::getInstanceFromPool($key8);
+					if (!$obj8) {
+	
+						$cls = ClientePeer::getOMClass(false);
+
+					$obj8 = new $cls();
+					$obj8->hydrate($row, $startcol8);
+					ClientePeer::addInstanceToPool($obj8, $key8);
+				} // if $obj8 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj8 (Cliente)
+				$obj8->addCertificado($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Certificado objects pre-filled with all related objects except UsuarioRelatedByUsuarioValidouId.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Certificado objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptUsuarioRelatedByUsuarioValidouId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CertificadoPeer::addSelectColumns($criteria);
+		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		SituacaoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (SituacaoPeer::NUM_COLUMNS - SituacaoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ParceiroPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ContadorPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		LocalPeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		FormaPagamentoPeer::addSelectColumns($criteria);
+		$startcol7 = $startcol6 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ProdutoPeer::addSelectColumns($criteria);
+		$startcol8 = $startcol7 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ClientePeer::addSelectColumns($criteria);
+		$startcol9 = $startcol8 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = CertificadoPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CertificadoPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Situacao rows
+
+				$key2 = SituacaoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = SituacaoPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = SituacaoPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					SituacaoPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj2 (Situacao)
+				$obj2->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Parceiro rows
+
+				$key3 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				if ($key3 !== null) {
+					$obj3 = ParceiroPeer::getInstanceFromPool($key3);
+					if (!$obj3) {
+	
+						$cls = ParceiroPeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					ParceiroPeer::addInstanceToPool($obj3, $key3);
+				} // if $obj3 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj3 (Parceiro)
+				$obj3->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Contador rows
+
+				$key4 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				if ($key4 !== null) {
+					$obj4 = ContadorPeer::getInstanceFromPool($key4);
+					if (!$obj4) {
+	
+						$cls = ContadorPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					ContadorPeer::addInstanceToPool($obj4, $key4);
+				} // if $obj4 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj4 (Contador)
+				$obj4->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Local rows
+
+				$key5 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+				if ($key5 !== null) {
+					$obj5 = LocalPeer::getInstanceFromPool($key5);
+					if (!$obj5) {
+	
+						$cls = LocalPeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					LocalPeer::addInstanceToPool($obj5, $key5);
+				} // if $obj5 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj5 (Local)
+				$obj5->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined FormaPagamento rows
+
+				$key6 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+				if ($key6 !== null) {
+					$obj6 = FormaPagamentoPeer::getInstanceFromPool($key6);
+					if (!$obj6) {
+	
+						$cls = FormaPagamentoPeer::getOMClass(false);
+
+					$obj6 = new $cls();
+					$obj6->hydrate($row, $startcol6);
+					FormaPagamentoPeer::addInstanceToPool($obj6, $key6);
+				} // if $obj6 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj6 (FormaPagamento)
+				$obj6->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Produto rows
+
+				$key7 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+				if ($key7 !== null) {
+					$obj7 = ProdutoPeer::getInstanceFromPool($key7);
+					if (!$obj7) {
+	
+						$cls = ProdutoPeer::getOMClass(false);
+
+					$obj7 = new $cls();
+					$obj7->hydrate($row, $startcol7);
+					ProdutoPeer::addInstanceToPool($obj7, $key7);
+				} // if $obj7 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj7 (Produto)
+				$obj7->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Cliente rows
+
+				$key8 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol8);
+				if ($key8 !== null) {
+					$obj8 = ClientePeer::getInstanceFromPool($key8);
+					if (!$obj8) {
+	
+						$cls = ClientePeer::getOMClass(false);
+
+					$obj8 = new $cls();
+					$obj8->hydrate($row, $startcol8);
+					ClientePeer::addInstanceToPool($obj8, $key8);
+				} // if $obj8 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj8 (Cliente)
+				$obj8->addCertificado($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Certificado objects pre-filled with all related objects except CertificadoRelatedByCertificadoRenovado.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Certificado objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptCertificadoRelatedByCertificadoRenovado(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CertificadoPeer::addSelectColumns($criteria);
+		$startcol2 = (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		SituacaoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (SituacaoPeer::NUM_COLUMNS - SituacaoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ParceiroPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ContadorPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (ContadorPeer::NUM_COLUMNS - ContadorPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		LocalPeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + (LocalPeer::NUM_COLUMNS - LocalPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		FormaPagamentoPeer::addSelectColumns($criteria);
+		$startcol7 = $startcol6 + (FormaPagamentoPeer::NUM_COLUMNS - FormaPagamentoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ProdutoPeer::addSelectColumns($criteria);
+		$startcol8 = $startcol7 + (ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ClientePeer::addSelectColumns($criteria);
+		$startcol9 = $startcol8 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol10 = $startcol9 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol11 = $startcol10 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(CertificadoPeer::STATUS_FOLLOWUP, SituacaoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PARCEIRO_ID, ParceiroPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CONTADOR_ID, ContadorPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::LOCAL_ID, LocalPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::FORMA_PAGAMENTO_ID, FormaPagamentoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::PRODUTO_ID, ProdutoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CertificadoPeer::USUARIO_VALIDOU_ID, UsuarioPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CertificadoPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CertificadoPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = CertificadoPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CertificadoPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Situacao rows
+
+				$key2 = SituacaoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = SituacaoPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = SituacaoPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					SituacaoPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj2 (Situacao)
+				$obj2->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Parceiro rows
+
+				$key3 = ParceiroPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				if ($key3 !== null) {
+					$obj3 = ParceiroPeer::getInstanceFromPool($key3);
+					if (!$obj3) {
+	
+						$cls = ParceiroPeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					ParceiroPeer::addInstanceToPool($obj3, $key3);
+				} // if $obj3 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj3 (Parceiro)
+				$obj3->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Contador rows
+
+				$key4 = ContadorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				if ($key4 !== null) {
+					$obj4 = ContadorPeer::getInstanceFromPool($key4);
+					if (!$obj4) {
+	
+						$cls = ContadorPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					ContadorPeer::addInstanceToPool($obj4, $key4);
+				} // if $obj4 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj4 (Contador)
+				$obj4->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Local rows
+
+				$key5 = LocalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+				if ($key5 !== null) {
+					$obj5 = LocalPeer::getInstanceFromPool($key5);
+					if (!$obj5) {
+	
+						$cls = LocalPeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					LocalPeer::addInstanceToPool($obj5, $key5);
+				} // if $obj5 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj5 (Local)
+				$obj5->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined FormaPagamento rows
+
+				$key6 = FormaPagamentoPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+				if ($key6 !== null) {
+					$obj6 = FormaPagamentoPeer::getInstanceFromPool($key6);
+					if (!$obj6) {
+	
+						$cls = FormaPagamentoPeer::getOMClass(false);
+
+					$obj6 = new $cls();
+					$obj6->hydrate($row, $startcol6);
+					FormaPagamentoPeer::addInstanceToPool($obj6, $key6);
+				} // if $obj6 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj6 (FormaPagamento)
+				$obj6->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Produto rows
+
+				$key7 = ProdutoPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+				if ($key7 !== null) {
+					$obj7 = ProdutoPeer::getInstanceFromPool($key7);
+					if (!$obj7) {
+	
+						$cls = ProdutoPeer::getOMClass(false);
+
+					$obj7 = new $cls();
+					$obj7->hydrate($row, $startcol7);
+					ProdutoPeer::addInstanceToPool($obj7, $key7);
+				} // if $obj7 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj7 (Produto)
+				$obj7->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Cliente rows
+
+				$key8 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol8);
+				if ($key8 !== null) {
+					$obj8 = ClientePeer::getInstanceFromPool($key8);
+					if (!$obj8) {
+	
+						$cls = ClientePeer::getOMClass(false);
+
+					$obj8 = new $cls();
+					$obj8->hydrate($row, $startcol8);
+					ClientePeer::addInstanceToPool($obj8, $key8);
+				} // if $obj8 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj8 (Cliente)
+				$obj8->addCertificado($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key9 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol9);
+				if ($key9 !== null) {
+					$obj9 = UsuarioPeer::getInstanceFromPool($key9);
+					if (!$obj9) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj9 = new $cls();
+					$obj9->hydrate($row, $startcol9);
+					UsuarioPeer::addInstanceToPool($obj9, $key9);
+				} // if $obj9 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj9 (Usuario)
+				$obj9->addCertificadoRelatedByUsuarioId($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key10 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol10);
+				if ($key10 !== null) {
+					$obj10 = UsuarioPeer::getInstanceFromPool($key10);
+					if (!$obj10) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj10 = new $cls();
+					$obj10->hydrate($row, $startcol10);
+					UsuarioPeer::addInstanceToPool($obj10, $key10);
+				} // if $obj10 already loaded
+
+				// Add the $obj1 (Certificado) to the collection in $obj10 (Usuario)
+				$obj10->addCertificadoRelatedByUsuarioValidouId($obj1);
 
 			} // if joined row is not null
 

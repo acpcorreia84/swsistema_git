@@ -3103,6 +3103,53 @@ abstract class BaseContador extends BaseObject  implements Persistent {
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in Contador.
 	 */
+	public function getCertificadosJoinSituacao($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(ContadorPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificados === null) {
+			if ($this->isNew()) {
+				$this->collCertificados = array();
+			} else {
+
+				$criteria->add(CertificadoPeer::CONTADOR_ID, $this->id);
+
+				$this->collCertificados = CertificadoPeer::doSelectJoinSituacao($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(CertificadoPeer::CONTADOR_ID, $this->id);
+
+			if (!isset($this->lastCertificadoCriteria) || !$this->lastCertificadoCriteria->equals($criteria)) {
+				$this->collCertificados = CertificadoPeer::doSelectJoinSituacao($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastCertificadoCriteria = $criteria;
+
+		return $this->collCertificados;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Contador is new, it will return
+	 * an empty collection; or if this Contador has previously
+	 * been saved, it will retrieve related Certificados from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Contador.
+	 */
 	public function getCertificadosJoinParceiro($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {

@@ -65,6 +65,7 @@ class CertificadoTableMap extends TableMap {
 		$this->addForeignKey('CERTIFICADO_RENOVADO', 'CertificadoRenovado', 'INTEGER', 'certificado', 'ID', false, null, null);
 		$this->addColumn('APAGADO', 'Apagado', 'INTEGER', true, null, null);
 		$this->addForeignKey('PARCEIRO_ID', 'ParceiroId', 'INTEGER', 'parceiro', 'ID', false, null, null);
+		$this->addForeignKey('STATUS_FOLLOWUP', 'StatusFollowup', 'INTEGER', 'situacao', 'ID', false, null, null);
 		// validators
 		$this->addValidator('PRODUTO_ID', 'minValue', 'propel.validator.MinValueValidator', '1', 'O Pedido do Certificado deve conter um produto!');
 		$this->addValidator('CLIENTE_ID', 'required', 'propel.validator.RequiredValidator', '', 'O Pedido do Certificado deve conter um cliente!');
@@ -79,6 +80,7 @@ class CertificadoTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
+    $this->addRelation('Situacao', 'Situacao', RelationMap::MANY_TO_ONE, array('status_followup' => 'id', ), 'RESTRICT', null);
     $this->addRelation('Parceiro', 'Parceiro', RelationMap::MANY_TO_ONE, array('parceiro_id' => 'id', ), 'RESTRICT', null);
     $this->addRelation('Contador', 'Contador', RelationMap::MANY_TO_ONE, array('contador_id' => 'id', ), 'RESTRICT', null);
     $this->addRelation('Local', 'Local', RelationMap::MANY_TO_ONE, array('local_id' => 'id', ), 'RESTRICT', null);

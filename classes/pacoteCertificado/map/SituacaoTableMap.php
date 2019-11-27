@@ -49,6 +49,7 @@ class SituacaoTableMap extends TableMap {
 	public function buildRelations()
 	{
     $this->addRelation('CertificadoSituacao', 'CertificadoSituacao', RelationMap::ONE_TO_MANY, array('id' => 'situacao_id', ), 'RESTRICT', null);
+    $this->addRelation('Certificado', 'Certificado', RelationMap::ONE_TO_MANY, array('id' => 'status_followup', ), 'RESTRICT', null);
 	} // buildRelations()
 
 } // SituacaoTableMap

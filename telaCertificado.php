@@ -5,6 +5,11 @@ include 'inc/script.php';
 ?>
 <body>
 
+<script>
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+</script>
 <div id="wrapper">
     <? include('inc/menu.php')?>
     <div id="page-wrapper">

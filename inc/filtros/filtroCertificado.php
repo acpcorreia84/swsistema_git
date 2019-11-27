@@ -46,6 +46,7 @@
                 <option value='Compra'>Compra</option>
                 <option value='Valida&ccedil;&atilde;o'>Valida&ccedil;&atilde;o</option>
                 <option value='Vencimento'>Vencimento</option>
+                <option value='Em aberto'>Em aberto</option>
             </select>
         </fieldset>
         <script>
