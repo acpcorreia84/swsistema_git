@@ -4,13 +4,36 @@ var pageUrl = 'funcoes/funcoesCentralNegocios.php';
 
 function carregarNegocios() {
 
+    if ((typeof window['filtroUsuariosNegocios'] !== 'undefined') && (Array.isArray(window['filtroUsuariosNegocios'])))
+        consultores = window['filtroUsuariosNegocios'];
+    else
+        consultores = '';
+
+    /*NOME E CAMPO DE FILTRO POR (IGUAL A)*/
+    nomeCampoFiltro = '';
+    valorCampoFiltro = '';
+    if (($('#tipo_filtro').val()) && ($('#filtro_pesquisa_por').val())) {
+        nomeCampoFiltro = $('#tipo_filtro').val();
+        valorCampoFiltro = $('#filtro_pesquisa_por').val();
+    }
+
+    camposFiltro = {};
+    camposFiltro[nomeCampoFiltro] = valorCampoFiltro;
+
+    var filtros = {
+        'filtroConsultores':consultores,
+        'campoFiltro' : camposFiltro
+    };
+
     $('#totalCertificadosUrgentes').html('carregando...');
     $('#totalCertificadosUrgentesComFeedback').html('carregando...');
     $('#totalLost').html('carregando...');
 
     var dadosajax = {
         'funcao' : "carregar_central_negocios",
-        'tipoNegocios': $('#tipoNegocios').val()
+        'tipoNegocios': $('#tipoNegocios').val(),
+        'filtros': filtros
+
     };
 
     $.ajax ({
@@ -27,7 +50,7 @@ function carregarNegocios() {
         },
         success : function(result){
             try {
-                //console.log(result);
+                console.log(result);
                 var resultado = JSON.parse(result);
                 //console.log(resultado.quantidadeTotalUrgentes,resultado.quantidadeTotalUrgentesComFeedback);
 
@@ -138,5 +161,43 @@ function carregarInformacoesNegocio (certificadoId) {
 
         }
 
+    });
+}
+
+
+function carregarFiltrosNegocios() {
+
+    var dadosajax = {
+        'funcao' : "carregar_filtros_negocios",
+    };
+
+    $('#divFiltroConsultoresNegocios').html('<i class="fa fa-circle-o-notch fa-spin text-info"></i>').css({'text-align':'center'});
+
+
+    $.ajax ({
+        url : pageUrl,
+        data : dadosajax,
+        type : 'POST',
+        cache : true,
+
+        error : function (){
+            alert ('Error NG2016 - Erro ao carregar os filtros dos negocios!' + msnPadrao + '.');
+            $("#modalCarregando").modal('hide');
+        },
+        success : function(result){
+            try {
+
+                var resultado = JSON.parse(result);
+
+                if (resultado.mensagem == 'Ok') {
+                    montarSelectMultiplo('filtroUsuariosNegocios', resultado.usuarios, 'divFiltroConsultoresNegocios', '', 'divNegociosUsuariosCertificados');
+                }
+            } catch (e){
+                $('#modalCarregando').modal('hide');
+                console.log(result, e);
+                alertErro ('Error NG2016 - Erro ao carregar os filtros dos negocios!,' + msnPadrao + ' '+e + '.');
+
+            }
+        }
     });
 }

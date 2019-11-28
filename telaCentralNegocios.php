@@ -79,8 +79,6 @@ include 'inc/script.php';
     });
 </script>
 <input type="hidden" id="opcaoFeedback" name="opcaoFeedback" value="feedback"/>
-
-
 <input type="hidden" id="tipoNegocios" name="tipoNegocios" value="Urgentes"/>
 <div id="wrapper">
     <? include('inc/menu.php')?>
@@ -88,6 +86,32 @@ include 'inc/script.php';
         <div class="container-fluid">
 
             <div class="row" style="margin-top:50px;">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-filter" aria-hidden="true"></i> Filtros <a href="#"> <i class="fa fa-bars" id="btnFiltroCd" ></i></a>
+                    </div>
+
+                    <script>
+                        $('#btnFiltroCd').click (function () {
+                            var visivel  = $('#divFiltrosCertificados').is(':visible');
+                            if (visivel) {
+                                $("#divFiltrosCertificados").css({visibility: 'hidden', display: 'none'});
+                            }
+
+                            else {
+                                $("#divFiltrosCertificados").css({visibility: 'visible', display: 'block'});
+                                carregarFiltrosNegocios();
+                            };
+                        });
+
+                    </script>
+                    <div class="panel-body oculto" id="divFiltrosCertificados">
+                        <div id="divFiltros"></div>
+                        <? include 'inc/filtros/filtroCentralNegocios.php';?>
+                    </div>
+                </div>
+
 
                 <div class="row">
 
@@ -162,17 +186,40 @@ include 'inc/script.php';
                                 </div>
                             </div>
 
-                        <!--FIM DE QUADROS RESUMO: PAGOS, EM ABERTO-->
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa fa-bar-chart fa-5x text-primary"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="text-primary">Gr&aacute;ficos</div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#" onclick="">
+                                <div class="panel-footer">
+                                    <span class="pull-left">Detalhes</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!--FIM DE QUADROS RESUMO: PAGOS, EM ABERTO-->
 
                 </div>
 
-                <hr/>
-                    <!---->
+                    <!--LISTA DE NEGOCIOS-->
                 <div class="row" >
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                Certificados <b id="tipoNegociosLegendas">Urgentes</b> <!--| Legenda: <i class="fa fa-square text-primary"></i> Em aberto | <i class="fa fa-square text-success"></i> Renovação  | <i class="fa fa-square text-danger"></i> Recarteirizado-->
+                                Certificados <b id="tipoNegociosLegendas">Urgentes</b> | Legenda: <i class="fa fa-square text-danger"></i> Em aberto | <i class="fa fa-square text-success"></i> Renova&ccedil;&atilde;o  | <i class="fa fa-square text-primary"></i> Recarteiriza&ccedil;&atilde;o
                             </div><!-- PANEL HEADING -->
 
                             <div class="panel-body">

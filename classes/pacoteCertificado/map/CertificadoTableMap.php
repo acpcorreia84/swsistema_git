@@ -60,6 +60,7 @@ class CertificadoTableMap extends TableMap {
 		$this->addColumn('DATA_REVOGACAO', 'DataRevogacao', 'TIMESTAMP', false, null, null);
 		$this->addColumn('DATA_INICIO_VALIDADE', 'DataInicioValidade', 'TIMESTAMP', false, null, null);
 		$this->addColumn('DATA_FIM_VALIDADE', 'DataFimValidade', 'TIMESTAMP', false, null, null);
+		$this->addColumn('DATA_RECARTEIRIZACAO', 'DataRecarteirizacao', 'TIMESTAMP', false, null, null);
 		$this->addColumn('DATA_SINCRONIZACAO_AC', 'DataSincronizacaoAc', 'TIMESTAMP', false, null, null);
 		$this->addColumn('CONFIRMACAO_VALIDACAO', 'ConfirmacaoValidacao', 'INTEGER', false, null, null);
 		$this->addForeignKey('CERTIFICADO_RENOVADO', 'CertificadoRenovado', 'INTEGER', 'certificado', 'ID', false, null, null);

@@ -2974,7 +2974,7 @@ function carregarFiltrosCertificados() {
     try {
         $usuarioLogado = ControleAcesso::getUsuarioLogado();
         $cUsuarios =  new Criteria();
-        $cUsuarios->add(UsuarioPeer::SITUACAO, -1, Criteria::NOT_EQUAL );
+        $cUsuarios->add(UsuarioPeer::SITUACAO, 0 );
 
         /*SE FOR DIRETORIA MOSTRA TUDO (OU SEJA, NAO ENTRA NO IF)*/
         if (($usuarioLogado->getPerfilId() != 4) && ($usuarioLogado->getPerfilId()!=11)) {

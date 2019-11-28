@@ -846,6 +846,7 @@ CREATE TABLE `certificado`
 	`data_revogacao` DATETIME,
 	`data_inicio_validade` DATETIME,
 	`data_fim_validade` DATETIME,
+	`data_recarteirizacao` DATETIME,
 	`data_sincronizacao_ac` DATETIME,
 	`confirmacao_validacao` INTEGER,
 	`certificado_renovado` INTEGER,

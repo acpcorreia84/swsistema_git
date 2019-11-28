@@ -42,7 +42,10 @@ require_once 'modais/modalListaProdutos.php';
                     <li><a title="Inserir novo usu&aacute;rio" data-target="#modalUsuarioInserirEditar" data-toggle="modal" onclick="$('#acaoUsuario').val('inserir'); $('#idUsuario').val(''); limparModalInserirUsuario();"><i class="fa fa-lg fa-user-plus"></i></a></li>
                 <? }?>
 
-                <? if($_SERVER['REQUEST_URI'] == '/telaCertificado.php' || $_SERVER['REQUEST_URI'] == '/telaCentralNegocios.php') {?>
+                <? if($_SERVER['REQUEST_URI'] == '/telaCentralNegocios.php' ) {?>
+                    <li ><a href="telaCertificado.php" target="_blank" title="Tela antiga de certificados" class="text-success"><i class="fa fa-lg fa-id-card"></i> Certificados </a></li>
+                <? }?>
+                <? if($_SERVER['REQUEST_URI'] == '/telaCertificado.php' ) {?>
                     <li ><a href="telaCertificado.php" target="_blank" title="Tela antiga de certificados" class="text-success"><i class="fa fa-lg fa-id-card"></i> Certificados </a></li>
                     <li><a title="Venda ERP 3.0" data-target="#vendaInterna" data-toggle="modal" onclick="abreModalVendaInterna()"><i class="fa fa-lg fa-cart-plus"></i></a></li>
                     <!--

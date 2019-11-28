@@ -163,6 +163,12 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 	protected $data_fim_validade;
 
 	/**
+	 * The value for the data_recarteirizacao field.
+	 * @var        string
+	 */
+	protected $data_recarteirizacao;
+
+	/**
 	 * The value for the data_sincronizacao_ac field.
 	 * @var        string
 	 */
@@ -823,6 +829,44 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 				$dt = new DateTime($this->data_fim_validade);
 			} catch (Exception $x) {
 				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->data_fim_validade, true), $x);
+			}
+		}
+
+		if ($format === null) {
+			// Because propel.useDateTimeClass is TRUE, we return a DateTime object.
+			return $dt;
+		} elseif (strpos($format, '%') !== false) {
+			return strftime($format, $dt->format('U'));
+		} else {
+			return $dt->format($format);
+		}
+	}
+
+	/**
+	 * Get the [optionally formatted] temporal [data_recarteirizacao] column value.
+	 * 
+	 *
+	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
+	 *							If format is NULL, then the raw DateTime object will be returned.
+	 * @return     mixed Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+	 * @throws     PropelException - if unable to parse/validate the date/time value.
+	 */
+	public function getDataRecarteirizacao($format = 'Y-m-d H:i:s')
+	{
+		if ($this->data_recarteirizacao === null) {
+			return null;
+		}
+
+
+		if ($this->data_recarteirizacao === '0000-00-00 00:00:00') {
+			// while technically this is not a default value of NULL,
+			// this seems to be closest in meaning.
+			return null;
+		} else {
+			try {
+				$dt = new DateTime($this->data_recarteirizacao);
+			} catch (Exception $x) {
+				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->data_recarteirizacao, true), $x);
 			}
 		}
 
@@ -1665,6 +1709,55 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 	} // setDataFimValidade()
 
 	/**
+	 * Sets the value of [data_recarteirizacao] column to a normalized version of the date/time value specified.
+	 * 
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
+	 *						be treated as NULL for temporal objects.
+	 * @return     Certificado The current object (for fluent API support)
+	 */
+	public function setDataRecarteirizacao($v)
+	{
+		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
+		// -- which is unexpected, to say the least.
+		if ($v === null || $v === '') {
+			$dt = null;
+		} elseif ($v instanceof DateTime) {
+			$dt = $v;
+		} else {
+			// some string/numeric value passed; we normalize that so that we can
+			// validate it.
+			try {
+				if (is_numeric($v)) { // if it's a unix timestamp
+					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
+					// We have to explicitly specify and then change the time zone because of a
+					// DateTime bug: http://bugs.php.net/bug.php?id=43003
+					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+				} else {
+					$dt = new DateTime($v);
+				}
+			} catch (Exception $x) {
+				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
+			}
+		}
+
+		if ( $this->data_recarteirizacao !== null || $dt !== null ) {
+			// (nested ifs are a little easier to read in this case)
+
+			$currNorm = ($this->data_recarteirizacao !== null && $tmpDt = new DateTime($this->data_recarteirizacao)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
+
+			if ( ($currNorm !== $newNorm) // normalized values don't match 
+					)
+			{
+				$this->data_recarteirizacao = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+				$this->modifiedColumns[] = CertificadoPeer::DATA_RECARTEIRIZACAO;
+			}
+		} // if either are not null
+
+		return $this;
+	} // setDataRecarteirizacao()
+
+	/**
 	 * Sets the value of [data_sincronizacao_ac] column to a normalized version of the date/time value specified.
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
@@ -1881,12 +1974,13 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 			$this->data_revogacao = ($row[$startcol + 21] !== null) ? (string) $row[$startcol + 21] : null;
 			$this->data_inicio_validade = ($row[$startcol + 22] !== null) ? (string) $row[$startcol + 22] : null;
 			$this->data_fim_validade = ($row[$startcol + 23] !== null) ? (string) $row[$startcol + 23] : null;
-			$this->data_sincronizacao_ac = ($row[$startcol + 24] !== null) ? (string) $row[$startcol + 24] : null;
-			$this->confirmacao_validacao = ($row[$startcol + 25] !== null) ? (int) $row[$startcol + 25] : null;
-			$this->certificado_renovado = ($row[$startcol + 26] !== null) ? (int) $row[$startcol + 26] : null;
-			$this->apagado = ($row[$startcol + 27] !== null) ? (int) $row[$startcol + 27] : null;
-			$this->parceiro_id = ($row[$startcol + 28] !== null) ? (int) $row[$startcol + 28] : null;
-			$this->status_followup = ($row[$startcol + 29] !== null) ? (int) $row[$startcol + 29] : null;
+			$this->data_recarteirizacao = ($row[$startcol + 24] !== null) ? (string) $row[$startcol + 24] : null;
+			$this->data_sincronizacao_ac = ($row[$startcol + 25] !== null) ? (string) $row[$startcol + 25] : null;
+			$this->confirmacao_validacao = ($row[$startcol + 26] !== null) ? (int) $row[$startcol + 26] : null;
+			$this->certificado_renovado = ($row[$startcol + 27] !== null) ? (int) $row[$startcol + 27] : null;
+			$this->apagado = ($row[$startcol + 28] !== null) ? (int) $row[$startcol + 28] : null;
+			$this->parceiro_id = ($row[$startcol + 29] !== null) ? (int) $row[$startcol + 29] : null;
+			$this->status_followup = ($row[$startcol + 30] !== null) ? (int) $row[$startcol + 30] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1896,7 +1990,7 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 30; // 30 = CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 31; // 31 = CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Certificado object", $e);
@@ -2589,6 +2683,7 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(CertificadoPeer::DATA_REVOGACAO)) $criteria->add(CertificadoPeer::DATA_REVOGACAO, $this->data_revogacao);
 		if ($this->isColumnModified(CertificadoPeer::DATA_INICIO_VALIDADE)) $criteria->add(CertificadoPeer::DATA_INICIO_VALIDADE, $this->data_inicio_validade);
 		if ($this->isColumnModified(CertificadoPeer::DATA_FIM_VALIDADE)) $criteria->add(CertificadoPeer::DATA_FIM_VALIDADE, $this->data_fim_validade);
+		if ($this->isColumnModified(CertificadoPeer::DATA_RECARTEIRIZACAO)) $criteria->add(CertificadoPeer::DATA_RECARTEIRIZACAO, $this->data_recarteirizacao);
 		if ($this->isColumnModified(CertificadoPeer::DATA_SINCRONIZACAO_AC)) $criteria->add(CertificadoPeer::DATA_SINCRONIZACAO_AC, $this->data_sincronizacao_ac);
 		if ($this->isColumnModified(CertificadoPeer::CONFIRMACAO_VALIDACAO)) $criteria->add(CertificadoPeer::CONFIRMACAO_VALIDACAO, $this->confirmacao_validacao);
 		if ($this->isColumnModified(CertificadoPeer::CERTIFICADO_RENOVADO)) $criteria->add(CertificadoPeer::CERTIFICADO_RENOVADO, $this->certificado_renovado);
@@ -2694,6 +2789,8 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 		$copyObj->setDataInicioValidade($this->data_inicio_validade);
 
 		$copyObj->setDataFimValidade($this->data_fim_validade);
+
+		$copyObj->setDataRecarteirizacao($this->data_recarteirizacao);
 
 		$copyObj->setDataSincronizacaoAc($this->data_sincronizacao_ac);
 
