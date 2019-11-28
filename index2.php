@@ -1,273 +1,222 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="GUIAR 3.2">
-    <meta name="author" content="Yan Lincoln Menezes Galucio">
-    <meta http-equiv="cache-control" content="max-age=0" />
-    <meta http-equiv="cache-control" content="no-cache" />
-    <meta http-equiv="expires" content="0" />
-    <meta http-equiv="pragma" content="no-cache" />
+<?php
+$usuarioLogado = controleAcesso::getUsuarioLogado();
 
-    <title>SW - GUIAR</title>
+if ($usuarioLogado->getFotoAvatar())
+    $fotoPerfil = $usuarioLogado->getFotoAvatar();
+else
+    $fotoPerfil = 'inc/jQuery-Picture-Cut-master/src/img/icon_add_image2.png';
 
-
-    <script type="text/javascript" src="inc/uteis.js"></script>
-
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
-
-    <!--Bootsrap 4 CDN-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap-dialog.min.js"></script>
-    <script type="text/javascript" src="bootstrap-select/js/bootstrap-select.min.js"></script>
-    <link rel="stylesheet" href="bootstrap-select/css/bootstrap-select.min.css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!--Fontawesome CDN-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-
-    <script type="text/javascript" src="inc/jquery-validation-1.15.0/dist/jquery.validate.js"></script>
-    <script type="text/javascript" src="inc/jquery-validation-1.15.0/dist/additional-methods.js"></script>
-    <script type="text/javascript" src="inc/jquery-validation-1.15.0/dist/localization/messages_pt_BR.min.js"></script>
-
-    <!-- Custom Fonts -->
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <script>
-        function login() {
-            $('.card').css('width', '450px');
-            var dadosajax = {
-                'email': $('#edtUsuario').val(),
-                'senha': $('#edtSenha').val(),
-                funcao: 'logarUsuario'
-            }
-            $('#loginbox').html('<i class="fa fa-5x fas fa-spinner fa-pulse text-primary"></i>').css({'text-align':'center'});
-
-            $.ajax({
-                url: 'funcoes/funcaoLogin.php',
-                data : dadosajax,
-                type : 'POST',
-                cache : true,
-                error : function(){
-                    alertErro('Error LOGIN - Erro na tentativa de logar no sistema, Erro:' + e+ '. '+ msnPadrao + '.')
-                },
-                success : function(result){
-                    try {
-                        console.log('saida login:', result);
-                        var resultado = JSON.parse(result);
-
-                        if (resultado.mensagem == 'Ok') {
-                            $('#loginbox').html('<i class="fa fa-5x fas fa fa-check text-success"></i> <span class="fa-2x text-success">Login Ok, acessando...</span>').css({'text-align':'center'});
-
-                            /*GUARDA O ID DO USUARIO LOGADO PARA UTILIZAR NOS MODAIS*/
-                            if (typeof(Storage) !== "undefined") {
-                                sessionStorage.usuarioLogadoId = resultado.usuarioId;
-                                sessionStorage.usuarioLogadoPerfilId = resultado.perfilId;
-
-                            } else {
-                                alert('O seu navegados nao possui suporte para Gravacao de dados. Por favor entre em contato com o departamento de suporte para solucionar o problema.');
-                            }
-
-                            ir('home.php');
-                        } else{
-                            alertErro(resultado.mensagem);
-                        }
-
-                    } catch (e) {
-                        alertErro('Error LOGIN - Erro na tentativa de logar no sistema, Erro:' + result + e+ '. '+ msnPadrao + '.')
-                        console.log(e, result);
-                    }
-                }
-            });
-        }
-    </script>
-</head>
-
-<style>
-    /* Made with love by Mutiullah Samim*/
-
-    @import url('https://fonts.googleapis.com/css?family=Numans');
-
-    html,body{
-        background-image: url('img/bg/safeweb-oficial.jpg');
-        background-size: cover;
-        background-repeat: no-repeat;
-        height: 100%;
-        font-family: 'Numans', sans-serif;
-    }
-
-    .container{
-        height: 100%;
-        align-content: center;
-    }
-
-    .card{
-        height: 300px;
-        margin-top: auto;
-        margin-bottom: auto;
-        width: auto;
-        background-color: rgba(0,0,0,0.5) !important;
-    }
-
-    .social_icon span{
-        font-size: 60px;
-        margin-left: 10px;
-        color: #0b62a4;
-    }
-
-    .social_icon span:hover{
-        color: white;
-        cursor: pointer;
-    }
-
-    .card-header h3{
-        color: white;
-    }
-
-    .social_icon{
-        position: absolute;
-        right: 20px;
-        top: -45px;
-    }
-
-    .input-group-prepend span{
-        width: 50px;
-        background-color: #0b62a4;
-        color: black;
-        border:0 !important;
-    }
-
-    input:focus{
-        outline: 0 0 0 0  !important;
-        box-shadow: 0 0 0 0 !important;
-
-    }
-
-    .remember{
-        color: white;
-    }
-
-    .remember input
-    {
-        width: 20px;
-        height: 20px;
-        margin-left: 15px;
-        margin-right: 5px;
-    }
-
-    .login_btn{
-        color: black;
-        background-color: #0b62a4;
-        width: 100px;
-    }
-
-    .login_btn:hover{
-        color: black;
-        background-color: white;
-    }
-
-    .links{
-        color: white;
-    }
-
-    .links a{
-        margin-left: 4px;
-    }
-
-    .error {
-        color: red;
-    }
-</style>
-<div class="container">
-    <div class="d-flex justify-content-center h-100">
-        <div class="card" >
-            <div class="card-header">
-                <div class="center-block">
-                    <img src="img/logo safeweb.png">
-                </div>
-                <div class="d-flex justify-content-end social_icon">
-                    <span><i class="fab fa-facebook-square"></i></span>
-                    <span><i class="fab fa-instagram"></i></span>
-                </div>
-            </div>
-            <div class="card-body" id="loginbox">
-                <form id="frmLogin" name="frmLogin" action="" method="post">
-                    <div class="input-group form-group col-lg-12">
-                        <div class="input-group-prepend ">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
-                        <input id="edtUsuario" name="edtUsuario" type="text" class="form-control" placeholder="usu&aacute;rio">
-
-                    </div>
-                    <div class="input-group form-group col-lg-12 ">
-                        <div class="input-group-prepend ">
-                            <span class="input-group-text"><i class="fas fa-key"></i></span>
-                        </div>
-                        <input id="edtSenha" name="edtSenha" type="password" class="form-control" placeholder="senha">
-                    </div>
-                    <div class="form-group">
-                        <input id="btnLogin" type="button" class="btn float-right login_btn" value="Entrar">
-                    </div>
-                </form>
-            </div>
-        </div>
+require_once 'modais/modalListaProdutos.php';
+?>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="home.php"><img src="../img/guiar.png"></a>
     </div>
-</div>
+    <!-- Top Menu Items -->
+    <ul class="nav navbar-right top-nav">
+        <li><a href="home.php" title="Painel Inicial"><i class="fa fa-lg fa-home"></i></a></li>
+        <? if($_SERVER['REQUEST_URI'] == '/telaProduto.php') {?>
+            <li><a data-toggle="modal" data-target="#modalInserirEditarProduto" onclick="carregarModalInserirEditarProduto('inserir')"> <i class="fa fa-lg fa-plus"></i> </a></li>
+        <? }?>
 
-</body>
-<script>
+        <? if (($_SERVER['REQUEST_URI'] == '/telaLocal.php') && (array_search('telaLocal.php', $arrTelasMenu)!==false) ) {?>
+            <li><a data-toggle="modal" data-target="#modalInserirEditarLocal"  onclick="carregarModalInserirEditarLocal('inserir')" title="Criar novo Local" ><i class="fa fa-lg fa-plus" aria-hidden="true"></i></a></li>
+        <? }?>
 
-    $.validator.setDefaults({
-        submitHandler: function() {
-            alert("submitted!");
-        }
-    });
-
-    $().ready( function () {
-
-        $("#frmLogin").validate({
-            rules: {
-                edtUsuario : {
-                    email: true,
-                    required: true
-                },
-
-                edtSenha: {
-                    required: true,
-                },
-            },
-            errorElement: "em",
-            errorPlacement: function (error, element) {
-                // Add the `help-block` class to the error element
-                error.addClass("help-block");
-                error.insertAfter(element);
-            },
-            highlight: function (element, errorClass, validClass) {
-                $(element).parents(".campoValidar").addClass("has-error").removeClass("has-success");
-            },
-            unhighlight: function (element, errorClass, validClass) {
-                $(element).parents(".campoValidar").addClass("has-success").removeClass("has-error");
-            }
-        });
-    });
+        <li><a data-toggle="modal" data-target="#modalListaProdutos" title="Lista de produtos" onclick="carregarListaProdutos(); limparCamposListaProdutos();"><i class="fa fa-lg fa-gift" aria-hidden="true"></i></a></li>
 
 
+        <? if($_SERVER['REQUEST_URI'] == '/telaParceiro.php') {?>
+            <li><a title="Inserir novo Canal" data-toggle="modal" data-target="#modalSalvarParceiro" onclick="limpar_formulario_inserir()"><i class="fa fa-lg fa-plus"></i></a></li>
+        <? }?>
+
+        <? if($_SERVER['REQUEST_URI'] == '/telaUsuario.php') {?>
+            <li><a title="Inserir novo usu&aacute;rio" data-target="#modalUsuarioInserirEditar" data-toggle="modal" onclick="$('#acaoUsuario').val('inserir'); $('#idUsuario').val(''); limparModalInserirUsuario();"><i class="fa fa-lg fa-user-plus"></i></a></li>
+        <? }?>
+
+        <? if($_SERVER['REQUEST_URI'] == '/telaCertificado.php' || $_SERVER['REQUEST_URI'] == '/telaCentralNegocios.php') {?>
+            <li ><a href="telaCertificado.php" target="_blank" title="Tela antiga de certificados" class="text-success"><i class="fa fa-lg fa-id-card"></i> Certificados </a></li>
+            <li><a title="Venda ERP 3.0" data-target="#vendaInterna" data-toggle="modal" onclick="abreModalVendaInterna()"><i class="fa fa-lg fa-cart-plus"></i></a></li>
+            <!--
+            SO MOSTRAR ICONE DE CERTIFICADOS VALIDADOS NA TELA DE CERTIFICADOS
+            -->
+            <? if (array_search('importarCertificadosValidados', $arrTelasMenu)!==false) {?>
+                <li><a data-toggle="modal" data-target="#modalImportarCertificadosValidados" title="Importar Certificados Validados" ><i class="fa fa-lg fa-download" aria-hidden="true"></i></a></li>
+            <? }?>
+
+            <? if (array_search('importarCertificadosValidados', $arrTelasMenu)!==false) {?>
+                <li><a data-toggle="modal" data-target="#modalBaixaStone" title="Baixar pagamentos stone" ><i class="fa fa-lg fa-money" aria-hidden="true"></i></a></li>
+            <? }?>
+
+            <!--<li><a title="Venda pelo Sistema" href=""><i class="fa fa-lg fa-plus-circle"></i></a></li>-->
+        <? }?>
+
+        <? if($_SERVER['REQUEST_URI'] == '/telaContador.php') {?>
+            <li><a data-toggle="modal" data-target="#modalInserirEditarContador" onclick="carregarModalInserirEditarContador('inserir')"> <i class="fa fa-lg fa-plus"></i> </a></li>
+        <? }?>
+
+        <? if($_SERVER['REQUEST_URI'] == '/telaMeuFaturamento.php') {?>
+            <li><a href="" onclick="imprimir();"><i class="fa fa-lg fa-print"></i></a></li>
+        <? }?>
+        <li><a title="Sair/Deslogar" href="deslogar.php"><i class="fa fa-lg fa-power-off"></i></a></li>
+        <li class="dropdown">
+            <a href="telaAlterarFotoPerfil.php" class="dropdown-toggle" data-toggle="dropdown"><img src="<?=$fotoPerfil?>" class="fotoAvatar"> <?=utf8_encode($usuarioLogado->getNome());?> <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a class="small">&Uacute;ltimo Acesso: <br/><?=$usuarioLogado->getDataUltimoAcesso('d/m/Y H:i:s');?></a></li>
+                <li class="divider"></li>
+                <li>
+                    <a href="telaProfile.php"><i class="fa fa-fw fa-user"></i> Perfil</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <?$linkSenha = 'telaAlterarSenha.php?usuario_id='.$usuarioLogado->getId();?>
+                    <a href="<?=$linkSenha?>"><i class="fa fa-fw fa-lock"></i> Alterar Senha</a>
+                </li>
+                <!--<li>
+                    <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
+                </li>-->
+
+                <li class="divider"></li>
+                <li>
+                    <a href="../deslogar.php"><i class="fa fa-fw fa-power-off"></i> Sair</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+
+        <ul class="nav navbar-nav side-nav">
+            <li class="avatar">
+                <div >
+                    <a title="Trocar o perfil" href="telaAlterarFotoPerfil.php" >
+                        <img src="<?=$fotoPerfil?>" class="fotoPrincipalAvatar">
+                    </a>
+
+                </div>
+                <span class="nomeAvatar"><?=utf8_encode(resumir22($usuarioLogado->getNome(), 20, ''));?></span>
+                <div class="textoAvatar">
+                    Bem vindo de volta<br>
+                    <a href="telaProfile.php"> <i class="fa fa-pencil" aria-hidden="true"></i> Editar</a> | <a href="deslogar.php"> <i class="fa fa-power-off" aria-hidden="true"></i> Deslogar</a>
+                </div>
+                <div>
+
+                </div>
+            </li>
+            <li>
+                <a href="home.php"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+            </li>
+            <? if (array_search('telaFinanceiro', $arrTelasMenu)!==false) {?>
+                <li>
+                    <a href="javascript:;" data-toggle="collapse" data-target="#financeiro"><i class="fa fa-money"></i> Financeiro <i class="fa fa-fw fa-chevron-down"></i></a>
+                    <ul id="financeiro" class="collapse">
+                        <? if (array_search('telaFinanceiro', $arrTelasMenu)!==false) {?>
+                            <li><a href="telaContaReceber.php"><i class="fa fa-download"></i> Contas a receber</a></li>
+                        <? }?>
+
+                    </ul>
+                </li>
+            <? }?>
+            <li style="background-color: darkred" >
+                <a href="telaCentralNegocios.php" style="color: white"><i class="fa fa-smile-o"></i> Central de Neg&oacute;cios</a>
+            </li>
+
+            <li>
+                <a href="javascript:;" data-toggle="collapse" data-target="#cadastro"><i class="fa fa-fw fa-user-plus"></i> Cadastro <i class="fa fa-fw fa-chevron-down"></i></a>
+                <ul id="cadastro" class="collapse">
+                    <li><a href="telaContador.php"><i class="fa fa-address-card"></i> Contador Amigo </a></li>
+                    <? if (array_search('telaUsuario.php', $arrTelasMenu)!==false) {?>
+                        <li><a href="telaUsuario.php"><i class="fa fa-users"></i> Usu&aacute;rios </a></li>
+                    <? }?>
+                    <? if (array_search('telaFuncionario.php', $arrTelasMenu)!==false) {?>
+                        <!--<li><a href="#">Funcion&aacute;rios</a></li>-->
+                    <? }?>
+
+                    <? if (array_search('telaParceiro.php', $arrTelasMenu)!==false) {?>
+                        <li><a href="telaParceiro.php"><i class="fa fa-building-o "></i> Canais de Atendimento</a></li>
+                    <? }?>
+                    <? if (array_search('telaProduto.php', $arrTelasMenu)!==false) {?>
+                        <li><a href="telaProduto.php"><i class="fa fa-product-hunt"></i> Produtos </a></li>
+                    <? }?>
+                    <? if (array_search('telaLocal.php', $arrTelasMenu)!==false) {?>
+                        <li><a href="telaLocal.php"><i class="fa fa-globe"></i> Locais </a></li>
+                    <? }?>
+                </ul>
+            </li>
+            <? if (array_search('PainelCRM', $arrTelasMenu)!==false) {?>
+                <li>
+                    <a  href="telaProspect.php"><i class="fa fa-fw fa-address-book"></i> CRM  </a>
+                </li>
+            <? }?>
 
 
+            <? if (array_search('telaOpcao', $arrTelasMenu)!==false) {?>
+                <li>
+                    <a href="javascript:;" data-toggle="collapse" data-target="#opcao"><i class="fa fa-fw fa-cogs"></i> Op&ccedil;&otilde;es <i class="fa fa-fw fa-chevron-down"></i></a>
+                    <ul id="opcao" class="collapse">
+                        <li>
+                            <a href="#">Recuperar Usu&aacute;rio</a>
+                        </li>
 
-    $("#btnLogin").click(function (){
-        if ($("#frmLogin").valid()) {
-            login();
-        }
-    });
-</script>
-</html>
+                        <li>
+                            <a href="#">Edi&ccedil;&atilde;o de Perfil</a>
+                        </li>
+
+                        <li>
+                            <a href="#"><i class="fa fa-history"></i> Log Sistema</a>
+                        </li>
+                    </ul>
+                </li>
+            <? }?>
+
+            <li>
+                <a href="javascript:;" data-toggle="collapse" data-target="#relatorios"><i class="fa fa-bar-chart"></i> Relat&oacute;rios <i class="fa fa-fw fa-chevron-down"></i></a>
+                <ul id="relatorios" class="collapse">
+                    <li>
+                        <a href="telaComissionamentoMensalContadorRep.php"><i class="glyphicon glyphicon-signal"></i> Relat&oacute;rio individual de comiss&atilde;o de contadores</a>
+                    </li>
+
+                    <? if (array_search('telaGeracaoCampanhaMkt.php', $arrTelasMenu)!==false) {?>
+                        <li>
+                            <a href="telaGeracaoCampanhaMkt.php"><i class="fa fa-whatsapp"></i> Gerador de campanhas para whatsapp</a>
+                        </li>
+                    <? }?>
+
+                    <? if (array_search('telaRelatorioRankingContador.php', $arrTelasMenu)!==false) {?>
+                        <li>
+                            <a href="telaRelatorioRankingContador.php"><i class="fa fa-trophy"></i> Ranking Contadores</a>
+                        </li>
+                    <? }?>
+
+                    <? if (array_search('telaRelatorioComissionamentoContador.php', $arrTelasMenu)!==false) {?>
+                        <li>
+                            <a href="telaRelatorioComissionamentoContador.php"><i class="fa fa-address-card"></i> Comissionamento de Contadores</a>
+                        </li>
+                    <? }?>
+
+                    <? if (array_search('telaRelatorioComissionamentoParceiros.php', $arrTelasMenu)!==false) {?>
+                        <li>
+                            <a href="telaRelatorioComissionamentoParceiros.php"><i class="fa fa-user-circle"></i> Comissionamento de Parceiros</a>
+                        </li>
+                    <? }?>
+                    <? if (array_search('telaRelatorioComissionamentoUsuarios.php', $arrTelasMenu)!==false) {?>
+                        <li>
+                            <a href="telaRelatorioComissionamentoUsuarios.php"><i class="fa fa-user-plus"></i> Comissionamento de Funcion&aacute;rios</a>
+                        </li>
+                    <? }?>
+
+                </ul>
+            </li>
+
+        </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+</nav>

@@ -125,8 +125,8 @@ require_once 'modais/modalListaProdutos.php';
                         </ul>
                     </li>
                     <? }?>
-                    <li >
-                        <a href="telaCentralNegocios.php"><i class="fa fa-smile-o"></i> Central de Neg&oacute;cios</a>
+                    <li style="background-color: darkred" >
+                        <a href="telaCentralNegocios.php" style="color: white"><i class="fa fa-smile-o"></i> Central de Neg&oacute;cios</a>
                     </li>
 
                     <li>

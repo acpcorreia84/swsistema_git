@@ -238,7 +238,7 @@
 </script>
 <?php
 //ABRE O MODAL DE DETALHE DE PAGAMENTO E HABILITA APENAS O BOTAO DE CUPOM DE DESCONTO
-if ($_GET['funcao']=='aplica_cupom' && isset($_GET['idCertificado'])) {
+if (($_GET['funcao']=='aplica_cupom' || $_GET['funcao']=='detalhaCertificado') && isset($_GET['idCertificado'])) {
 ?>
     <script lang='javascript'>
 

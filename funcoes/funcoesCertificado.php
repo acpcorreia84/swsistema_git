@@ -1751,10 +1751,11 @@ function detalharCertificado(){
         }
 
         foreach ($certificado->getCliente()->getClienteContatos() as $contatoCliente)
-            $contatosCliente[] =
-                array(
-                    "Tipo"=>"AC","Telefone"=>utf8_encode($contatoCliente->getTelefone()), "Celular"=>'-', "E-mail"=>$contatoCliente->getEmail(),
-                );
+            if ($contatoCliente->getTelefone())
+                $contatosCliente[] =
+                    array(
+                        "Tipo"=>"AC","Telefone"=>utf8_encode($contatoCliente->getTelefone()), "Celular"=>'-', "E-mail"=>$contatoCliente->getEmail(),
+                    );
 
         /*
          * PEGA OS CONTATOS DO CONTADOR E INSERE
@@ -1775,10 +1776,11 @@ function detalharCertificado(){
             $contatosCliente[] = array("Tipo" => "Escrit&oacute;rio Contador", "Telefone" => ($telefone) ? $telefone : '-', "Celular" => ($celular) ? $celular : '-', "E-mail"=>$certificado->getCliente()->getEmail());
 
             foreach ($contadorObj->getContadorContatos() as $contatoContador)
-                $contatosCliente[] =
-                    array(
-                        "Tipo"=>utf8_encode($contatoContador->getNome()) . "(Contador)","Telefone"=>$contatoContador->getFone(), "Celular"=>$contatoContador->getCelular(), "E-mail"=>$contatoContador->getEmail(),
-                    );
+                if ($contatoContador->getFone() || $contador->getCelular())
+                    $contatosCliente[] =
+                        array(
+                            "Tipo"=>utf8_encode($contatoContador->getNome()) . "(Contador)","Telefone"=>$contatoContador->getFone(), "Celular"=>$contatoContador->getCelular(), "E-mail"=>$contatoContador->getEmail(),
+                        );
         }
 
         $colunasContatos = array(
@@ -2018,16 +2020,16 @@ function detalharCertificado(){
         foreach ($situacoesCertificado as $situacaoCertificado) {
             if ($situacaoCertificado->getUsuario()) $nomeUsuario = $situacaoCertificado->getUsuario()->getNome(); else $nomeUsuario = '-';
             $situacoes[] = array('Id' => $situacaoCertificado->getId(),
-                utf8_encode('Usu?rio') => utf8_encode($nomeUsuario),
+                utf8_encode('Usuário') => utf8_encode($nomeUsuario),
                 'Descricao' => utf8_encode($situacaoCertificado->getSituacao()->getNome()),
                 'Data' => $situacaoCertificado->getData('d/m/Y H:i:s'),
-                utf8_encode('Coment?rio') => utf8_encode($situacaoCertificado->getComentario())
+                utf8_encode('Comentário') => utf8_encode('<b>'.$situacaoCertificado->getSituacao()->getDescricao() . '</b><br/> >' . $situacaoCertificado->getComentario())
             );
         }
 
         $colunasSituacoes = array(
-            array('nome'=>'Id'), array('nome'=>utf8_encode('Usu?rio')), array('nome'=>'Descricao'),
-            array('nome'=>'Data'), array('nome'=>utf8_encode('Coment?rio'))
+            array('nome'=>'Id'), array('nome'=>utf8_encode('Usuário')), array('nome'=>'Descricao'),
+            array('nome'=>'Data'), array('nome'=>utf8_encode('Comentário'))
         );
         $dadosSituacoes = array('mensagem'=>'Ok','colunasSituacoes'=>json_encode($colunasSituacoes),'situacoes'=>json_encode($situacoes));
         /*

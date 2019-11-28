@@ -104,7 +104,7 @@
     @import url('https://fonts.googleapis.com/css?family=Numans');
 
     html,body{
-        background-image: url('img/bg/safeweb-oficial.jpg');
+        background-image: url('img/bg/convencao-sw.jpeg');
         background-size: cover;
         background-repeat: no-repeat;
         height: 100%;
