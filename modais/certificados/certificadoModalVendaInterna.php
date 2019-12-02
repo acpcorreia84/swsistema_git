@@ -365,6 +365,66 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!--ETAPA QUE CONSULTA CERTIFICADOS DUPLICADOS OU RENOVACOES -->
+                                    <div id="divEtapaConsultaCertificados" class="oculto">
+                                        <div class="panel panel-default" >
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-lg-12 col-md-12">
+                                                        <h4>Encontramos estes certificados abaixo listados para este cliente:</h4>
+                                                        <h5>Clique na op&ccedil;&atilde;o ao lado do pedido pra avan&ccedil;ar</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body" >
+
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-lg-12 col-md-12 ">
+                                                        <div class="col-xs-4 col-lg-4 col-md-4 " >
+                                                            Certificados a renovar
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-lg-12 col-md-12">
+                                                        <div class="table table-responsive" id="divTabelaCdsRenVendaInterna"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-lg-12 col-md-12">
+                                                        <div class="col-xs-4 col-lg-4 col-md-4 " >
+                                                            Provaveis certificados duplicados
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-lg-12 col-md-12">
+                                                        <div class="table table-responsive" id="divTabelaCdsDupVendaInterna"></div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row oculto" id="divNovoPedido">
+                                                    <div class="col-xs-12 col-lg-12 col-md-12">
+                                                        <div class="col-xs-4 col-lg-4 col-md-4 " >
+                                                            <h3>Novo pedido</h3>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-lg-12 col-md-12">
+                                                        <div class="col-xs-4 col-lg-4 col-md-4 " >
+                                                            Caso voc&eacute; n&atilde;o queira renovar este pedido, clique aqui
+                                                        </div>
+                                                        <div class="col-xs-4 col-lg-4 col-md-4 " >
+                                                            <button class="btn btn-info" title="Clique aqui para criar um pedido novo, independente da renova&ccedil;&atilde;o deste cliente." onclick="$('#idCertificadoRenovacao').val(); $('#idCertificadoDuplicado').val(); avancarVendaInterna()"><i class="fa fa-chevron-right"></i> </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--FIM DA ETAPA QUE CONSULTA CERTIFICADOS DUPLICADOS OU RENOVACOES -->
+
+
                                     <div id="divSegundaEtapa" class="oculto">
                                         <!--FIM ESCOLHA FORMULARIO CADASTRO CLIENTE - PRIMEIRA ETAPA-->
                                         <div class="panel panel-default" >
@@ -389,6 +449,10 @@
                                                                     <input type="hidden" class="form-control" name="edtCodigoContadorPedido" id="edtCodigoContadorPedido"/>
                                                                     <input type="hidden" class="form-control" name="edtTipoCliente" id="edtTipoCliente" value=""/>
                                                                     <input type="hidden" class="form-control" name="edtProdutoCertificado" id="edtProdutoCertificado" value=""/>
+                                                                    <input type="hidden" name="idClienteVendaInterna" id="idClienteVendaInterna" value=""/>
+                                                                    <input type="hidden" name="idCertificadoRenovacao" id="idCertificadoRenovacao" value=""/>
+                                                                    <input type="hidden" name="idCertificadoDuplicado" id="idCertificadoDuplicado" value=""/>
+
                                                                     <label>Nome:</label>
                                                                     <input type="text" class="form-control" disabled  name="edtNomeContador" id="edtNomeContador" />
 
@@ -398,6 +462,39 @@
                                                     <!-------------------------FIM CONTADOR ------------------------->
                                                 </div>
                                         </div>
+
+
+
+                                        <div class="panel panel-default" id="divMotivoDuplicidade">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-lg-12 col-md-12">
+                                                        <h5>Duplicidade de clientes</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body" >
+                                                <!-------------------------DESCRICAO DUPLICIDADE ------------------------->
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-lg-12 col-md-12">
+                                                        <div class="col-xs-4 col-lg-4 col-md-4 " >
+                                                            <h5>Lembrando que caso voc&ecirc; opte por duplicar, esse pedido dever&aacute; ser autorizado pela gest&atilde;o</h5>
+                                                        </div>
+                                                        <div class="col-xs-4 col-lg-4 col-md-4 " >
+                                                            <h4>Informe aqui o motivo da duplica&ccedil;&atilde;o do pedido:</h4>
+                                                            <textarea class="form-control" id="txtMotivoDuplicacao" name="txtMotivoDuplicacao" rows="5" placeholder="Descreva aqui o motivo."></textarea>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+
+                                                <!-------------------------DESCRICAO DUPLICIDADE ------------------------->
+                                            </div>
+                                        </div>
+
+
+
                                         <!--FORMA DE PAGAMENTO-->
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -451,7 +548,10 @@
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-xs-12">
                                         <div class="btn-group">
-                                                <button id="btnAvancar" class="btn btn-primary oculto"> Avancar <i class="fa fa-arrow-circle-right fa-lg"></i></button>
+                                                <!--BOTOES DA CONSULTA DOS PEDIDOS DUPLICADOS-->
+                                                <button id="btnAvancar1" class="btn btn-primary oculto"> Avancar? <i class="fa fa-arrow-circle-right fa-lg"></i></button>
+                                                <button id="btnVoltar1" class="btn btn-primary oculto" onclick="voltarVendaInterna()" ><i class="fa fa-arrow-circle-left fa-lg"></i> Voltar|</button>
+                                                <button id="btnAvancar" class="btn btn-primary oculto" > Avancar <i class="fa fa-arrow-circle-right fa-lg"></i></button>
                                                 <button id="btnFinalizar" class="btn btn-success oculto" onclick="finalizarVendaInterna('<?=substr($_SERVER['PHP_SELF'], strrpos($_SERVER['PHP_SELF'], '/' )+1);?>')"><i class="fa fa-check"></i> Finalizar</button>
                                                 <button id="btnVoltar" class="btn btn-primary oculto" onclick="voltarVendaInterna()" ><i class="fa fa-arrow-circle-left fa-lg"></i> Voltar</button>
                                                 <button id="btnReiniciar" class="btn btn-danger" onclick="limparModalVendaInterna()"><i class="fa fa-check"></i> Reiniciar</button>
@@ -627,14 +727,14 @@
             }
         });
 
-        $('#btnAvancar').click(function () {
+        $('#btnAvancar1').click(function () {
             var pessoaTipo = $("input[name='tipoPessoa']:checked").val();
             if (pessoaTipo == "pf") {
                 if ( ($('#frmRepresentanteLegal').valid()) && ($('#frmEscolhaPessoaFisica').valid()) )
-                    avancarVendaInterna();
-            } else {
+                    consultarCertificadosVendaInterna();
+            } else if (pessoaTipo == 'pj') {
                 if (($('#frmDadosPessoaJuridica').valid()) && ($('#frmRepresentanteLegal').valid()) && ($("#frmEscolhaPessoaJuridica").valid()))
-                    avancarVendaInterna();
+                    consultarCertificadosVendaInterna();
             }
         });
 

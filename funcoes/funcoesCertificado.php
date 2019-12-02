@@ -8,6 +8,8 @@
 	$funcao = $_POST['funcao'];
 
 
+
+if($funcao == 'consultar_certificados_venda_interna') { consultarCertificadosVendaInterna(); }
 if($funcao == 'carregar_filtros_certificados') { carregarFiltrosCertificados(); }
 if($funcao == 'carregar_certificados') { carregarCertificados(); }
 if($funcao == 'carregar_modal_trocar_produto') { carregarModalTrocarProdutos(); }
@@ -163,7 +165,7 @@ function inserir_observacao($certificado_id,$comentarioObservacao,$usuario_id){
         inserir_situacao($certificado_id,$comentarioSituacao,$usuario_id,$idSituacao);
         echo "0";
 	}catch (Exception $e){
-	    erroEmail($e->getMessage(), removeAcentos("Erro no javascritp de inserir a observa??o"));
+	    erroEmail($e->getMessage(), removeAcentos("Erro no javascritp de inserir a observação"));
 		echo $e->getMessage();
 	}
 };
@@ -416,7 +418,7 @@ function apagarCertificado(){
         $contaReceber->save();
 
 
-		//Gerando A??o
+		//Gerando Ação
 		$idSituacao = 13;
 		$comentarioSituacao = utf8_decode($_POST['motivoExclusao']);
 		inserir_situacao($certificado->getId(),$comentarioSituacao,$usuarioLogado->getId(),$idSituacao);
@@ -461,7 +463,7 @@ function inserirDescontoCertificado($certificado_id,$motivoDesconto,$valor){
 function revogarCertificado ($certificado_id, $retornaJs=true){
 	try{
 		//duplica o cadastro com as mesmas informa??es (Certificado)
-		//Transfere pagamento e confirma??o de pagamento do certificado anterior pro novo registro
+		//Transfere pagamento e confirmação de pagamento do certificado anterior pro novo registro
         $usuarioLogado = ControleAcesso::getUsuarioLogado();
 		$certificadoRevogado =  CertificadoPeer::retrieveByPk($certificado_id);
 
@@ -502,7 +504,7 @@ function revogarCertificado ($certificado_id, $retornaJs=true){
 
 	    /* SITUA??ES DO NOVO CADASTRO */
 		$idSituacao = 26;
-		$comentarioSituacao = "Certificado gerado atrav?s de uma revoga??o. Certificado Revogado: ".$certificadoRevogado->getId();
+		$comentarioSituacao = "Certificado gerado atrav?s de uma revogação. Certificado Revogado: ".$certificadoRevogado->getId();
 		$novoCertificado_id = $certificadoNovo->getId();
 		inserir_situacao($novoCertificado_id,$comentarioSituacao,$usuarioLogado->getId(),$idSituacao);
 
@@ -822,7 +824,7 @@ function alterar_cliente($certificado_id){
 		$emailResponsavel = $_REQUEST['email_responsavel'];
 
 		$resultado = "";
-		//Altera??o do cliente
+		//Alteração do cliente
 		if ($pessoaTipo == "J"){
 			$resultado .= "J-";
 			$razaoSocialAnterior = $cliente->getRazaoSocial();
@@ -902,7 +904,7 @@ function alterar_cliente($certificado_id){
 			$responsavel = ResponsavelPeer::retrieveByPk($idResponsavel);
 
 			$resultado .= "RESPONSAVEL: /n";
-			//Altera??o do Respons?vel
+			//Alteração do Respons?vel
 
 			$cpfResponsavelAnterior = $responsavel->getCpf();
 			if($cpfResponsavel != $cpfResponsavelAnterior && $cpfResponsavel != " " && $cpfResponsavel != null){
@@ -1591,7 +1593,7 @@ function gerarProtocolo(){
                         array(),
                         array(),
 						$cpfContador
-                    ); //Cria??o do Array
+                    ); //Criação do Array
 
                     $certificado->setProtocolo($solicitacao);
                     $certificado->save();
@@ -1896,17 +1898,17 @@ function detalharCertificado(){
 
                 }
 
-                $boletos[] =  array('Id'=>$boleto->getId(),'Tid'=>$boleto->getTid(), utf8_encode('Situa??o')=> $situacaoPamento,
+                $boletos[] =  array('Id'=>$boleto->getId(),'Tid'=>$boleto->getTid(), utf8_encode('Situação')=> $situacaoPamento,
                     'Venc.'=>$boleto->getVencimento('d/m/Y'),'Dt.Pagt.'=> $dataConfirmacaoPagamento, 'Valor'=>formataMoeda($boleto->getValor()),
                     'Forma'=> utf8_encode($certificado->getFormaPagamento()->getNome()) . ' <a href="'.$boleto->getUrlBoleto().'" target="_blank" title="Visualizar Boleto"><i class="fa fa-barcode" aria-hidden="true"></i></a>',
-                    utf8_encode('A??o')=>$btnPagarExtornar
+                    utf8_encode('Ação')=>$btnPagarExtornar
                 );
             }
 
             $colunas = array(
-                array('nome'=>'Id'),array('nome'=>'Tid'), array('nome'=>utf8_encode('Situa??o')), array('nome'=>'Dt.Pagt.'),array('nome'=>'Venc.'),
+                array('nome'=>'Id'),array('nome'=>'Tid'), array('nome'=>utf8_encode('Situação')), array('nome'=>'Dt.Pagt.'),array('nome'=>'Venc.'),
                 array('nome'=>'Valor'),
-                array('nome'=>'Forma'), array('nome'=>utf8_encode('A??o'))
+                array('nome'=>'Forma'), array('nome'=>utf8_encode('Ação'))
             );
             $dadosPagamento = array('mensagem'=>'Ok','colunasPagamento'=>json_encode($colunas),'pagamento'=>json_encode($boletos), 'comprovantePagamento'=>'');
 
@@ -1990,14 +1992,14 @@ function detalharCertificado(){
 
             }
 
-            $pagamento[] =  array(utf8_encode('Situa??o')=> $situacaoPamento,
+            $pagamento[] =  array(utf8_encode('Situação')=> $situacaoPamento,
                 'Dt.Pagt.'=> $dataConfirmacaoPagamento, 'Valor'=>formataMoeda($certificado->getProduto()->getPreco() - $certificado->getDesconto()),
                 'Forma'=> utf8_encode($certificado->getFormaPagamento()->getNome()),
-                utf8_encode('A??o')=>$btnInformarPagamento . ' '. $btnPagarExtornar
+                utf8_encode('Ação')=>$btnInformarPagamento . ' '. $btnPagarExtornar
             );
             $colunas = array(
-                array('nome'=>utf8_encode('Situa??o')), array('nome'=>'Dt.Pagt.'), array('nome'=>'Valor'),
-                array('nome'=>'Forma'), array('nome'=>utf8_encode('A??o'))
+                array('nome'=>utf8_encode('Situação')), array('nome'=>'Dt.Pagt.'), array('nome'=>'Valor'),
+                array('nome'=>'Forma'), array('nome'=>utf8_encode('Ação'))
             );
 
 
@@ -2277,12 +2279,22 @@ function finalizarVendaCertificado() {
 
         $certificadoNovo = new Certificado();
         $certificadoNovo->setDataCompra(date('Y-m-d H:i:s'));
-        $certificadoNovo->setUsuarioId($usuarioLogadoRn->getId());
+
         $certificadoNovo->setCliente($cliente);
         $certificadoNovo->setProdutoId($_POST['edtprodutoVenda']);
         $certificadoNovo->setFormaPagamentoId($_POST['edtFormaPagamento']);
         $certificadoNovo->setLocalId($usuarioLogadoRn->getLocalId());
         $certificadoNovo->setApagado(0);
+        if ($_POST['idCertificadoRenovacao'])
+            $certificadoNovo->setCertificadoRenovado($_POST['idCertificadoRenovacao']);
+        /*
+         * SE ESTA DUPLICANDO INFORMA O USUARIO QUE DUPLICOU
+         * */
+        if ($_POST['idCertificadoDuplicado'])
+            $certificadoNovo->setUsuarioId(1039);
+        else
+            $certificadoNovo->setUsuarioId($usuarioLogadoRn->getId());
+
         /*INSERE CONTADOR NO CERTIFICADO E NO CLIENTE*/
         if($_POST['edtCodigoContadorPedido'] != '') {
             $cliente->setContadorId($_POST['edtCodigoContadorPedido']);
@@ -2290,24 +2302,6 @@ function finalizarVendaCertificado() {
             $cliente->save();
             $certificadoNovo->setAutorizadoVendaSemContador(0);
         }
-
-        /*CODIGO PARA ACHAR O ULTIMO CERTIFICADO VALIDADO PELO CLIENTE*/
-        $cUltimoCertificado = new Criteria();
-        $cUltimoCertificado->add(CertificadoPeer::CLIENTE_ID, $cliente->getId());
-        $cUltimoCertificado->addDescendingOrderByColumn(CertificadoPeer::DATA_VALIDACAO);
-        $cUltimoCertificado->addDescendingOrderByColumn(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO);
-        $cUltimoCertificado->addDescendingOrderByColumn(CertificadoPeer::DATA_PAGAMENTO);
-        $ultimoCd = CertificadoPeer::doSelectOne($cUltimoCertificado);
-        if ($ultimoCd)
-            if ($ultimoCd->getConfirmacaoValidacao()) {
-                $certificadoNovo->setDataUltimaValidacao($ultimoCd->getConfirmacaoValidacao('y-m-d H:i:s'));
-                /*SE FOR UMA RENOVACAO ATRIBUI O ID DO CERTIFICADO RENOVADO*/
-                $validade = mktime(0,0,0,$ultimoCd->getConfirmacaoValidacao('m'), $ultimoCd->getConfirmacaoValidacao('d'), ($ultimoCd->getConfirmacaoValidacao('Y')+$ultimoCd->getProduto()->getValidade()));
-                $hoje = mktime(0,0,0,date('m'), date('d'), date('Y'));
-                /*SE A DATA DE VALIDADE DO CERTIFICADO FOR MENOR QUE HOJE E POR QUE ESTE NOVO CD E UMA RENOVACAO*/
-                if ($hoje < $validade)
-                    $certificadoNovo->setCertificadoRenovado($ultimoCd->getId());
-            }
 
         /*
          * SALVA OS OBJETOS:
@@ -2320,8 +2314,6 @@ function finalizarVendaCertificado() {
                 $mensagemErro .= $falha->getMessage() . '<br/>';
         }
 
-/*        var_dump('produto:'.$certificadoNovo->getProdutoId());
-        var_dump($mensagemErro);*/
         $certificadoNovo->save();
 
 
@@ -2335,6 +2327,47 @@ function finalizarVendaCertificado() {
         $situacao->setData(date("Y-m-d H:i:s"));
         $situacao->setUsuarioId($usuarioLogadoRn->getId());
         $situacao->save();
+
+
+        /*
+        * SE O PEDIDO FOR DUPLICADO VAMOS INSERIR O USUARIO GUIAR PARA QUE SEJA TRATADO PELA GESTAO
+        * */
+        if ($_POST['idCertificadoDuplicado']) {
+            $certSit = new CertificadoSituacao();
+            $certSit->setComentario('Este certificado foi duplicado pelo usuario ' .$usuarioLogadoRn->getId() . ' - '. $usuarioLogadoRn->getNome(). ' a partir do certificado <a href="telaCertificado.php?funcao=detalhaCertificado&idCertificado=' . $_POST['idCertificadoDuplicado'] . '" target="_blank">'.$_POST['idCertificadoDuplicado'].'</a> 
+            <h4>Motivo: '.$_POST['motivoDuplicacao'].'</h4>');
+            $cSit = new Criteria();
+            /*
+             * USUARIO GUIAR
+             * */
+            $certSit->setUsuarioId($usuarioLogadoRn->getId());
+            $certSit->setCertificadoId($certificadoNovo->getId());
+            $cSit->add(SituacaoPeer::SIGLA, 'dupcd');
+            $certSit->setData(date('Y-m-d H:i:s'));
+            $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
+            $certSit->save();
+        }
+
+        /*
+        * SE TIVER O ID DE RENOVACAO SETADO E PQ FOI ESCOLHIDO UM CERTIFICADO PRA RENOVAR
+        * */
+
+        if ($_POST['idCertificadoRenovacao']) {
+            /*
+             * INSERE SITUACAO DE RENOVACAO NO CERTIFICADO
+             * */
+            $certSit = new CertificadoSituacao();
+            $certSit->setUsuarioId($usuarioLogadoRn->getId());
+            $certSit->setComentario('Este pedido foi renovado a partir do certificado pelo usuario ' .$usuarioLogadoRn->getId() . ' - '. $usuarioLogadoRn->getNome(). ' a partir do certificado <a href="telaCertificado.php?funcao=detalhaCertificado&idCertificado=' . $_POST['idCertificadoRenovacao'] . '" target="_blank">'.$_POST['idCertificadoRenovacao'].'</a>');
+            $cSit = new Criteria();
+            $certSit->setCertificadoId($certificadoNovo->getId());
+            $cSit->add(SituacaoPeer::SIGLA, 'pedren');
+            $certSit->setData(date('Y-m-d H:i:s'));
+            $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
+            $certSit->save();
+
+        }
+
 
         $pedido = new Pedido();
         $pedido->setDataPedido(date("Y-m-d H:i:s", mtime()));
@@ -2400,7 +2433,7 @@ function carregarModalPedidoInterno () {
 function autorizar_certificado ($certificado_id,$motivoAutorizacao,$usuario_id){
     try{
         //duplica o cadastro com as mesmas informa??es (Certificado)
-        //Transfere pagamento e confirma??o de pagamento do certificado anterior pro novo registro
+        //Transfere pagamento e confirmação de pagamento do certificado anterior pro novo registro
 
         $certificado =  CertificadoPeer::retrieveByPk($certificado_id);
         $certificado->setAutorizadoVendaSemContador('1');
@@ -2887,7 +2920,7 @@ function carregarCertificados() {
              * */
             if (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']=='Vencimento')) {
                 $certificados[$key]['D.Venc.'] = ($certificado->getDataFimValidade('d/m/Y'))?$certificado->getDataFimValidade('d/m/Y'):'-';
-            } elseif (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']==utf8_encode('Valida??o'))) {
+            } elseif (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']==utf8_encode('Validação'))) {
                 $certificados[$key]['D.Val.'] = ($certificado->getDataValidacao('d/m/Y')) ? $certificado->getDataValidacao('d/m/Y') : '-';
             } else {
                 $certificados[$key]['D.Com.'] = ($certificado->getDataCompra('d/m/Y'))?$certificado->getDataCompra('d/m/Y'):'-';
@@ -2902,7 +2935,7 @@ function carregarCertificados() {
                 array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
             );
 
-        } elseif (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']==utf8_encode('Valida??o'))) {
+        } elseif (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']==utf8_encode('Validação'))) {
             $colunas = array(
                 array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Val.'), array('nome'=>'Proto.'),
                 array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
@@ -3448,7 +3481,7 @@ function importarCertificadosValidados() {
                         $certSit->setCertificadoId($certificado->getId());
                         $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
                         $certSit->setComentario(
-                            "Concilia??o de certificados validados. Parab?ns este certificado foi APROVADO. ".$certificado->getProtocolo()
+                            "Conciliação de certificados validados. Parab?ns este certificado foi APROVADO. ".$certificado->getProtocolo()
                         );
                         $certSit->setData(date('Y-m-d H:i:s'));
                         $certSit->setUsuarioId($usuarioLogado->getId());
@@ -3462,7 +3495,7 @@ function importarCertificadosValidados() {
                         $certSit->setCertificadoId($certificado->getId());
                         $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
                         $certSit->setComentario(
-                            "Concilia??o de certificados validados. Fique atento este certificado foi aprovado com PEND?NCIA. ".
+                            "Conciliação de certificados validados. Fique atento este certificado foi aprovado com PEND?NCIA. ".
                             $certificado->getProtocolo()
 
                         );
@@ -3491,8 +3524,8 @@ function importarCertificadosValidados() {
                         $certSit = new CertificadoSituacao();
                         $certSit->setCertificadoId($certificado->getId());
                         $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
-                        $certSit->setComentario("Concilia??o de certificados validados. Infelizmente este certificado foi revogado. 
-                            Reagende com o cliente o quanto antes para emitir um novo. ".$certificado->getProtocolo() . '. motivo da revoga??o: ' .
+                        $certSit->setComentario("Conciliação de certificados validados. Infelizmente este certificado foi revogado. 
+                            Reagende com o cliente o quanto antes para emitir um novo. ".$certificado->getProtocolo() . '. motivo da revogação: ' .
                             utf8_decode($certificadoValidado['observacao'])
                         );
                         $certSit->setData(date('Y-m-d H:i:s'));
@@ -4128,6 +4161,164 @@ function usarCupomDesconto() {
     }
 }
 
+function consultarCertificadosVendaInterna () {
+    try {
+        $mostrarTelaNovoPedido = 'nao';
+        $hora_ini = ' 00:00:00';
+        $hora_fim = ' 23:59:59';
+
+        /*
+        * BUSCA OS CDS QUE FORAM COMPRADOS NOS ULTIMOS 40 DIAS E ESTAO EM ABERTO
+        * */
+        $dataCompra = new DateTime(date('Y-m-d'));
+        $dataCompra->sub(new DateInterval('P40D'));
+
+        $cCertificadosDuplicados = new Criteria();
+        $cCertificadosDuplicados->add(CertificadoPeer::CLIENTE_ID, $_POST['cliente_id']);
+
+        $cCertificadosDuplicados->add(CertificadoPeer::APAGADO, 0);
+        $cCertificadosDuplicados->add(CertificadoPeer::APAGADO, 0);
+
+        $cCertificadosDuplicados->add(CertificadoPeer::DATA_COMPRA, $dataCompra->format('Y-m-d') . ' '.$hora_ini, Criteria::GREATER_EQUAL);
+        $cCertificadosDuplicados->addAnd(CertificadoPeer::DATA_COMPRA, date('Y').'-'.date('m').'-'.date('d') . $hora_fim, Criteria::LESS_EQUAL);
+
+        $cCertificadosDuplicados->addAnd(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, null, Criteria::ISNULL);
+        $cCertificadosDuplicados->addOr(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, '0000-00-00 00:00:00');
+
+        $certificadosDuplicados = CertificadoPeer::doSelect($cCertificadosDuplicados);
+
+        $i = 1;
+        $arrCertificadosDuplicados = array();
+
+        foreach ($certificadosDuplicados as $key=>$certificado)  {
+            $nomeCliente = ($certificado->getCliente()->getRazaoSocial() != '')?utf8_encode($certificado->getCliente()->getRazaoSocial()):utf8_encode($certificado->getCliente()->getNomeFantasia());
+            $usuarioConsultor = $certificado->getUsuario()?$certificado->getUsuario()->getNome():'---';
+            $usuarioAgr = (($certificado->getUsuarioValidouId())?$certificado->getUsuarioValidouId().'-'.utf8_encode($certificado->getUsuarioRelatedByUsuarioValidouId()->getNome()):'---');
+            $produto = ($certificado->getProduto()) ? utf8_encode($certificado->getProduto()->getNome()) : '---';
+
+            $btnDetalhar = '<button class="btn btn-warning" title="Escolher este pedido pra seguir" onclick="avancarVendaInterna(\'\','.$certificado->getId().')"><i class="fa fa-chevron-right" </button>';
+
+            if ($certificado->getConfirmacaoValidacao() == 1)
+                $situacaoValidacao = '<i class="fa fa-flag" aria-hidden="true" style="color:#096;" title="validado em '.$certificado->getDataValidacao('d/m/Y').' Agr: '.$usuarioAgr.'"></i>';
+            elseif ($certificado->getConfirmacaoValidacao() == 2)
+                $situacaoValidacao = '<i class="fa fa-flag" aria-hidden="true" style="color:#fff847" title="validado em '.$certificado->getDataValidacao('d/m/Y').' Agr: '.$usuarioAgr. '(pendente)"></i>';
+            elseif ($certificado->getConfirmacaoValidacao() == 3)
+                $situacaoValidacao = '<i class="fa fa-flag" aria-hidden="true" style="color:#fff847" title="validado em '.$certificado->getDataValidacao('d/m/Y').' Agr: '.$usuarioAgr.' (renovado)"></i>';
+            elseif ($certificado->getConfirmacaoValidacao() == 4)
+                $situacaoValidacao = '<i class="fa fa-flag" aria-hidden="true" style="color:#ac2925" title="revogado em '.$certificado->getDataValidacao('d/m/Y').' Agr: '.$usuarioAgr.'"></i>';
+            else
+                $situacaoValidacao = '-';
+
+            $arrCertificadosDuplicados[] = array(' '=>($i++),'Cod.'=>$certificado->getId(),
+                'Proto.'=> ($certificado->getProtocolo())?$certificado->getProtocolo():'-',
+                'Cont.'=>DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d')),
+                'D.Comp.'=>($certificado->getDataCompra('d/m/Y'))?$certificado->getDataCompra('d/m/Y'):'-',
+                'Cliente'=> '<a id="btnContato'.$certificado->getId().'" href="telaCertificado.php?funcao=detalhaCertificado&idCertificado='.$certificado->getId().'" target="_blank">'.$certificado->getCliente()->getId() . ' - '.$nomeCliente . '</a>',
+                'Tipo'=>$produto,
+                'Consultor'=>utf8_encode($usuarioConsultor),
+                'Tot'=>formataMoeda($certificado->getProduto()->getPreco() - $certificado->getDesconto()),
+                '.'=>utf8_encode($situacaoValidacao),
+                utf8_encode('Acao')=>$btnDetalhar
+
+            );
+        }
+
+
+        $cCertificadoRenovacao = new Criteria();
+        $cCertificadoRenovacao->add(CertificadoPeer::CLIENTE_ID, $_POST['cliente_id']);
+
+        $cCertificadoRenovacao->add(CertificadoPeer::APAGADO, 0);
+
+        /*
+         * BUSCA CERTIFICADOS COM DATA DE VENCIMENTO ACIMA DE 31 DIAS
+         * PARA LISTAR NAS POSSIVEIS RENOVACOES
+         * */
+        $dataVencimento = new DateTime(date('Y-m-d'));
+        $dataVencimento->add(new DateInterval('P30D'));
+
+        $cCertificadoRenovacao->add(CertificadoPeer::DATA_FIM_VALIDADE, $dataVencimento->format('Y-m-d') .' ' . $hora_ini, Criteria::GREATER_EQUAL);
+
+        $cCertificadoRenovacao->addAscendingOrderByColumn(CertificadoPeer::DATA_FIM_VALIDADE);
+
+        $certificadosRenovacaoObj = CertificadoPeer::doSelect($cCertificadoRenovacao);
+
+        $i = 1;
+        $arrCertificadosRenovacao = array();
+
+        foreach ($certificadosRenovacaoObj as $key=>$certificado)  {
+            $nomeCliente = ($certificado->getCliente()->getRazaoSocial() != '')?utf8_encode($certificado->getCliente()->getRazaoSocial()):utf8_encode($certificado->getCliente()->getNomeFantasia());
+            $usuarioConsultor = $certificado->getUsuario()?$certificado->getUsuario()->getNome():'---';
+            $usuarioAgr = (($certificado->getUsuarioValidouId())?$certificado->getUsuarioValidouId().'-'.utf8_encode($certificado->getUsuarioRelatedByUsuarioValidouId()->getNome()):'---');
+            $produto = ($certificado->getProduto()) ? utf8_encode($certificado->getProduto()->getNome()) : '---';
+
+            if (count($arrCertificadosDuplicados)==0)
+                $btnDetalhar = '<button class="btn btn-info" title="Escolher este pedido pra seguir" onclick="avancarVendaInterna('.$certificado->getId().')"><i class="fa fa-chevron-right" </button>';
+            else
+                $btnDetalhar = '<a title="Voc&eacute; n&atilde;o pode solicitar renova&ccedil;&atilde;o do certificado deste cliente por ele constar em aberto" class="btn btn-danger"><i class="fa fa-times" </a>';
+
+            if ($certificado->getConfirmacaoValidacao() == 1)
+                $situacaoValidacao = '<i class="fa fa-flag" aria-hidden="true" style="color:#096;" title="validado em '.$certificado->getDataValidacao('d/m/Y').' Agr: '.$usuarioAgr.'"></i>';
+            elseif ($certificado->getConfirmacaoValidacao() == 2)
+                $situacaoValidacao = '<i class="fa fa-flag" aria-hidden="true" style="color:#fff847" title="validado em '.$certificado->getDataValidacao('d/m/Y').' Agr: '.$usuarioAgr. '(pendente)"></i>';
+            elseif ($certificado->getConfirmacaoValidacao() == 3)
+                $situacaoValidacao = '<i class="fa fa-flag" aria-hidden="true" style="color:#fff847" title="validado em '.$certificado->getDataValidacao('d/m/Y').' Agr: '.$usuarioAgr.' (renovado)"></i>';
+            elseif ($certificado->getConfirmacaoValidacao() == 4)
+                $situacaoValidacao = '<i class="fa fa-flag" aria-hidden="true" style="color:#ac2925" title="revogado em '.$certificado->getDataValidacao('d/m/Y').' Agr: '.$usuarioAgr.'"></i>';
+            else
+                $situacaoValidacao = '-';
+
+            $arrCertificadosRenovacao[] = array(' '=>($i++),'Cod.'=>$certificado->getId(),
+                'Proto.'=> ($certificado->getProtocolo())?$certificado->getProtocolo():'-',
+                'D.Comp.'=>($certificado->getDataCompra('d/m/Y'))?$certificado->getDataCompra('d/m/Y'):'-',
+                'D.Venc.'=>($certificado->getDataFimValidade('d/m/Y'))?$certificado->getDataFimValidade('d/m/Y'):'-',
+                'Cliente'=> '<a id="btnContato'.$certificado->getId().'" href="telaCertificado.php?funcao=detalhaCertificado&idCertificado='.$certificado->getId().'" target="_blank">'.$certificado->getCliente()->getId() . ' - '.$nomeCliente . '</a>',
+                'Tipo'=>$produto,
+                'Consultor'=>utf8_encode($usuarioConsultor),
+                'Tot'=>formataMoeda($certificado->getProduto()->getPreco() - $certificado->getDesconto()),
+                '.'=>utf8_encode($situacaoValidacao),
+                utf8_encode('Acao')=>$btnDetalhar
+
+            );
+        }
+
+        $colunasRenovacao = array(
+            array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'D.Comp.'),array('nome'=>'D.Venc.'), array('nome'=>'Proto.'),
+            array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Acao'))
+        );
+
+        /*
+         * SE SO ENCONTROU PEDIDOS A RENOVAR MOSTRA TELA DE NOVO PEDIDO
+         * */
+        if (count ($arrCertificadosRenovacao) > 0 && count($arrCertificadosDuplicados) == 0)
+            $mostrarTelaNovoPedido = 'sim';
+
+        /*
+         * SE NAO ENCONTROU NENHUM PEDIDO DUPLICADOS NEM PEDIDOS DE RENOVACAO
+         * SIMPLESMENTE VAI PRA ULTIMA TELA DE UMA VEZ
+         * */
+        if (count ($arrCertificadosRenovacao) == 0 && count($arrCertificadosDuplicados) == 0) {
+            $avancarUltimaTela = 'sim';
+        }
+        else $avancarUltimaTela = 'nao';
+
+
+        $colunasDuplicados = array(
+            array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Cont.'), array('nome'=>'D.Comp.'), array('nome'=>'Proto.'),
+            array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Acao'))
+        );
+
+
+        $retorno = array('mensagem'=>'Ok','colunasRenovacao'=>json_encode($colunasRenovacao),'colunasDuplicados'=>json_encode($colunasDuplicados),
+            'certificadosRenovacao'=>json_encode($arrCertificadosRenovacao),
+            'certificadosDuplicados'=>json_encode($arrCertificadosDuplicados),
+            'avancarUltimaTela'=>$avancarUltimaTela, 'mostrarTelaNovoPedido'=>$mostrarTelaNovoPedido
+        );
+
+        echo json_encode($retorno);
+    }catch(Exception $e){
+        echo var_dump($e->getMessage());
+    }
+}
 
 
 ?>

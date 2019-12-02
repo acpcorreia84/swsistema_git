@@ -416,21 +416,6 @@ function carregarNegocios() {
 
             }
 
-
-            /*
-             * ESCOLHE ENTRE DATA DE VENCIMENTO, DATA DE VALIDACAO OU DATA DA COMPRA
-             * DE ACORDO COM O FILTRO ESCOLHIDO PELO USUARIO
-             * */
-            if (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']=='Vencimento')) {
-                $certificados[$key]['D.Venc.'] = ($certificado->getDataFimValidade('d/m/Y'))?$certificado->getDataFimValidade('d/m/Y'):'-';
-            } elseif (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']==utf8_encode('Valida??o'))) {
-                $certificados[$key]['D.Val.'] = ($certificado->getDataValidacao('d/m/Y')) ? $certificado->getDataValidacao('d/m/Y') : '-';
-            } else {
-                $certificados[$key]['D.Com.'] = ($certificado->getDataCompra('d/m/Y'))?$certificado->getDataCompra('d/m/Y'):'-';
-            }
-
-
-
         }
 
 

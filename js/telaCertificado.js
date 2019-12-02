@@ -97,7 +97,7 @@ function trocarProdutoCertificado(){
                 carregarModalDetalharCertificado($('#idCertificado').val());
                 $('#modalTrocarProdutoCerticado').modal('hide');
             }else {
-                alertErro("Opa, Algo Deu Errado, Erro:"+resultado[0]+" entre em contato com sistema@gruposerama.com.br");
+                alertErro("Opa, Algo Deu Errado, Erro:"+resultado[0]+" entre em contato com sistema@swsistema.com.br");
                 erroEmail(result,acentuarMsn("Erro na fun??o de trocar o produto, erro:" + result));
                 $("#modalCarregando").modal('hide');
             }
@@ -501,212 +501,6 @@ function verificaTipoCliente(campo){
         $('#edtCnpjVendaInterna').focus();
 	}
 };
-function consultaClienteBase() {
-
-    $('#mensagemLoading').html('<i class="fa fa-user-circle-o"></i> Pesquisando de o cliente existe na base de dados do sistema');
-    $("#modalCarregando").modal('show');
-	var checado = '';
-	var mensagemErro ='';
-
-    $('#btnAvancar').css({
-        visibility:"visible",
-        display:"block"
-    });
-
-    /*APAGA O TIPO DE PESSOA NAO SELECIONADO, SO HABILITA QUANDO RESETAR FORMULARIO*/
-    $("input[name='tipoPessoa']").each(function() {
-        if (this.checked == false) {
-            $('#'+this.value).css('visibility', 'hidden');
-            $('#'+this.value).css('display', 'none');
-        }
-    });
-
-	var radios = document.getElementsByName("tipoPessoa");
-	for (var i = 0; i < radios.length; i++) {
-		if (radios[i].checked) {
-			checado =  radios[i].value;
-		}
-	}
-
-	if(checado == 'pf') {
-		var dadosajax = {
-			'cpf': $("#edtCpfVendaInterna").val(),
-			'dataNascimento': $("#edtDataNascimento").val(),
-			'tipoPessoa' : checado
-		}
-	} else {
-		var dadosajax = {
-			'cnpj': $("#edtCnpjVendaInterna").val(),
-            'dataNascimento': $("#edtDataNascimentoPj").val(),
-            'cpf': $("#edtCpfVendaInternaPj").val(),
-			'tipoPessoa' : checado
-		}
-	}
-
-	if (mensagemErro==''){
-		$.ajax ({
-			url : 'inc/consultaClienteBase.php',
-			data : dadosajax,
-			type : 'POST',
-			cache : false,
-			error : function (){
-				alert (acentuarMsn('Error TC.JS/591 - Erro de consulta Previa de CPF/CNPJ,' + msnPadrao + '.'));
-				$("#modalCarregando").modal('hide');
-			},
-			success : function(result){
-                $("#modalCarregando").modal('hide');
-				var dados = result.split(";");
-
-                if (checado=='pf') {
-                    /*SE ENCONTROU UM CLIENTE COM ESTE CPF*/
-                    $('#edtNomeRepresentanteVendaInterna').focus();
-
-                    if ((dados[14]) && dados[14].trim() == 0) {
-
-                        $('#divFormCliente').css('visibility', 'visible');
-                        $('#divFormCliente').css('display', 'inline');
-                        $('#codigo_cliente_' + checado).html(dados[0]);
-                        $('#div_codigo_cliente_' + checado).css({'visibility': 'visible', "display": "block"});
-                        /*SE FOR UMA PESSOA FISICA, ATRIBUI O NOME AO CAMPO NOME, SE FOR PJ ATRIBUI O NOME A RAZAO SOCIAL*/
-
-                        $('#edtNomeRepresentanteVendaInterna').val(dados[1]);
-                        $('#edtEnderecoRepresentanteVendaInterna').val(dados[2]);
-                        $('#edtComplementoRepresentanteVendaInterna').val(dados[3]);
-                        $('#edtNumeroRepresentanteVendaInterna').val(dados[4]);
-                        $('#edtUfRepresentanteVendaInterna').val(dados[5]);
-                        $('#edtBairroRepresentanteVendaInterna').val(dados[6]);
-                        $('#edtCidadeRepresentanteVendaInterna').val(dados[7]);
-                        $('#edtFoneRepresentanteVendaInterna').val(dados[8]);
-                        $('#edtFone2RepresentanteVendaInterna').val(dados[9]);
-                        $('#edtCelularRepresentanteVendaInterna').val(dados[10]);
-                        $('#edtEmailRepresentanteVendaInterna').val(dados[11]);
-                        $('#edtCepRepresentanteVendaInterna').val(dados[12]);
-                        $('#edtCodigoContadorCadastro').val(dados[13]);
-
-                    } /*SE NAO ENCONTROU O CLIENTE ABRE OS CAMPOS PARA INICIAR O CADASTRO DO ZERO*/
-                    else if (dados[0].trim() == 'naoEncontrouCliente') {
-                        $('#divFormCliente').css('visibility', 'visible');
-                        $('#divFormCliente').css('display', 'inline');
-                        $('#codigo_cliente_' + checado).html('Novo Cliente');
-                        $('#div_codigo_cliente_' + checado).css({'visibility': 'visible', "display": "block"});
-
-                        $('#edtNomeRepresentanteVendaInterna').val('');
-                        $('#edtEnderecoRepresentanteVendaInterna').val('');
-                        $('#edtComplementoRepresentanteVendaInterna').val('');
-                        $('#edtNumeroRepresentanteVendaInterna').val('');
-                        $('#edtUfRepresentanteVendaInterna').val('');
-                        $('#edtBairroRepresentanteVendaInterna').val('');
-                        $('#edtCidadeRepresentanteVendaInterna').val('');
-                        $('#edtFoneRepresentanteVendaInterna').val('');
-                        $('#edtFone2RepresentanteVendaInterna').val('');
-                        $('#edtCelularRepresentanteVendaInterna').val('');
-                        $('#edtEmailRepresentanteVendaInterna').val('');
-                        $('#edtCepRepresentanteVendaInterna').val('');
-                        $('#edtCodigoContadorCadastro').val('');
-                    }
-                } else if (checado=='pj' )  { /*FIM DO PF*/
-
-                    $('#edtRazaoSocial').focus();
-                    if (dados[0].trim() == 'ok') {
-                        $('#divPessoaJuridica').css('visibility', 'visible');
-                        $('#divPessoaJuridica').css('display', 'inline');
-                        $('#divFormCliente').css('visibility', 'visible');
-                        $('#divFormCliente').css('display', 'inline');
-
-                        $('#div_codigo_cliente_pj').css({'visibility': 'visible', "display": "block"});
-
-                        if (dados[1].trim() != 'naoEncontrouResponsavel') {
-                            var arrResponsavel = JSON.parse(dados[1]);
-                            $('#edtNomeRepresentanteVendaInterna').val(arrResponsavel.nomeResponsavel);
-                            $('#codigoRepresentanteVendaInterna').html("Cod.Rep: "+arrResponsavel.codigoResponsavel);
-                            if (arrResponsavel.cpfResponsavel)
-                                $('#edtCpfVendaInternaPj').val(arrResponsavel.cpfResponsavel);
-                            if (arrResponsavel.nascimentoReponsavel)
-                                $('#edtDataNascimentoPj').val(arrResponsavel.nascimentoReponsavel);
-                            $('#edtEnderecoRepresentanteVendaInterna').val(arrResponsavel.enderecoResponsavel);
-                            $('#edtComplementoRepresentanteVendaInterna').val(arrResponsavel.complementoResponsavel);
-                            $('#edtNumeroRepresentanteVendaInterna').val(arrResponsavel.numeroReponsavel);
-                            $('#edtUfRepresentanteVendaInterna').val(arrResponsavel.ufResponsavel);
-                            $('#edtBairroRepresentanteVendaInterna').val(arrResponsavel.bairroResponsavel);
-                            $('#edtCidadeRepresentanteVendaInterna').val(arrResponsavel.cidadeResponsavel);
-                            $('#edtFoneRepresentanteVendaInterna').val(arrResponsavel.foneResponsavel);
-                            $('#edtFone2RepresentanteVendaInterna').val(arrResponsavel.fone2Responsavel);
-                            $('#edtCelularRepresentanteVendaInterna').val(arrResponsavel.celularReponsavel);
-                            $('#edtEmailRepresentanteVendaInterna').val(arrResponsavel.emailResponsavel);
-                            $('#edtCepRepresentanteVendaInterna').val(arrResponsavel.cepResponsavel);
-                            $('#edtCodigoContadorCadastro').val(arrResponsavel.contadorReponsavel);
-
-                        } else {
-                            $('#codigoRepresentanteVendaInterna').html("Cod.Rep: Novo Rep.");
-                            $('#edtNomeRepresentanteVendaInterna').val("");
-                            $('#edtCepRepresentanteVendaInterna').val("");
-                            $('#edtBairroRepresentanteVendaInterna').val("");
-                            $('#edtCidadeRepresentanteVendaInterna').val("");
-                            $('#edtEnderecoRepresentanteVendaInterna').val("");
-                            $('#edtNumeroRepresentanteVendaInterna').val("");
-                            $('#edtComplementoRepresentanteVendaInterna').val("");
-                            $('#edtUfRepresentanteVendaInterna').val("");
-                            $('#edtFoneRepresentanteVendaInterna').val("");
-                            $('#edtFone2RepresentanteVendaInterna').val("");
-                            $('#edtCelularRepresentanteVendaInterna').val("");
-                            $('#edtEmailRepresentanteVendaInterna').val("");
-                            $('#edtCodigoContadorCadastro').val("");
-                        }
-
-                        if (dados[2].trim() != 'naoEncontrouCliente') {
-                            var arrCliente = JSON.parse(dados[2]);
-                            $('#codigo_cliente_pj').html(arrCliente.codigoEmpresa);
-                            $('#div_codigo_cliente_pj').css({'visibility': 'visible', "display": "block"});
-                            /*SE FOR UMA PESSOA FISICA, ATRIBUI O NOME AO CAMPO NOME, SE FOR PJ ATRIBUI O NOME A RAZAO SOCIAL*/
-                            $('#edtRazaoSocial').val(arrCliente.razaoSocial);
-                            $('#edtNomeFantasia').val(arrCliente.nomeFantasia);
-                            $('#edtEnderecoVendaInternaPj').val(arrCliente.enderecoEmpresa);
-                            $('#edtComplementoVendaInterna').val(arrCliente.complementoEmpresa);
-                            $('#edtNumeroVendaInterna').val(arrCliente.numeroEmpresa);
-                            $('#edtUfVendaInterna').val(arrCliente.ufEmpresa);
-                            $('#edtBairroPjVendaInterna').val(arrCliente.bairroEmpresa);
-                            $('#edtCidadePjVendaInterna').val(arrCliente.cidadeEmpresa);
-                            $('#edtFonePjVendaInterna').val(arrCliente.foneEmpresa);
-                            $('#edtFone2PjVendaInterna').val(arrCliente.fone2Empresa);
-                            $('#edtCelularPjVendaInterna').val(arrCliente.celularEmpresa);
-                            $('#edtEmailPjVendaInterna').val(arrCliente.emailEmpresa);
-                            $('#edtCepPjVendaInterna').val(arrCliente.cepEmpresa);
-                        } else {
-                            $('#codigo_cliente_pj').html("Novo Cliente");
-                            /*SE FOR UMA PESSOA FISICA, ATRIBUI O NOME AO CAMPO NOME, SE FOR PJ ATRIBUI O NOME A RAZAO SOCIAL*/
-                            $('#edtRazaoSocial').val('');
-                            $('#edtNomeFantasia').val('');
-                            $('#edtCepPjVendaInterna').val('');
-                            $('#edtBairroPjVendaInterna').val('');
-                            $('#edtCidadePjVendaInterna').val('');
-                            $('#edtEnderecoVendaInternaPj').val('');
-                            $('#edtNumeroVendaInterna').val('');
-                            $('#edtComplementoVendaInterna').val('');
-                            $('#edtUfVendaInterna').val('');
-                            $('#edtFonePjVendaInterna').val('');
-                            $('#edtFone2PjVendaInterna').val('');
-                            $('#edtCelularPjVendaInterna').val('');
-                            $('#edtEmailPjVendaInterna').val('');
-                            $('#edtContadorVendaInterna').val('');
-
-                        }
-
-
-                    } /*CASO NAO ENCONTRE O CLIENTE*/
-                    else if (dados[0].trim() == 'naoEncontrouCliente') {
-                    }
-
-				}
-				else{
-                    $("#modalCarregando").modal('hide');
-                    alert("Erro na consulta do cliente");
-                    console.log(result);
-					//erroEmail(result, "Erro no javascript de consultarReceira, dados nao encontrados ou cliente nao registrado na base de dados");
-				}
-			}
-		});
-	}
-};
 /* CONSULTA CEP DOS CORREIORS */
 function limpa_formulario_cep(campoEndereco, campoCidade, campoBairro, campoUf, campoComplemento) {
     //Limpa valores do formul?rio de cep.
@@ -842,67 +636,21 @@ function vincula_contador() {
 function voltarVendaInterna() {
     $('#divPrimeiraEtapa').css('visibility', 'visible');
     $('#divPrimeiraEtapa').css('display', 'block');
+    $('#divEtapaConsultaCertificados').css('visibility', 'hidden');
+    $('#divEtapaConsultaCertificados').css('display', 'none');
+
+    $('#btnVoltar1').css('visibility', 'hidden');
+    $('#btnVoltar1').css('display', 'none');
     $('#btnVoltar').css('visibility', 'hidden');
     $('#btnVoltar').css('display', 'none');
-    $('#btnAvancar').css('visibility', 'visible');
-    $('#btnAvancar').css('display', 'block');
+    $('#btnAvancar1').css('visibility', 'visible');
+    $('#btnAvancar1').css('display', 'block');
     $('#btnFinalizar').css('visibility', 'hidden');
     $('#btnFinalizar').css('display', 'none');
     $('#divSegundaEtapa').css('visibility', 'hidden');
     $('#divSegundaEtapa').css('display', 'none');
 }
-function avancarVendaInterna() {
-    /*CARREGA O SELECT DE CONTADORES, SE HOUVER CONTADOR NO CADASTRO DO CERTIFICADO SELECIONE*/
-    if ($("#edtCodigoContadorCadastro").val() != 0)
-    	carregar_select_contadores($("#edtCodigoContadorCadastro").val());
-    else
-        carregar_select_contadores();
 
-	var tipo_cliente = '';
-	if ($("input[name='tipoPessoa']:checked").val()=='pf')
-		tipo_cliente='F';
-	else
-		tipo_cliente='J';
-
-	/*SE AINDA NAO HOUVER CONTADOR SELECIONADO, CARREGUE O SELECT DE PRODUTOS COM OS PRODUTOS SEM DESCONTO*/
-	//if ( ($('#edtSelectContador').val()!='') && ($('#edtSelectContador').val()!='outra') )
-	carregar_select_produtos(tipo_cliente, 0);
-
-	$('#divPrimeiraEtapa').css('visibility', 'hidden');
-	$('#divPrimeiraEtapa').css('display', 'none');
-	$('#btnAvancar').css('visibility', 'hidden');
-	$('#btnAvancar').css('display', 'none');
-    $('#btnVoltar').css('visibility', 'visible');
-    $('#btnVoltar').css('display', 'block');
-    $('#btnFinalizar').css('visibility', 'visible');
-	$('#btnFinalizar').css('display', 'inline');
-	$('#divSegundaEtapa').css('visibility', 'visible');
-	$('#divSegundaEtapa').css('display', 'inline');
-
-    if (typeof(Storage) !== "undefined") {
-        sessionStorage.ssCpfVendaInternaRepresentante = $("#edtCpfVendaInterna").val();
-        sessionStorage.ssCnpjVendaInternaRepresentante = $("#edtCnpjVendaInterna").val();
-        sessionStorage.ssDataNascimentoRepresentante = $("#edtDataNascimento").val();
-        sessionStorage.ssNomeRepresentante = $("#edtNome").val();
-        sessionStorage.ssCepRepresentante = $("#edtCep").val();
-        sessionStorage.ssBairroRepresentante = $("#edtBairroVendaInterna").val();
-        sessionStorage.ssCidadeRepresentante = $("#edtCidadeVendaInterna").val();
-        sessionStorage.ssEnderecoRepresentante = $("#edtEnderecoVendaInterna").val();
-        sessionStorage.ssNumeroRepresentante = $("#edtNumeroVendaInterna").val();
-        sessionStorage.ssComplementoRepresentante = $("#edtComplementoVendaInterna").val();
-        sessionStorage.ssUfRepresentante = $("#edtUfVendaInterna").val();
-        sessionStorage.ssFoneRepresentante = $("#edtFone1").val();
-        sessionStorage.ssFone2Representante = $("#edtFone2").val();
-        sessionStorage.ssCelularRepresentante = $("#edtCelular").val();
-        sessionStorage.ssEmailRepresentante = $("#edtEmail").val();
-		/*PEGA O CAMPO HIDDEN QUE GUARDARA O CODIGO DO CONTADOR ENCONTRADO OU NAO NA CONSULTA DE CNPJ/CPF*/
-        sessionStorage.ssContadorRepresentante = $("#edtCodigoContadorCadastro").val();
-
-    } else {
-        alert('O seu navegados nao possui suporte para Gravacao de dados. Por favor entre em contato com o departamento de suporte para solucionar o problema.');
-    }
-
-}
 /*TIPO DA BUSCA PODE SER ID OU CODIGO*/
 function procurar_contador(cod_contador){
     var tipo_cliente = '';
@@ -1009,12 +757,12 @@ function carregar_select_produtos(tipo_cliente,tem_desconto, produto_selecionado
         cache: false,
         error: function(){
             alert('Erro: Ao carregar os produtos!!');
-            $("#modalCarregando").modal('hide');
+            //$("#modalCarregando").modal('hide');
 
         },
         success: function(result){
             var resultado = result.split(';');
-
+            $("#modalCarregando").modal('hide');
             if(resultado[0] == 0) {
                 var $select = $('<select/>', {
                     'id' : edtSelProds,
@@ -1044,8 +792,8 @@ function carregar_select_produtos(tipo_cliente,tem_desconto, produto_selecionado
 
                 $select.appendTo('#'+divSelectContadores).selectpicker('refresh');
             }else {
-                $("#modalCarregando").modal('hide');
-                alert("Opa, Algo Deu Errado, entre em contato com sistema@gruposerama.com.br");
+                //$("#modalCarregando").modal('hide');
+                alert("Opa, Algo Deu Errado, entre em contato com sistema@swsistema.com.br");
                 erroEmail(result,acentuarMsn("Erro na funcao de carregar os contadores. Tela: prospect.js"));
                 console.log(result);
             }
@@ -1067,7 +815,7 @@ function mudancaSelectContadores(selectContadores){
 
 function carregar_select_contadores(contador_selecionado, funcaoOnChange) {
     $('#mensagemLoading').html('<i class="fa fa-user-circle-o"></i> Carregando a lista de contadores');
-    $("#modalCarregando").modal('show');
+    //$("#modalCarregando").modal('show');
     var contador_id = 0;
     if (contador_selecionado !== undefined)
         contador_id = contador_selecionado;
@@ -1093,7 +841,7 @@ function carregar_select_contadores(contador_selecionado, funcaoOnChange) {
             alert('Erro: Ao carregar os contadores!!');
         },
         success: function(result){
-            $("#modalCarregando").modal('hide');
+            //$("#modalCarregando").modal('hide');
             var resultado = result.split(';');
 
             if(resultado[0] == 0) {
@@ -1120,8 +868,8 @@ function carregar_select_contadores(contador_selecionado, funcaoOnChange) {
                 $select.appendTo('#div_select_contadores').selectpicker('refresh');
 
             }else {
-                $("#modalCarregando").modal('hide');
-                alert("Opa, Algo Deu Errado, entre em contato com sistema@gruposerama.com.br");
+                //$("#modalCarregando").modal('hide');
+                alert("Opa, Algo Deu Errado, entre em contato com sistema@swsistema.com.br");
                 erroEmail(result,acentuarMsn("Erro na funcao de carregar os contadores. Tela: prospect.js"));
                 console.log(result);
             }
@@ -1130,6 +878,30 @@ function carregar_select_contadores(contador_selecionado, funcaoOnChange) {
 };
 
 function limparModalVendaInterna(){
+    $('#idCertificadoDuplicado').val('');
+    $('#idCertificadoRenovacao').val('');
+    $("#idClienteVendaInterna").val('');
+
+    $('#divNovoPedido').css('visibility', 'hidden');
+    $('#divNovoPedido').css('display', 'none');
+
+    $('#divMotivoDuplicidade').css('visibility', 'hidden');
+    $('#divMotivoDuplicidade').css('display', 'none');
+
+    $('#txtMotivoDuplicacao').val('');
+
+    $('#divEtapaConsultaCertificados').css('visibility', 'hidden');
+    $('#divEtapaConsultaCertificados').css('display', 'none');
+
+    $('#btnAvancar1').css('visibility', 'hidden');
+    $('#btnAvancar1').css('display', 'none');
+
+    $('#btnVoltar1').css('visibility', 'hidden');
+    $('#btnVoltar1').css('display', 'none');
+
+    $('#divEtapaConsultaCertificados').css('visibility', 'hidden');
+    $('#divEtapaConsultaCertificados').css('display', 'none');
+
     $('#divPrimeiraEtapa').css('visibility', 'hidden');
     $('#divPrimeiraEtapa').css('display', 'none');
     $('#divEdtCpf').css({
@@ -1154,11 +926,6 @@ function limparModalVendaInterna(){
         display:"none"
     });
 
-    $('#btnAvancar').css({
-        visibility:"hidden",
-        display:"none"
-    });
-
     $('#btnFinalizar').css({
         visibility:"hidden",
         display:"none"
@@ -1172,8 +939,9 @@ function limparModalVendaInterna(){
     $('#divSegundaEtapa').css('display', 'none');
     $('#btnVoltar').css('visibility', 'hidden');
     $('#btnVoltar').css('display', 'none');
-    $('#btnAvancar').css('visibility', 'visible');
-    $('#btnAvancar').css('display', 'block');
+    $('#btnVoltar1').css('visibility', 'hidden');
+    $('#btnVoltar1').css('display', 'none');
+
     $('#btnFinalizar').css('visibility', 'hidden');
     $('#btnFinalizar').css('display', 'none');
 
@@ -1231,8 +999,10 @@ function finalizarVendaInterna(){
     if (formaPagamento === undefined) {
         alertErro('Por favor selecione a forma de pagamento do Certificado');
         validaformulario = false;
-    } else if ( (formaPagamento == '1') && (vencimentoBoleto=='') ) {
-        alertErro('Por favor selecione o vencimento do boleto do Certificado');
+    }
+
+    if ($('#idCertificadoDuplicado').val() !='' && $('#txtMotivoDuplicacao').val() == '') {
+        alertErro('Por favor informe o motivo da duplicacao do certificado');
         validaformulario = false;
     }
     
@@ -1298,7 +1068,10 @@ function finalizarVendaInterna(){
                 'edtCep':$('#edtCepRepresentanteVendaInterna').val(),
                 'edtFone1':$('#edtFoneRepresentanteVendaInterna').val(),
                 'edtFone2':$('#edtFone2RepresentanteVendaInterna').val(),
-                'edtCelular':$('#edtCelularRepresentanteVendaInterna').val()
+                'edtCelular':$('#edtCelularRepresentanteVendaInterna').val(),
+                'idCertificadoRenovacao':$('#idCertificadoRenovacao').val(),
+                'idCertificadoDuplicado':$('#idCertificadoDuplicado').val(),
+				'motivoDuplicacao': $('#txtMotivoDuplicacao').val()
             };
         } else {
             var dadosajax = {
@@ -1342,6 +1115,9 @@ function finalizarVendaInterna(){
                 'edtFone1Responsavel':$('#edtFoneRepresentanteVendaInterna').val(),
                 'edtFone2Responsavel':$('#edtFone2RepresentanteVendaInterna').val(),
                 'edtCelularResponsavel':$('#edtCelularRepresentanteVendaInterna').val(),
+                'idCertificadoRenovacao':$('#idCertificadoRenovacao').val(),
+                'idCertificadoDuplicado':$('#idCertificadoDuplicado').val(),
+                'motivoDuplicacao': $('#txtMotivoDuplicacao').val()
             };
         }
         var x = $.ajax({
@@ -1373,6 +1149,8 @@ function finalizarVendaInterna(){
                 }else if (resultado[0].trim() == 'Erro') {
                     alertErro(resultado[1].trim());
                     $('#modalCarregando').modal('hide');
+                } else {
+                    alertErro('Erro!');
                 }
                 /*if (formaPagamento == 1) {
                     if(resultado[1].trim() == 'boletoOk'){
@@ -1382,7 +1160,7 @@ function finalizarVendaInterna(){
                         $('#modalCarregando').modal('hide');
                     }
                 }*/
-
+                $('#modalCarregando').modal('hide');
                 $('#vendaInterna').modal('hide');
 
                 carregarCertificados();
@@ -1396,6 +1174,8 @@ function finalizarVendaInterna(){
 function abreModalVendaInterna() {
     $('#divFormCliente').css('visibility', 'none');
     $('#divFormCliente').css('display', 'none');
+
+    limparModalVendaInterna();
 }
 
 function autorizar_certificado(funcao,usuario_id){
@@ -2599,4 +2379,379 @@ function usarCupom() {
             }
         }
     });
+}
+
+
+/*
+* PRIMEIRA ETAPA DA VENDA NO WIZARD
+* */
+function avancarVendaInterna(idCertificadoRenovacao='', $idCertificadoDuplicado='') {
+	$('#idCertificadoRenovacao').val(idCertificadoRenovacao);
+    $('#idCertificadoDuplicado').val($idCertificadoDuplicado);
+
+    if ($idCertificadoDuplicado) {
+        $('#divMotivoDuplicidade').css('visibility', 'visible');
+        $('#divMotivoDuplicidade').css('display', 'block');
+
+    } else {
+        $('#divMotivoDuplicidade').css('visibility', 'hidden');
+        $('#divMotivoDuplicidade').css('display', 'none');
+
+    }
+
+    console.log('ids:'+$('#idCertificadoRenovacao').val(), $('#idCertificadoDuplicado').val());
+
+    /*CHECA SE O CERTIFICADO E RENOVACAO */
+
+    /*CARREGA O SELECT DE CONTADORES, SE HOUVER CONTADOR NO CADASTRO DO CERTIFICADO SELECIONE*/
+    if ($("#edtCodigoContadorCadastro").val() != 0)
+        carregar_select_contadores($("#edtCodigoContadorCadastro").val());
+    else
+        carregar_select_contadores();
+
+    var tipo_cliente = '';
+    if ($("input[name='tipoPessoa']:checked").val()=='pf')
+        tipo_cliente='F';
+    else
+        tipo_cliente='J';
+
+    /*SE AINDA NAO HOUVER CONTADOR SELECIONADO, CARREGUE O SELECT DE PRODUTOS COM OS PRODUTOS SEM DESCONTO*/
+    //if ( ($('#edtSelectContador').val()!='') && ($('#edtSelectContador').val()!='outra') )
+    carregar_select_produtos(tipo_cliente, 0);
+
+    /*
+    * HABILITA OS PAINEIS E BOTOES CERTOS
+    * */
+    $('#divPrimeiraEtapa').css('visibility', 'hidden');
+    $('#divPrimeiraEtapa').css('display', 'none');
+
+    $('#divSegundaEtapa').css('visibility', 'visible');
+    $('#divSegundaEtapa').css('display', 'block');
+
+    $('#btnFinalizar').css('visibility', 'visible');
+    $('#btnFinalizar').css('display', 'block');
+
+
+    $('#divEtapaConsultaCertificados').css('visibility', 'hidden');
+    $('#divEtapaConsultaCertificados').css('display', 'none');
+
+    $('#btnAvancar1').css('visibility', 'hidden');
+    $('#btnAvancar1').css('display', 'none');
+    $('#btnVoltar1').css('visibility', 'visible');
+    $('#btnVoltar1').css('display', 'block');
+
+    if (typeof(Storage) !== "undefined") {
+        sessionStorage.ssCpfVendaInternaRepresentante = $("#edtCpfVendaInterna").val();
+        sessionStorage.ssCnpjVendaInternaRepresentante = $("#edtCnpjVendaInterna").val();
+        sessionStorage.ssDataNascimentoRepresentante = $("#edtDataNascimento").val();
+        sessionStorage.ssNomeRepresentante = $("#edtNome").val();
+        sessionStorage.ssCepRepresentante = $("#edtCep").val();
+        sessionStorage.ssBairroRepresentante = $("#edtBairroVendaInterna").val();
+        sessionStorage.ssCidadeRepresentante = $("#edtCidadeVendaInterna").val();
+        sessionStorage.ssEnderecoRepresentante = $("#edtEnderecoVendaInterna").val();
+        sessionStorage.ssNumeroRepresentante = $("#edtNumeroVendaInterna").val();
+        sessionStorage.ssComplementoRepresentante = $("#edtComplementoVendaInterna").val();
+        sessionStorage.ssUfRepresentante = $("#edtUfVendaInterna").val();
+        sessionStorage.ssFoneRepresentante = $("#edtFone1").val();
+        sessionStorage.ssFone2Representante = $("#edtFone2").val();
+        sessionStorage.ssCelularRepresentante = $("#edtCelular").val();
+        sessionStorage.ssEmailRepresentante = $("#edtEmail").val();
+        /*PEGA O CAMPO HIDDEN QUE GUARDARA O CODIGO DO CONTADOR ENCONTRADO OU NAO NA CONSULTA DE CNPJ/CPF*/
+        sessionStorage.ssContadorRepresentante = $("#edtCodigoContadorCadastro").val();
+
+    } else {
+        alert('O seu navegados nao possui suporte para Gravacao de dados. Por favor entre em contato com o departamento de suporte para solucionar o problema.');
+    }
+
+}
+
+function consultaClienteBase() {
+
+    $('#mensagemLoading').html('<i class="fa fa-user-circle-o"></i> Pesquisando de o cliente existe na base de dados do sistema');
+    $("#modalCarregando").modal('show');
+    var checado = '';
+    var mensagemErro ='';
+
+    $('#btnAvancar1').css({
+        visibility:"visible",
+        display:"block"
+    });
+
+    /*APAGA O TIPO DE PESSOA NAO SELECIONADO, SO HABILITA QUANDO RESETAR FORMULARIO*/
+    $("input[name='tipoPessoa']").each(function() {
+        if (this.checked == false) {
+            $('#'+this.value).css('visibility', 'hidden');
+            $('#'+this.value).css('display', 'none');
+        }
+    });
+
+    var radios = document.getElementsByName("tipoPessoa");
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            checado =  radios[i].value;
+        }
+    }
+
+    if(checado == 'pf') {
+        var dadosajax = {
+            'cpf': $("#edtCpfVendaInterna").val(),
+            'dataNascimento': $("#edtDataNascimento").val(),
+            'tipoPessoa' : checado
+        }
+    } else {
+        var dadosajax = {
+            'cnpj': $("#edtCnpjVendaInterna").val(),
+            'dataNascimento': $("#edtDataNascimentoPj").val(),
+            'cpf': $("#edtCpfVendaInternaPj").val(),
+            'tipoPessoa' : checado
+        }
+    }
+
+    if (mensagemErro==''){
+        $.ajax ({
+            url : 'inc/consultaClienteBase.php',
+            data : dadosajax,
+            type : 'POST',
+            cache : false,
+            error : function (){
+                alert (acentuarMsn('Error TC.JS/591 - Erro de consulta Previa de CPF/CNPJ,' + msnPadrao + '.'));
+                $("#modalCarregando").modal('hide');
+            },
+            success : function(result){
+                $("#modalCarregando").modal('hide');
+                var dados = result.split(";");
+
+                if (checado=='pf') {
+                    /*SE ENCONTROU UM CLIENTE COM ESTE CPF*/
+                    $('#edtNomeRepresentanteVendaInterna').focus();
+
+                    if ((dados[14]) && dados[14].trim() == 0) {
+                    	//INSERE O CODIGO DO CLIENTE QUE SERA UTILIZADO NA CONSULTA DOS PEDIDOS DESTE CLIENTE
+                        $('#idClienteVendaInterna').val(dados[0]);
+                        $('#divFormCliente').css('visibility', 'visible');
+                        $('#divFormCliente').css('display', 'inline');
+                        $('#codigo_cliente_' + checado).html(dados[0]);
+                        $('#div_codigo_cliente_' + checado).css({'visibility': 'visible', "display": "block"});
+                        /*SE FOR UMA PESSOA FISICA, ATRIBUI O NOME AO CAMPO NOME, SE FOR PJ ATRIBUI O NOME A RAZAO SOCIAL*/
+
+                        $('#edtNomeRepresentanteVendaInterna').val(dados[1]);
+                        $('#edtEnderecoRepresentanteVendaInterna').val(dados[2]);
+                        $('#edtComplementoRepresentanteVendaInterna').val(dados[3]);
+                        $('#edtNumeroRepresentanteVendaInterna').val(dados[4]);
+                        $('#edtUfRepresentanteVendaInterna').val(dados[5]);
+                        $('#edtBairroRepresentanteVendaInterna').val(dados[6]);
+                        $('#edtCidadeRepresentanteVendaInterna').val(dados[7]);
+                        $('#edtFoneRepresentanteVendaInterna').val(dados[8]);
+                        $('#edtFone2RepresentanteVendaInterna').val(dados[9]);
+                        $('#edtCelularRepresentanteVendaInterna').val(dados[10]);
+                        $('#edtEmailRepresentanteVendaInterna').val(dados[11]);
+                        $('#edtCepRepresentanteVendaInterna').val(dados[12]);
+                        $('#edtCodigoContadorCadastro').val(dados[13]);
+
+                    } /*SE NAO ENCONTROU O CLIENTE ABRE OS CAMPOS PARA INICIAR O CADASTRO DO ZERO*/
+                    else if (dados[0].trim() == 'naoEncontrouCliente') {
+                        $('#idClienteVendaInterna').val('');
+                        $('#divFormCliente').css('visibility', 'visible');
+                        $('#divFormCliente').css('display', 'inline');
+                        $('#codigo_cliente_' + checado).html('Novo Cliente');
+                        $('#div_codigo_cliente_' + checado).css({'visibility': 'visible', "display": "block"});
+
+                        $('#edtNomeRepresentanteVendaInterna').val('');
+                        $('#edtEnderecoRepresentanteVendaInterna').val('');
+                        $('#edtComplementoRepresentanteVendaInterna').val('');
+                        $('#edtNumeroRepresentanteVendaInterna').val('');
+                        $('#edtUfRepresentanteVendaInterna').val('');
+                        $('#edtBairroRepresentanteVendaInterna').val('');
+                        $('#edtCidadeRepresentanteVendaInterna').val('');
+                        $('#edtFoneRepresentanteVendaInterna').val('');
+                        $('#edtFone2RepresentanteVendaInterna').val('');
+                        $('#edtCelularRepresentanteVendaInterna').val('');
+                        $('#edtEmailRepresentanteVendaInterna').val('');
+                        $('#edtCepRepresentanteVendaInterna').val('');
+                        $('#edtCodigoContadorCadastro').val('');
+                    }
+                } else if (checado=='pj' )  { /*FIM DO PF*/
+
+                    $('#edtRazaoSocial').focus();
+                    if (dados[0].trim() == 'ok') {
+                        $('#divPessoaJuridica').css('visibility', 'visible');
+                        $('#divPessoaJuridica').css('display', 'inline');
+                        $('#divFormCliente').css('visibility', 'visible');
+                        $('#divFormCliente').css('display', 'inline');
+
+                        $('#div_codigo_cliente_pj').css({'visibility': 'visible', "display": "block"});
+
+                        if (dados[1].trim() != 'naoEncontrouResponsavel') {
+                            var arrResponsavel = JSON.parse(dados[1]);
+                            $('#edtNomeRepresentanteVendaInterna').val(arrResponsavel.nomeResponsavel);
+                            $('#codigoRepresentanteVendaInterna').html("Cod.Rep: "+arrResponsavel.codigoResponsavel);
+                            if (arrResponsavel.cpfResponsavel)
+                                $('#edtCpfVendaInternaPj').val(arrResponsavel.cpfResponsavel);
+                            if (arrResponsavel.nascimentoReponsavel)
+                                $('#edtDataNascimentoPj').val(arrResponsavel.nascimentoReponsavel);
+                            $('#edtEnderecoRepresentanteVendaInterna').val(arrResponsavel.enderecoResponsavel);
+                            $('#edtComplementoRepresentanteVendaInterna').val(arrResponsavel.complementoResponsavel);
+                            $('#edtNumeroRepresentanteVendaInterna').val(arrResponsavel.numeroReponsavel);
+                            $('#edtUfRepresentanteVendaInterna').val(arrResponsavel.ufResponsavel);
+                            $('#edtBairroRepresentanteVendaInterna').val(arrResponsavel.bairroResponsavel);
+                            $('#edtCidadeRepresentanteVendaInterna').val(arrResponsavel.cidadeResponsavel);
+                            $('#edtFoneRepresentanteVendaInterna').val(arrResponsavel.foneResponsavel);
+                            $('#edtFone2RepresentanteVendaInterna').val(arrResponsavel.fone2Responsavel);
+                            $('#edtCelularRepresentanteVendaInterna').val(arrResponsavel.celularReponsavel);
+                            $('#edtEmailRepresentanteVendaInterna').val(arrResponsavel.emailResponsavel);
+                            $('#edtCepRepresentanteVendaInterna').val(arrResponsavel.cepResponsavel);
+                            $('#edtCodigoContadorCadastro').val(arrResponsavel.contadorReponsavel);
+
+                        } else {
+                            $('#codigoRepresentanteVendaInterna').html("Cod.Rep: Novo Rep.");
+                            $('#edtNomeRepresentanteVendaInterna').val("");
+                            $('#edtCepRepresentanteVendaInterna').val("");
+                            $('#edtBairroRepresentanteVendaInterna').val("");
+                            $('#edtCidadeRepresentanteVendaInterna').val("");
+                            $('#edtEnderecoRepresentanteVendaInterna').val("");
+                            $('#edtNumeroRepresentanteVendaInterna').val("");
+                            $('#edtComplementoRepresentanteVendaInterna').val("");
+                            $('#edtUfRepresentanteVendaInterna').val("");
+                            $('#edtFoneRepresentanteVendaInterna').val("");
+                            $('#edtFone2RepresentanteVendaInterna').val("");
+                            $('#edtCelularRepresentanteVendaInterna').val("");
+                            $('#edtEmailRepresentanteVendaInterna').val("");
+                            $('#edtCodigoContadorCadastro').val("");
+                        }
+
+                        if (dados[2].trim() != 'naoEncontrouCliente') {
+                            var arrCliente = JSON.parse(dados[2]);
+                            $('#idClienteVendaInterna').val(arrCliente.codigoEmpresa);
+                            $('#codigo_cliente_pj').html(arrCliente.codigoEmpresa);
+                            $('#div_codigo_cliente_pj').css({'visibility': 'visible', "display": "block"});
+                            /*SE FOR UMA PESSOA FISICA, ATRIBUI O NOME AO CAMPO NOME, SE FOR PJ ATRIBUI O NOME A RAZAO SOCIAL*/
+                            $('#edtRazaoSocial').val(arrCliente.razaoSocial);
+                            $('#edtNomeFantasia').val(arrCliente.nomeFantasia);
+                            $('#edtEnderecoVendaInternaPj').val(arrCliente.enderecoEmpresa);
+                            $('#edtComplementoVendaInterna').val(arrCliente.complementoEmpresa);
+                            $('#edtNumeroVendaInterna').val(arrCliente.numeroEmpresa);
+                            $('#edtUfVendaInterna').val(arrCliente.ufEmpresa);
+                            $('#edtBairroPjVendaInterna').val(arrCliente.bairroEmpresa);
+                            $('#edtCidadePjVendaInterna').val(arrCliente.cidadeEmpresa);
+                            $('#edtFonePjVendaInterna').val(arrCliente.foneEmpresa);
+                            $('#edtFone2PjVendaInterna').val(arrCliente.fone2Empresa);
+                            $('#edtCelularPjVendaInterna').val(arrCliente.celularEmpresa);
+                            $('#edtEmailPjVendaInterna').val(arrCliente.emailEmpresa);
+                            $('#edtCepPjVendaInterna').val(arrCliente.cepEmpresa);
+                        } else {
+                            $('#codigo_cliente_pj').html("Novo Cliente");
+                            /*SE FOR UMA PESSOA FISICA, ATRIBUI O NOME AO CAMPO NOME, SE FOR PJ ATRIBUI O NOME A RAZAO SOCIAL*/
+                            $('#edtRazaoSocial').val('');
+                            $('#edtNomeFantasia').val('');
+                            $('#edtCepPjVendaInterna').val('');
+                            $('#edtBairroPjVendaInterna').val('');
+                            $('#edtCidadePjVendaInterna').val('');
+                            $('#edtEnderecoVendaInternaPj').val('');
+                            $('#edtNumeroVendaInterna').val('');
+                            $('#edtComplementoVendaInterna').val('');
+                            $('#edtUfVendaInterna').val('');
+                            $('#edtFonePjVendaInterna').val('');
+                            $('#edtFone2PjVendaInterna').val('');
+                            $('#edtCelularPjVendaInterna').val('');
+                            $('#edtEmailPjVendaInterna').val('');
+                            $('#edtContadorVendaInterna').val('');
+
+                        }
+
+
+                    } /*CASO NAO ENCONTRE O CLIENTE*/
+                    else if (dados[0].trim() == 'naoEncontrouCliente') {
+                    }
+
+                }
+                else{
+                    $("#modalCarregando").modal('hide');
+                    alert("Erro na consulta do cliente");
+                    console.log(result);
+                    //erroEmail(result, "Erro no javascript de consultarReceira, dados nao encontrados ou cliente nao registrado na base de dados");
+                }
+            }
+        });
+    }
+};
+
+/*
+* ETAPA DE DUPLICIDADE
+* */
+
+function consultarCertificadosVendaInterna() {
+    $('#mensagemLoading').html('<i class="fa fa-circle-o"></i> Consultar certificados duplicados');
+    $("#modalCarregando").modal('show');
+    console.log('idClienteConsultar:'+$('#idClienteVendaInterna').val());
+    /*
+    * SE FOR CLIENTE NOVO NEM ENTRA AQUI
+    * */
+	if ($("#idClienteVendaInterna").val()) {
+        var dadosajax = {
+            'cliente_id': $("#idClienteVendaInterna").val(),
+            'funcao': 'consultar_certificados_venda_interna',
+        };
+
+        $.ajax({
+            url: pageUrl,
+            data: dadosajax,
+            type: 'POST',
+            cache: true,
+
+            error: function () {
+                alertErro('Error CD9120 - Erro ao consultar certificados duplicados!' + msnPadrao + '.');
+            },
+            success: function (result) {
+                try {
+                    console.log('saida: ' + result);
+                    resultado = JSON.parse(result);
+                    $('#modalCarregando').modal('hide');
+                    if (resultado.mensagem == 'Ok') {
+
+
+                        if (resultado.avancarUltimaTela == 'nao') {
+                            if (resultado.mostrarTelaNovoPedido == 'sim') {
+                                $('#divNovoPedido').css('visibility', 'visible');
+                                $('#divNovoPedido').css('display', 'block');
+                            }
+
+                            /*
+                            * HABILITA OS PAINEIS E BOTOES CERTOS
+                            * */
+
+                            $('#btnVoltar').css('visibility', 'hidden');
+                            $('#btnVoltar').css('display', 'none');
+
+                            $('#divPrimeiraEtapa').css('visibility', 'hidden');
+                            $('#divPrimeiraEtapa').css('display', 'none');
+
+                            $('#divSegundaEtapa').css('visibility', 'hidden');
+                            $('#divSegundaEtapa').css('display', 'none');
+
+                            $('#divEtapaConsultaCertificados').css('visibility', 'visible');
+                            $('#divEtapaConsultaCertificados').css('display', 'block');
+                            $('#btnAvancar1').css('visibility', 'visible');
+                            $('#btnAvancar1').css('display', 'block');
+                            $('#btnVoltar1').css('visibility', 'visible');
+                            $('#btnVoltar1').css('display', 'block');
+
+                            montarTabelaDinamica(resultado.colunasRenovacao, resultado.certificadosRenovacao, 'tabelaConsultaCertificadosRenVendaInterna', 'divTabelaCdsRenVendaInterna');
+                            montarTabelaDinamica(resultado.colunasDuplicados, resultado.certificadosDuplicados, 'tabelaConsultaCertificadosDupVendaInterna', 'divTabelaCdsDupVendaInterna');
+                        } else {
+                            avancarVendaInterna();
+                            $('#btnAvancar1').css('visibility', 'hidden');
+                            $('#btnAvancar1').css('display', 'none');
+
+                        }
+
+                    }
+                } catch (e) {
+                    console.log('erro:' + result);
+                    alertErro('CD9121 - Erro ao consultar certificados duplicados!' + e + ', ' + msnPadrao + '.');
+                }
+
+            }
+        });
+    } else
+        avancarVendaInterna();
 }
