@@ -1253,6 +1253,8 @@ function voltarVendaInterna() {
     $('#divSegundaEtapa').css('visibility', 'hidden');
     $('#divSegundaEtapa').css('display', 'none');
 }
+
+/*PRIMEIRA ETAPA DA VENDA NO WIZARD*/
 function avancarVendaInterna() {
     /*CARREGA O SELECT DE CONTADORES, SE HOUVER CONTADOR NO CADASTRO DO CERTIFICADO SELECIONE*/
     if ($("#edtCodigoContadorCadastro").val() != 0)
