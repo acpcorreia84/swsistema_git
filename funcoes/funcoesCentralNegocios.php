@@ -261,9 +261,9 @@ function carregarNegocios() {
         $qtdDias = 0;
 
         if ($tipoNegocios == 'Urgentes')
-            $qtdDias = 11;
+            $qtdDias = 10;
         elseif ($tipoNegocios=='UrgentesFollowUp')
-            $qtdDias = 11;
+            $qtdDias = 10;
         else {
             $qtdDias = 30;
         }
@@ -382,7 +382,7 @@ function carregarNegocios() {
                     $certificadosUrgentesFollowUp[] = array(' '=>($i++),'Cod.'=>$certificado->getId(),
                         'Proto.'=> ($certificado->getProtocolo())?$certificado->getProtocolo():'-',
                         'Cont.'=>DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d')),
-                        'D.Comp.'=>($certificado->getDataCompra('d/m/Y'))?$certificado->getDataCompra('d/m/Y'):'-',
+                        'Cont.'=>$tipoCd.' '.(DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d'))).'d',
                         'Cliente'=> '<a id="btnContato'.$certificado->getId().'" href="telaCertificado.php?funcao=detalhaCertificado&idCertificado='.$certificado->getId().'" target="_blank">'.$certificado->getCliente()->getId() . ' - '.$nomeCliente . '</a>',
                         'Tipo'=>$produto,
                         'Consultor'=>utf8_encode($usuarioConsultor),
@@ -398,7 +398,7 @@ function carregarNegocios() {
 
                     $certificadosPerdidos[] = array(' '=>($j++),'Cod.'=>$certificado->getId(),
                         'Proto.'=> ($certificado->getProtocolo())?$certificado->getProtocolo():'-',
-                        'Cont.'=>DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d')),
+                        'Cont.'=>$tipoCd.' '.(DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d'))).'d',
                         'D.Comp.'=>($certificado->getDataCompra('d/m/Y'))?$certificado->getDataCompra('d/m/Y'):'-',
                         'Cliente'=> '<a id="btnContato'.$certificado->getId().'" href="telaCertificado.php?funcao=detalhaCertificado&idCertificado='.$certificado->getId().'" target="_blank">'.$certificado->getCliente()->getId() . ' - '.$nomeCliente . '</a>',
                         'Tipo'=>$produto,
@@ -450,7 +450,8 @@ function carregarNegocios() {
         $retorno = array('mensagem'=>'Ok','colunas'=>json_encode($colunas), 'negocios'=>json_encode($negocios),
             'quantidadeTotalUrgentes'=>$qtdUrgentes, 'quantidadeTotalUrgentesComFeedback'=>$qtdUrgentesComFeedback,
             'somaTotalUrgentes' => formataMoeda($somaUrgentes), 'somaTotalUrgentesComFeedback' =>formataMoeda($somaUrgentesComFeedaback),
-            'qtdLost'=>$qtdLost, 'somaLost'=>formataMoeda($somaLost), 'htmlContatosPopOver'=>$htmlPopOver, 'dataDe'=>date('d/m/Y'), 'dataAte'=>$dataAte->format('d/m/Y')
+            'qtdLost'=>$qtdLost, 'somaLost'=>formataMoeda($somaLost), 'htmlContatosPopOver'=>$htmlPopOver,
+            'dataDe'=>date('d/m/Y'), 'dataAte'=>$dataAte->format('d/m/Y'), 'tipoNegocio' => $tipoNegocios
         );
 
         echo json_encode($retorno);

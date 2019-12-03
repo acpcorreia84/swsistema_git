@@ -96,7 +96,7 @@ include 'inc/script.php';
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                Certificados
+                                Certificados | Legenda: <i class="fa fa-square text-danger"></i> Em aberto | <i class="fa fa-square text-success"></i> Renova&ccedil;&atilde;o  | <i class="fa fa-square text-primary"></i> Recarteiriza&ccedil;&atilde;o
                             </div><!-- PANEL HEADING -->
 
                             <script src="inc/paginator/jquery.twbsPagination.js" type="text/javascript"></script>

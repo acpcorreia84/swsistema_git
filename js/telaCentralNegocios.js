@@ -24,10 +24,14 @@ function carregarNegocios() {
         'filtroConsultores':consultores,
         'campoFiltro' : camposFiltro
     };
+    $('#txtDataNegocios').html('carregando...');
+    if ($('#tipoNegocios').val() == 'Perdidos')
+        $('#totalLost').html('carregando...');
+    else {
+        $('#totalCertificadosUrgentes').html('carregando...');
+        $('#totalCertificadosUrgentesComFeedback').html('carregando...');
+    }
 
-    $('#totalCertificadosUrgentes').html('carregando...');
-    $('#totalCertificadosUrgentesComFeedback').html('carregando...');
-    $('#totalLost').html('carregando...');
 
     var dadosajax = {
         'funcao' : "carregar_central_negocios",
@@ -59,9 +63,13 @@ function carregarNegocios() {
                 //var quantidadeCertificadosTotal = JSON.parse(resultado.quantidadeCertificadosTotal);
                 if (resultado.mensagem == 'Ok') {
                     montarTabelaDinamica(resultado.colunas, resultado.negocios, 'tabelaNegocios', 'divTabelaNegocios');
-                    $('#totalCertificadosUrgentes').html(resultado.somaTotalUrgentes + ' (' + resultado.quantidadeTotalUrgentes + ')');
-                    $('#totalCertificadosUrgentesComFeedback').html(resultado.somaTotalUrgentesComFeedback + ' (' +resultado.quantidadeTotalUrgentesComFeedback+ ')');
-                    $('#totalLost').html(resultado.somaLost + ' (' +resultado.qtdLost + ')');
+
+                    if (resultado.tipoNegocio == 'Perdidos')
+                        $('#totalLost').html(resultado.somaLost + ' (' +resultado.qtdLost + ')');
+                    else {
+                        $('#totalCertificadosUrgentes').html(resultado.somaTotalUrgentes + ' (' + resultado.quantidadeTotalUrgentes + ')');
+                        $('#totalCertificadosUrgentesComFeedback').html(resultado.somaTotalUrgentesComFeedback + ' (' +resultado.quantidadeTotalUrgentesComFeedback+ ')');
+                    }
                     $('#divContatosPopOver').html(resultado.htmlContatosPopOver);
                 }
             } catch (e) {

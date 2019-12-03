@@ -2909,7 +2909,16 @@ function carregarCertificados() {
                 $tipoCd = '<i class="fa fa-square text-danger" title="Em aberto"></i>';
             }
 
+            /*DEFINE SE E REVOGACAO, EM ABERTO OU RECARTEIRIZACAO*/
+            if ($certificado->getCertificadoRenovado()) {
+                $tipoCd = '<i class="fa fa-square text-success" title="Renova&ccedil;&atilde;o"></i>';
+            }elseif ($certificado->getDataRecarteirizacao()) {
+                $tipoCd = '<i class="fa fa-square text-primary" title="Recarteiriza&ccedil;&atilde;o"></i>';
+            } else {
+                $tipoCd = '<i class="fa fa-square text-danger" title="Em aberto"></i>';
+            }
             $certificados[] = array(' '=>($i++),'Cod.'=>$certificado->getId(),
+                'Cont.'=>$tipoCd.' '.(DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d'))).'d',
                 'Pago'=>$situacaoPagamento,
                 'D.Pag.'=>$dataPagamento,
                 'Proto.'=> ($certificado->getProtocolo())?$certificado->getProtocolo():'-',
@@ -2939,19 +2948,19 @@ function carregarCertificados() {
 
         if (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']=='Vencimento')) {
             $colunas = array(
-                array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Venc.'), array('nome'=>'Proto.'),
+                array('nome'=>' '), array('nome'=>'Cod.'),array('nome'=>'Cont.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Venc.'), array('nome'=>'Proto.'),
                 array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
             );
 
         } elseif (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']==utf8_encode('Validação'))) {
             $colunas = array(
-                array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Val.'), array('nome'=>'Proto.'),
+                array('nome'=>' '), array('nome'=>'Cod.'),array('nome'=>'Cont.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Val.'), array('nome'=>'Proto.'),
                 array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
             );
 
         } else {
             $colunas = array(
-                array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Com.'), array('nome'=>'Proto.'),
+                array('nome'=>' '), array('nome'=>'Cod.'),array('nome'=>'Cont.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Com.'), array('nome'=>'Proto.'),
                 array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
             );
         }
@@ -4185,7 +4194,6 @@ function consultarCertificadosVendaInterna () {
         $cCertificadosDuplicados->add(CertificadoPeer::CLIENTE_ID, $_POST['cliente_id']);
 
         $cCertificadosDuplicados->add(CertificadoPeer::APAGADO, 0);
-        $cCertificadosDuplicados->add(CertificadoPeer::APAGADO, 0);
 
         $cCertificadosDuplicados->add(CertificadoPeer::DATA_COMPRA, $dataCompra->format('Y-m-d') . ' '.$hora_ini, Criteria::GREATER_EQUAL);
         $cCertificadosDuplicados->addAnd(CertificadoPeer::DATA_COMPRA, date('Y').'-'.date('m').'-'.date('d') . $hora_fim, Criteria::LESS_EQUAL);
@@ -4242,9 +4250,10 @@ function consultarCertificadosVendaInterna () {
          * PARA LISTAR NAS POSSIVEIS RENOVACOES
          * */
         $dataVencimento = new DateTime(date('Y-m-d'));
-        $dataVencimento->add(new DateInterval('P30D'));
+        $dataVencimento->add(new DateInterval('P45D'));
 
-        $cCertificadoRenovacao->add(CertificadoPeer::DATA_FIM_VALIDADE, $dataVencimento->format('Y-m-d') .' ' . $hora_ini, Criteria::GREATER_EQUAL);
+            $cCertificadoRenovacao->add(CertificadoPeer::DATA_FIM_VALIDADE, date('Y-m-d') .' ' . $hora_ini, Criteria::GREATER_EQUAL);
+        $cCertificadoRenovacao->addAnd(CertificadoPeer::DATA_FIM_VALIDADE, $dataVencimento->format('Y-m-d') .' ' . $hora_ini, Criteria::LESS_EQUAL);
 
         $cCertificadoRenovacao->addAscendingOrderByColumn(CertificadoPeer::DATA_FIM_VALIDADE);
 

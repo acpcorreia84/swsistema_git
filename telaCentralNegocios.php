@@ -126,7 +126,7 @@ include 'inc/script.php';
                                             </div>
                                             <div class="col-xs-9 text-right">
                                                 <div id="totalCertificadosUrgentes">carregando...</div>
-                                                <div>Urgentes</div>
+                                                <div>Urgentes (10 dias)</div>
                                             </div>
                                         </div>
                                     </div>
@@ -149,7 +149,7 @@ include 'inc/script.php';
                                             </div>
                                             <div class="col-xs-9 text-right">
                                                 <div id="totalCertificadosUrgentesComFeedback">carregando...</div>
-                                                <div>Urgentes <br/>(com feedback)</div>
+                                                <div>Urgentes <br/>com feedback (10 dias)</div>
                                             </div>
                                         </div>
                                     </div>
@@ -171,8 +171,8 @@ include 'inc/script.php';
                                                 <i class="fa fa fa-thumbs-o-down fa-5x"></i>
                                             </div>
                                             <div class="col-xs-9 text-right">
-                                                <div id="totalLost">carregando...</div>
-                                                <div>Perdidos</div>
+                                                <div id="totalLost"></div>
+                                                <div>Perdidos (30 dias)</div>
                                             </div>
                                         </div>
                                     </div>
