@@ -256,9 +256,22 @@ function carregarNegocios() {
 
         $hora_ini = ' 00:00:00';
         $hora_fim = ' 23:59:59';
+        $dataDe = date('Y-m-d H:i:s');
 
-        $cCertificado->add(CertificadoPeer::DATA_COMPRA, date('Y').'-'.date('m').'-01'.$hora_ini, Criteria::GREATER_EQUAL);
-        $cCertificado->addAnd(CertificadoPeer::DATA_COMPRA, date('Y').'-'.date('m').'-'.getLastDayOfMonth(date('m'), date('Y')) . $hora_fim, Criteria::LESS_EQUAL);
+        $qtdDias = 0;
+
+        if ($tipoNegocios == 'Urgentes')
+            $qtdDias = 11;
+        elseif ($tipoNegocios=='UrgentesFollowUp')
+            $qtdDias = 11;
+        else {
+            $qtdDias = 30;
+        }
+        $dataAte = new DateTime(date('Y-m-d H:i:s'));
+        $dataAte->sub(new DateInterval('P'.$qtdDias.'D'));
+
+        $cCertificado->add(CertificadoPeer::DATA_COMPRA, $dataAte->format('Y-m-d H:i:s'), Criteria::GREATER_EQUAL);
+        $cCertificado->addAnd(CertificadoPeer::DATA_COMPRA, $dataDe, Criteria::LESS_EQUAL);
 
         $cCertificado->addAnd(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, null, Criteria::ISNULL);
         $cCertificado->addOr(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, '0000-00-00 00:00:00');
@@ -437,7 +450,7 @@ function carregarNegocios() {
         $retorno = array('mensagem'=>'Ok','colunas'=>json_encode($colunas), 'negocios'=>json_encode($negocios),
             'quantidadeTotalUrgentes'=>$qtdUrgentes, 'quantidadeTotalUrgentesComFeedback'=>$qtdUrgentesComFeedback,
             'somaTotalUrgentes' => formataMoeda($somaUrgentes), 'somaTotalUrgentesComFeedback' =>formataMoeda($somaUrgentesComFeedaback),
-            'qtdLost'=>$qtdLost, 'somaLost'=>formataMoeda($somaLost), 'htmlContatosPopOver'=>$htmlPopOver
+            'qtdLost'=>$qtdLost, 'somaLost'=>formataMoeda($somaLost), 'htmlContatosPopOver'=>$htmlPopOver, 'dataDe'=>date('d/m/Y'), 'dataAte'=>$dataAte->format('d/m/Y')
         );
 
         echo json_encode($retorno);

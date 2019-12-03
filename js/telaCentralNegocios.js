@@ -52,6 +52,8 @@ function carregarNegocios() {
             try {
                 console.log(result);
                 var resultado = JSON.parse(result);
+
+                $('#txtDataNegocios').html(resultado.dataAte + ' at&eacute; ' + resultado.dataDe);
                 //console.log(resultado.quantidadeTotalUrgentes,resultado.quantidadeTotalUrgentesComFeedback);
 
                 //var quantidadeCertificadosTotal = JSON.parse(resultado.quantidadeCertificadosTotal);

@@ -86,7 +86,7 @@ include 'inc/script.php';
         <div class="container-fluid">
 
             <div class="row" style="margin-top:50px;">
-
+                <h4 id="txtDataNegocios"></h4>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <i class="fa fa-filter" aria-hidden="true"></i> Filtros <a href="#"> <i class="fa fa-bars" id="btnFiltroCd" ></i></a>
