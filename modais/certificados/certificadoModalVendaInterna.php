@@ -551,7 +551,7 @@
                                                 <!--BOTOES DA CONSULTA DOS PEDIDOS DUPLICADOS-->
                                                 <button id="btnAvancar1" class="btn btn-primary oculto"> Avancar? <i class="fa fa-arrow-circle-right fa-lg"></i></button>
                                                 <button id="btnVoltar1" class="btn btn-primary oculto" onclick="voltarVendaInterna()" ><i class="fa fa-arrow-circle-left fa-lg"></i> Voltar|</button>
-                                                <button id="btnAvancar" class="btn btn-primary oculto" > Avancar <i class="fa fa-arrow-circle-right fa-lg"></i></button>
+
                                                 <button id="btnFinalizar" class="btn btn-success oculto" onclick="finalizarVendaInterna('<?=substr($_SERVER['PHP_SELF'], strrpos($_SERVER['PHP_SELF'], '/' )+1);?>')"><i class="fa fa-check"></i> Finalizar</button>
                                                 <button id="btnVoltar" class="btn btn-primary oculto" onclick="voltarVendaInterna()" ><i class="fa fa-arrow-circle-left fa-lg"></i> Voltar</button>
                                                 <button id="btnReiniciar" class="btn btn-danger" onclick="limparModalVendaInterna()"><i class="fa fa-check"></i> Reiniciar</button>

@@ -390,7 +390,8 @@ function editar_cliente_certificado(funcao){
 					if (funcao == "editar_cliente") {
                         $("#modalCarregando").modal('hide');
 						if(certificado[3] == 'J'){
-							document.getElementById('pessoaJuridica').style.display='block';
+                            $("#pessoaJuridica").css('visibility','visible');
+                            $('#pessoaJuridica').css('display','block');
 							document.getElementById('clEdtRazaoSocial').value=certificado[1];
 							document.getElementById('clEdtNomeFantasia').value=certificado[2];
 							document.getElementById('clEdtCnpj').value=certificado[4];
@@ -405,6 +406,11 @@ function editar_cliente_certificado(funcao){
 							document.getElementById('clEdtFone2Empresa').value=certificado[13];
 							document.getElementById('clEdtCelularEmpresa').value=certificado[14];
 							document.getElementById('clEdtEmailEmpresa').value=certificado[15];
+                            console.log('editou cliente pj');
+						} else {
+                            $('#pessoaJuridica').css('display','none');
+                            $("#pessoaJuridica").css('visibility','hidden');
+                            console.log('editou cliente pf');
 						}
                         document.getElementById('clEdtPessoaTipo').value=certificado[3];
                         document.getElementById('clEdtNomeResponsavel').value=certificado[16];
