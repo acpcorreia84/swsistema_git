@@ -1778,11 +1778,12 @@ function detalharCertificado(){
             $contatosCliente[] = array("Tipo" => "Escrit&oacute;rio Contador", "Telefone" => ($telefone) ? $telefone : '-', "Celular" => ($celular) ? $celular : '-', "E-mail"=>$certificado->getCliente()->getEmail());
 
             foreach ($contadorObj->getContadorContatos() as $contatoContador)
-                if ($contatoContador->getFone() || $contador->getCelular())
-                    $contatosCliente[] =
-                        array(
-                            "Tipo"=>utf8_encode($contatoContador->getNome()) . "(Contador)","Telefone"=>$contatoContador->getFone(), "Celular"=>$contatoContador->getCelular(), "E-mail"=>$contatoContador->getEmail(),
-                        );
+                if ($contatoContador)
+                    if ($contatoContador->getFone() || $contatoContador->getCelular())
+                        $contatosCliente[] =
+                            array(
+                                "Tipo"=>utf8_encode($contatoContador->getNome()) . "(Contador)","Telefone"=>$contatoContador->getFone(), "Celular"=>$contatoContador->getCelular(), "E-mail"=>$contatoContador->getEmail(),
+                            );
         }
 
         $colunasContatos = array(
@@ -2899,7 +2900,14 @@ function carregarCertificados() {
                 $situacaoValidacao = '-';
 
 
-
+            /*DEFINE SE E REVOGACAO, EM ABERTO OU RECARTEIRIZACAO*/
+            if ($certificado->getCertificadoRenovado()) {
+                $tipoCd = '<i class="fa fa-square text-success" title="Renova&ccedil;&atilde;o"></i>';
+            }elseif ($certificado->getDataRecarteirizacao()) {
+                $tipoCd = '<i class="fa fa-square text-primary" title="Recarteiriza&ccedil;&atilde;o"></i>';
+            } else {
+                $tipoCd = '<i class="fa fa-square text-danger" title="Em aberto"></i>';
+            }
 
             $certificados[] = array(' '=>($i++),'Cod.'=>$certificado->getId(),
                 'Pago'=>$situacaoPagamento,
