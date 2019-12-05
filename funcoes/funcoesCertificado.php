@@ -2359,7 +2359,7 @@ function finalizarVendaCertificado() {
              * */
             $certSit = new CertificadoSituacao();
             $certSit->setUsuarioId($usuarioLogadoRn->getId());
-            $certSit->setComentario('Este pedido foi renovado a partir do certificado pelo usuario ' .$usuarioLogadoRn->getId() . ' - '. $usuarioLogadoRn->getNome(). ' a partir do certificado <a href="telaCertificado.php?funcao=detalhaCertificado&idCertificado=' . $_POST['idCertificadoRenovacao'] . '" target="_blank">'.$_POST['idCertificadoRenovacao'].'</a>');
+            $certSit->setComentario('Este pedido foi renovado pelo usuario ' .$usuarioLogadoRn->getId() . ' - '. $usuarioLogadoRn->getNome(). ' a partir do certificado <a href="telaCertificado.php?funcao=detalhaCertificado&idCertificado=' . $_POST['idCertificadoRenovacao'] . '" target="_blank">'.$_POST['idCertificadoRenovacao'].'</a>');
             $cSit = new Criteria();
             $certSit->setCertificadoId($certificadoNovo->getId());
             $cSit->add(SituacaoPeer::SIGLA, 'pedren');
@@ -4250,7 +4250,7 @@ function consultarCertificadosVendaInterna () {
          * PARA LISTAR NAS POSSIVEIS RENOVACOES
          * */
         $dataVencimento = new DateTime(date('Y-m-d'));
-        $dataVencimento->add(new DateInterval('P45D'));
+        $dataVencimento->add(new DateInterval('P60D'));
 
             $cCertificadoRenovacao->add(CertificadoPeer::DATA_FIM_VALIDADE, date('Y-m-d') .' ' . $hora_ini, Criteria::GREATER_EQUAL);
         $cCertificadoRenovacao->addAnd(CertificadoPeer::DATA_FIM_VALIDADE, $dataVencimento->format('Y-m-d') .' ' . $hora_ini, Criteria::LESS_EQUAL);

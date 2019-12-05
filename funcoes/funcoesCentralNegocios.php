@@ -381,7 +381,6 @@ function carregarNegocios() {
 
                     $certificadosUrgentesFollowUp[] = array(' '=>($i++),'Cod.'=>$certificado->getId(),
                         'Proto.'=> ($certificado->getProtocolo())?$certificado->getProtocolo():'-',
-                        'Cont.'=>DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d')),
                         'Cont.'=>$tipoCd.' '.(DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d'))).'d',
                         'Cliente'=> '<a id="btnContato'.$certificado->getId().'" href="telaCertificado.php?funcao=detalhaCertificado&idCertificado='.$certificado->getId().'" target="_blank">'.$certificado->getCliente()->getId() . ' - '.$nomeCliente . '</a>',
                         'Tipo'=>$produto,
