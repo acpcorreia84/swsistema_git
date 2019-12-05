@@ -28,6 +28,7 @@
 
         case 'telaCentralNegocios.php':
             echo '<script src="../js/telaCentralNegocios.js"></script>
+            <script src="https://kit.fontawesome.com/269b16848d.js" crossorigin="anonymous"></script>
             <script type="text/javascript" src="inc/jquery-validation-1.15.0/dist/jquery.validate.js"></script>
             <script type="text/javascript" src="inc/jquery-validation-1.15.0/dist/additional-methods.js"></script>
             <script type="text/javascript" src="inc/jquery-validation-1.15.0/dist/localization/messages_pt_BR.min.js"></script>

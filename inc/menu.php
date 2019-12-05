@@ -45,7 +45,7 @@ require_once 'modais/modalListaProdutos.php';
                 <? if($_SERVER['REQUEST_URI'] == '/telaCentralNegocios.php' ) {?>
                     <li ><a href="telaCertificado.php" target="_blank" title="Tela antiga de certificados" class="text-success"><i class="fa fa-lg fa-id-card"></i> Certificados </a></li>
                 <? }?>
-                <? if($_SERVER['REQUEST_URI'] == '/telaCertificado.php' ) {?>
+                <? if(strpos($_SERVER['REQUEST_URI'], 'telaCertificado.php') ) {?>
                     <li ><a href="telaCertificado.php" target="_blank" title="Tela antiga de certificados" class="text-success"><i class="fa fa-lg fa-id-card"></i> Certificados </a></li>
                     <li><a title="Venda ERP 3.0" data-target="#vendaInterna" data-toggle="modal" onclick="abreModalVendaInterna()"><i class="fa fa-lg fa-cart-plus"></i></a></li>
                     <!--

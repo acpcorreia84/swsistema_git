@@ -118,7 +118,7 @@ include 'inc/script.php';
                         <!--QUADROS RESUMO: PAGOS, EM ABERTO-->
 
                             <div class="col-lg-3 col-md-6">
-                                <div class="panel panel-red">
+                                <div class="panel" style="background-color: yellow">
                                     <div class="panel-heading">
                                         <div class="row">
                                             <div class="col-xs-3">
@@ -141,7 +141,7 @@ include 'inc/script.php';
                             </div>
 
                             <div class="col-lg-3 col-md-6">
-                                <div class="panel panel-danger">
+                                <div class="panel " style="background-color: orange">
                                     <div class="panel-heading">
                                         <div class="row">
                                             <div class="col-xs-3">
@@ -164,15 +164,15 @@ include 'inc/script.php';
                             </div>
 
                             <div class="col-lg-3 col-md-6">
-                                <div class="panel panel-warning">
+                                <div class="panel" style="background-color: #0a0a0a; color: #fff;">
                                     <div class="panel-heading">
                                         <div class="row">
                                             <div class="col-xs-3">
-                                                <i class="fa fa fa-thumbs-o-down fa-5x"></i>
+                                                <i class="fas fa-skull fa-5x"></i>
                                             </div>
-                                            <div class="col-xs-9 text-right">
+                                            <div class="col-xs-9 text-right" style="color: #fff;">
                                                 <div id="totalLost"></div>
-                                                <div>Perdidos (30 dias)</div>
+                                                <div>CVP (30 dias)</div>
                                             </div>
                                         </div>
                                     </div>
