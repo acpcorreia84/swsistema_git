@@ -2902,21 +2902,14 @@ function carregarCertificados() {
 
             /*DEFINE SE E REVOGACAO, EM ABERTO OU RECARTEIRIZACAO*/
             if ($certificado->getCertificadoRenovado()) {
-                $tipoCd = '<i class="fa fa-square text-success" title="Renova&ccedil;&atilde;o"></i>';
+                $tipoCd = '<i class="fa fa-square text-success" title="Renova&ccedil;&atilde;o. Qtd. de dias faltam para o vencimento. "></i>';
             }elseif ($certificado->getDataRecarteirizacao()) {
-                $tipoCd = '<i class="fa fa-square text-primary" title="Recarteiriza&ccedil;&atilde;o"></i>';
+                $tipoCd = '<i class="fa fa-square " style="color: purple" title="Recarteiriza&ccedil;&atilde;o"></i>';
             } else {
-                $tipoCd = '<i class="fa fa-square text-danger" title="Em aberto"></i>';
+                $tipoCd = '<i class="fa fa-square" style="color: #0b2c89"  title="Em aberto. Qtd. de dias desde a data de cria&cedil;&atilde;o do pedido."></i>';
             }
 
-            /*DEFINE SE E REVOGACAO, EM ABERTO OU RECARTEIRIZACAO*/
-            if ($certificado->getCertificadoRenovado()) {
-                $tipoCd = '<i class="fa fa-square text-success" title="Renova&ccedil;&atilde;o"></i>';
-            }elseif ($certificado->getDataRecarteirizacao()) {
-                $tipoCd = '<i class="fa fa-square text-primary" title="Recarteiriza&ccedil;&atilde;o"></i>';
-            } else {
-                $tipoCd = '<i class="fa fa-square text-danger" title="Em aberto"></i>';
-            }
+
             $certificados[] = array(' '=>($i++),'Cod.'=>$certificado->getId(),
                 'Cont.'=>$tipoCd.' '.(DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d'))).'d',
                 'Pago'=>$situacaoPagamento,

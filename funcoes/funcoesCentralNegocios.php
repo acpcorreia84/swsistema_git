@@ -270,21 +270,36 @@ function carregarNegocios() {
         $dataAte = new DateTime(date('Y-m-d H:i:s'));
         $dataAte->sub(new DateInterval('P'.$qtdDias.'D'));
 
-        $cCertificado->add(CertificadoPeer::DATA_COMPRA, $dataAte->format('Y-m-d H:i:s'), Criteria::GREATER_EQUAL);
-        $cCertificado->addAnd(CertificadoPeer::DATA_COMPRA, $dataDe, Criteria::LESS_EQUAL);
+        $dataAteRenovacao = new DateTime(date('Y-m-d H:i:s'));
+        $dataAteRenovacao->sub(new DateInterval('P20D'));
 
         $cCertificado->addAnd(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, null, Criteria::ISNULL);
         $cCertificado->addOr(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, '0000-00-00 00:00:00');
 
+        /*$cCertificado->add(CertificadoPeer::DATA_COMPRA, $dataAte->format('Y-m-d H:i:s'), Criteria::GREATER_EQUAL);
+        $cCertificado->addAnd(CertificadoPeer::DATA_COMPRA, $dataDe, Criteria::LESS_EQUAL);*/
+
+        $cDataCompra = $cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataAte->format('Y-m-d H:i:s'), Criteria::GREATER_EQUAL);
+        $cDataCompra->addAnd($cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataDe, Criteria::LESS_EQUAL));
+        $cDataCompra->addAnd($cCertificado->getNewCriterion(CertificadoPeer::CERTIFICADO_RENOVADO, null, Criteria::ISNULL));
+
+        $cDataCompraRenovacao = $cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataAteRenovacao->format('Y-m-d H:i:s'), Criteria::GREATER_EQUAL);
+        $cDataCompraRenovacao->addAnd($cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataDe, Criteria::LESS_EQUAL));
+        $cDataCompraRenovacao->addAnd($cCertificado->getNewCriterion(CertificadoPeer::CERTIFICADO_RENOVADO, 0, Criteria::GREATER_THAN));
+
+        $cDataCompraRenovacao->addOr($cDataCompra);
+
+        $cCertificado->add($cDataCompraRenovacao);
+        /*$cConfirmacaoPagamentoNotEqual = $cCertificado->getNewCriterion(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, '0000-00-00 00:00:00', Criteria::NOT_EQUAL);
+        $cConfirmacaoPagamentoNull->addAnd($cConfirmacaoPagamentoNotEqual);
+        $cConfirmacaoPagamentoNull->addAnd($cConfirmacaoPagamentoNotEqual);*/
 
 
         $cCertificado->addAscendingOrderByColumn(CertificadoPeer::DATA_COMPRA);
 
 
-        /*CONSULTA QUANTIDADE ANTES DE INSERIR O LIMITE POR PAGINA*/
-        $quantidadeCertificados = CertificadoPeer::doSelect($cCertificado);
-
         $certificadosObj = CertificadoPeer::doSelect($cCertificado);
+
         $certificadosUrgentesFollowUp = array();
         $certificadosUrgentes = array();
         $certificadosPerdidos = array();
@@ -304,11 +319,11 @@ function carregarNegocios() {
 
             /*DEFINE SE E REVOGACAO, EM ABERTO OU RECARTEIRIZACAO*/
             if ($certificado->getCertificadoRenovado()) {
-                $tipoCd = '<i class="fa fa-square text-success" title="Renova&ccedil;&atilde;o"></i>';
+                $tipoCd = '<i class="fa fa-square text-success" title="Renova&ccedil;&atilde;o. Qtd. de dias faltam para o vencimento. "></i>';
             }elseif ($certificado->getDataRecarteirizacao()) {
-                $tipoCd = '<i class="fa fa-square text-primary" title="Recarteiriza&ccedil;&atilde;o"></i>';
+                $tipoCd = '<i class="fa fa-square " style="color: purple" title="Recarteiriza&ccedil;&atilde;o"></i>';
             } else {
-                $tipoCd = '<i class="fa fa-square text-danger" title="Em aberto"></i>';
+                $tipoCd = '<i class="fa fa-square" style="color: #0b2c89"  title="Em aberto. Qtd. de dias desde a data de cria&cedil;&atilde;o do pedido."></i>';
             }
 
             $contatos = getContatosCertificado($certificado);
@@ -357,6 +372,18 @@ function carregarNegocios() {
             else
                 $situacaoValidacao = '-';
 
+
+            /*
+             * SE FOR UM PEDIDO DE RENOVACAO, O VENCIMENTO E O VENCIMENTO DO CD ANTERIOR
+             * */
+            $certificadoRenovado = '';
+            if ($certificado->getCertificadoRenovado()) {
+                $certificadoRenovado = $certificado->getCertificadoRelatedByCertificadoRenovado();
+                $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificadoRenovado->getDataFimValidade('Y-m-d')));
+            } else {
+                $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d')));
+            }
+
             if ($certificado->getStatusFollowup()) {
 
                 /*GUARDA EM ARRAYS OS IDS DE FOLLOW UP E LOST EM SITUACOES*/
@@ -380,8 +407,9 @@ function carregarNegocios() {
                     $somaUrgentesComFeedaback += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
 
                     $certificadosUrgentesFollowUp[] = array(' '=>($i++),'Cod.'=>$certificado->getId(),
-                        'Proto.'=> ($certificado->getProtocolo())?$certificado->getProtocolo():'-',
-                        'Cont.'=>$tipoCd.' '.(DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d'))).'d',
+                        'Cont.'=>$tipoCd.' '.$diffDatas .'d',
+                        'D.Comp.'=>($certificado->getDataCompra('d/m/Y'))?$certificado->getDataCompra('d/m/Y'):'-',
+                        'D.Venc.'=>($certificadoRenovado)?$certificadoRenovado->getDataFimValidade('d/m/Y'):'-',
                         'Cliente'=> '<a id="btnContato'.$certificado->getId().'" href="telaCertificado.php?funcao=detalhaCertificado&idCertificado='.$certificado->getId().'" target="_blank">'.$certificado->getCliente()->getId() . ' - '.$nomeCliente . '</a>',
                         'Tipo'=>$produto,
                         'Consultor'=>utf8_encode($usuarioConsultor),
@@ -396,9 +424,9 @@ function carregarNegocios() {
                     $somaLost += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
 
                     $certificadosPerdidos[] = array(' '=>($j++),'Cod.'=>$certificado->getId(),
-                        'Proto.'=> ($certificado->getProtocolo())?$certificado->getProtocolo():'-',
-                        'Cont.'=>$tipoCd.' '.(DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d'))).'d',
+                        'Cont.'=>$tipoCd.' '.$diffDatas.'d',
                         'D.Comp.'=>($certificado->getDataCompra('d/m/Y'))?$certificado->getDataCompra('d/m/Y'):'-',
+                        'D.Venc.'=>($certificadoRenovado)?$certificadoRenovado->getDataFimValidade('d/m/Y'):'-',
                         'Cliente'=> '<a id="btnContato'.$certificado->getId().'" href="telaCertificado.php?funcao=detalhaCertificado&idCertificado='.$certificado->getId().'" target="_blank">'.$certificado->getCliente()->getId() . ' - '.$nomeCliente . '</a>',
                         'Tipo'=>$produto,
                         'Consultor'=>utf8_encode($usuarioConsultor),
@@ -414,9 +442,9 @@ function carregarNegocios() {
                 $somaUrgentes += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
 
                 $certificadosUrgentes[] = array(' '=>($l++),'Cod.'=>$certificado->getId(),
-                    'Proto.'=> ($certificado->getProtocolo())?$certificado->getProtocolo():'-',
-                    'Cont.'=>$tipoCd.' '.(DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d'))).'d',
+                    'Cont.'=>$tipoCd.' '.$diffDatas.'d',
                     'D.Comp.'=>($certificado->getDataCompra('d/m/Y'))?$certificado->getDataCompra('d/m/Y'):'-',
+                    'D.Venc.'=>($certificadoRenovado)?$certificadoRenovado->getDataFimValidade('d/m/Y'):'-',
                     'Cliente'=> '<a id="btnContato'.$certificado->getId().'" href="telaCertificado.php?funcao=detalhaCertificado&idCertificado='.$certificado->getId().'" target="_blank">'.$certificado->getCliente()->getId() . ' - '.$nomeCliente . '</a>',
                     'Tipo'=>$produto,
                     'Consultor'=>utf8_encode($usuarioConsultor),
@@ -432,7 +460,7 @@ function carregarNegocios() {
 
 
         $colunas = array(
-            array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Cont.'), array('nome'=>'D.Comp.'), array('nome'=>'Proto.'),
+            array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Cont.'), array('nome'=>'D.Comp.'), array('nome'=>'D.Venc.'),array('nome'=>'Proto.'),
             array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
         );
 
