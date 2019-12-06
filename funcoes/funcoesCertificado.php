@@ -1899,9 +1899,13 @@ function detalharCertificado(){
 
                 }
 
+                $consultorBoleto = '-';
+                if ($boleto->getUsuario())
+                    $consultorBoleto = utf8_encode($boleto->getUsuario()->getNome());
                 $boletos[] =  array('Id'=>$boleto->getId(),'Tid'=>$boleto->getTid(), utf8_encode('Situação')=> $situacaoPamento,
                     'Venc.'=>$boleto->getVencimento('d/m/Y'),'Dt.Pagt.'=> $dataConfirmacaoPagamento, 'Valor'=>formataMoeda($boleto->getValor()),
                     'Forma'=> utf8_encode($certificado->getFormaPagamento()->getNome()) . ' <a href="'.$boleto->getUrlBoleto().'" target="_blank" title="Visualizar Boleto"><i class="fa fa-barcode" aria-hidden="true"></i></a>',
+                    'Cons.'=>$consultorBoleto,
                     utf8_encode('Ação')=>$btnPagarExtornar
                 );
             }
@@ -1909,7 +1913,7 @@ function detalharCertificado(){
             $colunas = array(
                 array('nome'=>'Id'),array('nome'=>'Tid'), array('nome'=>utf8_encode('Situação')), array('nome'=>'Dt.Pagt.'),array('nome'=>'Venc.'),
                 array('nome'=>'Valor'),
-                array('nome'=>'Forma'), array('nome'=>utf8_encode('Ação'))
+                array('nome'=>'Forma'),array('nome'=>'Cons.'), array('nome'=>utf8_encode('Ação'))
             );
             $dadosPagamento = array('mensagem'=>'Ok','colunasPagamento'=>json_encode($colunas),'pagamento'=>json_encode($boletos), 'comprovantePagamento'=>'');
 
