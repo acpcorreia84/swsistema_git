@@ -1972,6 +1972,53 @@ abstract class BaseContasReceber extends BaseObject  implements Persistent {
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in ContasReceber.
 	 */
+	public function getBoletosJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(ContasReceberPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collBoletos === null) {
+			if ($this->isNew()) {
+				$this->collBoletos = array();
+			} else {
+
+				$criteria->add(BoletoPeer::CONTAS_RECEBER_ID, $this->id);
+
+				$this->collBoletos = BoletoPeer::doSelectJoinUsuario($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(BoletoPeer::CONTAS_RECEBER_ID, $this->id);
+
+			if (!isset($this->lastBoletoCriteria) || !$this->lastBoletoCriteria->equals($criteria)) {
+				$this->collBoletos = BoletoPeer::doSelectJoinUsuario($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastBoletoCriteria = $criteria;
+
+		return $this->collBoletos;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this ContasReceber is new, it will return
+	 * an empty collection; or if this ContasReceber has previously
+	 * been saved, it will retrieve related Boletos from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in ContasReceber.
+	 */
 	public function getBoletosJoinPedido($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {

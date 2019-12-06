@@ -55,6 +55,12 @@ abstract class BaseBoleto extends BaseObject  implements Persistent {
 	protected $cliente_id;
 
 	/**
+	 * The value for the usuario_id field.
+	 * @var        int
+	 */
+	protected $usuario_id;
+
+	/**
 	 * The value for the vencimento field.
 	 * @var        string
 	 */
@@ -100,6 +106,11 @@ abstract class BaseBoleto extends BaseObject  implements Persistent {
 	 * @var        Certificado
 	 */
 	protected $aCertificado;
+
+	/**
+	 * @var        Usuario
+	 */
+	protected $aUsuario;
 
 	/**
 	 * @var        Pedido
@@ -188,6 +199,16 @@ abstract class BaseBoleto extends BaseObject  implements Persistent {
 	public function getClienteId()
 	{
 		return $this->cliente_id;
+	}
+
+	/**
+	 * Get the [usuario_id] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getUsuarioId()
+	{
+		return $this->usuario_id;
 	}
 
 	/**
@@ -509,6 +530,30 @@ abstract class BaseBoleto extends BaseObject  implements Persistent {
 	} // setClienteId()
 
 	/**
+	 * Set the value of [usuario_id] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     Boleto The current object (for fluent API support)
+	 */
+	public function setUsuarioId($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->usuario_id !== $v) {
+			$this->usuario_id = $v;
+			$this->modifiedColumns[] = BoletoPeer::USUARIO_ID;
+		}
+
+		if ($this->aUsuario !== null && $this->aUsuario->getId() !== $v) {
+			$this->aUsuario = null;
+		}
+
+		return $this;
+	} // setUsuarioId()
+
+	/**
 	 * Sets the value of [vencimento] column to a normalized version of the date/time value specified.
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
@@ -802,13 +847,14 @@ abstract class BaseBoleto extends BaseObject  implements Persistent {
 			$this->pedido_id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->contas_receber_id = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
 			$this->cliente_id = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-			$this->vencimento = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-			$this->data_processamento = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-			$this->data_pagamento = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-			$this->data_confirmacao_pagamento = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
-			$this->valor = ($row[$startcol + 10] !== null) ? (double) $row[$startcol + 10] : null;
-			$this->url_boleto = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-			$this->descricao = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+			$this->usuario_id = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+			$this->vencimento = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+			$this->data_processamento = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+			$this->data_pagamento = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+			$this->data_confirmacao_pagamento = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+			$this->valor = ($row[$startcol + 11] !== null) ? (double) $row[$startcol + 11] : null;
+			$this->url_boleto = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+			$this->descricao = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -818,7 +864,7 @@ abstract class BaseBoleto extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 13; // 13 = BoletoPeer::NUM_COLUMNS - BoletoPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 14; // 14 = BoletoPeer::NUM_COLUMNS - BoletoPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Boleto object", $e);
@@ -852,6 +898,9 @@ abstract class BaseBoleto extends BaseObject  implements Persistent {
 		}
 		if ($this->aCliente !== null && $this->cliente_id !== $this->aCliente->getId()) {
 			$this->aCliente = null;
+		}
+		if ($this->aUsuario !== null && $this->usuario_id !== $this->aUsuario->getId()) {
+			$this->aUsuario = null;
 		}
 	} // ensureConsistency
 
@@ -893,6 +942,7 @@ abstract class BaseBoleto extends BaseObject  implements Persistent {
 		if ($deep) {  // also de-associate any related objects?
 
 			$this->aCertificado = null;
+			$this->aUsuario = null;
 			$this->aPedido = null;
 			$this->aContasReceber = null;
 			$this->aCliente = null;
@@ -1016,6 +1066,13 @@ abstract class BaseBoleto extends BaseObject  implements Persistent {
 				$this->setCertificado($this->aCertificado);
 			}
 
+			if ($this->aUsuario !== null) {
+				if ($this->aUsuario->isModified() || $this->aUsuario->isNew()) {
+					$affectedRows += $this->aUsuario->save($con);
+				}
+				$this->setUsuario($this->aUsuario);
+			}
+
 			if ($this->aPedido !== null) {
 				if ($this->aPedido->isModified() || $this->aPedido->isNew()) {
 					$affectedRows += $this->aPedido->save($con);
@@ -1136,6 +1193,12 @@ abstract class BaseBoleto extends BaseObject  implements Persistent {
 				}
 			}
 
+			if ($this->aUsuario !== null) {
+				if (!$this->aUsuario->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->aUsuario->getValidationFailures());
+				}
+			}
+
 			if ($this->aPedido !== null) {
 				if (!$this->aPedido->validate($columns)) {
 					$failureMap = array_merge($failureMap, $this->aPedido->getValidationFailures());
@@ -1182,6 +1245,7 @@ abstract class BaseBoleto extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(BoletoPeer::PEDIDO_ID)) $criteria->add(BoletoPeer::PEDIDO_ID, $this->pedido_id);
 		if ($this->isColumnModified(BoletoPeer::CONTAS_RECEBER_ID)) $criteria->add(BoletoPeer::CONTAS_RECEBER_ID, $this->contas_receber_id);
 		if ($this->isColumnModified(BoletoPeer::CLIENTE_ID)) $criteria->add(BoletoPeer::CLIENTE_ID, $this->cliente_id);
+		if ($this->isColumnModified(BoletoPeer::USUARIO_ID)) $criteria->add(BoletoPeer::USUARIO_ID, $this->usuario_id);
 		if ($this->isColumnModified(BoletoPeer::VENCIMENTO)) $criteria->add(BoletoPeer::VENCIMENTO, $this->vencimento);
 		if ($this->isColumnModified(BoletoPeer::DATA_PROCESSAMENTO)) $criteria->add(BoletoPeer::DATA_PROCESSAMENTO, $this->data_processamento);
 		if ($this->isColumnModified(BoletoPeer::DATA_PAGAMENTO)) $criteria->add(BoletoPeer::DATA_PAGAMENTO, $this->data_pagamento);
@@ -1252,6 +1316,8 @@ abstract class BaseBoleto extends BaseObject  implements Persistent {
 		$copyObj->setContasReceberId($this->contas_receber_id);
 
 		$copyObj->setClienteId($this->cliente_id);
+
+		$copyObj->setUsuarioId($this->usuario_id);
 
 		$copyObj->setVencimento($this->vencimento);
 
@@ -1359,6 +1425,55 @@ abstract class BaseBoleto extends BaseObject  implements Persistent {
 			 */
 		}
 		return $this->aCertificado;
+	}
+
+	/**
+	 * Declares an association between this object and a Usuario object.
+	 *
+	 * @param      Usuario $v
+	 * @return     Boleto The current object (for fluent API support)
+	 * @throws     PropelException
+	 */
+	public function setUsuario(Usuario $v = null)
+	{
+		if ($v === null) {
+			$this->setUsuarioId(NULL);
+		} else {
+			$this->setUsuarioId($v->getId());
+		}
+
+		$this->aUsuario = $v;
+
+		// Add binding for other direction of this n:n relationship.
+		// If this object has already been added to the Usuario object, it will not be re-added.
+		if ($v !== null) {
+			$v->addBoleto($this);
+		}
+
+		return $this;
+	}
+
+
+	/**
+	 * Get the associated Usuario object
+	 *
+	 * @param      PropelPDO Optional Connection object.
+	 * @return     Usuario The associated Usuario object.
+	 * @throws     PropelException
+	 */
+	public function getUsuario(PropelPDO $con = null)
+	{
+		if ($this->aUsuario === null && ($this->usuario_id !== null)) {
+			$this->aUsuario = UsuarioPeer::retrieveByPk($this->usuario_id);
+			/* The following can be used additionally to
+			   guarantee the related object contains a reference
+			   to this object.  This level of coupling may, however, be
+			   undesirable since it could result in an only partially populated collection
+			   in the referenced object.
+			   $this->aUsuario->addBoletos($this);
+			 */
+		}
+		return $this->aUsuario;
 	}
 
 	/**
@@ -1523,6 +1638,7 @@ abstract class BaseBoleto extends BaseObject  implements Persistent {
 		} // if ($deep)
 
 			$this->aCertificado = null;
+			$this->aUsuario = null;
 			$this->aPedido = null;
 			$this->aContasReceber = null;
 			$this->aCliente = null;

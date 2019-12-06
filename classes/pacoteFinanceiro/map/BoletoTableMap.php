@@ -42,6 +42,7 @@ class BoletoTableMap extends TableMap {
 		$this->addForeignKey('PEDIDO_ID', 'PedidoId', 'INTEGER', 'pedido', 'ID', true, null, null);
 		$this->addForeignKey('CONTAS_RECEBER_ID', 'ContasReceberId', 'INTEGER', 'contas_receber', 'ID', true, null, null);
 		$this->addForeignKey('CLIENTE_ID', 'ClienteId', 'VARCHAR', 'cliente', 'ID', true, 50, null);
+		$this->addForeignKey('USUARIO_ID', 'UsuarioId', 'INTEGER', 'usuario', 'ID', false, null, null);
 		$this->addColumn('VENCIMENTO', 'Vencimento', 'DATE', false, null, null);
 		$this->addColumn('DATA_PROCESSAMENTO', 'DataProcessamento', 'DATE', false, null, null);
 		$this->addColumn('DATA_PAGAMENTO', 'DataPagamento', 'DATE', false, null, null);
@@ -58,6 +59,7 @@ class BoletoTableMap extends TableMap {
 	public function buildRelations()
 	{
     $this->addRelation('Certificado', 'Certificado', RelationMap::MANY_TO_ONE, array('certificado_id' => 'id', ), 'RESTRICT', null);
+    $this->addRelation('Usuario', 'Usuario', RelationMap::MANY_TO_ONE, array('usuario_id' => 'id', ), 'RESTRICT', null);
     $this->addRelation('Pedido', 'Pedido', RelationMap::MANY_TO_ONE, array('pedido_id' => 'id', ), 'RESTRICT', null);
     $this->addRelation('ContasReceber', 'ContasReceber', RelationMap::MANY_TO_ONE, array('contas_receber_id' => 'id', ), 'RESTRICT', null);
     $this->addRelation('Cliente', 'Cliente', RelationMap::MANY_TO_ONE, array('cliente_id' => 'id', ), 'RESTRICT', null);

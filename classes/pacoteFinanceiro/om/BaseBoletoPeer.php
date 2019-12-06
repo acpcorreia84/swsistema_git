@@ -25,7 +25,7 @@ abstract class BaseBoletoPeer {
 	const TM_CLASS = 'BoletoTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 13;
+	const NUM_COLUMNS = 14;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -47,6 +47,9 @@ abstract class BaseBoletoPeer {
 
 	/** the column name for the CLIENTE_ID field */
 	const CLIENTE_ID = 'boleto.CLIENTE_ID';
+
+	/** the column name for the USUARIO_ID field */
+	const USUARIO_ID = 'boleto.USUARIO_ID';
 
 	/** the column name for the VENCIMENTO field */
 	const VENCIMENTO = 'boleto.VENCIMENTO';
@@ -85,11 +88,11 @@ abstract class BaseBoletoPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'Tid', 'CertificadoId', 'PedidoId', 'ContasReceberId', 'ClienteId', 'Vencimento', 'DataProcessamento', 'DataPagamento', 'DataConfirmacaoPagamento', 'Valor', 'UrlBoleto', 'Descricao', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'tid', 'certificadoId', 'pedidoId', 'contasReceberId', 'clienteId', 'vencimento', 'dataProcessamento', 'dataPagamento', 'dataConfirmacaoPagamento', 'valor', 'urlBoleto', 'descricao', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::TID, self::CERTIFICADO_ID, self::PEDIDO_ID, self::CONTAS_RECEBER_ID, self::CLIENTE_ID, self::VENCIMENTO, self::DATA_PROCESSAMENTO, self::DATA_PAGAMENTO, self::DATA_CONFIRMACAO_PAGAMENTO, self::VALOR, self::URL_BOLETO, self::DESCRICAO, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'tid', 'certificado_id', 'pedido_id', 'contas_receber_id', 'cliente_id', 'vencimento', 'data_processamento', 'data_pagamento', 'data_confirmacao_pagamento', 'valor', 'url_boleto', 'descricao', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'Tid', 'CertificadoId', 'PedidoId', 'ContasReceberId', 'ClienteId', 'UsuarioId', 'Vencimento', 'DataProcessamento', 'DataPagamento', 'DataConfirmacaoPagamento', 'Valor', 'UrlBoleto', 'Descricao', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'tid', 'certificadoId', 'pedidoId', 'contasReceberId', 'clienteId', 'usuarioId', 'vencimento', 'dataProcessamento', 'dataPagamento', 'dataConfirmacaoPagamento', 'valor', 'urlBoleto', 'descricao', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::TID, self::CERTIFICADO_ID, self::PEDIDO_ID, self::CONTAS_RECEBER_ID, self::CLIENTE_ID, self::USUARIO_ID, self::VENCIMENTO, self::DATA_PROCESSAMENTO, self::DATA_PAGAMENTO, self::DATA_CONFIRMACAO_PAGAMENTO, self::VALOR, self::URL_BOLETO, self::DESCRICAO, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'tid', 'certificado_id', 'pedido_id', 'contas_receber_id', 'cliente_id', 'usuario_id', 'vencimento', 'data_processamento', 'data_pagamento', 'data_confirmacao_pagamento', 'valor', 'url_boleto', 'descricao', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
 	);
 
 	/**
@@ -99,11 +102,11 @@ abstract class BaseBoletoPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Tid' => 1, 'CertificadoId' => 2, 'PedidoId' => 3, 'ContasReceberId' => 4, 'ClienteId' => 5, 'Vencimento' => 6, 'DataProcessamento' => 7, 'DataPagamento' => 8, 'DataConfirmacaoPagamento' => 9, 'Valor' => 10, 'UrlBoleto' => 11, 'Descricao' => 12, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'tid' => 1, 'certificadoId' => 2, 'pedidoId' => 3, 'contasReceberId' => 4, 'clienteId' => 5, 'vencimento' => 6, 'dataProcessamento' => 7, 'dataPagamento' => 8, 'dataConfirmacaoPagamento' => 9, 'valor' => 10, 'urlBoleto' => 11, 'descricao' => 12, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::TID => 1, self::CERTIFICADO_ID => 2, self::PEDIDO_ID => 3, self::CONTAS_RECEBER_ID => 4, self::CLIENTE_ID => 5, self::VENCIMENTO => 6, self::DATA_PROCESSAMENTO => 7, self::DATA_PAGAMENTO => 8, self::DATA_CONFIRMACAO_PAGAMENTO => 9, self::VALOR => 10, self::URL_BOLETO => 11, self::DESCRICAO => 12, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'tid' => 1, 'certificado_id' => 2, 'pedido_id' => 3, 'contas_receber_id' => 4, 'cliente_id' => 5, 'vencimento' => 6, 'data_processamento' => 7, 'data_pagamento' => 8, 'data_confirmacao_pagamento' => 9, 'valor' => 10, 'url_boleto' => 11, 'descricao' => 12, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Tid' => 1, 'CertificadoId' => 2, 'PedidoId' => 3, 'ContasReceberId' => 4, 'ClienteId' => 5, 'UsuarioId' => 6, 'Vencimento' => 7, 'DataProcessamento' => 8, 'DataPagamento' => 9, 'DataConfirmacaoPagamento' => 10, 'Valor' => 11, 'UrlBoleto' => 12, 'Descricao' => 13, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'tid' => 1, 'certificadoId' => 2, 'pedidoId' => 3, 'contasReceberId' => 4, 'clienteId' => 5, 'usuarioId' => 6, 'vencimento' => 7, 'dataProcessamento' => 8, 'dataPagamento' => 9, 'dataConfirmacaoPagamento' => 10, 'valor' => 11, 'urlBoleto' => 12, 'descricao' => 13, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::TID => 1, self::CERTIFICADO_ID => 2, self::PEDIDO_ID => 3, self::CONTAS_RECEBER_ID => 4, self::CLIENTE_ID => 5, self::USUARIO_ID => 6, self::VENCIMENTO => 7, self::DATA_PROCESSAMENTO => 8, self::DATA_PAGAMENTO => 9, self::DATA_CONFIRMACAO_PAGAMENTO => 10, self::VALOR => 11, self::URL_BOLETO => 12, self::DESCRICAO => 13, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'tid' => 1, 'certificado_id' => 2, 'pedido_id' => 3, 'contas_receber_id' => 4, 'cliente_id' => 5, 'usuario_id' => 6, 'vencimento' => 7, 'data_processamento' => 8, 'data_pagamento' => 9, 'data_confirmacao_pagamento' => 10, 'valor' => 11, 'url_boleto' => 12, 'descricao' => 13, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
 	);
 
 	/**
@@ -179,6 +182,7 @@ abstract class BaseBoletoPeer {
 		$criteria->addSelectColumn(BoletoPeer::PEDIDO_ID);
 		$criteria->addSelectColumn(BoletoPeer::CONTAS_RECEBER_ID);
 		$criteria->addSelectColumn(BoletoPeer::CLIENTE_ID);
+		$criteria->addSelectColumn(BoletoPeer::USUARIO_ID);
 		$criteria->addSelectColumn(BoletoPeer::VENCIMENTO);
 		$criteria->addSelectColumn(BoletoPeer::DATA_PROCESSAMENTO);
 		$criteria->addSelectColumn(BoletoPeer::DATA_PAGAMENTO);
@@ -482,6 +486,56 @@ abstract class BaseBoletoPeer {
 
 
 	/**
+	 * Returns the number of rows matching criteria, joining the related Usuario table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinUsuario(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(BoletoPeer::TABLE_NAME);
+
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			BoletoPeer::addSelectColumns($criteria);
+		}
+		
+		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+		
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(BoletoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+
+		$criteria->addJoin(BoletoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
+	}
+
+
+	/**
 	 * Returns the number of rows matching criteria, joining the related Pedido table
 	 *
 	 * @param      Criteria $criteria
@@ -686,6 +740,72 @@ abstract class BaseBoletoPeer {
 				} // if obj2 already loaded
 				
 				// Add the $obj1 (Boleto) to $obj2 (Certificado)
+				$obj2->addBoleto($obj1);
+
+			} // if joined row was not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Boleto objects pre-filled with their Usuario objects.
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Boleto objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinUsuario(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		BoletoPeer::addSelectColumns($criteria);
+		$startcol = (BoletoPeer::NUM_COLUMNS - BoletoPeer::NUM_LAZY_LOAD_COLUMNS);
+		UsuarioPeer::addSelectColumns($criteria);
+
+		$criteria->addJoin(BoletoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = BoletoPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = BoletoPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+
+				$cls = BoletoPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				BoletoPeer::addInstanceToPool($obj1, $key1);
+			} // if $obj1 already loaded
+
+			$key2 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			if ($key2 !== null) {
+				$obj2 = UsuarioPeer::getInstanceFromPool($key2);
+				if (!$obj2) {
+
+					$cls = UsuarioPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol);
+					UsuarioPeer::addInstanceToPool($obj2, $key2);
+				} // if obj2 already loaded
+				
+				// Add the $obj1 (Boleto) to $obj2 (Usuario)
 				$obj2->addBoleto($obj1);
 
 			} // if joined row was not null
@@ -933,6 +1053,8 @@ abstract class BaseBoletoPeer {
 
 		$criteria->addJoin(BoletoPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
 
+		$criteria->addJoin(BoletoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
 		$criteria->addJoin(BoletoPeer::PEDIDO_ID, PedidoPeer::ID, $join_behavior);
 
 		$criteria->addJoin(BoletoPeer::CONTAS_RECEBER_ID, ContasReceberPeer::ID, $join_behavior);
@@ -975,16 +1097,21 @@ abstract class BaseBoletoPeer {
 		CertificadoPeer::addSelectColumns($criteria);
 		$startcol3 = $startcol2 + (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
 
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
 		PedidoPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (PedidoPeer::NUM_COLUMNS - PedidoPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol5 = $startcol4 + (PedidoPeer::NUM_COLUMNS - PedidoPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		ContasReceberPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (ContasReceberPeer::NUM_COLUMNS - ContasReceberPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol6 = $startcol5 + (ContasReceberPeer::NUM_COLUMNS - ContasReceberPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		ClientePeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol7 = $startcol6 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
 
 		$criteria->addJoin(BoletoPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
 
 		$criteria->addJoin(BoletoPeer::PEDIDO_ID, PedidoPeer::ID, $join_behavior);
 
@@ -1027,58 +1154,76 @@ abstract class BaseBoletoPeer {
 				$obj2->addBoleto($obj1);
 			} // if joined row not null
 
-			// Add objects for joined Pedido rows
+			// Add objects for joined Usuario rows
 
-			$key3 = PedidoPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+			$key3 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol3);
 			if ($key3 !== null) {
-				$obj3 = PedidoPeer::getInstanceFromPool($key3);
+				$obj3 = UsuarioPeer::getInstanceFromPool($key3);
 				if (!$obj3) {
 
-					$cls = PedidoPeer::getOMClass(false);
+					$cls = UsuarioPeer::getOMClass(false);
 
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
-					PedidoPeer::addInstanceToPool($obj3, $key3);
+					UsuarioPeer::addInstanceToPool($obj3, $key3);
 				} // if obj3 loaded
 
-				// Add the $obj1 (Boleto) to the collection in $obj3 (Pedido)
+				// Add the $obj1 (Boleto) to the collection in $obj3 (Usuario)
 				$obj3->addBoleto($obj1);
+			} // if joined row not null
+
+			// Add objects for joined Pedido rows
+
+			$key4 = PedidoPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+			if ($key4 !== null) {
+				$obj4 = PedidoPeer::getInstanceFromPool($key4);
+				if (!$obj4) {
+
+					$cls = PedidoPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					PedidoPeer::addInstanceToPool($obj4, $key4);
+				} // if obj4 loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj4 (Pedido)
+				$obj4->addBoleto($obj1);
 			} // if joined row not null
 
 			// Add objects for joined ContasReceber rows
 
-			$key4 = ContasReceberPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-			if ($key4 !== null) {
-				$obj4 = ContasReceberPeer::getInstanceFromPool($key4);
-				if (!$obj4) {
+			$key5 = ContasReceberPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+			if ($key5 !== null) {
+				$obj5 = ContasReceberPeer::getInstanceFromPool($key5);
+				if (!$obj5) {
 
 					$cls = ContasReceberPeer::getOMClass(false);
 
-					$obj4 = new $cls();
-					$obj4->hydrate($row, $startcol4);
-					ContasReceberPeer::addInstanceToPool($obj4, $key4);
-				} // if obj4 loaded
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					ContasReceberPeer::addInstanceToPool($obj5, $key5);
+				} // if obj5 loaded
 
-				// Add the $obj1 (Boleto) to the collection in $obj4 (ContasReceber)
-				$obj4->addBoleto($obj1);
+				// Add the $obj1 (Boleto) to the collection in $obj5 (ContasReceber)
+				$obj5->addBoleto($obj1);
 			} // if joined row not null
 
 			// Add objects for joined Cliente rows
 
-			$key5 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol5);
-			if ($key5 !== null) {
-				$obj5 = ClientePeer::getInstanceFromPool($key5);
-				if (!$obj5) {
+			$key6 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol6);
+			if ($key6 !== null) {
+				$obj6 = ClientePeer::getInstanceFromPool($key6);
+				if (!$obj6) {
 
 					$cls = ClientePeer::getOMClass(false);
 
-					$obj5 = new $cls();
-					$obj5->hydrate($row, $startcol5);
-					ClientePeer::addInstanceToPool($obj5, $key5);
-				} // if obj5 loaded
+					$obj6 = new $cls();
+					$obj6->hydrate($row, $startcol6);
+					ClientePeer::addInstanceToPool($obj6, $key6);
+				} // if obj6 loaded
 
-				// Add the $obj1 (Boleto) to the collection in $obj5 (Cliente)
-				$obj5->addBoleto($obj1);
+				// Add the $obj1 (Boleto) to the collection in $obj6 (Cliente)
+				$obj6->addBoleto($obj1);
 			} // if joined row not null
 
 			$results[] = $obj1;
@@ -1124,6 +1269,64 @@ abstract class BaseBoletoPeer {
 			$con = Propel::getConnection(BoletoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
+		$criteria->addJoin(BoletoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::PEDIDO_ID, PedidoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::CONTAS_RECEBER_ID, ContasReceberPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
+	}
+
+
+	/**
+	 * Returns the number of rows matching criteria, joining the related Usuario table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinAllExceptUsuario(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(BoletoPeer::TABLE_NAME);
+		
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			BoletoPeer::addSelectColumns($criteria);
+		}
+		
+		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
+		
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(BoletoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+	
+		$criteria->addJoin(BoletoPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
+
 		$criteria->addJoin(BoletoPeer::PEDIDO_ID, PedidoPeer::ID, $join_behavior);
 
 		$criteria->addJoin(BoletoPeer::CONTAS_RECEBER_ID, ContasReceberPeer::ID, $join_behavior);
@@ -1180,6 +1383,8 @@ abstract class BaseBoletoPeer {
 	
 		$criteria->addJoin(BoletoPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
 
+		$criteria->addJoin(BoletoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
 		$criteria->addJoin(BoletoPeer::CONTAS_RECEBER_ID, ContasReceberPeer::ID, $join_behavior);
 
 		$criteria->addJoin(BoletoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
@@ -1233,6 +1438,8 @@ abstract class BaseBoletoPeer {
 		}
 	
 		$criteria->addJoin(BoletoPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
 
 		$criteria->addJoin(BoletoPeer::PEDIDO_ID, PedidoPeer::ID, $join_behavior);
 
@@ -1288,6 +1495,8 @@ abstract class BaseBoletoPeer {
 	
 		$criteria->addJoin(BoletoPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
 
+		$criteria->addJoin(BoletoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
 		$criteria->addJoin(BoletoPeer::PEDIDO_ID, PedidoPeer::ID, $join_behavior);
 
 		$criteria->addJoin(BoletoPeer::CONTAS_RECEBER_ID, ContasReceberPeer::ID, $join_behavior);
@@ -1328,260 +1537,23 @@ abstract class BaseBoletoPeer {
 		BoletoPeer::addSelectColumns($criteria);
 		$startcol2 = (BoletoPeer::NUM_COLUMNS - BoletoPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		PedidoPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (PedidoPeer::NUM_COLUMNS - PedidoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ContasReceberPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (ContasReceberPeer::NUM_COLUMNS - ContasReceberPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ClientePeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$criteria->addJoin(BoletoPeer::PEDIDO_ID, PedidoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(BoletoPeer::CONTAS_RECEBER_ID, ContasReceberPeer::ID, $join_behavior);
-
-		$criteria->addJoin(BoletoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
-
-
-		$stmt = BasePeer::doSelect($criteria, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = BoletoPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = BoletoPeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-				$cls = BoletoPeer::getOMClass(false);
-
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				BoletoPeer::addInstanceToPool($obj1, $key1);
-			} // if obj1 already loaded
-
-				// Add objects for joined Pedido rows
-
-				$key2 = PedidoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = PedidoPeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = PedidoPeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol2);
-					PedidoPeer::addInstanceToPool($obj2, $key2);
-				} // if $obj2 already loaded
-
-				// Add the $obj1 (Boleto) to the collection in $obj2 (Pedido)
-				$obj2->addBoleto($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined ContasReceber rows
-
-				$key3 = ContasReceberPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-				if ($key3 !== null) {
-					$obj3 = ContasReceberPeer::getInstanceFromPool($key3);
-					if (!$obj3) {
-	
-						$cls = ContasReceberPeer::getOMClass(false);
-
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					ContasReceberPeer::addInstanceToPool($obj3, $key3);
-				} // if $obj3 already loaded
-
-				// Add the $obj1 (Boleto) to the collection in $obj3 (ContasReceber)
-				$obj3->addBoleto($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Cliente rows
-
-				$key4 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol4);
-				if ($key4 !== null) {
-					$obj4 = ClientePeer::getInstanceFromPool($key4);
-					if (!$obj4) {
-	
-						$cls = ClientePeer::getOMClass(false);
-
-					$obj4 = new $cls();
-					$obj4->hydrate($row, $startcol4);
-					ClientePeer::addInstanceToPool($obj4, $key4);
-				} // if $obj4 already loaded
-
-				// Add the $obj1 (Boleto) to the collection in $obj4 (Cliente)
-				$obj4->addBoleto($obj1);
-
-			} // if joined row is not null
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
-
-	/**
-	 * Selects a collection of Boleto objects pre-filled with all related objects except Pedido.
-	 *
-	 * @param      Criteria  $criteria
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Boleto objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinAllExceptPedido(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$criteria = clone $criteria;
-
-		// Set the correct dbName if it has not been overridden
-		// $criteria->getDbName() will return the same object if not set to another value
-		// so == check is okay and faster
-		if ($criteria->getDbName() == Propel::getDefaultDB()) {
-			$criteria->setDbName(self::DATABASE_NAME);
-		}
-
-		BoletoPeer::addSelectColumns($criteria);
-		$startcol2 = (BoletoPeer::NUM_COLUMNS - BoletoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		CertificadoPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ContasReceberPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (ContasReceberPeer::NUM_COLUMNS - ContasReceberPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		ClientePeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$criteria->addJoin(BoletoPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
-
-		$criteria->addJoin(BoletoPeer::CONTAS_RECEBER_ID, ContasReceberPeer::ID, $join_behavior);
-
-		$criteria->addJoin(BoletoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
-
-
-		$stmt = BasePeer::doSelect($criteria, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = BoletoPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = BoletoPeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-				$cls = BoletoPeer::getOMClass(false);
-
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				BoletoPeer::addInstanceToPool($obj1, $key1);
-			} // if obj1 already loaded
-
-				// Add objects for joined Certificado rows
-
-				$key2 = CertificadoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = CertificadoPeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = CertificadoPeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol2);
-					CertificadoPeer::addInstanceToPool($obj2, $key2);
-				} // if $obj2 already loaded
-
-				// Add the $obj1 (Boleto) to the collection in $obj2 (Certificado)
-				$obj2->addBoleto($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined ContasReceber rows
-
-				$key3 = ContasReceberPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-				if ($key3 !== null) {
-					$obj3 = ContasReceberPeer::getInstanceFromPool($key3);
-					if (!$obj3) {
-	
-						$cls = ContasReceberPeer::getOMClass(false);
-
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					ContasReceberPeer::addInstanceToPool($obj3, $key3);
-				} // if $obj3 already loaded
-
-				// Add the $obj1 (Boleto) to the collection in $obj3 (ContasReceber)
-				$obj3->addBoleto($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined Cliente rows
-
-				$key4 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol4);
-				if ($key4 !== null) {
-					$obj4 = ClientePeer::getInstanceFromPool($key4);
-					if (!$obj4) {
-	
-						$cls = ClientePeer::getOMClass(false);
-
-					$obj4 = new $cls();
-					$obj4->hydrate($row, $startcol4);
-					ClientePeer::addInstanceToPool($obj4, $key4);
-				} // if $obj4 already loaded
-
-				// Add the $obj1 (Boleto) to the collection in $obj4 (Cliente)
-				$obj4->addBoleto($obj1);
-
-			} // if joined row is not null
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
-
-	/**
-	 * Selects a collection of Boleto objects pre-filled with all related objects except ContasReceber.
-	 *
-	 * @param      Criteria  $criteria
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Boleto objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinAllExceptContasReceber(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$criteria = clone $criteria;
-
-		// Set the correct dbName if it has not been overridden
-		// $criteria->getDbName() will return the same object if not set to another value
-		// so == check is okay and faster
-		if ($criteria->getDbName() == Propel::getDefaultDB()) {
-			$criteria->setDbName(self::DATABASE_NAME);
-		}
-
-		BoletoPeer::addSelectColumns($criteria);
-		$startcol2 = (BoletoPeer::NUM_COLUMNS - BoletoPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		CertificadoPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		PedidoPeer::addSelectColumns($criteria);
 		$startcol4 = $startcol3 + (PedidoPeer::NUM_COLUMNS - PedidoPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		ClientePeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+		ContasReceberPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (ContasReceberPeer::NUM_COLUMNS - ContasReceberPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(BoletoPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
+		ClientePeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(BoletoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
 
 		$criteria->addJoin(BoletoPeer::PEDIDO_ID, PedidoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::CONTAS_RECEBER_ID, ContasReceberPeer::ID, $join_behavior);
 
 		$criteria->addJoin(BoletoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
 
@@ -1603,21 +1575,21 @@ abstract class BaseBoletoPeer {
 				BoletoPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-				// Add objects for joined Certificado rows
+				// Add objects for joined Usuario rows
 
-				$key2 = CertificadoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				$key2 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 				if ($key2 !== null) {
-					$obj2 = CertificadoPeer::getInstanceFromPool($key2);
+					$obj2 = UsuarioPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$cls = CertificadoPeer::getOMClass(false);
+						$cls = UsuarioPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					CertificadoPeer::addInstanceToPool($obj2, $key2);
+					UsuarioPeer::addInstanceToPool($obj2, $key2);
 				} // if $obj2 already loaded
 
-				// Add the $obj1 (Boleto) to the collection in $obj2 (Certificado)
+				// Add the $obj1 (Boleto) to the collection in $obj2 (Usuario)
 				$obj2->addBoleto($obj1);
 
 			} // if joined row is not null
@@ -1641,22 +1613,41 @@ abstract class BaseBoletoPeer {
 
 			} // if joined row is not null
 
-				// Add objects for joined Cliente rows
+				// Add objects for joined ContasReceber rows
 
-				$key4 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				$key4 = ContasReceberPeer::getPrimaryKeyHashFromRow($row, $startcol4);
 				if ($key4 !== null) {
-					$obj4 = ClientePeer::getInstanceFromPool($key4);
+					$obj4 = ContasReceberPeer::getInstanceFromPool($key4);
 					if (!$obj4) {
 	
-						$cls = ClientePeer::getOMClass(false);
+						$cls = ContasReceberPeer::getOMClass(false);
 
 					$obj4 = new $cls();
 					$obj4->hydrate($row, $startcol4);
-					ClientePeer::addInstanceToPool($obj4, $key4);
+					ContasReceberPeer::addInstanceToPool($obj4, $key4);
 				} // if $obj4 already loaded
 
-				// Add the $obj1 (Boleto) to the collection in $obj4 (Cliente)
+				// Add the $obj1 (Boleto) to the collection in $obj4 (ContasReceber)
 				$obj4->addBoleto($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Cliente rows
+
+				$key5 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol5);
+				if ($key5 !== null) {
+					$obj5 = ClientePeer::getInstanceFromPool($key5);
+					if (!$obj5) {
+	
+						$cls = ClientePeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					ClientePeer::addInstanceToPool($obj5, $key5);
+				} // if $obj5 already loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj5 (Cliente)
+				$obj5->addBoleto($obj1);
 
 			} // if joined row is not null
 
@@ -1668,7 +1659,7 @@ abstract class BaseBoletoPeer {
 
 
 	/**
-	 * Selects a collection of Boleto objects pre-filled with all related objects except Cliente.
+	 * Selects a collection of Boleto objects pre-filled with all related objects except Usuario.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -1677,7 +1668,7 @@ abstract class BaseBoletoPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptCliente(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptUsuario(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1700,11 +1691,16 @@ abstract class BaseBoletoPeer {
 		ContasReceberPeer::addSelectColumns($criteria);
 		$startcol5 = $startcol4 + (ContasReceberPeer::NUM_COLUMNS - ContasReceberPeer::NUM_LAZY_LOAD_COLUMNS);
 
+		ClientePeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+
 		$criteria->addJoin(BoletoPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
 
 		$criteria->addJoin(BoletoPeer::PEDIDO_ID, PedidoPeer::ID, $join_behavior);
 
 		$criteria->addJoin(BoletoPeer::CONTAS_RECEBER_ID, ContasReceberPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
 
 
 		$stmt = BasePeer::doSelect($criteria, $con);
@@ -1778,6 +1774,460 @@ abstract class BaseBoletoPeer {
 
 				// Add the $obj1 (Boleto) to the collection in $obj4 (ContasReceber)
 				$obj4->addBoleto($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Cliente rows
+
+				$key5 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol5);
+				if ($key5 !== null) {
+					$obj5 = ClientePeer::getInstanceFromPool($key5);
+					if (!$obj5) {
+	
+						$cls = ClientePeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					ClientePeer::addInstanceToPool($obj5, $key5);
+				} // if $obj5 already loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj5 (Cliente)
+				$obj5->addBoleto($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Boleto objects pre-filled with all related objects except Pedido.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Boleto objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptPedido(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		BoletoPeer::addSelectColumns($criteria);
+		$startcol2 = (BoletoPeer::NUM_COLUMNS - BoletoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		CertificadoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ContasReceberPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (ContasReceberPeer::NUM_COLUMNS - ContasReceberPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ClientePeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(BoletoPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::CONTAS_RECEBER_ID, ContasReceberPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = BoletoPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = BoletoPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = BoletoPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				BoletoPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Certificado rows
+
+				$key2 = CertificadoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = CertificadoPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = CertificadoPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					CertificadoPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj2 (Certificado)
+				$obj2->addBoleto($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key3 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				if ($key3 !== null) {
+					$obj3 = UsuarioPeer::getInstanceFromPool($key3);
+					if (!$obj3) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					UsuarioPeer::addInstanceToPool($obj3, $key3);
+				} // if $obj3 already loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj3 (Usuario)
+				$obj3->addBoleto($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined ContasReceber rows
+
+				$key4 = ContasReceberPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				if ($key4 !== null) {
+					$obj4 = ContasReceberPeer::getInstanceFromPool($key4);
+					if (!$obj4) {
+	
+						$cls = ContasReceberPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					ContasReceberPeer::addInstanceToPool($obj4, $key4);
+				} // if $obj4 already loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj4 (ContasReceber)
+				$obj4->addBoleto($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Cliente rows
+
+				$key5 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol5);
+				if ($key5 !== null) {
+					$obj5 = ClientePeer::getInstanceFromPool($key5);
+					if (!$obj5) {
+	
+						$cls = ClientePeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					ClientePeer::addInstanceToPool($obj5, $key5);
+				} // if $obj5 already loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj5 (Cliente)
+				$obj5->addBoleto($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Boleto objects pre-filled with all related objects except ContasReceber.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Boleto objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptContasReceber(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		BoletoPeer::addSelectColumns($criteria);
+		$startcol2 = (BoletoPeer::NUM_COLUMNS - BoletoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		CertificadoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		PedidoPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (PedidoPeer::NUM_COLUMNS - PedidoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ClientePeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + (ClientePeer::NUM_COLUMNS - ClientePeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(BoletoPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::PEDIDO_ID, PedidoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::CLIENTE_ID, ClientePeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = BoletoPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = BoletoPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = BoletoPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				BoletoPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Certificado rows
+
+				$key2 = CertificadoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = CertificadoPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = CertificadoPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					CertificadoPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj2 (Certificado)
+				$obj2->addBoleto($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key3 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				if ($key3 !== null) {
+					$obj3 = UsuarioPeer::getInstanceFromPool($key3);
+					if (!$obj3) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					UsuarioPeer::addInstanceToPool($obj3, $key3);
+				} // if $obj3 already loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj3 (Usuario)
+				$obj3->addBoleto($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Pedido rows
+
+				$key4 = PedidoPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				if ($key4 !== null) {
+					$obj4 = PedidoPeer::getInstanceFromPool($key4);
+					if (!$obj4) {
+	
+						$cls = PedidoPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					PedidoPeer::addInstanceToPool($obj4, $key4);
+				} // if $obj4 already loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj4 (Pedido)
+				$obj4->addBoleto($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Cliente rows
+
+				$key5 = ClientePeer::getPrimaryKeyHashFromRow($row, $startcol5);
+				if ($key5 !== null) {
+					$obj5 = ClientePeer::getInstanceFromPool($key5);
+					if (!$obj5) {
+	
+						$cls = ClientePeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					ClientePeer::addInstanceToPool($obj5, $key5);
+				} // if $obj5 already loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj5 (Cliente)
+				$obj5->addBoleto($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Boleto objects pre-filled with all related objects except Cliente.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Boleto objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptCliente(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		BoletoPeer::addSelectColumns($criteria);
+		$startcol2 = (BoletoPeer::NUM_COLUMNS - BoletoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		CertificadoPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		UsuarioPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		PedidoPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (PedidoPeer::NUM_COLUMNS - PedidoPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		ContasReceberPeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + (ContasReceberPeer::NUM_COLUMNS - ContasReceberPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(BoletoPeer::CERTIFICADO_ID, CertificadoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::USUARIO_ID, UsuarioPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::PEDIDO_ID, PedidoPeer::ID, $join_behavior);
+
+		$criteria->addJoin(BoletoPeer::CONTAS_RECEBER_ID, ContasReceberPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = BoletoPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = BoletoPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://propel.phpdb.org/trac/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = BoletoPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				BoletoPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Certificado rows
+
+				$key2 = CertificadoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = CertificadoPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = CertificadoPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					CertificadoPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj2 (Certificado)
+				$obj2->addBoleto($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Usuario rows
+
+				$key3 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				if ($key3 !== null) {
+					$obj3 = UsuarioPeer::getInstanceFromPool($key3);
+					if (!$obj3) {
+	
+						$cls = UsuarioPeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					UsuarioPeer::addInstanceToPool($obj3, $key3);
+				} // if $obj3 already loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj3 (Usuario)
+				$obj3->addBoleto($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined Pedido rows
+
+				$key4 = PedidoPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				if ($key4 !== null) {
+					$obj4 = PedidoPeer::getInstanceFromPool($key4);
+					if (!$obj4) {
+	
+						$cls = PedidoPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					PedidoPeer::addInstanceToPool($obj4, $key4);
+				} // if $obj4 already loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj4 (Pedido)
+				$obj4->addBoleto($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined ContasReceber rows
+
+				$key5 = ContasReceberPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+				if ($key5 !== null) {
+					$obj5 = ContasReceberPeer::getInstanceFromPool($key5);
+					if (!$obj5) {
+	
+						$cls = ContasReceberPeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					ContasReceberPeer::addInstanceToPool($obj5, $key5);
+				} // if $obj5 already loaded
+
+				// Add the $obj1 (Boleto) to the collection in $obj5 (ContasReceber)
+				$obj5->addBoleto($obj1);
 
 			} // if joined row is not null
 

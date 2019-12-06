@@ -95,6 +95,7 @@ class UsuarioTableMap extends TableMap {
     $this->addRelation('ClienteHistorico', 'ClienteHistorico', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('Contador', 'Contador', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('ContadorDetalhar', 'ContadorDetalhar', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
+    $this->addRelation('Boleto', 'Boleto', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('Caixa', 'Caixa', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('Aviso', 'Aviso', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('AvisoUsuario', 'AvisoUsuario', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);

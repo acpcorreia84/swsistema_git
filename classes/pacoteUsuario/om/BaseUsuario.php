@@ -365,6 +365,16 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 	private $lastContadorDetalharCriteria = null;
 
 	/**
+	 * @var        array Boleto[] Collection to store aggregation of Boleto objects.
+	 */
+	protected $collBoletos;
+
+	/**
+	 * @var        Criteria The criteria used to select the current contents of collBoletos.
+	 */
+	private $lastBoletoCriteria = null;
+
+	/**
 	 * @var        array Caixa[] Collection to store aggregation of Caixa objects.
 	 */
 	protected $collCaixas;
@@ -1948,6 +1958,9 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 			$this->collContadorDetalhars = null;
 			$this->lastContadorDetalharCriteria = null;
 
+			$this->collBoletos = null;
+			$this->lastBoletoCriteria = null;
+
 			$this->collCaixas = null;
 			$this->lastCaixaCriteria = null;
 
@@ -2250,6 +2263,14 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 				}
 			}
 
+			if ($this->collBoletos !== null) {
+				foreach ($this->collBoletos as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
+			}
+
 			if ($this->collCaixas !== null) {
 				foreach ($this->collCaixas as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
@@ -2529,6 +2550,14 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 
 				if ($this->collContadorDetalhars !== null) {
 					foreach ($this->collContadorDetalhars as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
+
+				if ($this->collBoletos !== null) {
+					foreach ($this->collBoletos as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -2855,6 +2884,12 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 			foreach ($this->getContadorDetalhars() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 					$copyObj->addContadorDetalhar($relObj->copy($deepCopy));
+				}
+			}
+
+			foreach ($this->getBoletos() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addBoleto($relObj->copy($deepCopy));
 				}
 			}
 
@@ -6722,6 +6757,348 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 	}
 
 	/**
+	 * Clears out the collBoletos collection (array).
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addBoletos()
+	 */
+	public function clearBoletos()
+	{
+		$this->collBoletos = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collBoletos collection (array).
+	 *
+	 * By default this just sets the collBoletos collection to an empty array (like clearcollBoletos());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @return     void
+	 */
+	public function initBoletos()
+	{
+		$this->collBoletos = array();
+	}
+
+	/**
+	 * Gets an array of Boleto objects which contain a foreign key that references this object.
+	 *
+	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
+	 * Otherwise if this Usuario has previously been saved, it will retrieve
+	 * related Boletos from storage. If this Usuario is new, it will return
+	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 *
+	 * @param      PropelPDO $con
+	 * @param      Criteria $criteria
+	 * @return     array Boleto[]
+	 * @throws     PropelException
+	 */
+	public function getBoletos($criteria = null, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(UsuarioPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collBoletos === null) {
+			if ($this->isNew()) {
+			   $this->collBoletos = array();
+			} else {
+
+				$criteria->add(BoletoPeer::USUARIO_ID, $this->id);
+
+				BoletoPeer::addSelectColumns($criteria);
+				$this->collBoletos = BoletoPeer::doSelect($criteria, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return the collection.
+
+
+				$criteria->add(BoletoPeer::USUARIO_ID, $this->id);
+
+				BoletoPeer::addSelectColumns($criteria);
+				if (!isset($this->lastBoletoCriteria) || !$this->lastBoletoCriteria->equals($criteria)) {
+					$this->collBoletos = BoletoPeer::doSelect($criteria, $con);
+				}
+			}
+		}
+		$this->lastBoletoCriteria = $criteria;
+		return $this->collBoletos;
+	}
+
+	/**
+	 * Returns the number of related Boleto objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related Boleto objects.
+	 * @throws     PropelException
+	 */
+	public function countBoletos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(UsuarioPeer::DATABASE_NAME);
+		} else {
+			$criteria = clone $criteria;
+		}
+
+		if ($distinct) {
+			$criteria->setDistinct();
+		}
+
+		$count = null;
+
+		if ($this->collBoletos === null) {
+			if ($this->isNew()) {
+				$count = 0;
+			} else {
+
+				$criteria->add(BoletoPeer::USUARIO_ID, $this->id);
+
+				$count = BoletoPeer::doCount($criteria, false, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return count of the collection.
+
+
+				$criteria->add(BoletoPeer::USUARIO_ID, $this->id);
+
+				if (!isset($this->lastBoletoCriteria) || !$this->lastBoletoCriteria->equals($criteria)) {
+					$count = BoletoPeer::doCount($criteria, false, $con);
+				} else {
+					$count = count($this->collBoletos);
+				}
+			} else {
+				$count = count($this->collBoletos);
+			}
+		}
+		return $count;
+	}
+
+	/**
+	 * Method called to associate a Boleto object to this object
+	 * through the Boleto foreign key attribute.
+	 *
+	 * @param      Boleto $l Boleto
+	 * @return     void
+	 * @throws     PropelException
+	 */
+	public function addBoleto(Boleto $l)
+	{
+		if ($this->collBoletos === null) {
+			$this->initBoletos();
+		}
+		if (!in_array($l, $this->collBoletos, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collBoletos, $l);
+			$l->setUsuario($this);
+		}
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Usuario is new, it will return
+	 * an empty collection; or if this Usuario has previously
+	 * been saved, it will retrieve related Boletos from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Usuario.
+	 */
+	public function getBoletosJoinCertificado($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(UsuarioPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collBoletos === null) {
+			if ($this->isNew()) {
+				$this->collBoletos = array();
+			} else {
+
+				$criteria->add(BoletoPeer::USUARIO_ID, $this->id);
+
+				$this->collBoletos = BoletoPeer::doSelectJoinCertificado($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(BoletoPeer::USUARIO_ID, $this->id);
+
+			if (!isset($this->lastBoletoCriteria) || !$this->lastBoletoCriteria->equals($criteria)) {
+				$this->collBoletos = BoletoPeer::doSelectJoinCertificado($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastBoletoCriteria = $criteria;
+
+		return $this->collBoletos;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Usuario is new, it will return
+	 * an empty collection; or if this Usuario has previously
+	 * been saved, it will retrieve related Boletos from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Usuario.
+	 */
+	public function getBoletosJoinPedido($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(UsuarioPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collBoletos === null) {
+			if ($this->isNew()) {
+				$this->collBoletos = array();
+			} else {
+
+				$criteria->add(BoletoPeer::USUARIO_ID, $this->id);
+
+				$this->collBoletos = BoletoPeer::doSelectJoinPedido($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(BoletoPeer::USUARIO_ID, $this->id);
+
+			if (!isset($this->lastBoletoCriteria) || !$this->lastBoletoCriteria->equals($criteria)) {
+				$this->collBoletos = BoletoPeer::doSelectJoinPedido($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastBoletoCriteria = $criteria;
+
+		return $this->collBoletos;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Usuario is new, it will return
+	 * an empty collection; or if this Usuario has previously
+	 * been saved, it will retrieve related Boletos from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Usuario.
+	 */
+	public function getBoletosJoinContasReceber($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(UsuarioPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collBoletos === null) {
+			if ($this->isNew()) {
+				$this->collBoletos = array();
+			} else {
+
+				$criteria->add(BoletoPeer::USUARIO_ID, $this->id);
+
+				$this->collBoletos = BoletoPeer::doSelectJoinContasReceber($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(BoletoPeer::USUARIO_ID, $this->id);
+
+			if (!isset($this->lastBoletoCriteria) || !$this->lastBoletoCriteria->equals($criteria)) {
+				$this->collBoletos = BoletoPeer::doSelectJoinContasReceber($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastBoletoCriteria = $criteria;
+
+		return $this->collBoletos;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Usuario is new, it will return
+	 * an empty collection; or if this Usuario has previously
+	 * been saved, it will retrieve related Boletos from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Usuario.
+	 */
+	public function getBoletosJoinCliente($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(UsuarioPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collBoletos === null) {
+			if ($this->isNew()) {
+				$this->collBoletos = array();
+			} else {
+
+				$criteria->add(BoletoPeer::USUARIO_ID, $this->id);
+
+				$this->collBoletos = BoletoPeer::doSelectJoinCliente($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(BoletoPeer::USUARIO_ID, $this->id);
+
+			if (!isset($this->lastBoletoCriteria) || !$this->lastBoletoCriteria->equals($criteria)) {
+				$this->collBoletos = BoletoPeer::doSelectJoinCliente($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastBoletoCriteria = $criteria;
+
+		return $this->collBoletos;
+	}
+
+	/**
 	 * Clears out the collCaixas collection (array).
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
@@ -8988,6 +9365,11 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 					$o->clearAllReferences($deep);
 				}
 			}
+			if ($this->collBoletos) {
+				foreach ((array) $this->collBoletos as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 			if ($this->collCaixas) {
 				foreach ((array) $this->collCaixas as $o) {
 					$o->clearAllReferences($deep);
@@ -9049,6 +9431,7 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 		$this->collClienteHistoricos = null;
 		$this->collContadors = null;
 		$this->collContadorDetalhars = null;
+		$this->collBoletos = null;
 		$this->collCaixas = null;
 		$this->collAvisos = null;
 		$this->collAvisoUsuarios = null;

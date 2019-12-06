@@ -1031,6 +1031,7 @@
         <column name="pedido_id" type="INTEGER" required="true"/>
         <column name="contas_receber_id" type="INTEGER" required="true"/>
         <column name="cliente_id" type="VARCHAR" size="50" required="true"/>
+        <column name="usuario_id" type="INTEGER" required="false"/>
 
         <column name="vencimento" type="DATE"/>
         <column name="data_processamento" type="DATE"/>
@@ -1042,6 +1043,9 @@
 
         <foreign-key foreignTable="certificado" name="Rel_boleto_certificado" onDelete="restrict">
             <reference local="certificado_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="usuario" name="Rel_boleto_usuario" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
         </foreign-key>
 
         <foreign-key foreignTable="pedido" name="Rel_boleto_pedido" onDelete="restrict">

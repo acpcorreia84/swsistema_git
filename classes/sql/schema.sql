@@ -1329,6 +1329,7 @@ CREATE TABLE `boleto`
 	`pedido_id` INTEGER  NOT NULL,
 	`contas_receber_id` INTEGER  NOT NULL,
 	`cliente_id` VARCHAR(50)  NOT NULL,
+	`usuario_id` INTEGER,
 	`vencimento` DATE,
 	`data_processamento` DATE,
 	`data_pagamento` DATE,
@@ -1341,6 +1342,11 @@ CREATE TABLE `boleto`
 	CONSTRAINT `Rel_boleto_certificado`
 		FOREIGN KEY (`certificado_id`)
 		REFERENCES `certificado` (`id`)
+		ON DELETE RESTRICT,
+	INDEX `FI__boleto_usuario` (`usuario_id`),
+	CONSTRAINT `Rel_boleto_usuario`
+		FOREIGN KEY (`usuario_id`)
+		REFERENCES `usuario` (`id`)
 		ON DELETE RESTRICT,
 	INDEX `FI__boleto_pedido` (`pedido_id`),
 	CONSTRAINT `Rel_boleto_pedido`
