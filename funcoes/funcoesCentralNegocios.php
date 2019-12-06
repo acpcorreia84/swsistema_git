@@ -256,7 +256,7 @@ function carregarNegocios() {
 
         $hora_ini = ' 00:00:00';
         $hora_fim = ' 23:59:59';
-        $dataDe = date('Y-m-d H:i:s');
+        $dataDe = date('Y-m-d '.$hora_fim);
 
         $qtdDias = 0;
 
@@ -270,7 +270,7 @@ function carregarNegocios() {
         $dataAte = new DateTime(date('Y-m-d H:i:s'));
         $dataAte->sub(new DateInterval('P'.$qtdDias.'D'));
 
-        $dataAteRenovacao = new DateTime(date('Y-m-d H:i:s'));
+        $dataAteRenovacao = new DateTime(date('Y-m-d '.$hora_ini));
         $dataAteRenovacao->sub(new DateInterval('P20D'));
 
         $cCertificado->addAnd(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, null, Criteria::ISNULL);
@@ -279,11 +279,11 @@ function carregarNegocios() {
         /*$cCertificado->add(CertificadoPeer::DATA_COMPRA, $dataAte->format('Y-m-d H:i:s'), Criteria::GREATER_EQUAL);
         $cCertificado->addAnd(CertificadoPeer::DATA_COMPRA, $dataDe, Criteria::LESS_EQUAL);*/
 
-        $cDataCompra = $cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataAte->format('Y-m-d H:i:s'), Criteria::GREATER_EQUAL);
+        $cDataCompra = $cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataAte->format('Y-m-d '.$hora_ini), Criteria::GREATER_EQUAL);
         $cDataCompra->addAnd($cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataDe, Criteria::LESS_EQUAL));
         $cDataCompra->addAnd($cCertificado->getNewCriterion(CertificadoPeer::CERTIFICADO_RENOVADO, null, Criteria::ISNULL));
 
-        $cDataCompraRenovacao = $cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataAteRenovacao->format('Y-m-d H:i:s'), Criteria::GREATER_EQUAL);
+        $cDataCompraRenovacao = $cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataAteRenovacao->format('Y-m-d '.$hora_ini), Criteria::GREATER_EQUAL);
         $cDataCompraRenovacao->addAnd($cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataDe, Criteria::LESS_EQUAL));
         $cDataCompraRenovacao->addAnd($cCertificado->getNewCriterion(CertificadoPeer::CERTIFICADO_RENOVADO, 0, Criteria::GREATER_THAN));
 
@@ -314,6 +314,21 @@ function carregarNegocios() {
         $qtdLost = 0;
         $somaLost = 0.0;
         $htmlPopOver = '';
+
+        /*GUARDA EM ARRAYS OS IDS DE FOLLOW UP E LOST EM SITUACOES*/
+        $cFollow = new Criteria();
+        $cFollow->add(SituacaoPeer::SIGLA, 'follow');
+        $cFollow->addOr(SituacaoPeer::SIGLA, 'lost');
+        $situacoesFollowup = SituacaoPeer::doSelect($cFollow);
+
+        $arrFollow = array();
+        $arrLost = array();
+        foreach ($situacoesFollowup as $situacaoFollow) {
+            if ($situacaoFollow->getSigla()=='follow' || $situacaoFollow->getSigla()=='followaux')
+                $arrFollow[] = $situacaoFollow->getId();
+            elseif ($situacaoFollow->getSigla()=='lost' || $situacaoFollow->getSigla()=='lostout')
+                $arrLost[] = $situacaoFollow->getId();
+        }
 
         foreach ($certificadosObj as $key=>$certificado)  {
 
@@ -385,21 +400,6 @@ function carregarNegocios() {
             }
 
             if ($certificado->getStatusFollowup()) {
-
-                /*GUARDA EM ARRAYS OS IDS DE FOLLOW UP E LOST EM SITUACOES*/
-                $cFollow = new Criteria();
-                $cFollow->add(SituacaoPeer::SIGLA, 'follow');
-                $cFollow->addOr(SituacaoPeer::SIGLA, 'lost');
-                $situacoesFollowup = SituacaoPeer::doSelect($cFollow);
-
-                $arrFollow = array();
-                $arrLost = array();
-                foreach ($situacoesFollowup as $situacaoFollow) {
-                    if ($situacaoFollow->getSigla()=='follow')
-                        $arrFollow[] = $situacaoFollow->getId();
-                    elseif ($situacaoFollow->getSigla()=='lost')
-                        $arrLost[] = $situacaoFollow->getId();
-                }
 
 
                 if (array_search($certificado->getStatusFollowup(), $arrFollow )) {
