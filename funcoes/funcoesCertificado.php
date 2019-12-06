@@ -1215,7 +1215,7 @@ function salvarBoletoSafeToPay(){
         $boleto->setClienteId($cliente->getId());
         $boleto->setValor($valor_boleto);
         $boleto->setDescricao($certificado->getProduto()->getNome());
-        $boleto->setContasReceberId($contaReceber->getId());
+        //$boleto->setContasReceberId($contaReceber->getId());
 
         /*SALVANDO A URL DO BOLETO*/
         $boleto->setUrlBoleto($boleto_url);
