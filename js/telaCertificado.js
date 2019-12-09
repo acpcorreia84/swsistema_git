@@ -1507,286 +1507,294 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
     /*if (abrirModalCarregando)
         $('#modalCarregando').modal('show');*/
 
-    $('#idCertificado').val(certificado_id);
+    try {
+		$('#idCertificado').val(certificado_id);
 
-    var dadosajax = {
-        'certificado_id' : certificado_id,
-        'funcao' : 'carregar_modal_detalhar_certificado'
-    };
-    /*console.log("ID CERTIFICADO:"+certificado_id);*/
+		var dadosajax = {
+			'certificado_id' : certificado_id,
+			'funcao' : 'carregar_modal_detalhar_certificado'
+		};
+		/*console.log("ID CERTIFICADO:"+certificado_id);*/
 
-    $.ajax ({
-        url : 'funcoes/funcoesCertificado.php',
-        data : dadosajax,
-        type : 'POST',
-        cache : true,
-        beforeSend: function () {
-            $('#mensagemLoading').html('<i class="fa fa-lg fa-arrows"></i> Carregando a p&aacute;gina de detalhes do certificado');
-            $('#modalCarregando').modal('show');
-        },
-        error : function (){
-            $("#modalCarregando").modal('hide');
-            console.log(result, e);
-            alertErro ('Error CD6001 - Erro na a&ccedil;&atilde;o detalhar certificado,' + msnPadrao + '.');
-        },
-        success : function(result){
-            try {
-            	//console.log(result);
-                var resultado = JSON.parse(result);
-                var certificado = JSON.parse(resultado.dadosCertificado);
-                var pagamentos = JSON.parse(resultado.dadosPagamento);
-                var situacoes = JSON.parse(resultado.dadosSituacoes);
+		$.ajax ({
+			url : 'funcoes/funcoesCertificado.php',
+			data : dadosajax,
+			type : 'POST',
+			cache : true,
+			beforeSend: function () {
+				$('#mensagemLoading').html('<i class="fa fa-lg fa-arrows"></i> Carregando a p&aacute;gina de detalhes do certificado');
+				$('#modalCarregando').modal('show');
+			},
+			error : function (){
+				$("#modalCarregando").modal('hide');
+				console.log(result, e);
+				alertErro ('Error CD6001 - Erro na a&ccedil;&atilde;o detalhar certificado,' + msnPadrao + '.');
+			},
+			success : function(result){
+				try {
+					//console.log(result);
+					var resultado = JSON.parse(result);
+					var certificado = JSON.parse(resultado.dadosCertificado);
+					var pagamentos = JSON.parse(resultado.dadosPagamento);
+					var situacoes = JSON.parse(resultado.dadosSituacoes);
 
-                if (resultado.mensagem == 'Ok') {
+					if (resultado.mensagem == 'Ok') {
 
-                    /*
-                     * SET AS PERMISSOES DOS BOTOES
-                     * */
-                    var permissoes = JSON.parse(resultado.permissoes);
-                    if (permissoes.permiteAlterarConsultorCertificado == 'sim')
-                        $('#btnTrocarConsultor').prop("disabled",false);
-                    else
-                        $('#btnTrocarConsultor').prop("disabled",true);
+						/*
+						 * SET AS PERMISSOES DOS BOTOES
+						 * */
+						var permissoes = JSON.parse(resultado.permissoes);
+						if (permissoes.permiteAlterarConsultorCertificado == 'sim')
+							$('#btnTrocarConsultor').prop("disabled",false);
+						else
+							$('#btnTrocarConsultor').prop("disabled",true);
 
-                    /*
-                     * HABILITA O BOTAO APAGAR O CERTIFICADO
-                     * CASO HAJA PERMISSAO DE APAGAR O CERTIFICADO
-                     * */
-                    if (permissoes.permiteApagarCertificado == 'sim') {
-                        if (certificado.dataPagamento=='-' && certificado.dataValidacaoCertificado=='-' && (certificado.protocolo=='-'))
-                            $('#btnApagarCertificado').prop("disabled",false);
-                        else
-                            $('#btnApagarCertificado').prop("disabled",true);
-                    } else
-                        $('#btnApagarCertificado').prop("disabled",true);
-
-
-                    /*
-                     * HABILITA O BOTAO DE GERAR PROTOCOLO SE
-                     * SE JA FOI PAGO, SE NAO ESTIVER VALIDADO E SE NAO TIVER PROTOCOLO
-                     * */
-                    if ((permissoes.permiteGerarProtocolo == 'sim') && certificado.dataPagamento!='-' && certificado.dataValidacaoCertificado=='-' && (certificado.protocolo=='-')) {
-                        $('#btnGerarProtocolo').prop("disabled",false);
-                        $('#btnGerarProtocolo').prop("title", 'Gerar Protocolo');
-                    }
-                    else {
-                        $('#btnGerarProtocolo').prop("disabled",true);
-                        $('#btnGerarProtocolo').prop("title", resultado.mensagemErroGerarProtocolo);
-                    }
-
-                    /*
-                     * HABILITA O BOTAO DE RECIBO SE
-                     * SE JA FOI PAGO
-                     * */
-                    if (certificado.dataPagamento!='-')
-                        $('#btnCarregarModalGerarRecibo').prop("disabled",false);
-                    else
-                        $('#btnCarregarModalGerarRecibo').prop("disabled",true);
-                    /*
-                     * HABILITA O BOTAO DE DESCONTO SE
-                     * SE FOR DO PERFIL ALTA GESTAO OU SE
-                     * AINDA NAO FOI PAGO E NEM VALIDADO
-                     * */
-                    if ((certificado.dataPagamento=='-') && ( permissoes.permiteApagarCertificado=='sim' || certificado.dataValidacaoCertificado=='-') )
-                        $('#btnCarregarModalDesconto').prop("disabled",false);
-                    else
-                        $('#btnCarregarModalDesconto').prop("disabled",true);
-
-                    /*
-                     * HABILITA O BOTAO DE TROCAR PRODUTO SE
-                     * FOR DO PERFIL ALTA GESTAO OU SE
-                     * AINDA NAO FOI PAGO E NEM VALIDADO
-                     * */
-                    if ( (certificado.dataPagamento=='-') && (permissoes.permiteAlterarProduto=='sim' || certificado.dataValidacaoCertificado=='-') )
-                        $('#btnCarregarModalTrocaDeProduto').prop("disabled",false);
-                    else
-                        $('#btnCarregarModalTrocaDeProduto').prop("disabled",true);
-
-                    /*
-                     * HABILITA O BOTAO DE GERAR BOLETO SE
-                     * EXISTIR A FORMA DE PAGAMENTO FOR BOLETO, E AINDA NAO FOI PAGO
-                     * */
-                    if (certificado.formaPagamento=='Boleto' && certificado.dataPagamento=='-')
-                        $('#btnCarregarModalBoleto').prop("disabled",false);
-                    else
-                        $('#btnCarregarModalBoleto').prop("disabled",true);
-                    /*
-                     * HABILITA O BOTAO DE REVOGAR SE
-                     * EXISTIR PROTOCOLO, SE JA FOI VALIDADO E SE AINDA NAO FOI REVOGADO
-                     * */
-                    if ((certificado.protocolo!='-') && (certificado.dataValidacaoCertificado!='-') )
-                        $('#btnRevogarCertificado').prop("disabled",false);
-                    else
-                        $('#btnRevogarCertificado').prop("disabled",true);
-
-                    /*
-                     * HABILITA O BOTAO DE LIMPAR PROTOCOLO SE
-                     * EXISTIR PROTOCOLO, E AINDA NAO FOI VALIDADO
-                     * E SE ELE PUDER FAZER ESTA FUNCAO
-                     * */
-                    if (certificado.protocolo!='-' && (certificado.dataValidacaoCertificado=='-') && (permissoes.permiteApagarProtocolo == 'sim'))
-                        $('#btnLimparProtocolo').prop("disabled",false);
-                    else
-                        $('#btnLimparProtocolo').prop("disabled",true);
-                    /*
-                     * FIM DAS PERMISSOES DOS BOTOES
-                     * */
+						/*
+						 * HABILITA O BOTAO APAGAR O CERTIFICADO
+						 * CASO HAJA PERMISSAO DE APAGAR O CERTIFICADO
+						 * */
+						if (permissoes.permiteApagarCertificado == 'sim') {
+							if (certificado.dataPagamento=='-' && certificado.dataValidacaoCertificado=='-' && (certificado.protocolo=='-'))
+								$('#btnApagarCertificado').prop("disabled",false);
+							else
+								$('#btnApagarCertificado').prop("disabled",true);
+						} else
+							$('#btnApagarCertificado').prop("disabled",true);
 
 
+						/*
+						 * HABILITA O BOTAO DE GERAR PROTOCOLO SE
+						 * SE JA FOI PAGO, SE NAO ESTIVER VALIDADO E SE NAO TIVER PROTOCOLO
+						 * */
+						if ((permissoes.permiteGerarProtocolo == 'sim') && certificado.dataPagamento!='-' && certificado.dataValidacaoCertificado=='-' && (certificado.protocolo=='-')) {
+							$('#btnGerarProtocolo').prop("disabled",false);
+							$('#btnGerarProtocolo').prop("title", 'Gerar Protocolo');
+						}
+						else {
+							$('#btnGerarProtocolo').prop("disabled",true);
+							$('#btnGerarProtocolo').prop("title", resultado.mensagemErroGerarProtocolo);
+						}
 
-                    $('#ioCodCertificado').val(certificado.id);
-                    $('#dcSpanDataCompra').html(certificado.dataCompra);
-                    $('#dcSpanCodCertificado').html(certificado.id);
-                    $('#dcSpanIdCliente').html(certificado.clienteId);
-                    $('#idCliente').val(certificado.clienteId);
-                    $('#tcSpanNomeContador').html(certificado.nomeContador);
-                    $('#dcSpanNomeCliente').html(certificado.nomeCliente);
-                    $('#dcSpanProtocolo').html(certificado.protocolo);
-                    $('#dcSpanNomeProduto').html(certificado.nomeProduto);
-                    $('#dcSpanPrecoProduto').html(certificado.precoProduto);
-                    $('#dcSpanDesconto').html(certificado.desconto);
-                    $('#dcSpanValorTotal').html(certificado.valorTotal);
-                    $('#dcSpanDataValidacao').html(certificado.dataValidacaoCertificado);
-                    $('#dcSpanDataPagamento').html(certificado.dataPagamento);
-                    $('#dcSpanFormaPagamento').html(certificado.formaPagamento);
-                    $('#dcSpanConsultor').html(certificado.consultor);
-                    $('#dcSpanAgrValidacao').html(certificado.agr);
-                    $('#dcSpanValidadeCertificado').html(certificado.validade);
+						/*
+						 * HABILITA O BOTAO DE RECIBO SE
+						 * SE JA FOI PAGO
+						 * */
+						if (certificado.dataPagamento!='-')
+							$('#btnCarregarModalGerarRecibo').prop("disabled",false);
+						else
+							$('#btnCarregarModalGerarRecibo').prop("disabled",true);
+						/*
+						 * HABILITA O BOTAO DE DESCONTO SE
+						 * SE FOR DO PERFIL ALTA GESTAO OU SE
+						 * AINDA NAO FOI PAGO E NEM VALIDADO
+						 * */
+						if ((certificado.dataPagamento=='-') && ( permissoes.permiteApagarCertificado=='sim' || certificado.dataValidacaoCertificado=='-') )
+							$('#btnCarregarModalDesconto').prop("disabled",false);
+						else
+							$('#btnCarregarModalDesconto').prop("disabled",true);
 
+						/*
+						 * HABILITA O BOTAO DE TROCAR PRODUTO SE
+						 * FOR DO PERFIL ALTA GESTAO OU SE
+						 * AINDA NAO FOI PAGO E NEM VALIDADO
+						 * */
+						if ( (certificado.dataPagamento=='-') && (permissoes.permiteAlterarProduto=='sim' || certificado.dataValidacaoCertificado=='-') )
+							$('#btnCarregarModalTrocaDeProduto').prop("disabled",false);
+						else
+							$('#btnCarregarModalTrocaDeProduto').prop("disabled",true);
 
-                    /*
-                    * MOSTRA CONTATOS DO CLIENTE E DO CONTADOR
-                    * */
-                    montarTabelaDinamica(certificado.colunasContatos, certificado.contatosCliente, 'tabelaContatosCliente', 'divTabelaContatosCliente');
+						/*
+						 * HABILITA O BOTAO DE GERAR BOLETO SE
+						 * EXISTIR A FORMA DE PAGAMENTO FOR BOLETO, E AINDA NAO FOI PAGO
+						 * */
+						if (certificado.formaPagamento=='Boleto' && certificado.dataPagamento=='-')
+							$('#btnCarregarModalBoleto').prop("disabled",false);
+						else
+							$('#btnCarregarModalBoleto').prop("disabled",true);
+						/*
+						 * HABILITA O BOTAO DE REVOGAR SE
+						 * EXISTIR PROTOCOLO, SE JA FOI VALIDADO E SE AINDA NAO FOI REVOGADO
+						 * */
+						if ((certificado.protocolo!='-') && (certificado.dataValidacaoCertificado!='-') )
+							$('#btnRevogarCertificado').prop("disabled",false);
+						else
+							$('#btnRevogarCertificado').prop("disabled",true);
 
-                    /*
-                    * INSERE O VALOR TOTAL SEM FORMATACAO NA TELA DE DESCONTO PARA ABRIR O CAMPO DE VOUCHER CASO SEJA NECESSARIO
-                    * */
-                    $('#mdEdtPrecoOriginal').val(certificado.valorTotalSemFormatacao);
-
-
-                    /*CAMPO E E-MAIL DO MODALGERARBOLETO*/
-                    $('#gbSpanEmail').html(certificado.email);
-
-                    /*
-                    * DADOS DO PAGAMENTO
-                    * */
-                    if (pagamentos.mensagem == 'Ok') {
-                        montarTabelaDinamica(pagamentos.colunasPagamento, pagamentos.pagamento, 'tabelaPagamentosCertificado', 'divTabelaPagamentosCertificado');
-                    }
-
-                    /*
-                    * DADOS DA SITUACAO
-                    * */
-                    if (situacoes.mensagem == 'Ok') {
-                        montarTabelaDinamica(situacoes.colunasSituacoes, situacoes.situacoes, 'tabelaSituacoesCertificado', 'divTabelaSituacoesCertificado');
-                    }
-
-                    $('#modalCarregando').modal('hide');
-
-                    if (desabilitarBotoes == 'sim')
-                        desabilitarTelaDetalharCertificados();
-
-
-                    /*
-                    * PREPARAR O MODAL DE COMPROVANTES DE PAGAMENTO
-                    * */
-
-                    /*
-                     * PREECHER INFORMACOES DO MODAL DE INFORMAR PAGAMENTO
-                     * */
-                    $('#edtCertificadoCartaoCredito').val($('#ioCodCertificado').val());
-                    $('#edtEmailCartaoCredito').val(certificado.email);
-                    $('#edtDocumentoCartaoCredito').val(certificado.documento);
-                    $('#ipSpanCliente').html($('#dcSpanIdCliente').html() +' - ' +$('#dcSpanNomeCliente').html());
-                    $('#ipSpanVendedor').html($('#dcSpanConsultor').html());
-                    $('#ipSpanProduto').html($('#dcSpanNomeProduto').html());
-                    $('#ipSpanPreco').html($('#dcSpanPrecoProduto').html() +'-'+ $('#dcSpanDesconto').html() +'='+ $('#dcSpanValorTotal').html());
-                    $('#ipSpanForma').html($('#dcSpanFormaPagamento').html());
-                    $('#formaPagamentoId').val(certificado.formaPagamentoId);
-                    $('#ipPrecoCertificado').val(certificado.valorTotalSemFormatacao);
-
-                    /*PARA O SAFETOPAY*/
-                    $('#edtDocumentoLogradouro').val(certificado.logradouro);
-                    $('#edtDocumentoBairro').val(certificado.bairro);
-                    $('#edtDocumentoNumero').val(certificado.numero);
-                    $('#edtDocumentoComplemento').val(certificado.complemento);
-                    $('#edtDocumentoCep').val(certificado.cep);
-                    $('#edtDocumentoCidade').val(certificado.cidade);
-                    $('#edtDocumentoUf').val(certificado.uf);
-                    $('#precoProdutoSemFormatacao').val(certificado.precoProdutoSemFormatacao);
-                    $('#codigoProdutoSafeweb').val(certificado.codigoProdutoSafeweb);
+						/*
+						 * HABILITA O BOTAO DE LIMPAR PROTOCOLO SE
+						 * EXISTIR PROTOCOLO, E AINDA NAO FOI VALIDADO
+						 * E SE ELE PUDER FAZER ESTA FUNCAO
+						 * */
+						if (certificado.protocolo!='-' && (certificado.dataValidacaoCertificado=='-') && (permissoes.permiteApagarProtocolo == 'sim'))
+							$('#btnLimparProtocolo').prop("disabled",false);
+						else
+							$('#btnLimparProtocolo').prop("disabled",true);
+						/*
+						 * FIM DAS PERMISSOES DOS BOTOES
+						 * */
 
 
 
+						$('#ioCodCertificado').val(certificado.id);
+						$('#dcSpanDataCompra').html(certificado.dataCompra);
+						$('#dcSpanCodCertificado').html(certificado.id);
+						$('#dcSpanIdCliente').html(certificado.clienteId);
+						$('#idCliente').val(certificado.clienteId);
+						$('#tcSpanNomeContador').html(certificado.nomeContador);
+						$('#dcSpanNomeCliente').html(certificado.nomeCliente);
+						$('#dcSpanProtocolo').html(certificado.protocolo);
+						$('#dcSpanNomeProduto').html(certificado.nomeProduto);
+						$('#dcSpanPrecoProduto').html(certificado.precoProduto);
+						$('#dcSpanDesconto').html(certificado.desconto);
+						$('#dcSpanValorTotal').html(certificado.valorTotal);
+						$('#dcSpanDataValidacao').html(certificado.dataValidacaoCertificado);
+						$('#dcSpanDataPagamento').html(certificado.dataPagamento);
+						$('#dcSpanFormaPagamento').html(certificado.formaPagamento);
+						$('#dcSpanConsultor').html(certificado.consultor);
+						$('#dcSpanAgrValidacao').html(certificado.agr);
+						$('#dcSpanValidadeCertificado').html(certificado.validade);
 
 
-                    /*
-                    * SE O PEDIDO TIVER COMPROVANTE DE PAGAMENTO E ESTIVER PAGO (PODE SER QUE TENHA COMPROVANTE POREM TENHA SIDO EXTORNADO)
-                    * MOSTRA OS DADOS DO MESMO
-                    * SE NAO, ABRE A TELA DE INSERIR INFORMACOES DO PAGAMENTO OU O CARTAO DE CREDITO
-                    * */
+						/*
+						* MOSTRA CONTATOS DO CLIENTE E DO CONTADOR
+						* */
+						montarTabelaDinamica(certificado.colunasContatos, certificado.contatosCliente, 'tabelaContatosCliente', 'divTabelaContatosCliente');
 
-                    if ((pagamentos.comprovantePagamento.length > 2) && (certificado.dataPagamento!='-')){
-                        $('#btnInformarPagamento').css({display: 'block', visibility: 'visible'});
-                        var comprovantePagamento = JSON.parse(pagamentos.comprovantePagamento);
-                        $('#panelInformacoesPagamento').css({display: 'block', visibility: 'visible'});
-                        $('#panelCrudPagamento').css({display: 'none', visibility: 'hidden'});
-
-                        $('#ipSpanComprovanteCodigo').html(comprovantePagamento.id);
-                        $('#ipSpanImagemComprovante').html(comprovantePagamento.thumbImagemComprovante);
-                        $('#ipSpanIdCertificado').html(certificado.id);
-                        $('#ipSpanDataTransacao').html(comprovantePagamento.dataTransacao);
-                        $('#ipSpanValorPago').html(comprovantePagamento.valorPago);
-                        $('#ipSpanCodigoPagamento').html(comprovantePagamento.codigoPagamento);
-                        $('#ipSpanFormaPagamento').html($('#dcSpanFormaPagamento').html());
-                        $('#ipSpanComprovante').html('');
-                        $('#ipSpanObservacao').html(comprovantePagamento.observacao);
-                    }
-                    /*
-                    * SE NAO TIVER COMPROVANTE E NAO TIVER PAGO MOSTRA APENAS A OPCAO DE INFORMAR COMPROVANTE
-                    * */
-                    else if ( (pagamentos.comprovantePagamento.length <= 2) && (certificado.dataPagamento!='-') ){
-                        $('#btnInformarPagamento').css({display: 'block', visibility: 'visible'});
-                        $('#panelInformacoesPagamento').css({display: 'none', visibility: 'hidden'});
-                        $('#panelCrudPagamento').css({display: 'block', visibility: 'visible'});
+						/*
+						* INSERE O VALOR TOTAL SEM FORMATACAO NA TELA DE DESCONTO PARA ABRIR O CAMPO DE VOUCHER CASO SEJA NECESSARIO
+						* */
+						$('#mdEdtPrecoOriginal').val(certificado.valorTotalSemFormatacao);
 
 
-                        $('#panelCartaoCredito').css({display: 'none', visibility: 'hidden'});
-                        $('#panelInformacoesPagamentoOutrosTipos').css({display: 'block', visibility: 'visible'});
+						/*CAMPO E E-MAIL DO MODALGERARBOLETO*/
+						$('#gbSpanEmail').html(certificado.email);
 
-                    }
-                    /*
-                    * SE NAO ESTIVER PAGO MOSTRA APENAS O CARTAO DE CREDITO SE ESTA FOI A FORMA DE PAGAMENTO ESCOLHIDA
-                    * */
-                    else if (certificado.dataPagamento=='-') {
-                        $('#panelInformacoesPagamento').css({display: 'none', visibility: 'hidden'});
-                        $('#panelInformacoesPagamentoOutrosTipos').css({display: 'none', visibility: 'hidden'});
-                        $('#panelCrudPagamento').css({display: 'block', visibility: 'visible'});
+						/*
+						* DADOS DO PAGAMENTO
+						* */
+						if (pagamentos.mensagem == 'Ok') {
+							montarTabelaDinamica(pagamentos.colunasPagamento, pagamentos.pagamento, 'tabelaPagamentosCertificado', 'divTabelaPagamentosCertificado');
+						}
 
-                        /*
-                        SE NAO HOUVER PAGAMENTO E A FORMA FOI CARTAO MOSTRA O FORM DO CARTAO
-                        CASO CONTRARIO DESABILITA O BOTAO DE PAGAMENTO
-                        */
-                        if ($('#formaPagamentoId').val() == '6') { /*CARTAO DE CREDITO ONLINE*/
-                            $('#panelCartaoCredito').css({display: 'block', visibility: 'visible'});
-                        }
-                        else {
-                            $('#btnInformarPagamento').css({display: 'none', visibility: 'hidden'});
-                            $('#panelCartaoCredito').css({display: 'none', visibility: 'hidden'});
-                        }
+						/*
+						* DADOS DA SITUACAO
+						* */
+						if (situacoes.mensagem == 'Ok') {
+							montarTabelaDinamica(situacoes.colunasSituacoes, situacoes.situacoes, 'tabelaSituacoesCertificado', 'divTabelaSituacoesCertificado');
+						}
 
-                    }
-                }
-                /*FIM DO RESULTADO = Ok*/
-            } catch (e) {
-                $("#modalCarregando").modal('hide');
-                console.log(result, e);
-                alertErro ('Error CD6002 - Erro na a&ccedil;&atilde;o detalhar certificado,' + msnPadrao + '.');
+						$('#modalCarregando').modal('hide');
 
-            }
-        }
-    });
+						if (desabilitarBotoes == 'sim')
+							desabilitarTelaDetalharCertificados();
+
+
+						/*
+						* PREPARAR O MODAL DE COMPROVANTES DE PAGAMENTO
+						* */
+
+						/*
+						 * PREECHER INFORMACOES DO MODAL DE INFORMAR PAGAMENTO
+						 * */
+						$('#edtCertificadoCartaoCredito').val($('#ioCodCertificado').val());
+						$('#edtEmailCartaoCredito').val(certificado.email);
+						$('#edtDocumentoCartaoCredito').val(certificado.documento);
+						$('#ipSpanCliente').html($('#dcSpanIdCliente').html() +' - ' +$('#dcSpanNomeCliente').html());
+						$('#ipSpanVendedor').html($('#dcSpanConsultor').html());
+						$('#ipSpanProduto').html($('#dcSpanNomeProduto').html());
+						$('#ipSpanPreco').html($('#dcSpanPrecoProduto').html() +'-'+ $('#dcSpanDesconto').html() +'='+ $('#dcSpanValorTotal').html());
+						$('#ipSpanForma').html($('#dcSpanFormaPagamento').html());
+						$('#formaPagamentoId').val(certificado.formaPagamentoId);
+						$('#ipPrecoCertificado').val(certificado.valorTotalSemFormatacao);
+
+						/*PARA O SAFETOPAY*/
+						$('#edtDocumentoLogradouro').val(certificado.logradouro);
+						$('#edtDocumentoBairro').val(certificado.bairro);
+						$('#edtDocumentoNumero').val(certificado.numero);
+						$('#edtDocumentoComplemento').val(certificado.complemento);
+						$('#edtDocumentoCep').val(certificado.cep);
+						console.log(certificado.cidade);
+						$('#edtDocumentoCidade').val(certificado.cidade);
+						$('#edtDocumentoUf').val(certificado.uf);
+						$('#precoProdutoSemFormatacao').val(certificado.precoProdutoSemFormatacao);
+						$('#codigoProdutoSafeweb').val(certificado.codigoProdutoSafeweb);
+
+
+
+
+
+						/*
+						* SE O PEDIDO TIVER COMPROVANTE DE PAGAMENTO E ESTIVER PAGO (PODE SER QUE TENHA COMPROVANTE POREM TENHA SIDO EXTORNADO)
+						* MOSTRA OS DADOS DO MESMO
+						* SE NAO, ABRE A TELA DE INSERIR INFORMACOES DO PAGAMENTO OU O CARTAO DE CREDITO
+						* */
+
+						if ((pagamentos.comprovantePagamento.length > 2) && (certificado.dataPagamento!='-')){
+							$('#btnInformarPagamento').css({display: 'block', visibility: 'visible'});
+							var comprovantePagamento = JSON.parse(pagamentos.comprovantePagamento);
+							$('#panelInformacoesPagamento').css({display: 'block', visibility: 'visible'});
+							$('#panelCrudPagamento').css({display: 'none', visibility: 'hidden'});
+
+							$('#ipSpanComprovanteCodigo').html(comprovantePagamento.id);
+							$('#ipSpanImagemComprovante').html(comprovantePagamento.thumbImagemComprovante);
+							$('#ipSpanIdCertificado').html(certificado.id);
+							$('#ipSpanDataTransacao').html(comprovantePagamento.dataTransacao);
+							$('#ipSpanValorPago').html(comprovantePagamento.valorPago);
+							$('#ipSpanCodigoPagamento').html(comprovantePagamento.codigoPagamento);
+							$('#ipSpanFormaPagamento').html($('#dcSpanFormaPagamento').html());
+							$('#ipSpanComprovante').html('');
+							$('#ipSpanObservacao').html(comprovantePagamento.observacao);
+						}
+						/*
+						* SE NAO TIVER COMPROVANTE E NAO TIVER PAGO MOSTRA APENAS A OPCAO DE INFORMAR COMPROVANTE
+						* */
+						else if ( (pagamentos.comprovantePagamento.length <= 2) && (certificado.dataPagamento!='-') ){
+							$('#btnInformarPagamento').css({display: 'block', visibility: 'visible'});
+							$('#panelInformacoesPagamento').css({display: 'none', visibility: 'hidden'});
+							$('#panelCrudPagamento').css({display: 'block', visibility: 'visible'});
+
+
+							$('#panelCartaoCredito').css({display: 'none', visibility: 'hidden'});
+							$('#panelInformacoesPagamentoOutrosTipos').css({display: 'block', visibility: 'visible'});
+
+						}
+						/*
+						* SE NAO ESTIVER PAGO MOSTRA APENAS O CARTAO DE CREDITO SE ESTA FOI A FORMA DE PAGAMENTO ESCOLHIDA
+						* */
+						else if (certificado.dataPagamento=='-') {
+							$('#panelInformacoesPagamento').css({display: 'none', visibility: 'hidden'});
+							$('#panelInformacoesPagamentoOutrosTipos').css({display: 'none', visibility: 'hidden'});
+							$('#panelCrudPagamento').css({display: 'block', visibility: 'visible'});
+
+							/*
+							SE NAO HOUVER PAGAMENTO E A FORMA FOI CARTAO MOSTRA O FORM DO CARTAO
+							CASO CONTRARIO DESABILITA O BOTAO DE PAGAMENTO
+							*/
+							if ($('#formaPagamentoId').val() == '6') { /*CARTAO DE CREDITO ONLINE*/
+								$('#panelCartaoCredito').css({display: 'block', visibility: 'visible'});
+							}
+							else {
+								$('#btnInformarPagamento').css({display: 'none', visibility: 'hidden'});
+								$('#panelCartaoCredito').css({display: 'none', visibility: 'hidden'});
+							}
+
+						}
+					}
+					/*FIM DO RESULTADO = Ok*/
+				} catch (e) {
+					$("#modalCarregando").modal('hide');
+					console.log(result, e);
+					alertErro ('Error CD6002 - Erro na a&ccedil;&atilde;o detalhar certificado,' + msnPadrao + '.');
+
+				}
+			}
+		});
+		return;
+    } catch (e) {
+        $('#modalCarregando').modal('hide');
+        console.log(result, e);
+        alertErro ('Error CD6003 - Erro ao carregar tela de detalhar certificado.,' + msnPadrao + ' '+e + '.');
+    }
 };
 
 
