@@ -1799,7 +1799,7 @@ function detalharCertificado(){
             'agr'=>($certificado->getUsuarioValidouId())?utf8_encode($certificado->getUsuarioValidouId() .' - ' . $certificado->getUsuarioRelatedByUsuarioValidouId()->getNome()):'---',
             'validade'=>$validade, 'contatosCliente'=>json_encode($contatosCliente), 'colunasContatos'=>json_encode($colunasContatos),
             'documento'=>removeTracoPontoBarra($cliente->getCpfCnpj()), 'logradouro'=>utf8_encode($cliente->getEndereco()), 'numero'=>$cliente->getNumero(),
-			'bairro'=>utf8_encode($cliente->getBairro()),'complemento'=>json_encode($cliente->getComplemento()),'cep'=>removeTracoPontoBarra($cliente->getCep()), 'cidade'=>json_encode($cliente->getCidade())  ,'uf'=>$cliente->getUf(),
+			'bairro'=>utf8_encode($cliente->getBairro()),'complemento'=>json_encode($cliente->getComplemento()),'cep'=>removeTracoPontoBarra($cliente->getCep()), 'cidade'=>$cliente->getCidade()  ,'uf'=>$cliente->getUf(),
             'precoProdutoSemFormatacao'=>$valor, 'codigoProdutoSafeweb'=>$certificado->getProduto()->getProdutoId()
         );
         //var_dump($dadosCertificado);
