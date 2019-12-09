@@ -11,6 +11,10 @@ $secretKey = $retorno->SecretKey;
 $transactionStatus = $retorno->TransactionStatus;
 $tId = $retorno->TransactionID;
 
+/*$secretKey = '28517135D5E1438398289AA82447E1B82E4B9E5EE829425DA0D9C082A1C5F6FF';
+$transactionStatus = '3';
+$tId = '1540052';*/
+
 if ( ($secretKey == '28517135D5E1438398289AA82447E1B82E4B9E5EE829425DA0D9C082A1C5F6FF' && ($transactionStatus=="3"))  ) {
 		$cBol = new Criteria();
 		$cBol->add(BoletoPeer::TID, $tId);
@@ -58,7 +62,7 @@ if ( ($secretKey == '28517135D5E1438398289AA82447E1B82E4B9E5EE829425DA0D9C082A1C
 				//INSERI UM USUÁRIO NO SISTEMA CHAMADO SAFE2PAY QUE IRÁ GERAR UMA SITUÇÃO DE RETORNO
 				$certSit->setUsuarioId(868);
 				
-				$cSit->add(SituacaoPeer::SIGLA, 'pag');				
+				$cSit->add(SituacaoPeer::SIGLA, 'liqpag');
 				$certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
 				$certSit->setData(date("Y-m-d H:i:s",mtime()));
 				$certSit->save();
