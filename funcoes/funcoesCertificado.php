@@ -1790,7 +1790,6 @@ function detalharCertificado(){
             array('nome'=>'Tipo'), array('nome'=>'Telefone'), array('nome'=>'Celular'), array('nome'=>'E-mail')
         );
 
-
         $dadosCertificado = array(
             'id'=>$idCertificado, 'clienteId'=>$idCliente, 'nomeContador'=>utf8_encode($contador), 'nomeCliente'=>utf8_encode($nomeCliente), 'protocolo'=>$protocolo,
             'nomeProduto'=>$certificado->getProduto()->getId() .' - ' .  utf8_encode($nomeProduto), 'precoProduto'=>formataMoeda($preco), 'desconto'=>formataMoeda($desconto), 'valorTotal'=>formataMoeda($valor),
@@ -1799,10 +1798,11 @@ function detalharCertificado(){
             'consultor'=>utf8_encode($certificado->getUsuario()->getId() . ' - '. $certificado->getUsuario()->getNome()), 'email'=>$email, 'valorTotalSemFormatacao'=>$valor,
             'agr'=>($certificado->getUsuarioValidouId())?utf8_encode($certificado->getUsuarioValidouId() .' - ' . $certificado->getUsuarioRelatedByUsuarioValidouId()->getNome()):'---',
             'validade'=>$validade, 'contatosCliente'=>json_encode($contatosCliente), 'colunasContatos'=>json_encode($colunasContatos),
-            'documento'=>removeTracoPontoBarra($cliente->getCpfCnpj()), 'logradouro'=>$cliente->getEndereco(), 'numero'=>$cliente->getNumero(),
-			'bairro'=>$cliente->getBairro(),'complemento'=>$cliente->getComplemento(),'cep'=>removeTracoPontoBarra($cliente->getCep()), 'cidade'=>$cliente->getCidade()  ,'uf'=>$cliente->getUf(),
+            'documento'=>removeTracoPontoBarra($cliente->getCpfCnpj()), 'logradouro'=>utf8_encode($cliente->getEndereco()), 'numero'=>$cliente->getNumero(),
+			'bairro'=>utf8_encode($cliente->getBairro()),'complemento'=>json_encode($cliente->getComplemento()),'cep'=>removeTracoPontoBarra($cliente->getCep()), 'cidade'=>json_encode($cliente->getCidade())  ,'uf'=>$cliente->getUf(),
             'precoProdutoSemFormatacao'=>$valor, 'codigoProdutoSafeweb'=>$certificado->getProduto()->getProdutoId()
         );
+        //var_dump($dadosCertificado);
 
 
         /*
@@ -2026,6 +2026,7 @@ function detalharCertificado(){
         $situacoes = array();
         foreach ($situacoesCertificado as $situacaoCertificado) {
             if ($situacaoCertificado->getUsuario()) $nomeUsuario = $situacaoCertificado->getUsuario()->getNome(); else $nomeUsuario = '-';
+
             $situacoes[] = array('Id' => $situacaoCertificado->getId(),
                 utf8_encode('Usuário') => utf8_encode($nomeUsuario),
                 'Descricao' => utf8_encode($situacaoCertificado->getSituacao()->getNome()),
@@ -2109,6 +2110,7 @@ function detalharCertificado(){
             )
         );
     }catch(Exception $e){
+
         erroEmail($e->getMessage(),"Erro funcao de detalhar o certificado");
         echo $e->getMessage();
     }
