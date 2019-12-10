@@ -33,23 +33,24 @@ $tId = '1540052';*/
                 /*
                  * CODIGO DE RECARTEIRIZACAO DE USUSUARIO
                  * */
-                if ($certificado->getUsuarioId() != $boleto->getUsuarioId()) {
+                if ($boleto->getUsuarioId())
+                    if ($certificado->getUsuarioId() != $boleto->getUsuarioId()) {
 
-                    $cSit = new Criteria();
-                    $certSit = new CertificadoSituacao();
-                    $certSit->setCertificadoId($certificado->getId());
+                        $cSit = new Criteria();
+                        $certSit = new CertificadoSituacao();
+                        $certSit->setCertificadoId($certificado->getId());
 
-                    //O USUARIO GUIAR VAI RECARTEIRIZAR O PEDIDO PARA O USUARIO QUE GEROU O BOLETO
-                    $certSit->setUsuarioId(1039);
-                    $certSit->setComentario('Certificado recarteirizado pela pol&iacute;tica de emiss&atilde;o do boleto, Usu&aacute;rio anterior: '.$certificado->getUsuario()->getNome());
+                        //O USUARIO GUIAR VAI RECARTEIRIZAR O PEDIDO PARA O USUARIO QUE GEROU O BOLETO
+                        $certSit->setUsuarioId(1039);
+                        $certSit->setComentario('Certificado recarteirizado pela pol&iacute;tica de emiss&atilde;o do boleto, Usu&aacute;rio anterior: '.$certificado->getUsuario()->getNome());
 
-                    $cSit->add(SituacaoPeer::SIGLA, 'recartbol');
-                    $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
-                    $certSit->setData(date("Y-m-d H:i:s",mtime()));
-                    $certSit->save();
-                    $certificado->getUsuarioId($boleto->getId());
+                        $cSit->add(SituacaoPeer::SIGLA, 'recartbol');
+                        $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
+                        $certSit->setData(date("Y-m-d H:i:s",mtime()));
+                        $certSit->save();
+                        $certificado->getUsuarioId($boleto->getId());
 
-                }
+                    }
 
                 if ($certificado) {
                     $certificado->setDataConfirmacaoPagamento(date('Y-m-d'));
