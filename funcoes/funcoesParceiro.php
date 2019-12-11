@@ -6,7 +6,7 @@ if (isset($_POST['parceiro_id']) && $_POST['parceiro_id']!= null && $_POST['parc
     $parceiro_id = $_POST['parceiro_id'];
 }
 $funcao = $_POST['funcao'];
-//VARIAVEL PARA A FUNÇÃO INSERIR OBSERVAÇÃO
+//VARIAVEL PARA A FUNï¿½ï¿½O INSERIR OBSERVAï¿½ï¿½O
 
 if ($funcao == 'carregar_parceiros'){carregar_parceiros();}
 if ($funcao == 'carregar_dados_paginacao'){carregar_dados_paginacao();}
@@ -98,9 +98,9 @@ function carregar_usuarios_parceiro($parceiro_id) {
             $aux = '$("#idParceiroDesvincular").val("'.$parceiroUsuario->getParceiroId().'");';
             $aux.= '$("#idUsuarioDesvincular").val("'.$parceiroUsuario->getUsuarioId().'");';
             $aux.= '$("#nomeUsuarioDesvincular").html(" <strong>'.utf8_encode($parceiroUsuario->getUsuario()->getNome()).'</strong> ")';
-            $usuarios[] = array('Id'=>$parceiroUsuario->getUsuario()->getId(), utf8_encode('Usuário')=>utf8_encode($parceiroUsuario->getUsuario()->getNome()),
+            $usuarios[] = array('Id'=>$parceiroUsuario->getUsuario()->getId(), utf8_encode('Usuï¿½rio')=>utf8_encode($parceiroUsuario->getUsuario()->getNome()),
                 'Tipo'=>utf8_encode($parceiroUsuario->getParceiroUsuarioTipo()->getNome()),
-                utf8_encode('Ação')=>"<a title='Desvincular Usu&aacute;rio' data-toggle='modal' data-target='#desvincularUsuario' onclick='$aux'> <i class='fa fa-trash'></i> </a>"
+                utf8_encode('Aï¿½ï¿½o')=>"<a title='Desvincular Usu&aacute;rio' data-toggle='modal' data-target='#desvincularUsuario' onclick='$aux'> <i class='fa fa-trash'></i> </a>"
 
                 /*$("#idParceiroDesvincular").val("'.$parceiroUsuario->getParceiroId().'"); $("#idUsuarioDesvincular").val("'.$parceiroUsuario->getUsuarioId().'");*/
             );
@@ -108,7 +108,7 @@ function carregar_usuarios_parceiro($parceiro_id) {
 
 
         $colunas = array(
-            array('nome'=>'Id'), array('nome'=>utf8_encode('Usuário')), array('nome'=>'Tipo'), array('nome'=>utf8_encode('Ação'))
+            array('nome'=>'Id'), array('nome'=>utf8_encode('Usuï¿½rio')), array('nome'=>'Tipo'), array('nome'=>utf8_encode('Aï¿½ï¿½o'))
         );
         echo "Ok&&".json_encode($colunas)."&&".json_encode($usuarios);
     }catch(Exception $e){
@@ -206,6 +206,18 @@ function carregar_parceiros(){
         else
             $offSet = 0;
 
+        $usuarioLogado = ControleAcesso::getUsuarioLogado();
+        $arrParceirosUsuario = array();
+        if ($usuarioLogado->getPerfilId() != 4) {
+            $cParceiroUsuario = new Criteria();
+            $cParceiroUsuario->add(ParceiroUsuarioPeer::USUARIO_ID, $usuarioLogado->getId());
+            $parceirosUsuarios = ParceiroUsuarioPeer::doSelect($cParceiroUsuario);
+            foreach ($parceirosUsuarios as $parceiroUsuario)
+                $arrParceirosUsuario[] = $parceiroUsuario->getParceiroId();
+
+            $cParceiro->add(ParceiroPeer::ID, $arrParceirosUsuario, Criteria::IN);
+        }
+
         $cParceiro->setLimit($_POST['itensPorPagina']);
         $cParceiro->setOffset($offSet);
 
@@ -225,13 +237,13 @@ function carregar_parceiros(){
 
             $parceiros[] =  array(' '=>(++$key),'Id'=>$parceiro->getId(),'.'=>$canal,'Nome'=>utf8_encode($parceiro->getNome()), 'Empresa'=> (utf8_encode($parceiro->getEmpresa()))?utf8_encode($parceiro->getEmpresa()):'---',
                 'Localidade'=> utf8_encode($parceiro->getCidade() .'/' . $parceiro->getUf()), 'Celular'=>($parceiro->getCelular())?$parceiro->getCelular():'---', 'Telefone'=> ($parceiro->getFone())?$parceiro->getFone():'---',
-                utf8_encode('Ação')=>'<button class="btn btn-primary" onclick="$(\'#detalharParceiro\').modal(\'show\'); detalhar_parceiro('.$parceiro->getId().')"><i class="fa fa-arrows"></i></button> '
+                utf8_encode('Aï¿½ï¿½o')=>'<button class="btn btn-primary" onclick="$(\'#detalharParceiro\').modal(\'show\'); detalhar_parceiro('.$parceiro->getId().')"><i class="fa fa-arrows"></i></button> '
             );
         }
 
         $colunas = array(
             array('nome'=>' '),array('nome'=>'Id'), array('nome'=>'.'),array('nome'=>'Nome'), array('nome'=>'Empresa'), array('nome'=>'Localidade'),
-            array('nome'=>'Celular'), array('nome'=>'Telefone'),  array('nome'=>utf8_encode('Ação'))
+            array('nome'=>'Celular'), array('nome'=>'Telefone'),  array('nome'=>utf8_encode('Aï¿½ï¿½o'))
         );
 
         $retorno = array();
@@ -274,7 +286,7 @@ function carregar_dados_paginacao(){
 function detalhar_parceiro($parceiro_id){
 
     try {
-        //Cabeçalho do modal detalhar Parceiro
+        //Cabeï¿½alho do modal detalhar Parceiro
         $parceiro =  ParceiroPeer::retrieveByPk($parceiro_id);
         $cidade = utf8_encode($parceiro->getCidade());
         $contatos = $cidade." - ".$parceiro->getUf().' | Fones: '.$parceiro->getCelular();
@@ -619,13 +631,13 @@ function detalhar_parceiro($parceiro_id){
             $cLancamentosParceiro->addDescendingOrderByColumn(ParceiroLancamentoPeer::DATA_LANCAMENTO);
             $lancamentosComissao = $registroComissao->getParceiroLancamentos($cLancamentosParceiro);
 
-            $quadroResumo[] = array(utf8_encode('Descrição')=>utf8_encode('Vendas e Validações ('.$parceiro->getComissaoVendaValidacao().'%)'),
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>utf8_encode('Vendas e Validaï¿½ï¿½es ('.$parceiro->getComissaoVendaValidacao().'%)'),
                 $tituloReceita=>formataMoeda($registroComissao->getVendaValidacao() * $coeficienteVendaValidacao), 'Despesas'=> '-'
             );
-            $quadroResumo[] = array(utf8_encode('Descrição')=>utf8_encode('Apenas Vendidos ('.$parceiro->getComissaoVenda().'%)'),
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>utf8_encode('Apenas Vendidos ('.$parceiro->getComissaoVenda().'%)'),
                 $tituloReceita=>formataMoeda($registroComissao->getVenda() * $coeficienteVenda), 'Despesas'=> '-'
             );
-            $quadroResumo[] = array(utf8_encode('Descrição')=>utf8_encode('Apenas Validados ('.$parceiro->getComissaoValidacao().'%)'),
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>utf8_encode('Apenas Validados ('.$parceiro->getComissaoValidacao().'%)'),
                 $tituloReceita=>formataMoeda($registroComissao->getValidacao() * $coeficienteValidacao), 'Despesas'=> '-'
             );
 
@@ -652,7 +664,7 @@ function detalhar_parceiro($parceiro_id){
                 else
                     $iconeApagar = '';
                 if ($lancamentoComissao->getTipoLancamento() == 'C') {
-                    $quadroResumo[] = array(utf8_encode('Descrição') => utf8_encode($lancamentoComissao->getDescricao()) . $iconeApagar . $acaoApagar,
+                    $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o') => utf8_encode($lancamentoComissao->getDescricao()) . $iconeApagar . $acaoApagar,
                         $tituloReceita => formataMoeda($lancamentoComissao->getValor()), 'Despesas' => '-'
                     );
 
@@ -660,12 +672,12 @@ function detalhar_parceiro($parceiro_id){
                 }
 
             }
-            $quadroResumo[] = array(utf8_encode('Descrição')=>'<span class="text-danger">TOTAL PARCIAL (RECEITAS)</span>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>'<span class="text-danger">TOTAL PARCIAL (RECEITAS)</span>',
                 $tituloReceita=>'<span class="text-danger">'.formataMoeda($somaTotalAcrescimos).'</span>', 'Despesas'=> '-'
             );
 
 
-            $quadroResumo[] = array(utf8_encode('Descrição')=>'<strong>Descontos</strong>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>'<strong>Descontos</strong>',
                 $tituloReceita=>'', 'Despesas'=>''
             );
 
@@ -688,7 +700,7 @@ function detalhar_parceiro($parceiro_id){
                     $iconeApagar = '';
 
                 if ($lancamentoComissao->getTipoLancamento() == 'D') {
-                    $quadroResumo[] = array(utf8_encode('Descrição') => utf8_encode($lancamentoComissao->getDescricao()) . $iconeApagar . $acaoApagar,
+                    $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o') => utf8_encode($lancamentoComissao->getDescricao()) . $iconeApagar . $acaoApagar,
                         $tituloReceita => '-', 'Despesas' => formataMoeda($lancamentoComissao->getValor())
                     );
 
@@ -697,7 +709,7 @@ function detalhar_parceiro($parceiro_id){
 
             }
 
-            $quadroResumo[] = array(utf8_encode('Descrição')=>'<span class="text-danger">TOTAL PARCIAL (DESCONTOS)</span>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>'<span class="text-danger">TOTAL PARCIAL (DESCONTOS)</span>',
                 $tituloReceita=>'-', 'Despesas'=> '<span class="text-danger">'.formataMoeda($somaTotalDescontos).'</span>'
             );
 
@@ -716,19 +728,19 @@ function detalhar_parceiro($parceiro_id){
 
             $somaTotalAcrescimos += ($somaTotalDescontos) + ($somaProdutosVendidosValidados * $coeficienteVendaValidacao)+($somaProdutosVendidos * $coeficienteVenda)+($somaProdutosValidados * $coeficienteValidacao);
 
-            $quadroResumo[] = array(utf8_encode('Descrição')=>utf8_encode('Vendas e Validações ('.$parceiro->getComissaoVendaValidacao().'%)'),
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>utf8_encode('Vendas e Validaï¿½ï¿½es ('.$parceiro->getComissaoVendaValidacao().'%)'),
                 $tituloReceita=>formataMoeda($somaProdutosVendidosValidados * $coeficienteVendaValidacao ), 'Despesas'=> '-'
             );
-            $quadroResumo[] = array(utf8_encode('Descrição')=>utf8_encode('Apenas Vendidos ('.$parceiro->getComissaoVenda().'%)'),
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>utf8_encode('Apenas Vendidos ('.$parceiro->getComissaoVenda().'%)'),
                 $tituloReceita=>formataMoeda($somaProdutosVendidos * $coeficienteVenda), 'Despesas'=> '-'
             );
-            $quadroResumo[] = array(utf8_encode('Descrição')=>utf8_encode('Apenas Validados ('.$parceiro->getComissaoValidacao().'%)'),
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>utf8_encode('Apenas Validados ('.$parceiro->getComissaoValidacao().'%)'),
                 $tituloReceita=>formataMoeda($somaProdutosValidados * $coeficienteValidacao), 'Despesas'=> '-'
             );
-            $quadroResumo[] = array(utf8_encode('Descrição')=>'<span class="text-danger">TOTAL PARCIAL (RECEITAS)</span>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>'<span class="text-danger">TOTAL PARCIAL (RECEITAS)</span>',
                 $tituloReceita=>'<span class="text-danger">'.formataMoeda($somaTotalAcrescimos).'</span>', 'Despesas'=> '-'
             );
-            $quadroResumo[] = array(utf8_encode('Descrição')=>'<strong>Descontos</strong>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>'<strong>Descontos</strong>',
                 $tituloReceita=>'', 'Despesas'=>''
             );
 
@@ -765,18 +777,18 @@ function detalhar_parceiro($parceiro_id){
                     $produtoPrincipalRevogacao = $produtoRevogado->getProdutoRelatedByProdutoId();
                     if ($produtoPrincipalRevogacao) {
 
-                        /*O PRECO DE REVOGACAO SERA O PREÇO DE CUSTO + 30%*/
+                        /*O PRECO DE REVOGACAO SERA O PREï¿½O DE CUSTO + 30%*/
                         $precoRevogacao = $produtoPrincipalRevogacao->getPrecoCusto() + ($produtoPrincipalRevogacao->getPrecoCusto() * 0.3);
                         $somaTotalDescontos += $precoRevogacao;
-                        $arrCertificadosRevogados[] = array('descricao'=>utf8_encode('Revogação do certificado '.$certificado->getId() . ' produto ' .utf8_encode($certificado->getProduto()->getNome()) .' dia '. $certificado->getDataValidacao('d/m/Y') . ' pelo AGR.: ' . $agrRevogou ) ,
+                        $arrCertificadosRevogados[] = array('descricao'=>utf8_encode('Revogaï¿½ï¿½o do certificado '.$certificado->getId() . ' produto ' .utf8_encode($certificado->getProduto()->getNome()) .' dia '. $certificado->getDataValidacao('d/m/Y') . ' pelo AGR.: ' . $agrRevogou ) ,
                             'valor'=> $precoRevogacao
                         );
 
-                        $quadroResumo[] = array(utf8_encode('Descrição')=>utf8_encode('Revogação do certificado '.$certificado->getId() . ' produto ' .utf8_encode($certificado->getProduto()->getNome()) .' dia '. $certificado->getDataValidacao('d/m/Y') . ' pelo AGR.: ' . $agrRevogou . ' <a data-toggle="modal" data-target="#detalharCertificado" title="Detalhar Certificado" id="btnDetalharCertificado" onclick="$(\'#idCertificado\').val('.$certificado->getId().'); carregarModalDetalharCertificado('.$certificado->getId().', \'sim\');"> <i class="fa fa-arrows"></i> </a>') ,
+                        $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>utf8_encode('Revogaï¿½ï¿½o do certificado '.$certificado->getId() . ' produto ' .utf8_encode($certificado->getProduto()->getNome()) .' dia '. $certificado->getDataValidacao('d/m/Y') . ' pelo AGR.: ' . $agrRevogou . ' <a data-toggle="modal" data-target="#detalharCertificado" title="Detalhar Certificado" id="btnDetalharCertificado" onclick="$(\'#idCertificado\').val('.$certificado->getId().'); carregarModalDetalharCertificado('.$certificado->getId().', \'sim\');"> <i class="fa fa-arrows"></i> </a>') ,
                             $tituloReceita=>'-', 'Despesas'=> formataMoeda($precoRevogacao)
                         );
                     } else {
-                        $quadroResumo[] = array(utf8_encode('Descrição')=>utf8_encode('Revogação do certificado '.$certificado->getId() . ' produto ' .utf8_encode($certificado->getProduto()->getNome()) .' dia '. $certificado->getDataValidacao('d/m/Y') . ' pelo AGR.: ' . $agrRevogou),
+                        $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>utf8_encode('Revogaï¿½ï¿½o do certificado '.$certificado->getId() . ' produto ' .utf8_encode($certificado->getProduto()->getNome()) .' dia '. $certificado->getDataValidacao('d/m/Y') . ' pelo AGR.: ' . $agrRevogou),
                             $tituloReceita=>'-', 'Despesas'=> 'Verificar taxa de revoga&ccedil;&atilde;o'
                         );
                     }
@@ -793,7 +805,7 @@ function detalhar_parceiro($parceiro_id){
                             'valor'=> $produtoVendido->getPreco() - $certificado->getDesconto()
                         );
 
-                        $quadroResumo[] = array(utf8_encode('Descrição')=>utf8_encode('Certificado validado e n&atilde;o pago, c&oacute;digo: '.$certificado->getId() . ' | data de valida&ccedil;&atilde;o: '.$certificado->getDataValidacao('d/m/Y') . ' <a data-toggle="modal" data-target="#detalharCertificado" title="Detalhar Certificado" id="btnDetalharCertificado" onclick="$(\'#idCertificado\').val('.$certificado->getId().'); carregarModalDetalharCertificado('.$certificado->getId().', \'sim\');"> <i class="fa fa-arrows"></i> </a>') ,
+                        $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>utf8_encode('Certificado validado e n&atilde;o pago, c&oacute;digo: '.$certificado->getId() . ' | data de valida&ccedil;&atilde;o: '.$certificado->getDataValidacao('d/m/Y') . ' <a data-toggle="modal" data-target="#detalharCertificado" title="Detalhar Certificado" id="btnDetalharCertificado" onclick="$(\'#idCertificado\').val('.$certificado->getId().'); carregarModalDetalharCertificado('.$certificado->getId().', \'sim\');"> <i class="fa fa-arrows"></i> </a>') ,
                             $tituloReceita=>'-', 'Despesas'=> formataMoeda($produtoVendido->getPreco() - $certificado->getDesconto())
                         );
                 }
@@ -801,7 +813,7 @@ function detalhar_parceiro($parceiro_id){
             /*FINALIZA MONTAGEM DO QUADRO RESUMO*/
 
 
-            $quadroResumo[] = array(utf8_encode('Descrição')=>'<span class="text-danger">TOTAL PARCIAL (DESCONTOS)</span>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>'<span class="text-danger">TOTAL PARCIAL (DESCONTOS)</span>',
                 $tituloReceita=>'-', 'Despesas'=> '<span class="text-danger">'.formataMoeda($somaTotalDescontos).'</span>'
             );
 
@@ -811,16 +823,16 @@ function detalhar_parceiro($parceiro_id){
 
         /*SE O SALDO FOR POSITIVO COLOCA O TOTAL NAS RECEITAS E SAO COLOCA NAS DESPESAS*/
         if ($somaTotalAcrescimos-$somaTotalDescontos > 0)
-            $quadroResumo[] = array(utf8_encode('Descrição')=>'<span class="text-danger">TOTAL GERAL</span>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>'<span class="text-danger">TOTAL GERAL</span>',
                 $tituloReceita=>'<span class="text-danger">'.formataMoeda($somaTotalAcrescimos-$somaTotalDescontos).'</span>', 'Despesas'=> '-'
             );
         else
-            $quadroResumo[] = array(utf8_encode('Descrição')=>'<span class="text-danger">TOTAL GERAL</span>',
+            $quadroResumo[] = array(utf8_encode('Descriï¿½ï¿½o')=>'<span class="text-danger">TOTAL GERAL</span>',
                 $tituloReceita=>'-', 'Despesas'=> '<span class="text-danger">'.formataMoeda($somaTotalAcrescimos-$somaTotalDescontos).'</span>'
             );
 
         $colunasQuadroResumo = array(
-            array('nome'=>utf8_encode('Descrição')), array('nome'=>$tituloReceita), array('nome'=>'Despesas')
+            array('nome'=>utf8_encode('Descriï¿½ï¿½o')), array('nome'=>$tituloReceita), array('nome'=>'Despesas')
         );
         /*FIM MONTAGEM DO QUADRO RESUMO*/
 
@@ -863,7 +875,7 @@ function detalhar_parceiro($parceiro_id){
 
 function bloquear_parceiro () {
     try {
-        //Cabeçalho do modal detalhar Parceiro
+        //Cabeï¿½alho do modal detalhar Parceiro
         $parceiro =  ParceiroPeer::retrieveByPk($_POST['parceiro_id']);
         $retorno = '';
         if ($_POST['acao'] == 'bloquear') {
@@ -884,7 +896,7 @@ function bloquear_parceiro () {
 
 function apagar_parceiro () {
     try {
-        //Cabeçalho do modal detalhar Parceiro
+        //Cabeï¿½alho do modal detalhar Parceiro
         $parceiro =  ParceiroPeer::retrieveByPk($_POST['parceiro_id']);
         $parceiro->setSituacao(-1);
         $parceiro->save();
@@ -896,7 +908,7 @@ function apagar_parceiro () {
 
 function registrarComissaoParceiro () {
     try {
-        //Cabeçalho do modal detalhar Parceiro
+        //Cabeï¿½alho do modal detalhar Parceiro
         $comissaoParceiro =  new ParceiroComissionamento();
         $comissaoParceiro->setDescricao(utf8_decode($_POST['descricao']));
         $periodoDe = explode('/',$_POST['periodoDe']);
@@ -1089,13 +1101,13 @@ function carregarParceirosRelatorioComissao () {
                 'Localidade'=> utf8_encode($parceiro->getCidade() .'/' . $parceiro->getUf()),
                 'Dados'=> utf8_encode($parceiro->getBanco()). '<br/> (Ag: ' .$parceiro->getAgencia() .') <strong> CC:' . $parceiro->getContaCorrente() .'</strong> - Op:'. $parceiro->getOperacao(),
                 'Registro'=>$descricaoRegistroComissao, 'Pagto.'=>$dataPagamento, 'Valor' =>$valor,
-                utf8_encode('Ação')=>$btnPago
+                utf8_encode('Aï¿½ï¿½o')=>$btnPago
             );
         }/*FIM DO FOR*/
 
         $colunas = array(
             array('nome'=>'Id'), array('nome'=>'Nome'), array('nome'=>'Empresa'), array('nome'=>'Localidade'),array('nome'=>'Dados'),
-            array('nome'=>'Registro'),  array('nome'=>'Pagto.'),array('nome'=>'Valor'), array('nome'=>utf8_encode('Ação'))
+            array('nome'=>'Registro'),  array('nome'=>'Pagto.'),array('nome'=>'Valor'), array('nome'=>utf8_encode('Aï¿½ï¿½o'))
         );
 
         echo json_encode(array('mensagem'=>'Ok', 'colunas'=>json_encode($colunas), 'parceiros'=>json_encode($parceiros)));
