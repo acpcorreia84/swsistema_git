@@ -251,14 +251,35 @@ function carregarNegocios() {
 
         }
 
+        /*GUARDA EM ARRAYS OS IDS DE FOLLOW UP E LOST EM SITUACOES*/
+        $cFollow = new Criteria();
+        $cFollow->add(SituacaoPeer::SIGLA, 'follow');
+        $cFollow->addOr(SituacaoPeer::SIGLA, 'followaux');
+        $cFollow->addOr(SituacaoPeer::SIGLA, 'lost');
+        $cFollow->addOr(SituacaoPeer::SIGLA, 'lostaux');
+        $situacoesFollowup = SituacaoPeer::doSelect($cFollow);
+
+        $arrFollow = array();
+        $arrLost = array();
+        $situacaoLostAux = '';
+        foreach ($situacoesFollowup as $situacaoFollow) {
+            if ($situacaoFollow->getSigla()=='follow' || $situacaoFollow->getSigla()=='followaux')
+                $arrFollow[] = $situacaoFollow->getId();
+            elseif ($situacaoFollow->getSigla()=='lost'  )
+                $arrLost[] = $situacaoFollow->getId();
+            elseif ($situacaoFollow->getSigla()=='lostaux')
+                $situacaoLostAux = $situacaoFollow->getId();
+        }
 
         $cCertificado->add(CertificadoPeer::APAGADO, 0);
 
+        $cCertificado->add(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, null, Criteria::ISNULL);
+        $cCertificado->addOr(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, '0000-00-00 00:00:00');
+
+
         $hora_ini = ' 00:00:00';
         $hora_fim = ' 23:59:59';
-        $dataDe = date('Y-m-d '.$hora_fim);
-
-        $qtdDias = 0;
+        $dataDe = date('Y-m-d H:i:s');
 
         if ($tipoNegocios == 'Urgentes')
             $qtdDias = 10;
@@ -270,34 +291,50 @@ function carregarNegocios() {
         $dataAte = new DateTime(date('Y-m-d H:i:s'));
         $dataAte->sub(new DateInterval('P'.$qtdDias.'D'));
 
-        $dataAteRenovacao = new DateTime(date('Y-m-d '.$hora_ini));
-        $dataAteRenovacao->sub(new DateInterval('P20D'));
+        $dataDeRecart = new DateTime(date('Y-m-d H:i:s'));
+        $dataDeRecart->sub(new DateInterval('P20D'));
 
-        $cCertificado->addAnd(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, null, Criteria::ISNULL);
-        $cCertificado->addOr(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, '0000-00-00 00:00:00');
+        $cCountCertificadosCvp = clone $cCertificado;
+        $cCountCertificadosCvp->add(CertificadoPeer::STATUS_FOLLOWUP, $situacaoLostAux);
+        $cCountCertificadosCvp->add(CertificadoPeer::DATA_RECARTEIRIZACAO, $dataDeRecart->format('Y-m-d'), Criteria::GREATER_EQUAL);
+        $cCountCertificadosCvp->addOr(CertificadoPeer::DATA_RECARTEIRIZACAO, date('Y-m-d'), Criteria::LESS_EQUAL);
+        $countCvp20d = CertificadoPeer::doCount($cCountCertificadosCvp);
 
-        /*$cCertificado->add(CertificadoPeer::DATA_COMPRA, $dataAte->format('Y-m-d H:i:s'), Criteria::GREATER_EQUAL);
-        $cCertificado->addAnd(CertificadoPeer::DATA_COMPRA, $dataDe, Criteria::LESS_EQUAL);*/
-
-        $cDataCompra = $cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataAte->format('Y-m-d '.$hora_ini), Criteria::GREATER_EQUAL);
-        $cDataCompra->addAnd($cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataDe, Criteria::LESS_EQUAL));
-        $cDataCompra->addAnd($cCertificado->getNewCriterion(CertificadoPeer::CERTIFICADO_RENOVADO, null, Criteria::ISNULL));
-
-        $cDataCompraRenovacao = $cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataAteRenovacao->format('Y-m-d '.$hora_ini), Criteria::GREATER_EQUAL);
-        $cDataCompraRenovacao->addAnd($cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataDe, Criteria::LESS_EQUAL));
-        $cDataCompraRenovacao->addAnd($cCertificado->getNewCriterion(CertificadoPeer::CERTIFICADO_RENOVADO, 0, Criteria::GREATER_THAN));
-
-        $cDataCompraRenovacao->addOr($cDataCompra);
-
-        $cCertificado->add($cDataCompraRenovacao);
-        /*$cConfirmacaoPagamentoNotEqual = $cCertificado->getNewCriterion(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, '0000-00-00 00:00:00', Criteria::NOT_EQUAL);
-        $cConfirmacaoPagamentoNull->addAnd($cConfirmacaoPagamentoNotEqual);
-        $cConfirmacaoPagamentoNull->addAnd($cConfirmacaoPagamentoNotEqual);*/
+        if ($tipoNegocios != 'Perdidos') {
+            $dataAteRenovacao = new DateTime(date('Y-m-d H:i:s'));
+            $dataAteRenovacao->sub(new DateInterval('P20D'));
 
 
-        $cCertificado->addAscendingOrderByColumn(CertificadoPeer::DATA_COMPRA);
+            $cDataCompra = $cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataAte->format('Y-m-d H:i:s'), Criteria::GREATER_EQUAL);
+            $cDataCompra->addAnd($cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataDe, Criteria::LESS_EQUAL));
+            $cDataCompra->addAnd($cCertificado->getNewCriterion(CertificadoPeer::CERTIFICADO_RENOVADO, null, Criteria::ISNULL));
+
+            $cDataCompraRenovacao = $cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataAteRenovacao->format('Y-m-d H:i:s'), Criteria::GREATER_EQUAL);
+            $cDataCompraRenovacao->addAnd($cCertificado->getNewCriterion(CertificadoPeer::DATA_COMPRA, $dataDe, Criteria::LESS_EQUAL));
+            $cDataCompraRenovacao->addAnd($cCertificado->getNewCriterion(CertificadoPeer::CERTIFICADO_RENOVADO, 0, Criteria::GREATER_THAN));
+
+            $cDataCompraRenovacao->addOr($cDataCompra);
+
+            $cCertificado->add($cDataCompraRenovacao);
+
+            $cCertificado->addAscendingOrderByColumn(CertificadoPeer::DATA_COMPRA);
+            $colunas = array(
+                array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Cont.'), array('nome'=>'D.Comp.'), array('nome'=>'D.Venc.'),array('nome'=>'Proto.'),
+                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>utf8_encode('Ações'))
+            );
+
+        } else {
+            $cCertificado->add(CertificadoPeer::STATUS_FOLLOWUP, $situacaoLostAux);
+            $cCertificado->add(CertificadoPeer::DATA_RECARTEIRIZACAO, $dataDeRecart->format('Y-m-d'), Criteria::GREATER_EQUAL);
+            $cCertificado->addOr(CertificadoPeer::DATA_RECARTEIRIZACAO, date('Y-m-d'), Criteria::LESS_EQUAL);
 
 
+            $colunas = array(
+                array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Cont.'), array('nome'=>'D.CVP'), array('nome'=>'D.Venc.'),
+                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>utf8_encode('Ações'))
+            );
+
+        }
         $certificadosObj = CertificadoPeer::doSelect($cCertificado);
 
         $certificadosUrgentesFollowUp = array();
@@ -315,54 +352,73 @@ function carregarNegocios() {
         $somaLost = 0.0;
         $htmlPopOver = '';
 
-        /*GUARDA EM ARRAYS OS IDS DE FOLLOW UP E LOST EM SITUACOES*/
-        $cFollow = new Criteria();
-        $cFollow->add(SituacaoPeer::SIGLA, 'follow');
-        $cFollow->addOr(SituacaoPeer::SIGLA, 'lost');
-        $situacoesFollowup = SituacaoPeer::doSelect($cFollow);
-
-        $arrFollow = array();
-        $arrLost = array();
-        foreach ($situacoesFollowup as $situacaoFollow) {
-            if ($situacaoFollow->getSigla()=='follow' || $situacaoFollow->getSigla()=='followaux')
-                $arrFollow[] = $situacaoFollow->getId();
-            elseif ($situacaoFollow->getSigla()=='lost' || $situacaoFollow->getSigla()=='lostout')
-                $arrLost[] = $situacaoFollow->getId();
-        }
-
         foreach ($certificadosObj as $key=>$certificado)  {
 
+            $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d')));
             /*DEFINE SE E REVOGACAO, EM ABERTO OU RECARTEIRIZACAO*/
             if ($certificado->getCertificadoRenovado()) {
                 $tipoCd = '<i class="fa fa-square text-success" title="Renova&ccedil;&atilde;o. Qtd. de dias faltam para o vencimento. "></i>';
+                $certificadoRenovado = $certificado->getCertificadoRelatedByCertificadoRenovado();
+                $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificadoRenovado->getDataFimValidade('Y-m-d')));
             }elseif ($certificado->getDataRecarteirizacao()) {
                 $tipoCd = '<i class="fa fa-square " style="color: purple" title="Recarteiriza&ccedil;&atilde;o"></i>';
             } else {
                 $tipoCd = '<i class="fa fa-square" style="color: #0b2c89"  title="Em aberto. Qtd. de dias desde a data de cria&cedil;&atilde;o do pedido."></i>';
             }
 
-            $contatos = getContatosCertificado($certificado);
-            $conteudoPopOver = "<table class='table table-striped '><thead><tr><td><strong>Tipo</strong></td><td><strong>Celular</strong></td><td><strong>Telefone</strong></td></tr></thead><tbody>";
-            foreach ($contatos as $contato) {
-                $celular = $contato['Celular'];
-                $telefone = $contato['Telefone'];
-                $conteudoPopOver .= '<tr><td>'.utf8_encode($contato['Tipo']) .'</td>';
-                $conteudoPopOver .= '<td>'.$celular .'</td>';
-                $conteudoPopOver .= '<td>'.$telefone .'</td>';
-            }
-            $conteudoPopOver .= '</tbody></table>';
-
-            $htmlPopOver .= '<script>$("#btnContato'.$certificado->getId().'").popover({title:"Contatos:",content: "'.$conteudoPopOver.'",html: true, placement: "right",trigger: "hover"}); </script>';
-
-
-
             $nomeCliente = ($certificado->getCliente()->getRazaoSocial() != '')?utf8_encode($certificado->getCliente()->getRazaoSocial()):utf8_encode($certificado->getCliente()->getNomeFantasia());
             $usuarioConsultor = $certificado->getUsuario()?$certificado->getUsuario()->getNome():'---';
-            $usuarioAgr = (($certificado->getUsuarioValidouId())?$certificado->getUsuarioValidouId().'-'.utf8_encode($certificado->getUsuarioRelatedByUsuarioValidouId()->getNome()):'---');
             $produto = ($certificado->getProduto()) ? utf8_encode($certificado->getProduto()->getNome()) : '---';
 
 
-            $btnDetalhar = '<button class="btn btn-primary" 
+            /*
+             * SE TIVER NA TELA DE URGENTE E COM FEEDBACK MOSTRA O CONTATO AO PASSAR O MOUSE EM CIMA DO CLIENTE
+             * SE TIVER NA TELA DE CVP MOSTRA AS SITUACOES DAQUELE CLIENTE
+             * */
+            if ($tipoNegocios == 'Perdidos') {
+                /*
+                * MONTANDO INFORMACOES SITUACAO
+                * */
+                $cSituacao = new criteria();
+                $cSituacao->add(CertificadoSituacaoPeer::CERTIFICADO_ID, $certificado->getId());
+                $cSituacao->addDescendingOrderByColumn(CertificadoSituacaoPeer::DATA);
+                $situacoesCertificado = $certificado->getCertificadoSituacaos($cSituacao);
+
+                $conteudoPopOver = "<table class='table table-striped '><thead><tr><td><strong>Data</strong></td><td><strong>Coment&aacute;rio</strong></td></tr></thead><tbody>";
+
+                foreach ($situacoesCertificado as $situacaoCertificado) {
+                    $conteudoPopOver .= '<tr><td>'.$situacaoCertificado->getData('d/m/Y') .'</td>';
+                    $conteudoPopOver .= '<td>'.'<b>'.utf8_encode($situacaoCertificado->getSituacao()->getDescricao()) . '</b><br/> ' .'</td>';
+
+                }
+
+                $conteudoPopOver .= '</tbody></table>';
+
+                $htmlPopOver .= '<script>$("#btnContato'.$certificado->getId().'").popover({title:"Contatos:",content: "'.$conteudoPopOver.'",html: true, placement: "right",trigger: "hover"}); </script>';
+                /*
+                * FIM MONTAGEM INFORMACOES SITUACAO
+                * */
+
+                $btnDetalhar = '<button class="btn btn-danger" 
+                title="Reativar neg&oacute;cio" id="btnReativarNegocio"  data-toggle="modal" 
+                data-target="#"> <i class="fas fa-user-md"></i> 
+                </button> ';
+
+            } else {
+                $contatos = getContatosCertificado($certificado);
+                $conteudoPopOver = "<table class='table table-striped '><thead><tr><td><strong>Tipo</strong></td><td><strong>Celular</strong></td><td><strong>Telefone</strong></td></tr></thead><tbody>";
+                foreach ($contatos as $contato) {
+                    $celular = $contato['Celular'];
+                    $telefone = $contato['Telefone'];
+                    $conteudoPopOver .= '<tr><td>'.utf8_encode($contato['Tipo']) .'</td>';
+                    $conteudoPopOver .= '<td>'.$celular .'</td>';
+                    $conteudoPopOver .= '<td>'.$telefone .'</td>';
+                }
+                $conteudoPopOver .= '</tbody></table>';
+
+                $htmlPopOver .= '<script>$("#btnContato'.$certificado->getId().'").popover({title:"Contatos:",content: "'.$conteudoPopOver.'",html: true, placement: "right",trigger: "hover"}); </script>';
+
+                $btnDetalhar = '<button class="btn btn-primary" 
                 title="Inserir feedback do cliente" id="btnDetalharCertificado"  data-toggle="modal" 
                 data-target="#modalInserirFeedbackCertificado" onclick="
                 $(\'#cnSpanCodigoCliente\').html(\''.$certificado->getClienteId().'\');
@@ -376,28 +432,8 @@ function carregarNegocios() {
                 "> <i class="fa fa-commenting-o"></i> 
             </button> ';
 
-            if ($certificado->getConfirmacaoValidacao() == 1)
-                $situacaoValidacao = '<i class="fa fa-flag" aria-hidden="true" style="color:#096;" title="validado em '.$certificado->getDataValidacao('d/m/Y').' Agr: '.$usuarioAgr.'"></i>';
-            elseif ($certificado->getConfirmacaoValidacao() == 2)
-                $situacaoValidacao = '<i class="fa fa-flag" aria-hidden="true" style="color:#fff847" title="validado em '.$certificado->getDataValidacao('d/m/Y').' Agr: '.$usuarioAgr. '(pendente)"></i>';
-            elseif ($certificado->getConfirmacaoValidacao() == 3)
-                $situacaoValidacao = '<i class="fa fa-flag" aria-hidden="true" style="color:#fff847" title="validado em '.$certificado->getDataValidacao('d/m/Y').' Agr: '.$usuarioAgr.' (renovado)"></i>';
-            elseif ($certificado->getConfirmacaoValidacao() == 4)
-                $situacaoValidacao = '<i class="fa fa-flag" aria-hidden="true" style="color:#ac2925" title="revogado em '.$certificado->getDataValidacao('d/m/Y').' Agr: '.$usuarioAgr.'"></i>';
-            else
-                $situacaoValidacao = '-';
-
-
-            /*
-             * SE FOR UM PEDIDO DE RENOVACAO, O VENCIMENTO E O VENCIMENTO DO CD ANTERIOR
-             * */
-            $certificadoRenovado = '';
-            if ($certificado->getCertificadoRenovado()) {
-                $certificadoRenovado = $certificado->getCertificadoRelatedByCertificadoRenovado();
-                $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificadoRenovado->getDataFimValidade('Y-m-d')));
-            } else {
-                $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d')));
             }
+
 
             if ($certificado->getStatusFollowup()) {
 
@@ -414,24 +450,24 @@ function carregarNegocios() {
                         'Tipo'=>$produto,
                         'Consultor'=>utf8_encode($usuarioConsultor),
                         'Tot'=>formataMoeda($certificado->getProduto()->getPreco() - $certificado->getDesconto()),
-                        '.'=>utf8_encode($situacaoValidacao),
+                        '.'=>$certificado->getStatusFollowup(),
                         utf8_encode('Ações')=>$btnDetalhar
 
                     );
 
-                } elseif (array_search($certificado->getStatusFollowup(), $arrLost )) {
+                } elseif ($certificado->getStatusFollowup()==$situacaoLostAux) {
                     $qtdLost++;
                     $somaLost += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                    $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataRecarteirizacao('Y-m-d')));
 
                     $certificadosPerdidos[] = array(' '=>($j++),'Cod.'=>$certificado->getId(),
                         'Cont.'=>$tipoCd.' '.$diffDatas.'d',
-                        'D.Comp.'=>($certificado->getDataCompra('d/m/Y'))?$certificado->getDataCompra('d/m/Y'):'-',
+                        'D.CVP'=>($certificado->getDataRecarteirizacao('d/m/Y'))?$certificado->getDataRecarteirizacao('d/m/Y'):'-',
                         'D.Venc.'=>($certificadoRenovado)?$certificadoRenovado->getDataFimValidade('d/m/Y'):'-',
                         'Cliente'=> '<a id="btnContato'.$certificado->getId().'" href="telaCertificado.php?funcao=detalhaCertificado&idCertificado='.$certificado->getId().'" target="_blank">'.$certificado->getCliente()->getId() . ' - '.$nomeCliente . '</a>',
                         'Tipo'=>$produto,
                         'Consultor'=>utf8_encode($usuarioConsultor),
                         'Tot'=>formataMoeda($certificado->getProduto()->getPreco() - $certificado->getDesconto()),
-                        '.'=>utf8_encode($situacaoValidacao),
                         utf8_encode('Ações')=>$btnDetalhar
 
                     );
@@ -449,7 +485,7 @@ function carregarNegocios() {
                     'Tipo'=>$produto,
                     'Consultor'=>utf8_encode($usuarioConsultor),
                     'Tot'=>formataMoeda($certificado->getProduto()->getPreco() - $certificado->getDesconto()),
-                    '.'=>utf8_encode($situacaoValidacao),
+                    '.'=>$certificado->getStatusFollowup(),
                     utf8_encode('Ações')=>$btnDetalhar
 
                 );
@@ -459,11 +495,6 @@ function carregarNegocios() {
         }
 
 
-        $colunas = array(
-            array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Cont.'), array('nome'=>'D.Comp.'), array('nome'=>'D.Venc.'),array('nome'=>'Proto.'),
-            array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
-        );
-
         $negocios = '';
 
         if ($tipoNegocios == 'Urgentes')
@@ -472,12 +503,19 @@ function carregarNegocios() {
             $negocios = $certificadosUrgentesFollowUp;
         elseif ($tipoNegocios == 'Perdidos'){
             $negocios = $certificadosPerdidos;
+            /*
+            * SE ELE DETALHOU O CVP, MOSTRA A QTD E A SOMA
+            * */
+            if ($somaLost && $qtdLost)
+                $countCvp20d =  formataMoeda($somaUrgentesComFeedaback). '('.$qtdLost.')';
+
         }
+
 
         $retorno = array('mensagem'=>'Ok','colunas'=>json_encode($colunas), 'negocios'=>json_encode($negocios),
             'quantidadeTotalUrgentes'=>$qtdUrgentes, 'quantidadeTotalUrgentesComFeedback'=>$qtdUrgentesComFeedback,
             'somaTotalUrgentes' => formataMoeda($somaUrgentes), 'somaTotalUrgentesComFeedback' =>formataMoeda($somaUrgentesComFeedaback),
-            'qtdLost'=>$qtdLost, 'somaLost'=>formataMoeda($somaLost), 'htmlContatosPopOver'=>$htmlPopOver,
+            'countCvp20d'=>$countCvp20d, 'htmlContatosPopOver'=>$htmlPopOver,
             'dataDe'=>date('d/m/Y'), 'dataAte'=>$dataAte->format('d/m/Y'), 'tipoNegocio' => $tipoNegocios
         );
 

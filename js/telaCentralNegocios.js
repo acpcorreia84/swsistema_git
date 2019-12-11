@@ -30,6 +30,7 @@ function carregarNegocios() {
     else {
         $('#totalCertificadosUrgentes').html('carregando...');
         $('#totalCertificadosUrgentesComFeedback').html('carregando...');
+        $('#totalCertificadosCvp').html('carregando...');
     }
 
 
@@ -54,7 +55,7 @@ function carregarNegocios() {
         },
         success : function(result){
             try {
-                console.log(result);
+                //console.log(result);
                 var resultado = JSON.parse(result);
 
                 $('#txtDataNegocios').html(resultado.dataAte + ' at&eacute; ' + resultado.dataDe);
@@ -69,7 +70,9 @@ function carregarNegocios() {
                     else {
                         $('#totalCertificadosUrgentes').html(resultado.somaTotalUrgentes + ' (' + resultado.quantidadeTotalUrgentes + ')');
                         $('#totalCertificadosUrgentesComFeedback').html(resultado.somaTotalUrgentesComFeedback + ' (' +resultado.quantidadeTotalUrgentesComFeedback+ ')');
+                        $('#totalCertificadosCvp').html(resultado.countCvp20d);
                     }
+
                     $('#divContatosPopOver').html(resultado.htmlContatosPopOver);
                 }
             } catch (e) {

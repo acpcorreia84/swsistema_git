@@ -117,22 +117,21 @@ include 'inc/script.php';
 
                         <!--QUADROS RESUMO: PAGOS, EM ABERTO-->
 
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg-2 col-md-6">
                                 <div class="panel" style="background-color: yellow">
                                     <div class="panel-heading">
                                         <div class="row">
                                             <div class="col-xs-3">
-                                                <i class="fa fa-exclamation fa-5x"></i>
+                                                <i class="fa fa-exclamation fa-4x"></i>
                                             </div>
                                             <div class="col-xs-9 text-right">
                                                 <div id="totalCertificadosUrgentes">carregando...</div>
-                                                <div>Urgentes (10 dias)</div>
                                             </div>
                                         </div>
                                     </div>
                                     <a href="#" onclick="$('#tipoNegocios').val('Urgentes'); $('#tipoNegociosLegendas').html('Urgentes'); carregarNegocios();">
                                         <div class="panel-footer">
-                                            <span class="pull-left">Detalhes</span>
+                                            <span class="pull-left">Urgentes 7d</span>
                                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                             <div class="clearfix"></div>
                                         </div>
@@ -140,22 +139,22 @@ include 'inc/script.php';
                                 </div>
                             </div>
 
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg-2 col-md-6">
                                 <div class="panel " style="background-color: orange">
                                     <div class="panel-heading">
                                         <div class="row">
                                             <div class="col-xs-3">
-                                                <i class="fa fa-times fa-5x"></i>
+                                                <i class="fa fa-times fa-4x"></i>
                                             </div>
                                             <div class="col-xs-9 text-right">
                                                 <div id="totalCertificadosUrgentesComFeedback">carregando...</div>
-                                                <div>Urgentes <br/>com feedback (10 dias)</div>
+                                                <div></div>
                                             </div>
                                         </div>
                                     </div>
                                     <a href="#" onclick="$('#tipoNegocios').val('UrgentesFollowUp'); $('#tipoNegociosLegendas').html('Urgentes com Followup'); carregarNegocios();">
                                         <div class="panel-footer" >
-                                            <span class="pull-left">Detalhes</span>
+                                            <span class="pull-left">Feedback +3d</span>
                                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                             <div class="clearfix"></div>
                                         </div>
@@ -163,22 +162,22 @@ include 'inc/script.php';
                                 </div>
                             </div>
 
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg-2 col-md-6">
                                 <div class="panel" style="background-color: #0a0a0a; color: #fff;">
                                     <div class="panel-heading">
                                         <div class="row">
                                             <div class="col-xs-3">
-                                                <i class="fas fa-skull fa-5x"></i>
+                                                <i class="fas fa-skull fa-4x"></i>
                                             </div>
                                             <div class="col-xs-9 text-right" style="color: #fff;">
-                                                <div id="totalLost"></div>
-                                                <div>CVP (30 dias)</div>
+                                                <div id="totalCertificadosCvp" style="color: yellow; font-weight: bolder">carregando...</div>
+                                                <div style="color: yellow; font-weight: bolder"> </div>
                                             </div>
                                         </div>
                                     </div>
                                     <a href="#" onclick="$('#tipoNegocios').val('Perdidos'); $('#tipoNegociosLegendas').html('Perdidos');  carregarNegocios();">
                                         <div class="panel-footer">
-                                            <span class="pull-left">Detalhes</span>
+                                            <span class="pull-left">CVP</span>
                                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                             <div class="clearfix"></div>
                                         </div>
@@ -186,13 +185,34 @@ include 'inc/script.php';
                                 </div>
                             </div>
 
+                    <div class="col-lg-2 col-md-6">
+                        <div class="panel" style="background-color: darkgreen; color: #fff;">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fas fa-ambulance fa-4x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right" style="color: #fff;">
+                                        <div style="font-weight: bolder"> </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#" onclick="#">
+                                <div class="panel-footer">
+                                    <span class="pull-left">Em recupera&ccedil;&atilde;o</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
 
-                    <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-2 col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-3">
-                                        <i class="fa fa fa-bar-chart fa-5x text-primary"></i>
+                                        <i class="fa fa fa-bar-chart fa-4x text-primary"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
                                         <div class="text-primary">Gr&aacute;ficos</div>
