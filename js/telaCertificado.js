@@ -375,9 +375,11 @@ function editar_cliente_certificado(funcao){
                 alertErro (acentuarMsn('Error TC.JS/591 - Erro na a??o editar cliente,' + msnPadrao + '.'));
 			},
 			success : function(result){
-                var certificado = result.split(';');
+				var resultado = JSON.parse(result);
+                var certificado = resultado.dados.split(';');
+                console.log(certificado);
 
-				if ( (certificado[31] == 0) || (certificado[1] == 0)) {
+				if ( resultado.mensagem=='Ok') {
 
 					var elemento = document.getElementsByName('clEdtUfEmpresa');
 					var optionUf = certificado[10];

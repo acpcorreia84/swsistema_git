@@ -777,7 +777,8 @@ function editar_cliente($certificado_id){
 		$idCliente = $certificado->getClienteId();
 		$retorno = recupera_cliente($idCliente,'editar');
         //var_dump($retorno);
-		echo $retorno.';0';
+        echo json_encode(array('mensagem'=>'Ok', 'dados'=>$retorno.';0'));
+		//echo $retorno.';0';
 	}catch(Exception $e){
 	    erroEmail($e->getMessage(),"Erro na funcao de certificados no editar cliente");
 		echo $e->getMessage();
