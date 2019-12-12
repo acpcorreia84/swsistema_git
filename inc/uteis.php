@@ -90,7 +90,8 @@ function removeEspeciais($string) {
 
 
 function removeAcentos ($s) {
-    $s = preg_replace("[áàâãª]","a",$s);
+    return preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"),$s);
+    /*$s = preg_replace("[áàâãª]","a",$s);
     $s = preg_replace("[ÁÀÂÃ]","A",$s);
     $s = preg_replace("[éèê]","e",$s);
     $s = preg_replace("[ÉÈÊ]","E",$s);
@@ -100,7 +101,7 @@ function removeAcentos ($s) {
     $s = preg_replace("[ÚÙÛ]","U",$s);
     $s = str_replace("ç","c",$s);
     $s = str_replace("Ç","C",$s);
-//	$s = ereg_replace(" ","",$s);
+	$s = ereg_replace(" ","",$s);*/
     return $s;
 }
 function corLinhaTabela ($key) {

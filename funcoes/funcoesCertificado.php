@@ -589,7 +589,7 @@ function recupera_cliente($clienteId,$funcao){
         if ($clienteTipo == "J") {
             $cnpj = $cliente->getCpfCnpj();
             if ($cliente->getRazaoSocial()) {
-                $razaoSocial = utf8_encode($cliente->getRazaoSocial());
+                $razaoSocial = removeAcentos(utf8_encode($cliente->getRazaoSocial()));
             } else {
                 $razaoSocial = "";
             }
@@ -607,13 +607,13 @@ function recupera_cliente($clienteId,$funcao){
             }
 
             if ($cliente->getEndereco()) {
-                $enderecoEmpresa = utf8_encode($cliente->getEndereco());
+                $enderecoEmpresa = removeAcentos(utf8_encode($cliente->getEndereco()));
             } else {
                 $enderecoEmpresa = "";
             }
 
             if ($cliente->getBairro()) {
-                $bairroEmpresa = utf8_encode($cliente->getBairro());
+                $bairroEmpresa = removeAcentos(utf8_encode($cliente->getBairro()));
             } else {
                 $bairroEmpresa = "";
             }
@@ -625,7 +625,7 @@ function recupera_cliente($clienteId,$funcao){
             }
 
             if ($cliente->getComplemento()) {
-                $complementoEmpresa = utf8_encode($cliente->getComplemento());
+                $complementoEmpresa = removeAcentos(utf8_encode($cliente->getComplemento()));
             } else {
                 $complementoEmpresa = "";
             }
@@ -637,7 +637,7 @@ function recupera_cliente($clienteId,$funcao){
             }
 
             if ($cliente->getCidade()) {
-                $cidadeEmpresa = utf8_encode($cliente->getCidade());
+                $cidadeEmpresa = removeAcentos(utf8_encode($cliente->getCidade()));
             } else {
                 $cidadeEmpresa = "";
             }
@@ -684,19 +684,19 @@ function recupera_cliente($clienteId,$funcao){
             $responsavel = ResponsavelPeer::doSelectOne($cResponsavel);
             $idResponsavel = $responsavel->getId();
             if ($idResponsavel != '0' && $idResponsavel != null) {
-                $nomeResponsavel = utf8_encode($responsavel->getNome());
+                $nomeResponsavel = removeAcentos(utf8_encode($responsavel->getNome()));
                 $cpf = $responsavel->getCpf();
                 $nascimentoResponsavel = $responsavel->getNascimento('Y-m-d');
-                $complementoResponsavel = utf8_encode($responsavel->getComplemento());
-                $cidadeResponsavel = utf8_encode($responsavel->getCidade());
+                $complementoResponsavel = removeAcentos(utf8_encode($responsavel->getComplemento()));
+                $cidadeResponsavel = removeAcentos(utf8_encode($responsavel->getCidade()));
                 $estadoResponsavel = utf8_encode($responsavel->getUf());
                 $foneResponsavel = $responsavel->getFone1();
                 $fone2Responsavel = $responsavel->getFone2();
                 $celularResponsavel = $responsavel->getCelular();
                 $telefoneResponsavel = "";
 
-                $enderecoBrutoResponsavel = utf8_encode($responsavel->getEndereco());
-                $bairroResponsavel = utf8_encode($responsavel->getBairro());
+                $enderecoBrutoResponsavel = removeAcentos(utf8_encode($responsavel->getEndereco()));
+                $bairroResponsavel = removeAcentos(utf8_encode($responsavel->getBairro()));
                 $numeroResponsavel = $responsavel->getNumero();
                 $cepResponsavel = $responsavel->getCep();
                 if ($funcao == 'visualizaProtocolo') {
@@ -721,18 +721,18 @@ function recupera_cliente($clienteId,$funcao){
                 }
             }
         } else {
-            $nomeResponsavel = utf8_encode($cliente->getNomeFantasia());
+            $nomeResponsavel = removeAcentos(utf8_encode($cliente->getNomeFantasia()));
             $nascimentoResponsavel = $cliente->getNascimento('Y-m-d');
             $cpf = $cliente->getCpfCnpj();
             $foneResponsavel = $cliente->getFone1();
             $fone2Responsavel = $cliente->getFone2();
             $celularResponsavel = $cliente->getCelular();
             $telefoneResponsavel = "";
-            $enderecoBrutoResponsavel = utf8_encode($cliente->getEndereco());
-            $complementoResponsavel = utf8_encode($cliente->getComplemento());
-            $cidadeResponsavel = utf8_encode($cliente->getCidade());
+            $enderecoBrutoResponsavel = removeAcentos(utf8_encode($cliente->getEndereco()));
+            $complementoResponsavel = removeAcentos(utf8_encode($cliente->getComplemento()));
+            $cidadeResponsavel = removeAcentos(utf8_encode($cliente->getCidade()));
             $estadoResponsavel = $cliente->getUf();
-            $bairroResponsavel = utf8_encode($cliente->getBairro());
+            $bairroResponsavel = removeAcentos(utf8_encode($cliente->getBairro()));
             $numeroResponsavel = $cliente->getNumero();
             $cepResponsavel = $cliente->getCep();
 
@@ -1030,8 +1030,8 @@ function alterar_cliente($certificado_id){
 			}
 		}
 		$cliente->save();
-
-		echo $resultado.';0';
+        echo json_encode(array('mensagem'=>'Ok', 'dados'=>$resultado.';0'));
+		//echo $resultado.';0';
 	}catch(Exception $e){
 	    erroEmail($e->getMessage(),'Erro na funcoes de certificado em alterar cliente');
 		echo $e->getMessage();

@@ -314,6 +314,7 @@ function editar_certificado(certificado_id,funcao,usuario_id){
 						alertSucesso('Certificado alterado com sucesso!');
 					}
 				}else{
+                    $("#editarCliente").modal('hide');
 				    erroEmail(result, 'Erro no javascritp na fun??o editar certificado');
 					alert('Error TC.JS/444 - Erro ao editar certificado,' + msnPadrao + '.');
 				}
@@ -375,6 +376,7 @@ function editar_cliente_certificado(funcao){
                 alertErro (acentuarMsn('Error TC.JS/591 - Erro na a??o editar cliente,' + msnPadrao + '.'));
 			},
 			success : function(result){
+				console.log(result);
 				var resultado = JSON.parse(result);
                 var certificado = resultado.dados.split(';');
                 console.log(certificado);
