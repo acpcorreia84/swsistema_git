@@ -25,13 +25,19 @@ function carregarNegocios() {
         'campoFiltro' : camposFiltro
     };
     $('#txtDataNegocios').html('carregando...');
-    if ($('#tipoNegocios').val() == 'Perdidos')
-        $('#totalLost').html('carregando...');
+
+    if ($('#tipoNegocios').val() == 'Perdidos' || $('#tipoNegocios').val() == 'Recuperacao') {
+        $('#totalCertificadosCvp').html('carregando...');
+        $('#totalCertificadosRecuperacao').html('carregando...');
+    }
     else {
         $('#totalCertificadosUrgentes').html('carregando...');
         $('#totalCertificadosUrgentesComFeedback').html('carregando...');
         $('#totalCertificadosCvp').html('carregando...');
+        $('#totalCertificadosRecuperacao').html('carregando...');
     }
+
+
 
 
     var dadosajax = {
@@ -65,12 +71,15 @@ function carregarNegocios() {
                 if (resultado.mensagem == 'Ok') {
                     montarTabelaDinamica(resultado.colunas, resultado.negocios, 'tabelaNegocios', 'divTabelaNegocios');
 
-                    if (resultado.tipoNegocio == 'Perdidos')
-                        $('#totalLost').html(resultado.somaLost + ' (' +resultado.qtdLost + ')');
+                    if ($('#tipoNegocios').val() == 'Perdidos' || $('#tipoNegocios').val() == 'Recuperacao') {
+                        $('#totalCertificadosCvp').html(resultado.countCvp20d);
+                        $('#totalCertificadosRecuperacao').html(resultado.countRecuperacao20d);
+                    }
                     else {
                         $('#totalCertificadosUrgentes').html(resultado.somaTotalUrgentes + ' (' + resultado.quantidadeTotalUrgentes + ')');
-                        $('#totalCertificadosUrgentesComFeedback').html(resultado.somaTotalUrgentesComFeedback + ' (' +resultado.quantidadeTotalUrgentesComFeedback+ ')');
+                        $('#totalCertificadosUrgentesComFeedback').html(resultado.somaTotalUrgentesComFeedback + ' (' + resultado.quantidadeTotalUrgentesComFeedback + ')');
                         $('#totalCertificadosCvp').html(resultado.countCvp20d);
+                        $('#totalCertificadosRecuperacao').html(resultado.countRecuperacao20d);
                     }
 
                     $('#divContatosPopOver').html(resultado.htmlContatosPopOver);
@@ -212,5 +221,44 @@ function carregarFiltrosNegocios() {
 
             }
         }
+    });
+}
+
+function reativarNegocio(certificadoId) {
+    var dadosajax = {
+        'funcao' : "reativar_negocio",
+        'certificadoId': certificadoId
+    };
+
+    $('#mensagemLoading').html('<i class="fa fa-user-circle-o"></i> Reativando o neg&oacute;cio...');
+    $("#modalCarregando").modal('show');
+
+    $.ajax ({
+        url : pageUrl,
+        data : dadosajax,
+        type : 'POST',
+        cache : true,
+        error : function (){
+            alertErro ('Error NG1902 - Erro na a&ccedil;&atilde;o de reativar o negocio,' + msnPadrao + '.');
+        },
+        success : function(result){
+            try {
+                $("#modalCarregando").modal('hide');
+
+                var resultado = JSON.parse(result);
+
+                if (resultado.mensagem == 'Ok') {
+                    alertSucesso('Neg&oacute;cio reativado com sucesso');
+
+                }
+            } catch (e) {
+                console.log(result, e);
+                alertErro ('Error NG1923 - ao tentar reativar o negocio,' + msnPadrao + '.');
+            }
+        },
+        complete : function ( ) {
+            carregarNegocios();
+        }
+
     });
 }

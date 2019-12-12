@@ -148,7 +148,6 @@ include 'inc/script.php';
                                             </div>
                                             <div class="col-xs-9 text-right">
                                                 <div id="totalCertificadosUrgentesComFeedback">carregando...</div>
-                                                <div></div>
                                             </div>
                                         </div>
                                     </div>
@@ -171,7 +170,6 @@ include 'inc/script.php';
                                             </div>
                                             <div class="col-xs-9 text-right" style="color: #fff;">
                                                 <div id="totalCertificadosCvp" style="color: yellow; font-weight: bolder">carregando...</div>
-                                                <div style="color: yellow; font-weight: bolder"> </div>
                                             </div>
                                         </div>
                                     </div>
@@ -192,12 +190,12 @@ include 'inc/script.php';
                                     <div class="col-xs-3">
                                         <i class="fas fa-ambulance fa-4x"></i>
                                     </div>
-                                    <div class="col-xs-9 text-right" style="color: #fff;">
-                                        <div style="font-weight: bolder"> </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div id="totalCertificadosRecuperacao" style="color: #fff;">carregando...</div>
                                     </div>
                                 </div>
                             </div>
-                            <a href="#" onclick="#">
+                            <a href="#" onclick="$('#tipoNegocios').val('Recuperacao'); $('#tipoNegociosLegendas').html('Recupera&ccedil;&atilde;o');  carregarNegocios();">
                                 <div class="panel-footer">
                                     <span class="pull-left">Em recupera&ccedil;&atilde;o</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
