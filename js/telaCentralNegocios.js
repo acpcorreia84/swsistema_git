@@ -37,9 +37,6 @@ function carregarNegocios() {
         $('#totalCertificadosRecuperacao').html('carregando...');
     }
 
-
-
-
     var dadosajax = {
         'funcao' : "carregar_central_negocios",
         'tipoNegocios': $('#tipoNegocios').val(),
@@ -80,6 +77,9 @@ function carregarNegocios() {
                         $('#totalCertificadosUrgentesComFeedback').html(resultado.somaTotalUrgentesComFeedback + ' (' + resultado.quantidadeTotalUrgentesComFeedback + ')');
                         $('#totalCertificadosCvp').html(resultado.countCvp20d);
                         $('#totalCertificadosRecuperacao').html(resultado.countRecuperacao20d);
+
+                        $('#totalPedidos').html(resultado.totalPedido + ' (' + resultado.qtdPedido + ')');
+                        $('#totalRenovacoes').html(resultado.totalRenovacao + ' (' + resultado.qtdRenovacao + ')');
                     }
 
                     $('#divContatosPopOver').html(resultado.htmlContatosPopOver);
@@ -104,7 +104,8 @@ function informarFeedbackNegocio() {
         'selectFeedback': $('#selectFeedback').val(),
         'selectLost': $('#selectLost').val(),
         'edtFeedbackCd': $('#edtFeedbackCd').val(),
-        'certificadoId': $('#cnSpanCodigoCertificado').html()
+        'certificadoId': $('#cnSpanCodigoCertificado').html(),
+        'tipoNegocio': $('#tipoNegocios').val(),
     };
     console.log($('#selectLost').val(),$('#selectFeedback').val());
     $('#mensagemLoading').html('<i class="fa fa-user-circle-o"></i> Gravando o feedback do neg&oacute;cio');

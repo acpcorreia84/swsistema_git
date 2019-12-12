@@ -237,7 +237,7 @@ include 'inc/script.php';
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                Certificados <b id="tipoNegociosLegendas">Urgentes</b> | Legenda: <i class="fa fa-square" style="color: #0b2c89"></i> Pedido | <i class="fa fa-square text-success"></i> Renova&ccedil;&atilde;o  | <i class="fa fa-square" style="color: purple"></i> Recarteiriza&ccedil;&atilde;o
+                                Certificados <b id="tipoNegociosLegendas">Urgentes</b> | Legenda: <i class="fa fa-square" style="color: #0b2c89"></i> Pedido <span id="totalPedidos"></span> | <i class="fa fa-square text-success"></i> Renova&ccedil;&atilde;o <span id="totalRenovacoes"></span> | <i class="fa fa-square" style="color: purple"></i> Recarteiriza&ccedil;&atilde;o
                             </div><!-- PANEL HEADING -->
 
                             <div class="panel-body">

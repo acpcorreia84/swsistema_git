@@ -21,11 +21,13 @@ function informarFeedbackNegocio() {
         /*var_dump($_POST['tipoFeedback'], $_POST['selectFeedback']); exit;*/
         if ($_POST['tipoFeedback'] == 'feedback') {
             $certificadoSituacao->setSituacaoId($_POST['selectFeedback']);
-            $certificado->setStatusFollowup($_POST['selectFeedback']);
+            if ($_POST['tipoNegocio'] != 'Recuperacao')
+                $certificado->setStatusFollowup($_POST['selectFeedback']);
         }
         else {
             $certificadoSituacao->setSituacaoId($_POST['selectLost']);
-            $certificado->setStatusFollowup($_POST['selectLost']);
+            if ($_POST['tipoNegocio'] != 'Recuperacao')
+                $certificado->setStatusFollowup($_POST['selectLost']);
         }
 
         $certificadoSituacao->setComentario($_POST['edtFeedbackCd']);
@@ -287,7 +289,7 @@ function carregarNegocios() {
         $dataDe = date('Y-m-d H:i:s');
 
         if ($tipoNegocios == 'Urgentes')
-            $qtdDias = 10;
+            $qtdDias = 7;
         elseif ($tipoNegocios=='UrgentesFollowUp')
             $qtdDias = 10;
         else {
@@ -382,6 +384,10 @@ function carregarNegocios() {
         $htmlPopOver = '';
         $qtdRecuperacao = 0;
         $somaRecuperacao = 0;
+        $totalPedido = 0;
+        $qtdPedido = 0;
+        $qtdRenovacao = 0;
+        $totalRenovacao = 0;
 
         foreach ($certificadosObj as $key=>$certificado)  {
 
@@ -504,7 +510,7 @@ function carregarNegocios() {
 
                     );
                 /*
-                 * VAI PRO CVP
+                 * CVP
                  * */
                 } elseif ($certificado->getStatusFollowup()==$situacaoLostAux) {
                     $qtdLost++;
@@ -524,7 +530,7 @@ function carregarNegocios() {
                     );
 
                 /*
-                 * VAI PRO CVP
+                 * EM RECUPERACAO
                  * */
                 } elseif ($certificado->getStatusFollowup()==$situacaoRecuperacao) {
                     $qtdRecuperacao++;
@@ -551,6 +557,14 @@ function carregarNegocios() {
                 /*
                  * URGENTE SEM FEEDBACK
                  * */
+                if ($certificado->getCertificadoRenovado()>0) {
+                    $totalRenovacao += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                    $qtdRenovacao += 1;
+                }
+                else {
+                    $totalPedido += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                    $qtdPedido += 1;
+                }
                 $qtdUrgentes++;
                 $somaUrgentes += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
 
@@ -597,7 +611,8 @@ function carregarNegocios() {
             'quantidadeTotalUrgentes'=>$qtdUrgentes, 'quantidadeTotalUrgentesComFeedback'=>$qtdUrgentesComFeedback,
             'somaTotalUrgentes' => formataMoeda($somaUrgentes), 'somaTotalUrgentesComFeedback' =>formataMoeda($somaUrgentesComFeedaback),
             'countCvp20d'=>$countCvp20d, 'countRecuperacao20d'=>$countRecuperacao20d, 'htmlContatosPopOver'=>$htmlPopOver,
-            'dataDe'=>date('d/m/Y'), 'dataAte'=>$dataAte->format('d/m/Y'), 'tipoNegocio' => $tipoNegocios
+            'dataDe'=>date('d/m/Y'), 'dataAte'=>$dataAte->format('d/m/Y'), 'tipoNegocio' => $tipoNegocios,
+            'qtdPedido'=>$qtdPedido, 'totalPedido'=>formataMoeda($totalPedido), 'qtdRenovacao'=>$qtdRenovacao, 'totalRenovacao'=>formataMoeda($totalRenovacao)
         );
 
         echo json_encode($retorno);
