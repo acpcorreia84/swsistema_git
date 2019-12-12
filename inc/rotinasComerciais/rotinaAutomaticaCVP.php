@@ -184,6 +184,7 @@ try {
             $qtdSemFollowAntes++;
 
         if ($_GET['acao']=='executar') {
+            $certSit = '';
             $qtdTotal++;
             /*
              * ACAO PRA RECARTEIRIZACAO APENAS DE PEDIDOS
@@ -212,7 +213,7 @@ try {
 
                             $certSit = new CertificadoSituacao();
                             $certSit->setUsuarioId(1039);
-                            $certSit->setComentario('Este pedido foi mandado para o CVP, devido a estar '. $diffDatas . ' em aberto. Por enquanto n&atildeo ser&aacute; recarteirizado e se manter&aacute; na sua carteira. Cuide bem dele!');
+                            $certSit->setComentario('Este pedido foi mandado para o CVP, devido a estar '. $diffDatas . ' em aberto mesmo com feedback. Por enquanto n&atildeo ser&aacute; recarteirizado e se manter&aacute; na sua carteira. Cuide bem dele!');
                             $cSit = new Criteria();
                             $certSit->setCertificadoId($certificado->getId());
                             $cSit->add(SituacaoPeer::SIGLA, 'lostaux');
@@ -238,7 +239,7 @@ try {
 
                         $certSit = new CertificadoSituacao();
                         $certSit->setUsuarioId(1039);
-                        $certSit->setComentario('Este pedido foi mandado para o CVP, devido a estar '. $diffDatas . ' em aberto. Por enquanto n&atildeo ser&aacute; recarteirizado e se manter&aacute; na sua carteira. Cuide bem dele!');
+                        $certSit->setComentario('Este pedido foi mandado para o CVP, devido a estar '. $diffDatas . ' em aberto sem feedback. Por enquanto n&atildeo ser&aacute; recarteirizado e se manter&aacute; na sua carteira. Cuide bem dele!');
                         $cSit = new Criteria();
                         $certSit->setCertificadoId($certificado->getId());
                         $cSit->add(SituacaoPeer::SIGLA, 'lostaux');
@@ -247,13 +248,14 @@ try {
                         $certSit->save();
 
                     }
-
                 }
         }
         $comentario = '';
-        if ($certSit)
+        if ($certSit) {
             $comentario = $certSit->getComentario();
-        echo "<tr><td>".$i++."</td><td>".$certificado->getId()."</td><td>".$certificado->getCliente()->getRazaoSocial().' - '.$certificado->getCliente()->getNomeFantasia()." | Comentario: ".$comentario."</td><td>".$certificado->getDataCompra('d/m/Y')."</td><td>".$diffDatas .'d'."</td><td>".$certificado->getStatusFollowup()."</td><td>".$tipoPedido."</td></tr>";
+            echo "<tr><td>".$i++."</td><td><a target='_blank' href='http://www.swsistema.com.br/telaCertificado.php?funcao=detalhaCertificado&idCertificado=".$certificado->getId()."'>".$certificado->getId()."</a></td><td>".$certificado->getCliente()->getRazaoSocial().' - '.$certificado->getCliente()->getNomeFantasia()." - CONSULTOR: ".$certificado->getUsuario()->getNome()." | Comentario: ".$comentario."</td><td>".$certificado->getDataCompra('d/m/Y')."</td><td>".$diffDatas .'d'."</td><td>".$certificado->getStatusFollowup()." <h3 style='color: darkred'>Comentario: ".$comentario."</h3></td><td>" . $tipoPedido . "</td></tr>";
+        } else
+            echo '<tr><td>' . $i++ . '</td><td><a target="_blank" href="http://www.swsistema.com.br/telaCertificado.php?funcao=detalhaCertificado&idCertificado='.$certificado->getId().'">'.$certificado->getId()."</a></td><td>" . $certificado->getCliente()->getRazaoSocial() . ' - ' . $certificado->getCliente()->getNomeFantasia() . "- <b>CONSULTOR: ".$certificado->getUsuario()->getNome()."</b>  | Comentario: " . $comentario . "</td><td>" . $certificado->getDataCompra('d/m/Y') . "</td><td>" . $diffDatas . 'd' . "</td><td>" . $certificado->getStatusFollowup() . "</td><td>" . $tipoPedido . "</td></tr>";
     }
 
 
