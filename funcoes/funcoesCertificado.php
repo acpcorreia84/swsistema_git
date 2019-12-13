@@ -711,7 +711,7 @@ function recupera_cliente($clienteId,$funcao){
                     }
                     $enderecoResponsavel = $enderecoBrutoResponsavel . ", " . $numeroResponsavel . ", " . $bairroResponsavel . " - " . $cepResponsavel;
                 } else {
-                    $enderecoResponsavel = $responsavel->getEndereco();
+                    $enderecoResponsavel = removeAcentos(utf8_encode($responsavel->getEndereco()));
                 }
 
                 if ($responsavel->getEmail()) {
