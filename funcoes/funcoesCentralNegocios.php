@@ -637,6 +637,11 @@ function carregarNegocios() {
         $totaisPedidoRenovacao['cvp']['totalPedido']= formataMoeda($totaisPedidoRenovacao['cvp']['totalPedido']);
         $totaisPedidoRenovacao['recuperacao']['totalPedido']= formataMoeda($totaisPedidoRenovacao['recuperacao']['totalPedido']);
 
+        $totaisPedidoRenovacao['urgenteSemFeedback']['totalRenovacao'] = formataMoeda($totaisPedidoRenovacao['urgenteSemFeedback']['totalRenovacao']);
+        $totaisPedidoRenovacao['urgenteFeedback']['totalRenovacao']= formataMoeda($totaisPedidoRenovacao['urgenteFeedback']['totalRenovacao']);
+        $totaisPedidoRenovacao['cvp']['totalRenovacao']= formataMoeda($totaisPedidoRenovacao['cvp']['totalRenovacao']);
+        $totaisPedidoRenovacao['recuperacao']['totalRenovacao']= formataMoeda($totaisPedidoRenovacao['recuperacao']['totalRenovacao']);
+
         $retorno = array('mensagem'=>'Ok','colunas'=>json_encode($colunas), 'negocios'=>json_encode($negocios),
             'quantidadeTotalUrgentes'=>$qtdUrgentes, 'quantidadeTotalUrgentesComFeedback'=>$qtdUrgentesComFeedback,
             'somaTotalUrgentes' => formataMoeda($somaUrgentes), 'somaTotalUrgentesComFeedback' =>formataMoeda($somaUrgentesComFeedaback),

@@ -99,7 +99,6 @@ function carregarNegocios() {
 
                     }
 
-                    console.log(totaisQtds.urgenteFeedback.totalPedido);
                     /*$('#totalPedidos').html(resultado.totaisPedidoRenovacao + ' (' + resultado.totaisPedidoRenovacao + ')');
                     $('#totalRenovacoes').html(resultado.totalRenovacao + ' (' + resultado.qtdRenovacao + ')');*/
 
