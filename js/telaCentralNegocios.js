@@ -36,6 +36,8 @@ function carregarNegocios() {
         $('#totalCertificadosCvp').html('carregando...');
         $('#totalCertificadosRecuperacao').html('carregando...');
     }
+    $('#totalPedidos').html('carregando...');
+    $('#totalRenovacoes').html('carregando...');
 
     var dadosajax = {
         'funcao' : "carregar_central_negocios",
@@ -67,10 +69,18 @@ function carregarNegocios() {
                 //var quantidadeCertificadosTotal = JSON.parse(resultado.quantidadeCertificadosTotal);
                 if (resultado.mensagem == 'Ok') {
                     montarTabelaDinamica(resultado.colunas, resultado.negocios, 'tabelaNegocios', 'divTabelaNegocios');
-
+                    var totaisQtds = JSON.parse(resultado.totaisPedidoRenovacao);
                     if ($('#tipoNegocios').val() == 'Perdidos' || $('#tipoNegocios').val() == 'Recuperacao') {
                         $('#totalCertificadosCvp').html(resultado.countCvp20d);
                         $('#totalCertificadosRecuperacao').html(resultado.countRecuperacao20d);
+                        if ($('#tipoNegocios').val() == 'Perdidos') {
+                            $('#totalPedidos').html(totaisQtds.cvp.totalPedido + ' (' + totaisQtds.cvp.qtdPedido + ')');
+                            $('#totalRenovacoes').html(totaisQtds.cvp.totalRenovacao + ' (' + totaisQtds.cvp.qtdRenovacao + ')');
+                        }
+                        else if ($('#tipoNegocios').val() == 'Recuperacao') {
+                            $('#totalPedidos').html(totaisQtds.recuperacao.totalPedido + ' (' + totaisQtds.recuperacao.qtdPedido + ')');
+                            $('#totalRenovacoes').html(totaisQtds.recuperacao.totalRenovacao + ' (' + totaisQtds.recuperacao.qtdRenovacao + ')');
+                        }
                     }
                     else {
                         $('#totalCertificadosUrgentes').html(resultado.somaTotalUrgentes + ' (' + resultado.quantidadeTotalUrgentes + ')');
@@ -78,9 +88,20 @@ function carregarNegocios() {
                         $('#totalCertificadosCvp').html(resultado.countCvp20d);
                         $('#totalCertificadosRecuperacao').html(resultado.countRecuperacao20d);
 
-                        $('#totalPedidos').html(resultado.totalPedido + ' (' + resultado.qtdPedido + ')');
-                        $('#totalRenovacoes').html(resultado.totalRenovacao + ' (' + resultado.qtdRenovacao + ')');
+                        if ($('#tipoNegocios').val() == 'Urgentes') {
+                            $('#totalPedidos').html(totaisQtds.urgenteSemFeedback.totalPedido + ' (' + totaisQtds.urgenteSemFeedback.qtdPedido + ')');
+                            $('#totalRenovacoes').html(totaisQtds.urgenteSemFeedback.totalRenovacao + ' (' + totaisQtds.urgenteSemFeedback.qtdRenovacao + ')');
+                        }
+                        else if ($('#tipoNegocios').val() == 'UrgentesFollowUp') {
+                            $('#totalPedidos').html(totaisQtds.urgenteFeedback.totalPedido + ' (' + totaisQtds.urgenteFeedback.qtdPedido + ')');
+                            $('#totalRenovacoes').html(totaisQtds.urgenteFeedback.totalRenovacao + ' (' + totaisQtds.urgenteFeedback.qtdRenovacao + ')');
+                        }
+
                     }
+
+                    console.log(totaisQtds.urgenteFeedback.totalPedido);
+                    /*$('#totalPedidos').html(resultado.totaisPedidoRenovacao + ' (' + resultado.totaisPedidoRenovacao + ')');
+                    $('#totalRenovacoes').html(resultado.totalRenovacao + ' (' + resultado.qtdRenovacao + ')');*/
 
                     $('#divContatosPopOver').html(resultado.htmlContatosPopOver);
                 }
