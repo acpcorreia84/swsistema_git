@@ -386,7 +386,102 @@ function carregarNegocios() {
 
         $totaisPedidoRenovacao = array();
 
+
         foreach ($certificadosObj as $key=>$certificado)  {
+
+            if ($certificado->getStatusFollowup()) {
+
+                /*
+                 * URGENTE COM FEEDBACK
+                 * */
+                if (array_search($certificado->getStatusFollowup(), $arrFollow )) {
+
+                    if ($certificado->getCertificadoRenovado()==0) {
+                        $totaisPedidoRenovacao['urgenteFeedback']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                        $totaisPedidoRenovacao['urgenteFeedback']['qtdRenovacao'] += 1;
+                    }
+                    else {
+                        $totaisPedidoRenovacao['urgenteFeedback']['totalPedido'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                        $totaisPedidoRenovacao['urgenteFeedback']['qtdPedido'] += 1;
+                    }
+                    $qtdUrgentesComFeedback++;
+                    $somaUrgentesComFeedaback += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+
+                    /*
+                     * CVP
+                     * */
+                } elseif ($certificado->getStatusFollowup()==$situacaoLostAux) {
+
+                    if ($certificado->getCertificadoRenovado()==0) {
+                        $totaisPedidoRenovacao['cvp']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                        $totaisPedidoRenovacao['cvp']['qtdRenovacao'] += 1;
+                    }
+                    else {
+                        $totaisPedidoRenovacao['cvp']['totalPedido'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                        $totaisPedidoRenovacao['cvp']['qtdPedido'] += 1;
+                    }
+
+
+                    $qtdLost++;
+                    $somaLost += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+
+                    /*
+                     * EM RECUPERACAO
+                     * */
+                } elseif ($certificado->getStatusFollowup()==$situacaoRecuperacao) {
+
+                    if ($certificado->getCertificadoRenovado()==0) {
+                        $totaisPedidoRenovacao['recuperacao']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                        $totaisPedidoRenovacao['recuperacao']['qtdRenovacao'] += 1;
+                    }
+                    else {
+                        $totaisPedidoRenovacao['recuperacao']['totalPedido'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                        $totaisPedidoRenovacao['recuperacao']['qtdPedido'] += 1;
+                    }
+
+                    $qtdRecuperacao++;
+                    $somaRecuperacao += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+
+
+                }
+
+
+
+            } else {
+                /*
+                 * URGENTE SEM FEEDBACK
+                 * */
+                if ($certificado->getCertificadoRenovado()==0) {
+                    $totaisPedidoRenovacao['urgenteSemFeedback']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                    $totaisPedidoRenovacao['urgenteSemFeedback']['qtdRenovacao'] += 1;
+                }
+                else {
+                    $totaisPedidoRenovacao['urgenteSemFeedback']['totalPedido'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                    $totaisPedidoRenovacao['urgenteSemFeedback']['qtdPedido'] += 1;
+                }
+                $qtdUrgentes++;
+                $somaUrgentes += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+
+
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+        $qtdCount =  0;
+
+
+        foreach ($certificadosObj as $key=>$certificado)  {
+            $qtdCount++;
+            if ($qtdCount>=50)
+                break;
 
             $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d')));
             /*DEFINE SE E REVOGACAO, EM ABERTO OU RECARTEIRIZACAO*/
@@ -492,17 +587,6 @@ function carregarNegocios() {
                  * */
                 if (array_search($certificado->getStatusFollowup(), $arrFollow )) {
 
-                    if ($certificado->getCertificadoRenovado()==0) {
-                        $totaisPedidoRenovacao['urgenteFeedback']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
-                        $totaisPedidoRenovacao['urgenteFeedback']['qtdRenovacao'] += 1;
-                    }
-                    else {
-                        $totaisPedidoRenovacao['urgenteFeedback']['totalPedido'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
-                        $totaisPedidoRenovacao['urgenteFeedback']['qtdPedido'] += 1;
-                    }
-                    $qtdUrgentesComFeedback++;
-                    $somaUrgentesComFeedaback += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
-
                     $certificadosUrgentesFollowUp[] = array(' '=>($i++),'Cod.'=>$certificado->getId(),
                         'Cont.'=>$tipoCd.' '.$diffDatas .'d',
                         'D.Comp.'=>($certificado->getDataCompra('d/m/Y'))?$certificado->getDataCompra('d/m/Y'):'-',
@@ -520,18 +604,6 @@ function carregarNegocios() {
                  * */
                 } elseif ($certificado->getStatusFollowup()==$situacaoLostAux) {
 
-                    if ($certificado->getCertificadoRenovado()==0) {
-                        $totaisPedidoRenovacao['cvp']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
-                        $totaisPedidoRenovacao['cvp']['qtdRenovacao'] += 1;
-                    }
-                    else {
-                        $totaisPedidoRenovacao['cvp']['totalPedido'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
-                        $totaisPedidoRenovacao['cvp']['qtdPedido'] += 1;
-                    }
-
-
-                    $qtdLost++;
-                    $somaLost += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
                     $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataRecarteirizacao('Y-m-d')));
 
                     $certificadosPerdidos[] = array(' '=>($j++),'Cod.'=>$certificado->getId(),
@@ -550,18 +622,6 @@ function carregarNegocios() {
                  * EM RECUPERACAO
                  * */
                 } elseif ($certificado->getStatusFollowup()==$situacaoRecuperacao) {
-
-                    if ($certificado->getCertificadoRenovado()==0) {
-                        $totaisPedidoRenovacao['recuperacao']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
-                        $totaisPedidoRenovacao['recuperacao']['qtdRenovacao'] += 1;
-                    }
-                    else {
-                        $totaisPedidoRenovacao['recuperacao']['totalPedido'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
-                        $totaisPedidoRenovacao['recuperacao']['qtdPedido'] += 1;
-                    }
-
-                    $qtdRecuperacao++;
-                    $somaRecuperacao += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
                     $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataRecarteirizacao('Y-m-d')));
 
                     $certificadosRecuperacao[] = array(' '=>($j++),'Cod.'=>$certificado->getId(),
@@ -581,19 +641,6 @@ function carregarNegocios() {
 
 
             } else {
-                /*
-                 * URGENTE SEM FEEDBACK
-                 * */
-                if ($certificado->getCertificadoRenovado()==0) {
-                    $totaisPedidoRenovacao['urgenteSemFeedback']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
-                    $totaisPedidoRenovacao['urgenteSemFeedback']['qtdRenovacao'] += 1;
-                }
-                else {
-                    $totaisPedidoRenovacao['urgenteSemFeedback']['totalPedido'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
-                    $totaisPedidoRenovacao['urgenteSemFeedback']['qtdPedido'] += 1;
-                }
-                $qtdUrgentes++;
-                $somaUrgentes += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
 
                 $certificadosUrgentes[] = array(' '=>($l++),'Cod.'=>$certificado->getId(),
                     'Cont.'=>$tipoCd.' '.$diffDatas.'d',
