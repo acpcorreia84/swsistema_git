@@ -1216,7 +1216,7 @@ function salvarBoletoSafeToPay(){
         $boleto->setClienteId($cliente->getId());
         $boleto->setValor($valor_boleto);
         $boleto->setDescricao($certificado->getProduto()->getNome());
-        $boleto->setUsuarioId($certificado->getUsuarioId());
+        $boleto->setUsuarioId($usuarioLogado->getId());
         //$boleto->setContasReceberId($contaReceber->getId());
 
         /*SALVANDO A URL DO BOLETO*/
@@ -1349,6 +1349,7 @@ function gerarBoletoCertificado($certificado_id){
         }
 
         $boleto = new Boleto();
+        $boleto->setUsuarioId($usuarioLogado->getId());
         $boleto->setCertificadoId($certificado->getId());
         $boleto->setVencimento($vencimento[2].'/'.$vencimento[1].'/'.$vencimento[0]);
         $boleto->setDataProcessamento(date("Y-m-d"));
