@@ -335,7 +335,7 @@ function carregarNegocios() {
 
             $cCertificado->addAscendingOrderByColumn(CertificadoPeer::DATA_COMPRA);
             $colunas = array(
-                array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Cont.'), array('nome'=>'D.Comp.'), array('nome'=>'D.Venc.'),array('nome'=>'Proto.'),
+                array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Cont.'), array('nome'=>'D.Comp.'), array('nome'=>'D.Venc.'),
                 array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>utf8_encode('Ações'))
             );
 
@@ -386,6 +386,9 @@ function carregarNegocios() {
 
         $totaisPedidoRenovacao = array();
 
+        /*
+         * ALGORITMO PRA SOMAR AS QUANTIDADES
+         * */
 
         foreach ($certificadosObj as $key=>$certificado)  {
 
@@ -397,12 +400,12 @@ function carregarNegocios() {
                 if (array_search($certificado->getStatusFollowup(), $arrFollow )) {
 
                     if ($certificado->getCertificadoRenovado()==0) {
-                        $totaisPedidoRenovacao['urgenteFeedback']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
-                        $totaisPedidoRenovacao['urgenteFeedback']['qtdRenovacao'] += 1;
-                    }
-                    else {
                         $totaisPedidoRenovacao['urgenteFeedback']['totalPedido'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
                         $totaisPedidoRenovacao['urgenteFeedback']['qtdPedido'] += 1;
+                    }
+                    else {
+                        $totaisPedidoRenovacao['urgenteFeedback']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                        $totaisPedidoRenovacao['urgenteFeedback']['qtdRenovacao'] += 1;
                     }
                     $qtdUrgentesComFeedback++;
                     $somaUrgentesComFeedaback += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
@@ -413,12 +416,12 @@ function carregarNegocios() {
                 } elseif ($certificado->getStatusFollowup()==$situacaoLostAux) {
 
                     if ($certificado->getCertificadoRenovado()==0) {
-                        $totaisPedidoRenovacao['cvp']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
-                        $totaisPedidoRenovacao['cvp']['qtdRenovacao'] += 1;
-                    }
-                    else {
                         $totaisPedidoRenovacao['cvp']['totalPedido'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
                         $totaisPedidoRenovacao['cvp']['qtdPedido'] += 1;
+                    }
+                    else {
+                        $totaisPedidoRenovacao['cvp']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                        $totaisPedidoRenovacao['cvp']['qtdRenovacao'] += 1;
                     }
 
 
@@ -431,12 +434,12 @@ function carregarNegocios() {
                 } elseif ($certificado->getStatusFollowup()==$situacaoRecuperacao) {
 
                     if ($certificado->getCertificadoRenovado()==0) {
-                        $totaisPedidoRenovacao['recuperacao']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
-                        $totaisPedidoRenovacao['recuperacao']['qtdRenovacao'] += 1;
-                    }
-                    else {
                         $totaisPedidoRenovacao['recuperacao']['totalPedido'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
                         $totaisPedidoRenovacao['recuperacao']['qtdPedido'] += 1;
+                    }
+                    else {
+                        $totaisPedidoRenovacao['recuperacao']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                        $totaisPedidoRenovacao['recuperacao']['qtdRenovacao'] += 1;
                     }
 
                     $qtdRecuperacao++;
@@ -452,12 +455,12 @@ function carregarNegocios() {
                  * URGENTE SEM FEEDBACK
                  * */
                 if ($certificado->getCertificadoRenovado()==0) {
-                    $totaisPedidoRenovacao['urgenteSemFeedback']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
-                    $totaisPedidoRenovacao['urgenteSemFeedback']['qtdRenovacao'] += 1;
-                }
-                else {
                     $totaisPedidoRenovacao['urgenteSemFeedback']['totalPedido'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
                     $totaisPedidoRenovacao['urgenteSemFeedback']['qtdPedido'] += 1;
+                }
+                else {
+                    $totaisPedidoRenovacao['urgenteSemFeedback']['totalRenovacao'] += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
+                    $totaisPedidoRenovacao['urgenteSemFeedback']['qtdRenovacao'] += 1;
                 }
                 $qtdUrgentes++;
                 $somaUrgentes += $certificado->getProduto()->getPreco() - $certificado->getDesconto();
@@ -473,15 +476,12 @@ function carregarNegocios() {
 
 
 
-
+        /*
+         * ALGORITMO PRA CARREGAR O CERTIFICADO
+         * */
 
         $qtdCount =  0;
-
-
         foreach ($certificadosObj as $key=>$certificado)  {
-            $qtdCount++;
-            if ($qtdCount>=50)
-                break;
 
             $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d')));
             /*DEFINE SE E REVOGACAO, EM ABERTO OU RECARTEIRIZACAO*/
@@ -575,7 +575,7 @@ function carregarNegocios() {
                 
                 
                 "> <i class="fa fa-commenting-o"></i> 
-            </button> ';
+                </button> ';
 
             }
 
@@ -638,9 +638,14 @@ function carregarNegocios() {
 
                 }
 
-
+            /*
+             * URGENTES
+             * */
 
             } else {
+                $qtdCount++;
+                if ($qtdCount>=201)
+                    break;
 
                 $certificadosUrgentes[] = array(' '=>($l++),'Cod.'=>$certificado->getId(),
                     'Cont.'=>$tipoCd.' '.$diffDatas.'d',
@@ -661,10 +666,12 @@ function carregarNegocios() {
 
         $negocios = '';
 
-        if ($tipoNegocios == 'Urgentes')
+        if ($tipoNegocios == 'Urgentes') {
             $negocios = $certificadosUrgentes;
-        elseif ($tipoNegocios=='UrgentesFollowUp')
+        }
+        elseif ($tipoNegocios=='UrgentesFollowUp') {
             $negocios = $certificadosUrgentesFollowUp;
+        }
         elseif ($tipoNegocios=='Recuperacao') {
             $negocios = $certificadosRecuperacao;
             if ($somaRecuperacao && $qtdRecuperacao)
@@ -679,6 +686,27 @@ function carregarNegocios() {
                 $countCvp20d =  formataMoeda($somaLost). ' ('.$qtdLost.')';
 
         }
+
+        /*
+        * GUARDA OS NEGOCIOS NA SESSAO
+        * */
+        session_start();
+        $arrNegocio = array();
+        if (!isset($_SESSION['sessCertificados'.$tipoNegocios]))
+            $_SESSION['sessCertificados'.$tipoNegocios] = serialize($certificadosUrgentes);
+        else {
+            $arrNegocio = unserialize($_SESSION['sessCertificados'.$tipoNegocios]);
+            //$arrNegocio.concat($negocios);
+        }
+        //$_SESSION['sessCertificados'.$tipoNegocios] = '';
+
+
+
+        //var_dump($_SESSION['sessCertificados'.$tipoNegocios]);
+        //var_dump('arrNegocio:',$arrNegocio);
+        //unset($_SESSION['sessCertificados'.$tipoNegocios]);
+        //var_dump($_SESSION);exit;
+
         $totaisPedidoRenovacao['urgenteSemFeedback']['totalPedido'] = formataMoeda($totaisPedidoRenovacao['urgenteSemFeedback']['totalPedido']);
         $totaisPedidoRenovacao['urgenteFeedback']['totalPedido']= formataMoeda($totaisPedidoRenovacao['urgenteFeedback']['totalPedido']);
         $totaisPedidoRenovacao['cvp']['totalPedido']= formataMoeda($totaisPedidoRenovacao['cvp']['totalPedido']);
