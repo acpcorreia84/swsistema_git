@@ -673,13 +673,17 @@ function enviarEmailRetornoCartaoCredito($tipo, $idCertificado, $finalCartao, $n
 // '%h Hours                                                    =>  11 Hours
 // '%a Days                                                        =>  468 Days
 //////////////////////////////////////////////////////////////////////
-function DiferencaEntreDatas ($date_1 , $date_2 , $differenceFormat = '%a' ) {
+function DiferencaEntreDatas ($date_1 , $date_2 , $differenceFormat = '%a', $maisMenos = false ) {
     $datetime1 = date_create($date_1);
     $datetime2 = date_create($date_2);
 
     $interval = date_diff($datetime1, $datetime2);
 
-    return $interval->format($differenceFormat);
+    if ($maisMenos)
+        return $interval->format('%R'.$differenceFormat);
+    else
+        return $interval->format($differenceFormat);
+
 }
 
 ///CIDADES E DDDS DO BRASIL
