@@ -12,7 +12,7 @@ $tId = $retorno->TransactionID;
 
 /*$secretKey = '28517135D5E1438398289AA82447E1B82E4B9E5EE829425DA0D9C082A1C5F6FF';
 $transactionStatus = '3';
-$tId = '1631559';*/
+$tId = '1638245';*/
 
     if ( ($secretKey == '28517135D5E1438398289AA82447E1B82E4B9E5EE829425DA0D9C082A1C5F6FF' && ($transactionStatus=="3"))  ) {
             $cBol = new Criteria();
@@ -48,7 +48,12 @@ $tId = '1631559';*/
                         $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
                         $certSit->setData(date("Y-m-d H:i:s",mtime()));
                         $certSit->save();
-                        $certificado->setUsuarioId($boleto->getUsuarioId());
+                        $usuarioRecart = $boleto->getUsuario();
+                        /*
+                         * SO RECARTEIRIZA SE FOR CONSULTOR, CONSULTOR AGR OU SUPERVISOR
+                         * */
+                        if ($usuarioRecart->getCargo() == 9 || $usuarioRecart->getCargo() == 10 || $usuarioRecart->getCargo() == 23)
+                            $certificado->setUsuarioId($boleto->getUsuarioId());
 
                     }
 
