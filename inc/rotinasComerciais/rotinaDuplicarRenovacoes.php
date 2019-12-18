@@ -260,6 +260,39 @@ function duplicarPedidosRenovacao($certificadosDistribuidosUsuarios, $dataCompra
                     $certSit->setData(date('Y-m-d H:i:s'));
                     $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
                     $certSit->save();
+
+
+                    $pedido = new Pedido();
+                    $pedido->setDataPedido(date("Y-m-d H:i:s", mtime()));
+                    $pedido->setClienteId($certificadoNovo->getClienteId());
+                    $pedido->setFuncionarioId($idUsuario);
+                    $pedido->save();
+
+                    $itemPedido = new ItemPedido();
+                    $itemPedido->setProdutoId($certificadoNovo->getProdutoId());
+                    $itemPedido->setCertificadoId($certificadoNovo->getId());
+                    $itemPedido->setPedidoId($pedido->getId());
+                    $itemPedido->save();
+
+                    $contaReceber = new ContasReceber();
+                    $contaReceber->setPedidoId($pedido->getId());
+                    $contaReceber->setCertificadoId($certificadoNovo->getId());
+                    if ($pedido->getCliente()->getRazaoSocial())
+                        $nome = $pedido->getCliente()->getRazaoSocial();
+                    else
+                        $nome = $pedido->getCliente()->getNomeFantasia();
+
+                    $contaReceber->setDescricao(utf8_decode("Compra de certificado digital: " . $certificadoNovo->getProduto()->getNome() . " , pelo cliente: " . $nome));
+                    $contaReceber->setDataDocumento(date("Y-m-d", mtime()));
+                    $contaReceber->setValorDocumento($certificadoNovo->getProduto()->getPreco());
+                    $contaReceber->setDesconto($certificadoNovo->getDesconto());
+                    $contaReceber->setSituacao(0);
+                    $contaReceber->setFormaPagamentoId($certificadoNovo->getFormaPagamentoId());
+                    $contaReceber->setVencimento(date('Y-m-d H:i:s'));
+                    $contaReceber->setPedidoId($pedido->getId());
+                    $contaReceber->save();
+
+                    /*FIM CADASTRO PEDIDO, ITEM PEDIDO, SITUACAO E CONTAS A RECEBER*/
                 }
 
             }
