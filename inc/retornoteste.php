@@ -48,7 +48,7 @@ $tId = '1638245';*/
                         $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
                         $certSit->setData(date("Y-m-d H:i:s",mtime()));
                         $certSit->save();
-                        $usuarioRecart = $boleto->getUsuario();
+                        $usuarioRecart = $certificado->getUsuario();
                         /*
                          * SO RECARTEIRIZA SE FOR CONSULTOR, CONSULTOR AGR OU SUPERVISOR
                          * */
