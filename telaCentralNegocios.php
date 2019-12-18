@@ -241,8 +241,9 @@ include 'inc/script.php';
                             </div><!-- PANEL HEADING -->
 
                             <div class="panel-body">
-
+                                <ul class="paginacao pagination-sm"  ></ul>
                                 <div class="table table-responsive" id="divTabelaNegocios"></div>
+                                <ul class="paginacao" ></ul>
                                 <div id="divContatosPopOver"></div>
                             </div><!-- PANEL BODY -->
                         </div><!-- panel default -->

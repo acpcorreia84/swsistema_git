@@ -2,7 +2,24 @@ var msnPadrao = 'Entre em contato com o administrador do sistema';
 
 var pageUrl = 'funcoes/funcoesCentralNegocios.php';
 
-function carregarNegocios() {
+function carregarNegocios(paginaSelecionada, qtdItensPorPagina, paginando, carregarDivPaginacao) {
+
+    /*INICIALIZA SE NAO PASSAR PARAMETRO SETA 0*/
+    if (paginaSelecionada === undefined)
+        var pagina = 0;
+    else
+        var pagina = paginaSelecionada;
+
+    /*INICIALIZA SE NAO PASSAR PARAMETRO SETA 20 ITENS POR PAGINA POR PADRAO*/
+    if (qtdItensPorPagina === undefined)
+        var qtdItens = 30;
+    else
+        var qtdItens = qtdItensPorPagina;
+
+    if (carregarDivPaginacao !== undefined)
+        var carregarPaginacao = carregarDivPaginacao;
+    else
+        var carregarPaginacao = '';
 
     if ((typeof window['filtroUsuariosNegocios'] !== 'undefined') && (Array.isArray(window['filtroUsuariosNegocios'])))
         consultores = window['filtroUsuariosNegocios'];
@@ -42,8 +59,9 @@ function carregarNegocios() {
     var dadosajax = {
         'funcao' : "carregar_central_negocios",
         'tipoNegocios': $('#tipoNegocios').val(),
-        'filtros': filtros
-
+        'filtros': filtros,
+        'pagina' : pagina,
+        'itensPorPagina' : qtdItens
     };
 
     $.ajax ({

@@ -643,9 +643,6 @@ function carregarNegocios() {
              * */
 
             } else {
-                $qtdCount++;
-                if ($qtdCount>=201)
-                    break;
 
                 $certificadosUrgentes[] = array(' '=>($l++),'Cod.'=>$certificado->getId(),
                     'Cont.'=>$tipoCd.' '.$diffDatas.'d',
