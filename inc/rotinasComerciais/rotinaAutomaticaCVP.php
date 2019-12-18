@@ -148,35 +148,18 @@ try {
         * SE FOR UM PEDIDO DE RENOVACAO, O VENCIMENTO E O VENCIMENTO DO CD ANTERIOR
         * */
         $tipoPedido = 'PED';
-        $certificadoRenovado = '';
+
         if ($certificado->getCertificadoRenovado()) {
-            $certificadoRenovado = $certificado->getCertificadoRelatedByCertificadoRenovado();
             $tipoPedido = 'REN';
-            $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificadoRenovado->getDataFimValidade('Y-m-d')));
+            $certificadoRenovado = $certificado->getCertificadoRelatedByCertificadoRenovado();
+            if ($certificadoRenovado)
+                $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificadoRenovado->getDataFimValidade('Y-m-d')));
+            else
+                $diffDatas = '';
         } else {
             $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d')));
         }
 
-        /*
-    * SE FOR UM PEDIDO DE RENOVACAO, O VENCIMENTO E O VENCIMENTO DO CD ANTERIOR
-    * */
-        $certificadoRenovado = '';
-        if ($certificado->getCertificadoRenovado()) {
-            $certificadoRenovado = $certificado->getCertificadoRelatedByCertificadoRenovado();
-            $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificadoRenovado->getDataFimValidade('Y-m-d')));
-        } else {
-            $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d')));
-        }
-        /*
-        * SE FOR UM PEDIDO DE RENOVACAO, O VENCIMENTO E O VENCIMENTO DO CD ANTERIOR
-        * */
-        $certificadoRenovado = '';
-        if ($certificado->getCertificadoRenovado()) {
-            $certificadoRenovado = $certificado->getCertificadoRelatedByCertificadoRenovado();
-            $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificadoRenovado->getDataFimValidade('Y-m-d')));
-        } else {
-            $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d')));
-        }
 
         if ($certificado->getStatusFollowup())
             $qtdFollowAntes ++;
@@ -189,7 +172,7 @@ try {
             /*
              * ACAO PRA RECARTEIRIZACAO APENAS DE PEDIDOS
              * */
-            if ( ($tipoPedido=='PED'))
+            if ( ($tipoPedido=='PED')) {
                 if (($certificado->getStatusFollowup()) ) {
                     /*
                      * SO EXECUTA DENOVAMENTE SE AINDA NAO TIVER MANDADO PRA CVP, PRA NAO GERAR STATUS DUPLICADO
@@ -249,6 +232,29 @@ try {
 
                     }
                 }
+            } elseif ($tipoPedido=='REN') {
+                /*
+                 * TEM QUE ESTAR EM UM DOS STATUS DE FOLLOWUP LISTADOS
+                 * */
+                if ((array_search($certificado->getStatusFollowup(), $arrFollow )) || ($certificado->getStatusFollowup() == 0)) {
+                    /*
+                     * ACAO PARA RENOVACAO
+                     * */
+                    $certificado->setStatusFollowup($situacaoCvp);
+                    $certificado->setDataRecarteirizacao(date('Y-m-d H:i:s'));
+                    $certificado->save();
+
+                    $certSit = new CertificadoSituacao();
+                    $certSit->setUsuarioId(1039);
+                    $certSit->setComentario('Esta renova&ccedil;&atilde;o foi mandada para o CVP, devido a estar ' . $diffDatas . ' de vencer. Por enquanto n&atildeo ser&aacute; recarteirizado e se manter&aacute; na sua carteira. Cuide bem dela!');
+                    $cSit = new Criteria();
+                    $certSit->setCertificadoId($certificado->getId());
+                    $cSit->add(SituacaoPeer::SIGLA, 'lostaux');
+                    $certSit->setData(date('Y-m-d H:i:s'));
+                    $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
+                    $certSit->save();
+                }
+            }
         }
         $comentario = '';
         if ($certSit) {
