@@ -13,24 +13,6 @@
                 </div>
             </div>
             <div class="modal-body">
-                <div class="panel panel-default">
-                    <div class="panel-body bg-info">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <label>Conta:</label><span id="crDescricaoContaBaixar">...</span>
-                            </div>
-                        </div> <!--DIV CLASS row-->
-
-                        <!--
-                        INFORMACOES DO COMPROVANTE DO PAGAMENTO
-                        -->
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <label>Conta:</label><span id="crDescricaoContaBaixar">...</span>
-                            </div>
-                        </div> <!--DIV CLASS row-->
-                    </div>
-                </div>
                 <form role="form" class='form-horizontal' id="frmBaixarContaReceber">
 
                     <div class="form-group">

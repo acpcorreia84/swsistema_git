@@ -26,7 +26,7 @@
                         <button data-toggle="modal" class="btn btn-primary"  title="Editar Cliente" data-target="#editarCliente" onclick="editar_cliente_certificado('editar_cliente',<?=$usuarioLogado->getId();?>)"><i class="fa fa-lg fa-edit"></i> </button>
                         <button class="btn btn-primary" id="btnApagarCertificado" ><i class="fa fa-trash-o" aria-hidden="true" title="Apagar Certificado"></i></button>
                         <button class="btn btn-primary" id="btnCupomDesconto" data-toggle="modal" data-target="#modalInserirCupom"><i class="fa fa-hand-scissors-o" aria-hidden="true" title="Aplicar cupom de desconto"></i></button>
-
+                        <button id="btnBaixarPagamento" class="btn btn-primary" data-toggle="modal" data-target="#modalContaReceberBaixarPagamento" title="Baixar pagamento" onclick="carregarModalBaixarContasReceber()"><i class="fa fa-usd"></i> </button>
                         <button class="btn btn-danger" title="Fechar Janela" data-toggle="modal" data-target="#detalharCertificado" onclick="carregarCertificados($('.paginacao li.active').find('a').html());" id="btnFecharDetalhesCertificado"><i class="fa fa-close"></i></button>
                     </h3>
                     <script>
@@ -171,6 +171,7 @@
             <div class="modal-footer">
                 <input type="hidden" id="idCertificado" name="idCertificado"/>
                 <input type="hidden" id="idCliente" name="idCliente"/>
+                <input type="hidden" id="idContaReceber" name="idContaReceber"/>
             </div>
         </div>
     </div> <!--DIV CLASS modal-dialog modal-lg-->

@@ -1566,6 +1566,14 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
 							$('#btnApagarCertificado').prop("disabled",true);
 
 
+                        /*
+                         * HABILITA O BOTAO DE BAIXA DE PAGAMENTOS
+                         * */
+                        if (permissoes.permiteBaixarContaReceber == 'sim')
+                            $('#btnBaixarPagamento').prop("disabled",false);
+                        else
+                            $('#btnBaixarPagamento').prop("disabled",true);
+
 						/*
 						 * HABILITA O BOTAO DE GERAR PROTOCOLO SE
 						 * SE JA FOI PAGO, SE NAO ESTIVER VALIDADO E SE NAO TIVER PROTOCOLO
@@ -2772,4 +2780,110 @@ function consultarCertificadosVendaInterna() {
         });
     } else
         avancarVendaInterna();
+}
+
+function carregarModalBaixarContasReceber () {
+	/*
+	* CARREGA O MODAL DE CONTAS A RECEBER MAS PRINCIPALMENTE CRIA PEDIDO,
+	* CONTAS A RECEBER E ITEM DE PEDIDO CASO NECESSITE
+	* */
+
+    $('#mensagemLoading').html('<i class="fa fa-circle-o"></i> Carregando modal contas a receber');
+    $("#modalCarregando").modal('show');
+
+	var dadosajax = {
+		'certificadoId': $('#idCertificado').val(),
+		'funcao': 'carregar_modal_baixa_contas_receber',
+	};
+
+	$.ajax({
+		url: pageUrl,
+		data: dadosajax,
+		type: 'POST',
+		cache: true,
+
+		error: function () {
+			alertErro('Error CD9120 - Erro ao consultar certificados duplicados!' + msnPadrao + '.');
+		},
+		success: function (result) {
+			try {
+                $('#modalCarregando').modal('hide');
+                var dados = JSON.parse(result);
+
+                if (dados.mensagem=='Ok') {
+                    $('#crObservacaoBaixa').val('');
+                    $('#crCodigoOperacaoBaixa').val('');
+                    $('#idContaReceber').val(dados.contaReceberId);
+                    montarSelect('crDestinoLancamento', dados.bancos, 'divCrBanco');
+                    montarSelect('crFormaPagamentoLancamento', dados.formasPagamento, 'divCrFormaLancamento');
+                    /*INSERE FUNCAO PARA MOSTRAR O SELECT DA LISTA DE BOLETOS*/
+                    $('#divCrFormaLancamento').append('<script>$("#crFormaPagamentoLancamento").change(function() { if($("#crFormaPagamentoLancamento option:selected").val()==1) { $("#divLabelBoletos").css({vibility:"visible", display:"block"});$("#divBoletosCr").css({vibility:"visible", display:"block"});} else {$("#divLabelBoletos").css({vibility:"hidden", display:"none"});$("#divBoletosCr").css({vibility:"hidden", display:"none"});} });</script>');
+                    /*ESCONDE O SELECT DE BOLETOS E SO MOSTRA QUANDO O CLIENTE CLICAR*/
+                    if (dados.boletos)
+                        montarSelect('crBoletoPago', dados.boletos, 'divCrBoletos');
+
+                    $("#divLabelBoletos").css({vibility: "hidden", display: "none"});
+                    $("#divBoletosCr").css({vibility: "hidden", display: "none"});
+                }
+
+
+			} catch (e) {
+				console.log('erro:' + result);
+				alertErro('CD2938 Erro ao carregar modal de baixa de contas a receber na tela de certificados!' + e + ', ' + msnPadrao + '.');
+			}
+
+		}
+	});
+
+
+}
+
+
+/*
+* SALVAR CONTA A RECEBER
+* */
+function salvarContaReceber () {
+
+    $('#mensagemLoading').html('<i class="fa fa-arrows"></i> Baixando contas a receber');
+    $('#modalCarregando').modal('show');
+    var dadosajax = {
+        'funcao' : "salvar_conta_receber",
+        'contaId': $('#idContaReceber').val(),
+        'dataLancamento': $('#crDataLancamento').val(),
+        'banco': $('#crDestinoLancamento').val(),
+        'formaPagamento': $('#crFormaPagamentoLancamento').val(),
+        'codigoOperacao': $('#crCodigoOperacaoBaixa').val(),
+        'observacao': $('#crObservacaoBaixa').val(),
+        'idBoletoPago': $('#crBoletoPago').val(),
+
+    };
+    $.ajax ({
+        url : pageUrl,
+        data : dadosajax,
+        type : 'POST',
+        cache : true,
+        error : function (){
+            alertErro ('Error CR500 - Erro ao salvar a conta a Receber,' + msnPadrao + '.');
+            $('#modalCarregando').modal('hide');
+        },
+        success : function(result){
+            try {
+                resultado = JSON.parse(result);
+                $('#modalContaReceberBaixarPagamento').modal('hide');
+                if (resultado.mensagem == 'Ok') {
+                    alertSucesso('Conta a receber Baixada com sucesso');
+                    carregarModalDetalharCertificado($('#idCertificado').val());
+                }
+                else
+                    throw result + '! Erro inesperado';
+
+            } catch (e) {
+                $('#modalCarregando').modal('hide');
+                console.log(result, e);
+                alertErro('Error CR501 - Erro na tela de Contas a receber na a&ccedil;&atilde;o de Salvar, Erro:' + e + msnPadrao + '.');
+            }
+
+        }
+    });
+
 }

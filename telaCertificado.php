@@ -144,6 +144,7 @@ include 'inc/script.php';
     <? include 'modais/certificados/certificadoModalInserirObservacao.php';?>
     <? include 'modais/certificados/certificadoModalVincularContador.php'?>
 
+    <? include_once 'modais/contas_receber/modalContaReceberBaixarPagamento.php'; ?>
     <? include "modais/modalLoading.php";?>
 
 	<? include 'modais/certificados/certificadoModalVisualizarProtocolo.php';?>
@@ -151,6 +152,7 @@ include 'inc/script.php';
 	<? include 'modais/certificados/certificadoModalApagar.php';?>
 
 	<? include 'modais/certificados/certificadoModalDuvida.php'?>
+
 
 
 </div> <!--DIV CLASS CONTAINER-->

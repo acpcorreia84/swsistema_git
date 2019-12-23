@@ -8,13 +8,14 @@
 	$funcao = $_POST['funcao'];
 
 
-
+if ($funcao == 'salvar_conta_receber'){salvarContaReceber();}
 if($funcao == 'consultar_certificados_venda_interna') { consultarCertificadosVendaInterna(); }
 if($funcao == 'carregar_filtros_certificados') { carregarFiltrosCertificados(); }
 if($funcao == 'carregar_certificados') { carregarCertificados(); }
 if($funcao == 'carregar_modal_trocar_produto') { carregarModalTrocarProdutos(); }
 if($funcao == 'carregar_dados_tela_cupom') { carregarDadosTelaCupom(); }
 if($funcao == 'usarCupomDesconto') { usarCupomDesconto(); }
+if($funcao == 'carregar_modal_baixa_contas_receber') { carregarModalBaixarContaReceber(); }
 
 
 
@@ -2052,6 +2053,11 @@ function detalharCertificado(){
             $permissoes['permiteAlterarConsultorCertificado'] = 'sim';
         else
             $permissoes['permiteAlterarConsultorCertificado'] = 'nao';
+
+        if (ControleAcesso::permitido('telaContaReceber.php', 'acessar', $usuarioLogado->getPerfilId()))
+            $permissoes['permiteBaixarContaReceber'] = 'sim';
+        else
+            $permissoes['permiteBaixarContaReceber'] = 'nao';
 
         if (ControleAcesso::permitido('apagarProtocolo', 'apagarProt', $usuarioLogado->getPerfilId()))
             $permissoes['permiteApagarProtocolo'] = 'sim';
@@ -4338,5 +4344,192 @@ function consultarCertificadosVendaInterna () {
     }
 }
 
+function carregarModalBaixarContaReceber() {
+    try {
+        $cContaReceber = new Criteria();
+        $cContaReceber->add(ContasReceberPeer::CERTIFICADO_ID, $_POST['certificadoId']);
+        $contaReceber = ContasReceberPeer::doSelectOne($cContaReceber);
+        /*
+         * SE NAO ENCONTROU A CONTA A RECEBER, CRIA
+         * */
+        if (!$contaReceber) {
+            $certificado = CertificadoPeer::retrieveByPK($_POST['certificadoId']);
+
+
+            $pedido = new Pedido();
+            $pedido->setDataPedido(date("Y-m-d H:i:s", mtime()));
+            $pedido->setClienteId($certificado->getClienteId());
+            $pedido->setFuncionarioId($certificado->getId());
+            $pedido->save();
+
+            $itemPedido = new ItemPedido();
+            $itemPedido->setProdutoId($certificado->getProdutoId());
+            $itemPedido->setCertificadoId($certificado->getId());
+            $itemPedido->setPedidoId($pedido->getId());
+            $itemPedido->save();
+
+            $contaReceber = new ContasReceber();
+            $contaReceber->setPedidoId($pedido->getId());
+            $contaReceber->setCertificadoId($certificado->getId());
+            if ($pedido->getCliente()->getRazaoSocial())
+                $nome = $pedido->getCliente()->getRazaoSocial();
+            else
+                $nome = $pedido->getCliente()->getNomeFantasia();
+
+            $contaReceber->setDescricao(utf8_decode("Compra de certificado digital: " . $certificado->getProduto()->getNome() . " , pelo cliente: " . $nome));
+            $contaReceber->setDataDocumento(date("Y-m-d", mtime()));
+            $contaReceber->setValorDocumento($certificado->getProduto()->getPreco());
+            $contaReceber->setDesconto($certificado->getDesconto());
+            $contaReceber->setSituacao(0);
+            $contaReceber->setFormaPagamentoId($certificado->getFormaPagamentoId());
+            $contaReceber->setVencimento(date('Y-m-d H:i:s'));
+            $contaReceber->setPedidoId($pedido->getId());
+            $contaReceber->save();
+
+            /*FIM CADASTRO PEDIDO, ITEM PEDIDO, SITUACAO E CONTAS A RECEBER*/
+
+        }
+        $certificado = $contaReceber->getCertificado();
+        $boletosObj = $certificado->getBoletos();
+        $formasPagamentoObj = FormaPagamentoPeer::doSelect(new Criteria());
+        $bancosObj = BancoPeer::doSelect(new Criteria());
+
+        $boletos = array();
+        foreach ($boletosObj as $boleto) {
+            $boletos[] = array('id'=>$boleto->getId(), 'nome'=>$boleto->getVencimento('d/m/Y') . ' - ' . formataMoeda($boleto->getValor()) . ' ('. $boleto->getTid() . ')' );
+        }
+
+        $formasPagamento = array();
+        $formasPagamento[] = array('id'=>'', 'nome'=>'Escolha uma forma de Pagamento');
+        foreach ($formasPagamentoObj as $formaPagamento) {
+            $formasPagamento[] = array('id'=>$formaPagamento->getId(), 'nome'=>utf8_encode($formaPagamento->getNome()));
+        }
+
+        $bancos = array();
+        foreach ($bancosObj as $banco) {
+            $bancos[] = array('id'=>$banco->getId(), 'nome'=>utf8_encode($banco->getNome()));
+        }
+
+        $retorno = array('mensagem'=>'Ok','formasPagamento'=>json_encode($formasPagamento),
+            'bancos'=>json_encode($bancos), 'boletos'=>json_encode($boletos),
+            'contaReceberId'=>$contaReceber->getId()
+        );
+
+        echo json_encode($retorno);
+    } catch(Exception $e){
+        echo var_dump($e->getMessage());
+    }
+}
+
+
+function salvarContaReceber() {
+    try {
+        $usuarioLogado = ControleAcesso::getUsuarioLogado();
+        $dataLancamento = explode('/', $_POST['dataLancamento']);
+        $dataLancamento = $dataLancamento[2] . '-' .$dataLancamento[1] . '-' .$dataLancamento[0] . ' ' . date('H:i:s');
+
+        $contaReceber = ContasReceberPeer::retrieveByPK($_POST['contaId']);
+        $contaReceber->setDataPagamento($dataLancamento);
+        $contaReceber->setBancoId($_POST['banco']);
+        $contaReceber->setFormaPagamentoId($_POST['formaPagamento']);
+        $contaReceber->setCodigoDocumento($_POST['codigoOperacao']);
+        $contaReceber->setObservacao(utf8_decode($_POST['observacao']));
+
+        $certificado = $contaReceber->getCertificado();
+        /*PERGUNTA SE O CERTIFICADO EXISTE*/
+        if ($certificado) {
+            $lancamentoConta = new LancamentoConta();
+            $lancamentoConta->setDataLancamento($dataLancamento);
+            $lancamentoConta->setDescricao('Baixa da conta: ' . $contaReceber->getDescricao());
+            $lancamentoConta->setObservacao($_POST['observacao']);
+            $lancamentoConta->setValor($certificado->getProduto()->getPreco() - $certificado->getDesconto());
+            $lancamentoConta->setTipo('C');
+            $lancamentoConta->setContaReceberId($contaReceber->getId());
+            $lancamentoConta->setContaBancariaId($_POST['banco']);
+
+
+            $certificado->setDataConfirmacaoPagamento($dataLancamento);
+            if ($certificado->getDataPagamento())
+                $certificado->setDataPagamento($dataLancamento);
+
+            /*TROCA A FORMA DE PAGAMENTO DE GERA UMA SITUACAO NOVA PARA REGISTRAR A MUDANCA*/
+            if ($certificado->getFormaPagamentoId() != $_POST['formaPagamento']) {
+                $novaFormaPagamento = FormaPagamentoPeer::retrieveByPK($_POST['formaPagamento']);
+                $formaPagamentoAnterior = $certificado->getFormaPagamento()->getNome();
+                $certificado->setFormaPagamentoId($_POST['formaPagamento']);
+                $certSit2 = new CertificadoSituacao();
+                $certSit2->setCertificadoId($certificado->getId());
+                $certSit2->setUsuarioId($usuarioLogado->getId());
+                $cSit2 = new Criteria();
+                $cSit2->add(SituacaoPeer::SIGLA, 'edt_pagt');
+                $certSit2->setSituacao(SituacaoPeer::doSelectOne($cSit2));
+                $certSit2->setData(date("Y-m-d H:i:s"));
+                $certSit2->setComentario('Forma de pagamento Anterior:' . $formaPagamentoAnterior . '. Nova Forma de pagamento:' . $novaFormaPagamento->getNome());
+            }
+
+            $certSit = new CertificadoSituacao();
+            $certSit->setCertificadoId($certificado->getId());
+            $cSit = new Criteria();
+            $certSit->setUsuarioId($usuarioLogado->getId());
+            $cSit->add(SituacaoPeer::SIGLA, 'conf_pag');
+            $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
+            $certSit->setComentario('Baixa manual de pagamento, pelo dep. Financeiro');
+            $certSit->setData(date("Y-m-d H:i:s"));
+
+            if( ($_POST['formaPagamento'] == 1) && ($_POST['idBoletoPago'] <> '') )
+            {
+                $cBoleto = new Criteria();
+                $cBoleto->add(BoletoPeer::ID, $_POST['idBoletoPago']);
+                $boleto = BoletoPeer::doSelectOne($cBoleto);
+
+                if($boleto)
+                {
+                    if ($boleto->getDataPagamento())
+                        $boleto->setDataPagamento($dataLancamento);
+
+                    $boleto->setDataConfirmacaoPagamento($dataLancamento);
+
+                    $certSit3 = new CertificadoSituacao();
+                    $certSit3->setCertificadoId($certificado->getId());
+                    $cSit3 = new Criteria();
+                    $certSit3->setUsuarioId($usuarioLogado->getId());
+                    $cSit3->add(SituacaoPeer::SIGLA, 'pag_bolt');
+                    $certSit3->setSituacao(SituacaoPeer::doSelectOne($cSit3));
+                    $certSit3->setComentario('Registro de pagamento do boleto n&uacute;mero: ' . $boleto->getId() . ' TID: ' . $boleto->getTid());
+                    $certSit3->setData(date("Y-m-d H:i:s"));
+
+                }
+            }
+            elseif( ($_POST['edtFormaPagamento'] == 1) && ($_POST['edtCodigoDocumento'] == '') )
+            {
+                js_aviso('Voc? deve informar o numero(codigo) do boleto!');
+                echo '<script language="javascript">window.location="telaLancamentoContaReceber.php"</script>';
+            }
+
+
+        }
+
+        $certificado->save();
+        /*SALVA SITUACAO DE BAIXA DE PAGAMENTO*/
+        $certSit->save();
+
+        /*SALVA SITUACAO DE ALTERACAO DE FORMA DE PAGAMENTO*/
+        if ($certSit2)
+            $certSit2->save();
+
+        if ($boleto) {
+            $boleto->save();
+            /*GRAVA SITUACAO DE BAIXA DE BOLETO*/
+            $certSit3->save();
+        }
+
+        $contaReceber->save();
+        $lancamentoConta->save();
+
+        echo json_encode(array('mensagem'=>'Ok'));
+    } catch (Exception $e) {
+        var_dump($e);
+    }
+}
 
 ?>
