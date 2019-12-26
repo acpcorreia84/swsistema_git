@@ -26,8 +26,7 @@ function informarFeedbackNegocio() {
         }
         else {
             $certificadoSituacao->setSituacaoId($_POST['selectLost']);
-            if ($_POST['tipoNegocio'] != 'Recuperacao')
-                $certificado->setStatusFollowup($_POST['selectLost']);
+            $certificado->setStatusFollowup($_POST['selectLost']);
         }
 
         $certificadoSituacao->setComentario($_POST['edtFeedbackCd']);
