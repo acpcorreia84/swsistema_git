@@ -132,6 +132,7 @@ function carregarNegocios() {
         $tipoNegocios = $_POST['tipoNegocios'];
         $cCertificado = new Criteria();
 
+
         if (isset($_POST['filtros'])) {
             /*OS FILTROS INDIVIDUAIS*/
             if ($_POST['filtros']['campoFiltro']) {
@@ -348,15 +349,21 @@ function carregarNegocios() {
                 array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Cont.'), array('nome'=>'D.CVP'), array('nome'=>'D.Venc.'),
                 array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>utf8_encode('Ações'))
             );
-        } elseif ($tipoNegocios == 'Perdidos') {
+        } elseif ($tipoNegocios == 'Perdidos') { /*CVP*/
             $cCertificado->add(CertificadoPeer::STATUS_FOLLOWUP, $situacaoLostAux);
             $cCertificado->add(CertificadoPeer::DATA_RECARTEIRIZACAO, $dataDeRecart->format('Y-m-d'), Criteria::GREATER_EQUAL);
             $cCertificado->addOr(CertificadoPeer::DATA_RECARTEIRIZACAO, date('Y-m-d'), Criteria::LESS_EQUAL);
+            /*
+            * RETIRA A RESTRICAO DE USUARIO PARA QUE TODOS VEJAM O CVP DE TODOS
+             * APENAS CASO O USUARIO LOGADO N SEJA PARCEIRO O USUARIO DE PARCEIRO
+            * */
+            if ($usuarioLogado->getSetorId() != 8)
+                $cCertificado->remove(CertificadoPeer::USUARIO_ID);
 
 
             $colunas = array(
                 array('nome'=>' '), array('nome'=>'Cod.'), array('nome'=>'Cont.'), array('nome'=>'D.CVP'), array('nome'=>'D.Venc.'),
-                array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>utf8_encode('Ações'))
+                array('nome'=>'Cliente'), array('nome'=>'Tipo'),  array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>utf8_encode('Ações'))
             );
 
         }
@@ -364,6 +371,8 @@ function carregarNegocios() {
         /*
         * FIM DO FILTRO DE DATAS DE ACORDO COM ESCOLHA DO TIPO DE NEGOCIO
         * */
+        $cCertificado->setLimit(20);
+        $cCertificado->setOffset(0);
 
         $certificadosObj = CertificadoPeer::doSelect($cCertificado);
         $certificadosUrgentesFollowUp = array();
@@ -487,7 +496,8 @@ function carregarNegocios() {
             if ($certificado->getCertificadoRenovado()) {
                 $tipoCd = '<i class="fa fa-square text-success" title="Renova&ccedil;&atilde;o. Qtd. de dias faltam para o vencimento. "></i>';
                 $certificadoRenovado = $certificado->getCertificadoRelatedByCertificadoRenovado();
-                $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificadoRenovado->getDataFimValidade('Y-m-d')));
+                if ($certificadoRenovado)
+                    $diffDatas = (DiferencaEntreDatas(date('Y-m-d'), $certificadoRenovado->getDataFimValidade('Y-m-d')));
             }elseif ($certificado->getDataRecarteirizacao()) {
                 $tipoCd = '<i class="fa fa-square " style="color: purple" title="Recarteiriza&ccedil;&atilde;o"></i>';
             } else {
@@ -500,10 +510,13 @@ function carregarNegocios() {
 
 
             /*
+             * NEGOCIOS DO CVP
              * SE TIVER NA TELA DE URGENTE E COM FEEDBACK MOSTRA O CONTATO AO PASSAR O MOUSE EM CIMA DO CLIENTE
              * SE TIVER NA TELA DE CVP MOSTRA AS SITUACOES DAQUELE CLIENTE
              * */
             if ($tipoNegocios == 'Perdidos') {
+                $usuarioNegocio = $certificado->getUsuario();
+
                 /*
                 * MONTANDO INFORMACOES SITUACAO
                 * */
@@ -527,26 +540,58 @@ function carregarNegocios() {
                 * FIM MONTAGEM INFORMACOES SITUACAO
                 * */
 
-                $btnDetalhar = '<button class="btn btn-danger" 
+                /*
+                 * DESABILITA O BOTAO SE O USUARIO LOGADO FOR PARCEIRO E O USUARIO DO NEGOCIO NAO FOR DELE
+                 * OU SE O USUARIO LOGADO FOR CONSULTOR E O USUARIO DO NEGOCIO FOR DE UM PARCEIRO
+                 * */
+                $btnDesativado = '';
+                if ($usuarioNegocio->getSetorId() == 8 && $usuarioNegocio->getId()!= $usuarioLogado->getId()
+                ||
+                    $usuarioLogado->getSetorId() != 8 && $usuarioNegocio->getSetorId()== 8
+                ) $btnDesativado = 'disabled="disabled"';
+
+
+                $btnDetalhar = '<button class="btn btn-danger"  '.$btnDesativado.'
                 title="Reativar neg&oacute;cio" id="btnReativarNegocio'.$certificado->getId().'"  data-toggle="modal" 
                 data-target="#"> <i class="fas fa-user-md"></i> 
-                </button> <script>
-                
-                $("#btnReativarNegocio'.$certificado->getId().'").on("click", function(){
-                            ezBSAlert({
-                                type: "confirm",
-                                messageText: "Tem certeza que deseja reativar o neg&oacute;cio e enviar para a recupera&ccedil;&atilde;o?",
-                                alertType: "primary",
-                                yesButtonText: "Sim",
-                                noButtonText: "N&atilde;o",
-                            }).done(function (e) {
-                                if (e) {
-                                    reativarNegocio('.$certificado->getId().');
-                                }
+                </button> <script>';
 
+                /*
+                 * SE NO CVP O USUARIO LOGADO FOR PARCEIRO, SO MOSTRA PRA ELE OS CVPS QUE FOREM ESPECIFICAMENTE DELE
+                 * */
+                if ($usuarioNegocio->getSetorId() == 8 && $usuarioNegocio->getId()== $usuarioLogado->getId())
+                    $btnDetalhar .= '$("#btnReativarNegocio'.$certificado->getId().'").on("click", function(){
+                                ezBSAlert({
+                                    type: "confirm",
+                                    messageText: "Tem certeza que deseja reativar o neg&oacute;cio e enviar para a recupera&ccedil;&atilde;o?",
+                                    alertType: "primary",
+                                    yesButtonText: "Sim",
+                                    noButtonText: "N&atilde;o",
+                                }).done(function (e) {
+                                    if (e) {
+                                        reativarNegocio('.$certificado->getId().');
+                                    }
+    
+                                });
                             });
-                        });
-                </script>';
+                    </script>';
+                elseif ($usuarioLogado->getSetorId() != 8 && $usuarioNegocio->getSetorId()!= 8)
+                    $btnDetalhar .= '$("#btnReativarNegocio'.$certificado->getId().'").on("click", function(){
+                                ezBSAlert({
+                                    type: "confirm",
+                                    messageText: "Tem certeza que deseja reativar o neg&oacute;cio e enviar para a recupera&ccedil;&atilde;o?",
+                                    alertType: "primary",
+                                    yesButtonText: "Sim",
+                                    noButtonText: "N&atilde;o",
+                                }).done(function (e) {
+                                    if (e) {
+                                        reativarNegocio('.$certificado->getId().');
+                                    }
+    
+                                });
+                            });
+                    </script>';
+
 
             } else {
                 $contatos = getContatosCertificado($certificado);
@@ -609,7 +654,7 @@ function carregarNegocios() {
                         'Cont.'=>$tipoCd.' '.$diffDatas.'d',
                         'D.CVP'=>($certificado->getDataRecarteirizacao('d/m/Y'))?$certificado->getDataRecarteirizacao('d/m/Y'):'-',
                         'D.Venc.'=>($certificadoRenovado)?$certificadoRenovado->getDataFimValidade('d/m/Y'):'-',
-                        'Cliente'=> '<a id="btnContato'.$certificado->getId().'" href="telaCertificado.php?funcao=detalhaCertificado&idCertificado='.$certificado->getId().'" target="_blank">'.$certificado->getCliente()->getId() . ' - '.$nomeCliente . '</a>',
+                        'Cliente'=> '<a id="btnContato'.$certificado->getId().'">'.$certificado->getCliente()->getId() . ' - '.$nomeCliente . '</a>',
                         'Tipo'=>$produto,
                         'Consultor'=>utf8_encode($usuarioConsultor),
                         'Tot'=>formataMoeda($certificado->getProduto()->getPreco() - $certificado->getDesconto()),

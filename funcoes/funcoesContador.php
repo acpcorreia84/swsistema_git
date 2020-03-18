@@ -137,11 +137,14 @@ function carregarContadoresRelatorioMensal() {
         if ($usuarioLogado && $usuarioLogado->getPerfilId() != 4)
             $sql .= ' usuario.id = ' . $usuarioLogado->getId() . ' and ';
 
-        $sql .= ' certificado.data_confirmacao_pagamento >= "'.$dataDe[2] . '/' . $dataDe[1] . '/' . $dataDe[0] .' 00:00:00" and ';
-        $sql .= ' certificado.data_confirmacao_pagamento <= "'.$dataAte[2] . '/' . $dataAte[1] . '/' . $dataAte[0].' 23:59:59" and';
+        $sql .= ' certificado.data_confirmacao_pagamento <> "0000/00/00 00:00:00" and ';
+        $sql .= ' certificado.data_confirmacao_pagamento is not null and';
+
+        $sql .= ' certificado.data_validacao >= "'.$dataDe[2] . '/' . $dataDe[1] . '/' . $dataDe[0] .' 00:00:00" and ';
+        $sql .= ' certificado.data_validacao <= "'.$dataAte[2] . '/' . $dataAte[1] . '/' . $dataAte[0].' 23:59:59" and';
+
         $sql .= ' contador.comissao = 1 and ';
-        $sql .= ' certificado.apagado = 0 and ';
-        $sql .= ' certificado.data_validacao is not null and certificado.data_validacao <> "0000-00-00 00:00:00"';
+        $sql .= ' certificado.apagado = 0  ';
         //INSERE AS CONDICOES DE FILTRO
         $sql .= $condicaoSql;
         $sql .= $condicaoSqlConsultores;

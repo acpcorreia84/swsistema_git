@@ -5,7 +5,7 @@
  * Date: 17/12/2019
  * Time: 12:02
  */
-require_once $_SERVER['DOCUMENT_ROOT'] . '/loader_off.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/loader.php';
 $con = Propel::getConnection();
 
 $sql = 'select * from negocios_em_aberto_total;';
@@ -28,66 +28,130 @@ $sql = 'select * from negocios_pagos_renovacao;';
 $stmt = $con->prepare($sql);
 $stmt->execute();
 $negociosPagosRenovacoes = $stmt->fetchAll();
+
+$sql = 'select * from negocios_perdidos_renovacoes;';
+$stmt = $con->prepare($sql);
+$stmt->execute();
+$negociosPerdidosRenovacoes = $stmt->fetchAll();
+
+$sql = 'select * from negocios_em_aberto_pedidos;';
+$stmt = $con->prepare($sql);
+$stmt->execute();
+$negociosEmAbertoPedidos = $stmt->fetchAll();
+
+$sql = 'select * from negocios_pagos_pedidos;';
+$stmt = $con->prepare($sql);
+$stmt->execute();
+$negociosPagosPedidos = $stmt->fetchAll();
+
+
 $arrNegocios = array();
 
 foreach($negociosEmAberto as $res){
     $arrNegocios[$res['id']]['consultor'] = $res['consultor'];
-    $arrNegocios[$res['id']]['somaTotalEmAberto'] = array('v'=>intval($res['somaTotalEmAberto']), 'f'=>formataMoeda($res['somaTotalEmAberto']));
-    $arrNegocios[$res['id']]['qtdTotalEmAberto'] = intval($res['qtdTotalEmAberto']);
+    $arrNegocios[$res['id']]['somaTotalEmAberto'] = array('v'=>intval($res['somaTotalEmAberto']), 'f'=>formataMoeda($res['somaTotalEmAberto']) . ' (' . intval($res['qtdTotalEmAberto']).')' );
 }
 foreach($negociosEmAbertoRenovacoes as $res){
     $arrNegocios[$res['id']]['consultor'] = $res['consultor'];
-    $arrNegocios[$res['id']]['somaARenovar'] = array('v'=>intval($res['somaARenovar']), 'f'=>formataMoeda($res['somaARenovar']));
-    $arrNegocios[$res['id']]['qtdARenovar'] = intval($res['qtdARenovar']);
+    $arrNegocios[$res['id']]['somaARenovar'] = array('v'=>intval($res['somaARenovar']), 'f'=>formataMoeda($res['somaARenovar']). ' (' . intval($res['qtdARenovar']).')' );
 }
 
 foreach($negociosPagosTotal as $res){
     $arrNegocios[$res['id']]['consultor'] = $res['consultor'];
-    $arrNegocios[$res['id']]['somaTotal'] = array('v'=>intval($res['somaTotal']), 'f'=>formataMoeda($res['somaTotal']));
-    $arrNegocios[$res['id']]['qtdTotal'] = intval($res['qtdTotal']);
+    $arrNegocios[$res['id']]['somaTotal'] = array('v'=>intval($res['somaTotal']), 'f'=>formataMoeda($res['somaTotal']). ' (' . intval($res['qtdTotal']).')' );
 }
 
 foreach($negociosPagosRenovacoes as $res){
     $arrNegocios[$res['id']]['consultor'] = $res['consultor'];
-    $arrNegocios[$res['id']]['somaRenovados'] = array('v'=>intval($res['somaRenovados']), 'f'=>formataMoeda($res['somaRenovados']));
-    $arrNegocios[$res['id']]['qtdRenovados'] = intval($res['qtdRenovados']);
+    $arrNegocios[$res['id']]['somaRenovados'] = array('v'=>intval($res['somaRenovados']), 'f'=>formataMoeda($res['somaRenovados']) . ' (' . intval($res['qtdRenovados']).')' );
 
 }
+
+foreach($negociosPerdidosRenovacoes as $res){
+    $arrNegocios[$res['id']]['consultor'] = $res['consultor'];
+    $arrNegocios[$res['id']]['somaRenovacoesPerdidas'] = array('v'=>intval($res['somaRenovacoesPerdidas']), 'f'=>formataMoeda($res['somaRenovacoesPerdidas']) . ' (' . intval($res['qtdRenovacoesPerdidas']).')' );
+
+}
+
+foreach($negociosEmAbertoPedidos as $res){
+    $arrNegocios[$res['id']]['consultor'] = $res['consultor'];
+    $arrNegocios[$res['id']]['somaPedidosAberto'] = array('v'=>intval($res['somaPedidosAberto']), 'f'=>formataMoeda($res['somaPedidosAberto']) . ' (' . intval($res['qtdPedidosAberto']).')' );
+
+}
+
+foreach($negociosPagosPedidos as $res){
+    $arrNegocios[$res['id']]['consultor'] = $res['consultor'];
+    $arrNegocios[$res['id']]['somaPedidosPagos'] = array('v'=>intval($res['somaPedidosPagos']), 'f'=>formataMoeda($res['somaPedidosPagos']) . ' (' . intval($res['qtdPedidosPagos']).')' );
+
+}
+
+
+
 
 $arrNegociosFinal = array();
 $i = 0;
 foreach ($arrNegocios as $negocios) {
     $arrNegociosFinal[$i][] =  $negocios['consultor'];
-    if ($negocios['somaTotalEmAberto'] && $negocios['qtdTotalEmAberto']) {
-        $arrNegociosFinal[$i][] = $negocios['somaTotalEmAberto'];
-        $arrNegociosFinal[$i][] = $negocios['qtdTotalEmAberto'];
+
+    if ($negocios['somaPedidosAberto'] ) {
+        $arrNegociosFinal[$i][] = $negocios['somaPedidosAberto'];
+
     } else {
         $arrNegociosFinal[$i][] = array('v'=>intval(0), 'f'=>'R$ 0,00');
-        $arrNegociosFinal[$i][] = 0;
-    }
 
-    if ($negocios['somaARenovar'] && $negocios['qtdARenovar']) {
+    }
+    if ($negocios['somaARenovar'] ) {
         $arrNegociosFinal[$i][] = $negocios['somaARenovar'];
-        $arrNegociosFinal[$i][] = $negocios['qtdARenovar'];
+
     } else {
         $arrNegociosFinal[$i][] = array('v'=>intval(0), 'f'=>'R$ 0,00');
-        $arrNegociosFinal[$i][] = 0;
+
     }
 
-    if ($negocios['somaTotal'] && $negocios['qtdTotal']) {
-        $arrNegociosFinal[$i][] = $negocios['somaTotal'];
-        $arrNegociosFinal[$i][] = $negocios['qtdTotal'];
+    if ($negocios['somaTotalEmAberto'] ) {
+        $arrNegociosFinal[$i][] = $negocios['somaTotalEmAberto'];
+
     } else {
         $arrNegociosFinal[$i][] = array('v'=>intval(0), 'f'=>'R$ 0,00');
-        $arrNegociosFinal[$i][] = 0;
+
     }
 
-    if ($negocios['somaRenovados'] && $negocios['qtdRenovados']) {
+    if ($negocios['somaPedidosPagos'] ) {
+        $arrNegociosFinal[$i][] = $negocios['somaPedidosPagos'];
+
+    } else {
+        $arrNegociosFinal[$i][] = array('v'=>intval(0), 'f'=>'R$ 0,00');
+
+    }
+
+    if ($negocios['somaRenovados'] ) {
         $arrNegociosFinal[$i][] = $negocios['somaRenovados'];
-        $arrNegociosFinal[$i][] = $negocios['qtdRenovados'];
+
     } else {
         $arrNegociosFinal[$i][] = array('v'=>intval(0), 'f'=>'R$ 0,00');
-        $arrNegociosFinal[$i][] = 0;
+
+    }
+
+    if ($negocios['somaTotal'] ) {
+        $arrNegociosFinal[$i][] = $negocios['somaTotal'];
+
+    } else {
+        $arrNegociosFinal[$i][] = array('v'=>intval(0), 'f'=>'R$ 0,00');
+
+    }
+    $percentualPerdido = 0;
+    if ($negocios['somaRenovacoesPerdidas'] ) {
+
+        if ($negocios['somaARenovar']) {
+            $percentualPerdido = $negocios['somaRenovacoesPerdidas']['v'] / $negocios['somaARenovar']['v'];
+            $negocios['somaRenovacoesPerdidas']['f'] .= ' | '.round($percentualPerdido*100, 2) . '%' ;
+        }
+
+        $arrNegociosFinal[$i][] = $negocios['somaRenovacoesPerdidas'];
+
+    } else {
+        $arrNegociosFinal[$i][] = array('v'=>intval(0), 'f'=>'R$ 0,00');
+
     }
     $i++;
 
@@ -102,66 +166,6 @@ exit;*/
 <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        // Load Charts and the corechart package.
-        google.charts.load('current', {'packages':['corechart']});
-
-        // Draw the pie chart for Sarah's pizza when Charts is loaded.
-        google.charts.setOnLoadCallback(drawSarahChart);
-
-        // Draw the pie chart for the Anthony's pizza when Charts is loaded.
-        google.charts.setOnLoadCallback(drawAnthonyChart);
-
-
-        // Callback that draws the pie chart for Sarah's pizza.
-        function drawSarahChart() {
-
-            // Create the data table for Sarah's pizza.
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Topping');
-            data.addColumn('number', 'Slices');
-            data.addRows([
-                ['Mushrooms', 1],
-                ['Onions', 1],
-                ['Olives', 2],
-                ['Zucchini', 2],
-                ['Pepperoni', 1]
-            ]);
-
-            // Set options for Sarah's pie chart.
-            var options = {title:'How Much Pizza Sarah Ate Last Night',
-                width:400,
-                height:300};
-
-            // Instantiate and draw the chart for Sarah's pizza.
-            var chart = new google.visualization.PieChart(document.getElementById('Sarah_chart_div'));
-            //chart.draw(data, options);
-        }
-
-
-        // Callback that draws the pie chart for Anthony's pizza.
-        function drawAnthonyChart() {
-
-            // Create the data table for Anthony's pizza.
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Topping');
-            data.addColumn('number', 'Slices');
-            data.addRows([
-                ['Mushrooms', 2],
-                ['Onions', 2],
-                ['Olives', 2],
-                ['Zucchini', 0],
-                ['Pepperoni', 3]
-            ]);
-
-            // Set options for Anthony's pie chart.
-            var options = {title:'How Much Pizza Anthony Ate Last Night',
-                width:400,
-                height:300};
-
-            // Instantiate and draw the chart for Anthony's pizza.
-            var chart = new google.visualization.PieChart(document.getElementById('Anthony_chart_div'));
-            //chart.draw(data, options);
-        }
 
         google.charts.load('current', {'packages':['table']});
         google.charts.setOnLoadCallback(drawTable);
@@ -169,14 +173,13 @@ exit;*/
         function drawTable() {
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Consultor');
-            data.addColumn('number', 'Total em aberto');
-            data.addColumn('number', 'Qtd. Em aberto');
+            data.addColumn('number', 'Pedidos em aberto');
             data.addColumn('number', 'Renovacoes em aberto');
-            data.addColumn('number', 'Qtd. Renovacoes em aberto');
-            data.addColumn('number', 'Pagos total');
-            data.addColumn('number', 'Qtd Pagos Total');
-            data.addColumn('number', 'Total renovacoes pagas');
-            data.addColumn('number', 'Qtd renovacoes pagas');
+            data.addColumn('number', 'Total em aberto');
+            data.addColumn('number', 'Pedidos pagos');
+            data.addColumn('number', 'Renovacoes pagas');
+            data.addColumn('number', 'Total Pago');
+            data.addColumn('number', 'Total renovacoes perdidas');
             data.addRows(<?=json_encode($arrNegociosFinal); ?>)
 
             var table = new google.visualization.Table(document.getElementById('table_div'));
@@ -185,6 +188,7 @@ exit;*/
 
         }
     </script>
+
 </head>
 <body>
 <div id="table_div" style="border: 1px solid #ccc">&nbsp;</div>

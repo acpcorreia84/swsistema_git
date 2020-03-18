@@ -23,9 +23,18 @@ require_once 'modais/modalListaProdutos.php';
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
                 <li><a href="home.php" title="Painel Inicial"><i class="fa fa-lg fa-home"></i></a></li>
+
+
+                <? if (array_search('telaFinanceiro', $arrTelasMenu)!==false) {?>
+                    <li>
+                        <a href="biInformacoesGeraisConsultores.php" title="BI Consultores Pr&oacute;prios" target="_blank"><i class="fa fa-lg fa-bar-chart-o"></i></a>
+                    </li>
+                <? }?>
+
                 <? if($_SERVER['REQUEST_URI'] == '/telaProduto.php') {?>
                     <li><a data-toggle="modal" data-target="#modalInserirEditarProduto" onclick="carregarModalInserirEditarProduto('inserir')"> <i class="fa fa-lg fa-plus"></i> </a></li>
                 <? }?>
+
 
                 <? if (($_SERVER['REQUEST_URI'] == '/telaLocal.php') && (array_search('telaLocal.php', $arrTelasMenu)!==false) ) {?>
                     <li><a data-toggle="modal" data-target="#modalInserirEditarLocal"  onclick="carregarModalInserirEditarLocal('inserir')" title="Criar novo Local" ><i class="fa fa-lg fa-plus" aria-hidden="true"></i></a></li>
@@ -118,7 +127,15 @@ require_once 'modais/modalListaProdutos.php';
                         <a href="home.php"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                     </li>
                     <? if (array_search('telaFinanceiro', $arrTelasMenu)!==false) {?>
+                        <li>
+                            <a href="javascript:;" data-toggle="collapse" data-target="#financeiro"><i class="fa fa-money"></i> Financeiro <i class="fa fa-fw fa-chevron-down"></i></a>
+                            <ul id="financeiro" class="collapse">
+                                <? if (array_search('telaFinanceiro', $arrTelasMenu)!==false) {?>
+                                    <li><a href="telaContaReceber.php"><i class="fa fa-download"></i> Contas a receber</a></li>
+                                <? }?>
 
+                            </ul>
+                        </li>
                     <? }?>
                     <li style="background-color: darkred" >
                         <a href="telaCentralNegocios.php" style="color: white"><i class="fa fa-smile-o"></i> Central de Neg&oacute;cios</a>

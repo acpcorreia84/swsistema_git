@@ -596,7 +596,7 @@ function recupera_cliente($clienteId,$funcao){
             }
 
             if ($cliente->getNomeFantasia()) {
-                $nomeFantasia = utf8_encode($cliente->getNomeFantasia());
+                $nomeFantasia = removeAcentos(utf8_encode($cliente->getNomeFantasia()));
             } else {
                 $nomeFantasia = "";
             }
@@ -749,7 +749,7 @@ function recupera_cliente($clienteId,$funcao){
                 }
                 $enderecoResponsavel = $enderecoBrutoResponsavel . ", " . $numeroResponsavel . ", " . $bairroResponsavel . " - " . $cepResponsavel;
             } else {
-                $enderecoResponsavel = $cliente->getEndereco();
+                $enderecoResponsavel = removeAcentos(utf8_encode($cliente->getEndereco()));
             }
 
             if($cliente->getEmail()) {
