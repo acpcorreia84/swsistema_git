@@ -167,8 +167,8 @@ function carregarContadoresRelatorioMensal() {
             $totalComissao += $contador['faturamento']*0.12;
             $totalFaturamento += $contador['faturamento'];
 
-            $contadores[] =  array(' '=>($i++),'Id'=>$contador['id'],'Contador'=>utf8_decode($contador['nome']),
-                'Consultor'=>utf8_decode($contador['consultor']), 'CPF'=>$contador['cpf'],
+            $contadores[] =  array(' '=>($i++),'Id'=>$contador['id'],'Contador'=>utf8_encode($contador['nome']),
+                'Consultor'=>utf8_encode($contador['consultor']), 'CPF'=>$contador['cpf'],
 
                 'Banco'=> (strpos($contador['banco'], '-'))? '<div style="background-color: #9f2b1e; color: #fff;">'.$contador['banco'].'</div>' : $contador['banco'],
                 'Ag.'=> (strpos($contador['agencia'], '-') || (!is_numeric($contador['agencia'])))?'<div style="background-color: #9f2b1e; color: #fff;">'.$contador['agencia'].'</div>': $contador['agencia'],
@@ -179,7 +179,7 @@ function carregarContadoresRelatorioMensal() {
                 'Faturamento'=>formataMoeda($contador['faturamento']*0.12),
             );
 
-            $contadoresRep[] = array('Contador'=>utf8_decode($contador['nome']), 'CPF'=>removeTracoPontoBarra($contador['cpf']),
+            $contadoresRep[] = array('Contador'=>utf8_encode($contador['nome']), 'CPF'=>removeTracoPontoBarra($contador['cpf']),
 
                 'Banco'=> $contador['banco'], 'Agencia'=> $contador['agencia'],'DigitoAgencia'=> $contador['digitoAgencia'], 'Conta'=> $contador['conta_corrente'],
                 'DigitoConta'=> $contador['digitoConta'],'Operacao'=> $contador['operacao'], 'Faturamento'=>$contador['faturamento']*0.12,
