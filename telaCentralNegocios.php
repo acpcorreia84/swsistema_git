@@ -94,19 +94,19 @@ include 'inc/script.php';
 
                     <script>
                         $('#btnFiltroCd').click (function () {
-                            var visivel  = $('#divFiltrosCertificados').is(':visible');
+                            var visivel  = $('#divFiltroNegocios').is(':visible');
                             if (visivel) {
-                                $("#divFiltrosCertificados").css({visibility: 'hidden', display: 'none'});
+                                $("#divFiltroNegocios").css({visibility: 'hidden', display: 'none'});
                             }
 
                             else {
-                                $("#divFiltrosCertificados").css({visibility: 'visible', display: 'block'});
+                                $("#divFiltroNegocios").css({visibility: 'visible', display: 'block'});
                                 carregarFiltrosNegocios();
                             };
                         });
 
                     </script>
-                    <div class="panel-body oculto" id="divFiltrosCertificados">
+                    <div class="panel-body oculto" id="divFiltroNegocios">
                         <div id="divFiltros"></div>
                         <? include 'inc/filtros/filtroCentralNegocios.php';?>
                     </div>
@@ -129,7 +129,7 @@ include 'inc/script.php';
                                             </div>
                                         </div>
                                     </div>
-                                    <a href="#" onclick="$('#tipoNegocios').val('Urgentes'); $('#tipoNegociosLegendas').html('Urgentes'); carregarNegocios();">
+                                    <a href="#" onclick="$('#tipoNegocios').val('Urgentes'); $('#tipoNegociosLegendas').html('Urgentes'); carregarNegociosSemFeedback(undefined,undefined,undefined,'sim');">
                                         <div class="panel-footer">
                                             <span class="pull-left">Urgentes 7d</span>
                                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -151,7 +151,7 @@ include 'inc/script.php';
                                             </div>
                                         </div>
                                     </div>
-                                    <a href="#" onclick="$('#tipoNegocios').val('UrgentesFollowUp'); $('#tipoNegociosLegendas').html('Urgentes com Followup'); carregarNegocios();">
+                                    <a href="#" onclick="$('#tipoNegocios').val('UrgentesFollowUp'); $('#tipoNegociosLegendas').html('Urgentes com Followup'); carregarNegociosComFeedback(undefined,undefined,undefined,'sim');">
                                         <div class="panel-footer" >
                                             <span class="pull-left">Feedback +3d</span>
                                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -173,7 +173,7 @@ include 'inc/script.php';
                                             </div>
                                         </div>
                                     </div>
-                                    <a href="#" onclick="$('#tipoNegocios').val('Perdidos'); $('#tipoNegociosLegendas').html('Perdidos');  carregarNegocios();">
+                                    <a href="#" onclick="$('#tipoNegocios').val('Perdidos'); $('#tipoNegociosLegendas').html('Perdidos');  carregarNegociosCVP(undefined,undefined,undefined,'sim');">
                                         <div class="panel-footer">
                                             <span class="pull-left">CVP</span>
                                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -195,7 +195,7 @@ include 'inc/script.php';
                                     </div>
                                 </div>
                             </div>
-                            <a href="#" onclick="$('#tipoNegocios').val('Recuperacao'); $('#tipoNegociosLegendas').html('Recupera&ccedil;&atilde;o');  carregarNegocios();">
+                            <a href="#" onclick="$('#tipoNegocios').val('Recuperacao'); $('#tipoNegociosLegendas').html('Recupera&ccedil;&atilde;o');  //carregarNegocios();">
                                 <div class="panel-footer">
                                     <span class="pull-left">Em recupera&ccedil;&atilde;o</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -233,6 +233,8 @@ include 'inc/script.php';
                 </div>
 
                     <!--LISTA DE NEGOCIOS-->
+
+
                 <div class="row" >
                     <div class="col-lg-12">
                         <div class="panel panel-default">
@@ -241,9 +243,11 @@ include 'inc/script.php';
                             </div><!-- PANEL HEADING -->
 
                             <div class="panel-body">
+                                <script src="inc/paginator/jquery.twbsPagination.js" type="text/javascript"></script>
                                 <ul class="paginacao pagination-sm"  ></ul>
                                 <div class="table table-responsive" id="divTabelaNegocios"></div>
                                 <ul class="paginacao" ></ul>
+
                                 <div id="divContatosPopOver"></div>
                             </div><!-- PANEL BODY -->
                         </div><!-- panel default -->
@@ -257,7 +261,9 @@ include 'inc/script.php';
 </div><!-- WRAPPER -->
 
 <script>
-    carregarNegocios();
+    carregarNegociosSemFeedback(undefined,undefined,undefined,'sim');
+    carregarNumerosNegocios();
+
 </script>
 <!-- MODAIS DA PAGINA-->
 <div class="container">

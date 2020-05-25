@@ -10,6 +10,14 @@
           <option name="port" value="21" />
         </fileTransfer>
       </webServer>
+      <webServer id="d6fef288-999d-46c2-afb9-bffa93495377" name="SW-BETA" url="http://beta.swsistema.com.br">
+        <fileTransfer host="ftp.swsistema.com.br" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

@@ -1353,7 +1353,7 @@ function carregarCertificados(paginaSelecionada, qtdItensPorPagina, paginando, c
         var pagina = 0;
     else
         var pagina = paginaSelecionada;
-
+    console.log('pagina selecionada:'+pagina);
     /*INICIALIZA SE NAO PASSAR PARAMETRO SETA 20 ITENS POR PAGINA POR PADRAO*/
     if (qtdItensPorPagina === undefined)
         var qtdItens = 30;

@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="SWSISTEMA">
+  <component name="PublishConfigData" serverName="SW-BETA">
     <serverData>
+      <paths name="SW-BETA">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/public_html/beta" local="$PROJECT_DIR$" web="" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="SWSISTEMA">
         <serverdata>
           <mappings>
-            <mapping deploy="/public_html" local="$PROJECT_DIR$" web="" />
+            <mapping deploy="/public_html" local="$PROJECT_DIR$" web="http://www.swsistema.com.br" />
           </mappings>
         </serverdata>
       </paths>

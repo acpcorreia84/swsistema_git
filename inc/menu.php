@@ -22,6 +22,8 @@ require_once 'modais/modalListaProdutos.php';
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
+                <li><a href="#" title="AMBIENTE DE HOMOLOGACAO" >******************** BETA - AMBIENTE DE TESTE ********************</a></li>
+
                 <li><a href="home.php" title="Painel Inicial"><i class="fa fa-lg fa-home"></i></a></li>
 
 
