@@ -1242,7 +1242,7 @@ function salvarBoletoSafeToPay(){
         $certSit->setUsuarioId($usuarioLogado->getId());
         $certSit->save();
 
-        enviarEmailBoleto($nome,$emailEnvio, $boleto_barcode,$boleto_url, $produto->getNome(), $valor_boleto);
+        //enviarEmailBoleto($nome,$emailEnvio, $boleto_barcode,$boleto_url, $produto->getNome(), $valor_boleto);
 
         echo json_encode(array('mensagem'=>'Ok'));
     }catch(Exception $e){

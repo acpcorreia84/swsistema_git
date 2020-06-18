@@ -72,6 +72,93 @@ function carregarNumerosNegocios() {
     });
 }
 
+function carregarNegociosRecuperacao(paginaSelecionada, qtdItensPorPagina, paginando, carregarDivPaginacao) {
+
+    /*INICIALIZA SE NAO PASSAR PARAMETRO SETA 0*/
+    if (paginaSelecionada === undefined)
+        var pagina = 0;
+    else
+        var pagina = paginaSelecionada;
+
+    console.log('pagina selecionada:'+pagina);
+
+    /*INICIALIZA SE NAO PASSAR PARAMETRO SETA 20 ITENS POR PAGINA POR PADRAO*/
+    if (qtdItensPorPagina === undefined)
+        var qtdItens = 30;
+    else
+        var qtdItens = qtdItensPorPagina;
+
+    if (carregarDivPaginacao !== undefined)
+        var carregarPaginacao = carregarDivPaginacao;
+    else
+        var carregarPaginacao = '';
+
+    if ((typeof window['filtroUsuariosNegocios'] !== 'undefined') && (Array.isArray(window['filtroUsuariosNegocios'])))
+        consultores = window['filtroUsuariosNegocios'];
+    else
+        consultores = '';
+
+    /*NOME E CAMPO DE FILTRO POR (IGUAL A)*/
+    nomeCampoFiltro = '';
+    valorCampoFiltro = '';
+    if (($('#tipo_filtro').val()) && ($('#filtro_pesquisa_por').val())) {
+        nomeCampoFiltro = $('#tipo_filtro').val();
+        valorCampoFiltro = $('#filtro_pesquisa_por').val();
+    }
+
+    camposFiltro = {};
+    camposFiltro[nomeCampoFiltro] = valorCampoFiltro;
+
+    var filtros = {
+        'filtroConsultores':consultores,
+        'campoFiltro' : camposFiltro
+    };
+    $('#txtDataNegocios').html('carregando...');
+
+    var dadosajax = {
+        'funcao' : "carregar_negocios_recuperacao",
+        'filtros': filtros,
+        'pagina' : pagina,
+        'itensPorPagina' : qtdItens
+    };
+
+    $.ajax ({
+        beforeSend: function () {
+            $('#divTabelaNegocios').html('<i class="fa fa-5x fa-circle-o-notch fa-spin text-info"></i>').css({'text-align':'center'});
+        },
+        url : pageUrl,
+        data : dadosajax,
+        type : 'POST',
+        cache : true,
+        error : function (){
+            alertErro ('Error NG3201 - Erro na a&ccedil;&atilde;o de carregar os Neg&oacute;cios sem feedback,' + msnPadrao + '.');
+        },
+        success : function(result){
+            try {
+                //console.log(result);
+                var resultado = JSON.parse(result);
+
+                if (resultado.mensagem == 'Ok') {
+                    $('#txtDataNegocios').html(resultado.dataAte + ' at&eacute; ' + resultado.dataDe);
+                    if (carregarPaginacao)
+                        mostrar_paginacao(resultado.quantidadeTotal, qtdItens, carregarNegociosComFeedback, 'divPaginacaoNegociosRecuperacaoTopo', 'divPaginacaoNegociosRecuperacaoRodape');
+
+                    montarTabelaDinamica(resultado.colunas, resultado.negocios, 'tabelaNegocios', 'divTabelaNegocios');
+
+                    $('#divContatosPopOver').html(resultado.htmlContatosPopOver);
+                }
+            } catch (e) {
+                console.log(result, e);
+                alertErro ('Error CDN2932 - Erro ao carregar dados dos neg&oacute;cios sem feedback,' + msnPadrao + '.');
+            }
+        },
+        complete : function ( ) {
+
+
+        }
+
+    });
+}
 
 function carregarNegociosSemFeedback(paginaSelecionada, qtdItensPorPagina, paginando, carregarDivPaginacao) {
 
@@ -307,7 +394,7 @@ function carregarNegociosCVP(paginaSelecionada, qtdItensPorPagina, paginando, ca
         type : 'POST',
         cache : true,
         error : function (){
-            alertErro ('Error NG3201 - Erro na a&ccedil;&atilde;o de carregar os Neg&oacute;cios sem feedback,' + msnPadrao + '.');
+            alertErro ('Error NG4201 - Erro na a&ccedil;&atilde;o de carregar os Neg&oacute;cios sem feedback,' + msnPadrao + '.');
         },
         success : function(result){
             try {
@@ -317,7 +404,7 @@ function carregarNegociosCVP(paginaSelecionada, qtdItensPorPagina, paginando, ca
                 if (resultado.mensagem == 'Ok') {
                     $('#txtDataNegocios').html(resultado.dataAte + ' at&eacute; ' + resultado.dataDe);
                     if (carregarPaginacao)
-                        mostrar_paginacao(resultado.quantidadeTotal, qtdItens, carregarNegociosCVP, 'divPaginacaoNegociosComFeedbackTopo', 'divPaginacaoNegociosComFeedbackRodape');
+                        mostrar_paginacao(resultado.quantidadeTotal, qtdItens, carregarNegociosComFeedback, 'divPaginacaoNegociosComFeedbackTopo', 'divPaginacaoNegociosComFeedbackRodape');
 
                     montarTabelaDinamica(resultado.colunas, resultado.negocios, 'tabelaNegocios', 'divTabelaNegocios');
 
@@ -325,7 +412,7 @@ function carregarNegociosCVP(paginaSelecionada, qtdItensPorPagina, paginando, ca
                 }
             } catch (e) {
                 console.log(result, e);
-                alertErro ('Error CDN2932 - Erro ao carregar dados dos neg&oacute;cios sem feedback,' + msnPadrao + '.');
+                alertErro ('Error CDN4932 - Erro ao carregar dados dos neg&oacute;cios sem feedback,' + msnPadrao + '.');
             }
         },
         complete : function ( ) {

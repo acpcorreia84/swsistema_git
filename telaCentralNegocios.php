@@ -195,7 +195,7 @@ include 'inc/script.php';
                                     </div>
                                 </div>
                             </div>
-                            <a href="#" onclick="$('#tipoNegocios').val('Recuperacao'); $('#tipoNegociosLegendas').html('Recupera&ccedil;&atilde;o');  //carregarNegocios();">
+                            <a href="#" onclick="$('#tipoNegocios').val('Recuperacao'); $('#tipoNegociosLegendas').html('Recupera&ccedil;&atilde;o');  carregarNegociosRecuperacao(undefined,undefined,undefined,'sim');">
                                 <div class="panel-footer">
                                     <span class="pull-left">Em recupera&ccedil;&atilde;o</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
