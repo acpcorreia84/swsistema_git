@@ -115,7 +115,7 @@
 
 <script>
     $('#btnFiltrarContadores').click(function () {
-        carregarRelatorioComissaoGeralMensalContadores(true);
+        carregarRelatorioComissaoGeralMensalContadores();
     })
 
     $('#btnExportar').click(function () {

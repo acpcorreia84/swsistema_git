@@ -5,7 +5,7 @@
       <webServer id="5ca2fb5c-4f8f-4ac4-b08e-1a2ac7c16117" name="SWSISTEMA" url="http://ftp.swsistema.com.br">
         <fileTransfer host="ftp.swsistema.com.br" port="21">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
           <option name="port" value="21" />
         </fileTransfer>
@@ -13,7 +13,7 @@
       <webServer id="d6fef288-999d-46c2-afb9-bffa93495377" name="SW-BETA" url="http://beta.swsistema.com.br">
         <fileTransfer host="ftp.swsistema.com.br" port="21">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
           <option name="port" value="21" />
         </fileTransfer>

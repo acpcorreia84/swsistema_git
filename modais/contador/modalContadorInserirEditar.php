@@ -200,6 +200,7 @@ NAO PERMITIR ESCONDER/MOSTRAR QUADRO PJ
                                                 <option value="037" >BANPARA</option>
                                                 <option value="237" >BRADESCO</option>
                                                 <option value="104" >CAIXA ECONOMICA</option>
+                                                <option value="077" >INTER</option>
                                                 <option value="341" >ITAU</option>
                                                 <option value="212" >ORIGINAL</option>
                                                 <option value="074" >SAFRA</option>

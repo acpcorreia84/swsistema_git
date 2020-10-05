@@ -210,11 +210,11 @@ require_once 'modais/modalListaProdutos.php';
                             </li>
                             <? }?>
 
-                            <? if (array_search('telaRelatorioComissionamentoContador.php', $arrTelasMenu)!==false) {?>
-                                <li>
+                            <? //if (array_search('telaRelatorioComissionamentoContador.php', $arrTelasMenu)!==false) {?>
+<!--                                <li>
                                     <a href="telaRelatorioComissionamentoContador.php"><i class="fa fa-address-card"></i> Comissionamento de Contadores</a>
                                 </li>
-                            <? }?>
+-->                            <? //}?>
 
                             <? if (array_search('telaRelatorioComissionamentoParceiros.php', $arrTelasMenu)!==false) {?>
                                 <li>
