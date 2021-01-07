@@ -195,6 +195,7 @@ NAO PERMITIR ESCONDER/MOSTRAR QUADRO PJ
                                         <div class="col-lg-6 campoValidar">
                                             <select name="ecEdtBanco" id="ecEdtBanco" class="form-control">
                                                 <option value="">Selecione o banco</option>
+                                                <option value="280" >AVISTA</option>
                                                 <option value="003" >BANCO DA AMAZONIA</option>
                                                 <option value="001" >BANCO DO BRASIL</option>
                                                 <option value="037" >BANPARA</option>
@@ -203,10 +204,12 @@ NAO PERMITIR ESCONDER/MOSTRAR QUADRO PJ
                                                 <option value="077" >INTER</option>
                                                 <option value="341" >ITAU</option>
                                                 <option value="212" >ORIGINAL</option>
+                                                <option value="260" >NUBANK</option>
                                                 <option value="074" >SAFRA</option>
                                                 <option value="033" >SANTANDER</option>
                                                 <option value="748" >SICREDI</option>
                                                 <option value="756" >SICOOB</option>
+
                                             </select>
 
                                         </div>

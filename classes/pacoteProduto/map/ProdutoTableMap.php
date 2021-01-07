@@ -41,13 +41,13 @@ class ProdutoTableMap extends TableMap {
 		$this->addColumn('CODIGO', 'Codigo', 'INTEGER', false, null, null);
 		$this->addColumn('NOME', 'Nome', 'VARCHAR', true, 50, null);
 		$this->addColumn('PRECO', 'Preco', 'FLOAT', true, null, null);
-		$this->addColumn('PRECO_ANTIGO2', 'PrecoAntigo2', 'FLOAT', true, null, null);
-		$this->addColumn('PRECO_ANTIGO', 'PrecoAntigo', 'FLOAT', true, null, null);
+		$this->addColumn('PRECO_VENDA', 'PrecoVenda', 'FLOAT', true, null, null);
 		$this->addColumn('PRECO_CUSTO', 'PrecoCusto', 'FLOAT', true, null, null);
 		$this->addColumn('PESSOA_TIPO', 'PessoaTipo', 'CHAR', true, 1, null);
 		$this->addColumn('SITUACAO', 'Situacao', 'INTEGER', true, null, null);
 		$this->addColumn('VALIDADE', 'Validade', 'INTEGER', true, null, null);
 		$this->addForeignKey('PRODUTO_ID', 'ProdutoId', 'INTEGER', 'produto', 'ID', true, null, null);
+		$this->addForeignKey('GRUPO_PRODUTO_ID', 'GrupoProdutoId', 'INTEGER', 'grupo_produto', 'ID', true, null, null);
 		$this->addColumn('COMISSAO', 'Comissao', 'FLOAT', false, null, null);
 		$this->addColumn('PRODUTO_LOJA', 'ProdutoLoja', 'INTEGER', true, null, null);
 		// validators
@@ -60,6 +60,7 @@ class ProdutoTableMap extends TableMap {
 	{
     $this->addRelation('Fornecedor', 'Fornecedor', RelationMap::MANY_TO_ONE, array('fornecedor_id' => 'id', ), 'RESTRICT', null);
     $this->addRelation('ProdutoRelatedByProdutoId', 'Produto', RelationMap::MANY_TO_ONE, array('produto_id' => 'id', ), 'RESTRICT', null);
+    $this->addRelation('GrupoProduto', 'GrupoProduto', RelationMap::MANY_TO_ONE, array('grupo_produto_id' => 'id', ), 'RESTRICT', null);
     $this->addRelation('CuponsDescontoCertificado', 'CuponsDescontoCertificado', RelationMap::ONE_TO_MANY, array('id' => 'produto_id', ), 'RESTRICT', null);
     $this->addRelation('ProdutoRelatedByProdutoId', 'Produto', RelationMap::ONE_TO_MANY, array('id' => 'produto_id', ), 'RESTRICT', null);
     $this->addRelation('LocalProduto', 'LocalProduto', RelationMap::ONE_TO_MANY, array('id' => 'produto_id', ), 'RESTRICT', null);

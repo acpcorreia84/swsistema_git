@@ -129,7 +129,7 @@ function carregarContadoresRelatorioMensal() {
 
         //CONSULTA DO FATURAMENTO PARA O GRAFICO NO PAINEL
         $sql = 'select contador.id, contador.nome, contador.cpf as cpf, contador.banco, contador.agencia, contador.digitoAgencia, ';
-        $sql .=' contador.conta_corrente, contador.digitoConta, contador.operacao ,sum(produto.preco) as faturamento, usuario.nome as consultor';
+        $sql .=' contador.conta_corrente, contador.digitoConta, contador.operacao ,sum(produto.preco-certificado.desconto) as faturamento, usuario.nome as consultor';
         $sql .= ' from (((contador join certificado on contador.id = certificado.contador_id) ';
         $sql .= ' join produto on certificado.produto_id = produto.id) ';
         $sql .= ' join usuario on usuario.id = certificado.usuario_id)';

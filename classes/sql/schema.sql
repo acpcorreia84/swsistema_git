@@ -638,13 +638,13 @@ CREATE TABLE `produto`
 	`codigo` INTEGER,
 	`nome` VARCHAR(50)  NOT NULL,
 	`preco` FLOAT  NOT NULL,
-	`preco_antigo2` FLOAT  NOT NULL,
-	`preco_antigo` FLOAT  NOT NULL,
+	`preco_venda` FLOAT  NOT NULL,
 	`preco_custo` FLOAT  NOT NULL,
 	`pessoa_tipo` CHAR(1)  NOT NULL,
 	`situacao` INTEGER  NOT NULL,
 	`validade` INTEGER  NOT NULL,
 	`produto_id` INTEGER  NOT NULL,
+	`grupo_produto_id` INTEGER  NOT NULL,
 	`comissao` FLOAT,
 	`produto_loja` INTEGER  NOT NULL,
 	PRIMARY KEY (`id`),
@@ -657,7 +657,27 @@ CREATE TABLE `produto`
 	CONSTRAINT `rel_produto_produto`
 		FOREIGN KEY (`produto_id`)
 		REFERENCES `produto` (`id`)
+		ON DELETE RESTRICT,
+	INDEX `FI__produto_grupo` (`grupo_produto_id`),
+	CONSTRAINT `rel_produto_grupo`
+		FOREIGN KEY (`grupo_produto_id`)
+		REFERENCES `grupo_produto` (`id`)
 		ON DELETE RESTRICT
+)Type=MyISAM;
+
+#-----------------------------------------------------------------------------
+#-- grupo_produto
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `grupo_produto`;
+
+
+CREATE TABLE `grupo_produto`
+(
+	`id` INTEGER  NOT NULL AUTO_INCREMENT,
+	`nome` VARCHAR(100)  NOT NULL,
+	`descricao` VARCHAR(150)  NOT NULL,
+	PRIMARY KEY (`id`)
 )Type=MyISAM;
 
 #-----------------------------------------------------------------------------

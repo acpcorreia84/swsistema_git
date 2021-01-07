@@ -23,9 +23,12 @@ $tId = '1638245';*/
             $valor = '';
 
             if ($boleto) {
-                $boleto->setDataConfirmacaoPagamento(date('Y-m-d'));
-                $boleto->setDataPagamento(date('Y-m-d'));
-                $boleto->save();
+                //SO ATUALIZA O BOLETO CASO ELE NAO TENHA DATA JA DE CONFIRMACAO
+                if ($boleto->getDataConfirmacaoPagamento() == '') {
+                    $boleto->setDataConfirmacaoPagamento(date('Y-m-d'));
+                    $boleto->setDataPagamento(date('Y-m-d'));
+                    $boleto->save();
+                }
                 $valor = formataMoeda($boleto->getValor());
 
                 $certificado = $boleto->getCertificado();
@@ -58,9 +61,11 @@ $tId = '1638245';*/
                     }
 
                 if ($certificado) {
-                    $certificado->setDataConfirmacaoPagamento(date('Y-m-d'));
-                    $certificado->setDataPagamento(date('Y-m-d'));
-                    $certificado->save();
+                    if ($certificado->getDataConfirmacaoPagamento() == '') {
+                        $certificado->setDataConfirmacaoPagamento(date('Y-m-d'));
+                        $certificado->setDataPagamento(date('Y-m-d'));
+                        $certificado->save();
+                    }
 
                     $certSit = new CertificadoSituacao();
                     $certSit->setCertificadoId($certificado->getId());

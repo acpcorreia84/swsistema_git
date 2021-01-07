@@ -446,13 +446,13 @@
         <column name="codigo" type="INTEGER"/>
         <column name="nome" required="true" type="VARCHAR" size="50"/>
         <column name="preco" required="true" type="FLOAT"/>
-        <column name="preco_antigo2" required="true" type="FLOAT"/>
-        <column name="preco_antigo" required="true" type="FLOAT"/>
+        <column name="preco_venda" required="true" type="FLOAT"/>
         <column name="preco_custo" required="true" type="FLOAT"/>
         <column name="pessoa_tipo" required="true" type="CHAR" size="1"/>
         <column name="situacao" type="INTEGER" required="true"/>
         <column name="validade" type="INTEGER" required="true"/>
         <column name="produto_id" type="INTEGER" required="true"/>
+        <column name="grupo_produto_id" type="INTEGER" required="true"/>
         <column name="comissao" type="FLOAT"/>
         <column name="produto_loja" type="INTEGER" required="true"/>
 
@@ -462,8 +462,21 @@
         <foreign-key foreignTable="produto" name="rel_produto_produto" onDelete="restrict">
             <reference local="produto_id" foreign="id"/>
         </foreign-key>
+        <foreign-key foreignTable="grupo_produto" name="rel_produto_grupo" onDelete="restrict">
+            <reference local="grupo_produto_id" foreign="id"/>
+        </foreign-key>
 
     </table>
+
+
+    <table name="grupo_produto" package="pacoteProduto">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="nome" type="VARCHAR" size="100" required="true"/>
+        <column name="descricao" type="VARCHAR" size="150" required="true"/>
+
+    </table>
+
 
     <table name="local_produto" package="pacoteProduto">
 

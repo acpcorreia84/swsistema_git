@@ -98,9 +98,9 @@ function carregar_usuarios_parceiro($parceiro_id) {
             $aux = '$("#idParceiroDesvincular").val("'.$parceiroUsuario->getParceiroId().'");';
             $aux.= '$("#idUsuarioDesvincular").val("'.$parceiroUsuario->getUsuarioId().'");';
             $aux.= '$("#nomeUsuarioDesvincular").html(" <strong>'.utf8_encode($parceiroUsuario->getUsuario()->getNome()).'</strong> ")';
-            $usuarios[] = array('Id'=>$parceiroUsuario->getUsuario()->getId(), utf8_encode('Usu�rio')=>utf8_encode($parceiroUsuario->getUsuario()->getNome()),
+            $usuarios[] = array('Id'=>$parceiroUsuario->getUsuario()->getId(), utf8_encode('Usuário')=>utf8_encode($parceiroUsuario->getUsuario()->getNome()),
                 'Tipo'=>utf8_encode($parceiroUsuario->getParceiroUsuarioTipo()->getNome()),
-                utf8_encode('A��o')=>"<a title='Desvincular Usu&aacute;rio' data-toggle='modal' data-target='#desvincularUsuario' onclick='$aux'> <i class='fa fa-trash'></i> </a>"
+                utf8_encode('Ação')=>"<a title='Desvincular Usu&aacute;rio' data-toggle='modal' data-target='#desvincularUsuario' onclick='$aux'> <i class='fa fa-trash'></i> </a>"
 
                 /*$("#idParceiroDesvincular").val("'.$parceiroUsuario->getParceiroId().'"); $("#idUsuarioDesvincular").val("'.$parceiroUsuario->getUsuarioId().'");*/
             );
@@ -108,7 +108,7 @@ function carregar_usuarios_parceiro($parceiro_id) {
 
 
         $colunas = array(
-            array('nome'=>'Id'), array('nome'=>utf8_encode('Usu�rio')), array('nome'=>'Tipo'), array('nome'=>utf8_encode('A��o'))
+            array('nome'=>'Id'), array('nome'=>utf8_encode('Usuário')), array('nome'=>'Tipo'), array('nome'=>utf8_encode('Ação'))
         );
         echo "Ok&&".json_encode($colunas)."&&".json_encode($usuarios);
     }catch(Exception $e){

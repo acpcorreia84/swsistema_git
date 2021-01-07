@@ -2,7 +2,7 @@
 
 @cd classes/propel-gen
 
-@set path=c:\xampp\htdocs\swsistema\classes\propel-gen\propel\generator\bin;c:\xampp\htdocs\swsistema\classes\propel-gen\php;c:\xampp\htdocs\swsistema\classes\propel-gen\phing\bin
+@set path=C:\Users\anton\PhpstormProjects\swsistema\classes\propel-gen\propel\generator\bin;C:\Users\anton\PhpstormProjects\swsistema\classes\propel-gen\php;C:\Users\anton\PhpstormProjects\swsistema\classes\propel-gen\phing\bin
 
 @cd propel/generator
 

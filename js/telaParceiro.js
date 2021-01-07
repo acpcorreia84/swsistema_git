@@ -476,6 +476,7 @@ function apagar_parceiro(){
                 console.log(result);
                 alertErro('Error TC.JS/82346 - Erro ao tentar apagar o parceiro,' + msnPadrao + '.');
             }
+            $('#modalCarregando').modal('hide');
         }
     });
 }

@@ -49,16 +49,10 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 	protected $preco;
 
 	/**
-	 * The value for the preco_antigo2 field.
+	 * The value for the preco_venda field.
 	 * @var        double
 	 */
-	protected $preco_antigo2;
-
-	/**
-	 * The value for the preco_antigo field.
-	 * @var        double
-	 */
-	protected $preco_antigo;
+	protected $preco_venda;
 
 	/**
 	 * The value for the preco_custo field.
@@ -91,6 +85,12 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 	protected $produto_id;
 
 	/**
+	 * The value for the grupo_produto_id field.
+	 * @var        int
+	 */
+	protected $grupo_produto_id;
+
+	/**
 	 * The value for the comissao field.
 	 * @var        double
 	 */
@@ -111,6 +111,11 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 	 * @var        Produto
 	 */
 	protected $aProdutoRelatedByProdutoId;
+
+	/**
+	 * @var        GrupoProduto
+	 */
+	protected $aGrupoProduto;
 
 	/**
 	 * @var        array CuponsDescontoCertificado[] Collection to store aggregation of CuponsDescontoCertificado objects.
@@ -227,23 +232,13 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [preco_antigo2] column value.
+	 * Get the [preco_venda] column value.
 	 * 
 	 * @return     double
 	 */
-	public function getPrecoAntigo2()
+	public function getPrecoVenda()
 	{
-		return $this->preco_antigo2;
-	}
-
-	/**
-	 * Get the [preco_antigo] column value.
-	 * 
-	 * @return     double
-	 */
-	public function getPrecoAntigo()
-	{
-		return $this->preco_antigo;
+		return $this->preco_venda;
 	}
 
 	/**
@@ -294,6 +289,16 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 	public function getProdutoId()
 	{
 		return $this->produto_id;
+	}
+
+	/**
+	 * Get the [grupo_produto_id] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getGrupoProdutoId()
+	{
+		return $this->grupo_produto_id;
 	}
 
 	/**
@@ -421,44 +426,24 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 	} // setPreco()
 
 	/**
-	 * Set the value of [preco_antigo2] column.
+	 * Set the value of [preco_venda] column.
 	 * 
 	 * @param      double $v new value
 	 * @return     Produto The current object (for fluent API support)
 	 */
-	public function setPrecoAntigo2($v)
+	public function setPrecoVenda($v)
 	{
 		if ($v !== null) {
 			$v = (double) $v;
 		}
 
-		if ($this->preco_antigo2 !== $v) {
-			$this->preco_antigo2 = $v;
-			$this->modifiedColumns[] = ProdutoPeer::PRECO_ANTIGO2;
+		if ($this->preco_venda !== $v) {
+			$this->preco_venda = $v;
+			$this->modifiedColumns[] = ProdutoPeer::PRECO_VENDA;
 		}
 
 		return $this;
-	} // setPrecoAntigo2()
-
-	/**
-	 * Set the value of [preco_antigo] column.
-	 * 
-	 * @param      double $v new value
-	 * @return     Produto The current object (for fluent API support)
-	 */
-	public function setPrecoAntigo($v)
-	{
-		if ($v !== null) {
-			$v = (double) $v;
-		}
-
-		if ($this->preco_antigo !== $v) {
-			$this->preco_antigo = $v;
-			$this->modifiedColumns[] = ProdutoPeer::PRECO_ANTIGO;
-		}
-
-		return $this;
-	} // setPrecoAntigo()
+	} // setPrecoVenda()
 
 	/**
 	 * Set the value of [preco_custo] column.
@@ -565,6 +550,30 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 	} // setProdutoId()
 
 	/**
+	 * Set the value of [grupo_produto_id] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     Produto The current object (for fluent API support)
+	 */
+	public function setGrupoProdutoId($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->grupo_produto_id !== $v) {
+			$this->grupo_produto_id = $v;
+			$this->modifiedColumns[] = ProdutoPeer::GRUPO_PRODUTO_ID;
+		}
+
+		if ($this->aGrupoProduto !== null && $this->aGrupoProduto->getId() !== $v) {
+			$this->aGrupoProduto = null;
+		}
+
+		return $this;
+	} // setGrupoProdutoId()
+
+	/**
 	 * Set the value of [comissao] column.
 	 * 
 	 * @param      double $v new value
@@ -641,13 +650,13 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 			$this->codigo = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
 			$this->nome = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->preco = ($row[$startcol + 4] !== null) ? (double) $row[$startcol + 4] : null;
-			$this->preco_antigo2 = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
-			$this->preco_antigo = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
-			$this->preco_custo = ($row[$startcol + 7] !== null) ? (double) $row[$startcol + 7] : null;
-			$this->pessoa_tipo = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-			$this->situacao = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
-			$this->validade = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
-			$this->produto_id = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
+			$this->preco_venda = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
+			$this->preco_custo = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
+			$this->pessoa_tipo = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+			$this->situacao = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+			$this->validade = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
+			$this->produto_id = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
+			$this->grupo_produto_id = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
 			$this->comissao = ($row[$startcol + 12] !== null) ? (double) $row[$startcol + 12] : null;
 			$this->produto_loja = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
 			$this->resetModified();
@@ -687,6 +696,9 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 		}
 		if ($this->aProdutoRelatedByProdutoId !== null && $this->produto_id !== $this->aProdutoRelatedByProdutoId->getId()) {
 			$this->aProdutoRelatedByProdutoId = null;
+		}
+		if ($this->aGrupoProduto !== null && $this->grupo_produto_id !== $this->aGrupoProduto->getId()) {
+			$this->aGrupoProduto = null;
 		}
 	} // ensureConsistency
 
@@ -729,6 +741,7 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 
 			$this->aFornecedor = null;
 			$this->aProdutoRelatedByProdutoId = null;
+			$this->aGrupoProduto = null;
 			$this->collCuponsDescontoCertificados = null;
 			$this->lastCuponsDescontoCertificadoCriteria = null;
 
@@ -869,6 +882,13 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 					$affectedRows += $this->aProdutoRelatedByProdutoId->save($con);
 				}
 				$this->setProdutoRelatedByProdutoId($this->aProdutoRelatedByProdutoId);
+			}
+
+			if ($this->aGrupoProduto !== null) {
+				if ($this->aGrupoProduto->isModified() || $this->aGrupoProduto->isNew()) {
+					$affectedRows += $this->aGrupoProduto->save($con);
+				}
+				$this->setGrupoProduto($this->aGrupoProduto);
 			}
 
 			if ($this->isNew() ) {
@@ -1016,6 +1036,12 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 				}
 			}
 
+			if ($this->aGrupoProduto !== null) {
+				if (!$this->aGrupoProduto->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->aGrupoProduto->getValidationFailures());
+				}
+			}
+
 
 			if (($retval = ProdutoPeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
@@ -1083,13 +1109,13 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(ProdutoPeer::CODIGO)) $criteria->add(ProdutoPeer::CODIGO, $this->codigo);
 		if ($this->isColumnModified(ProdutoPeer::NOME)) $criteria->add(ProdutoPeer::NOME, $this->nome);
 		if ($this->isColumnModified(ProdutoPeer::PRECO)) $criteria->add(ProdutoPeer::PRECO, $this->preco);
-		if ($this->isColumnModified(ProdutoPeer::PRECO_ANTIGO2)) $criteria->add(ProdutoPeer::PRECO_ANTIGO2, $this->preco_antigo2);
-		if ($this->isColumnModified(ProdutoPeer::PRECO_ANTIGO)) $criteria->add(ProdutoPeer::PRECO_ANTIGO, $this->preco_antigo);
+		if ($this->isColumnModified(ProdutoPeer::PRECO_VENDA)) $criteria->add(ProdutoPeer::PRECO_VENDA, $this->preco_venda);
 		if ($this->isColumnModified(ProdutoPeer::PRECO_CUSTO)) $criteria->add(ProdutoPeer::PRECO_CUSTO, $this->preco_custo);
 		if ($this->isColumnModified(ProdutoPeer::PESSOA_TIPO)) $criteria->add(ProdutoPeer::PESSOA_TIPO, $this->pessoa_tipo);
 		if ($this->isColumnModified(ProdutoPeer::SITUACAO)) $criteria->add(ProdutoPeer::SITUACAO, $this->situacao);
 		if ($this->isColumnModified(ProdutoPeer::VALIDADE)) $criteria->add(ProdutoPeer::VALIDADE, $this->validade);
 		if ($this->isColumnModified(ProdutoPeer::PRODUTO_ID)) $criteria->add(ProdutoPeer::PRODUTO_ID, $this->produto_id);
+		if ($this->isColumnModified(ProdutoPeer::GRUPO_PRODUTO_ID)) $criteria->add(ProdutoPeer::GRUPO_PRODUTO_ID, $this->grupo_produto_id);
 		if ($this->isColumnModified(ProdutoPeer::COMISSAO)) $criteria->add(ProdutoPeer::COMISSAO, $this->comissao);
 		if ($this->isColumnModified(ProdutoPeer::PRODUTO_LOJA)) $criteria->add(ProdutoPeer::PRODUTO_LOJA, $this->produto_loja);
 
@@ -1154,9 +1180,7 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 
 		$copyObj->setPreco($this->preco);
 
-		$copyObj->setPrecoAntigo2($this->preco_antigo2);
-
-		$copyObj->setPrecoAntigo($this->preco_antigo);
+		$copyObj->setPrecoVenda($this->preco_venda);
 
 		$copyObj->setPrecoCusto($this->preco_custo);
 
@@ -1167,6 +1191,8 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 		$copyObj->setValidade($this->validade);
 
 		$copyObj->setProdutoId($this->produto_id);
+
+		$copyObj->setGrupoProdutoId($this->grupo_produto_id);
 
 		$copyObj->setComissao($this->comissao);
 
@@ -1351,6 +1377,55 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 			 */
 		}
 		return $this->aProdutoRelatedByProdutoId;
+	}
+
+	/**
+	 * Declares an association between this object and a GrupoProduto object.
+	 *
+	 * @param      GrupoProduto $v
+	 * @return     Produto The current object (for fluent API support)
+	 * @throws     PropelException
+	 */
+	public function setGrupoProduto(GrupoProduto $v = null)
+	{
+		if ($v === null) {
+			$this->setGrupoProdutoId(NULL);
+		} else {
+			$this->setGrupoProdutoId($v->getId());
+		}
+
+		$this->aGrupoProduto = $v;
+
+		// Add binding for other direction of this n:n relationship.
+		// If this object has already been added to the GrupoProduto object, it will not be re-added.
+		if ($v !== null) {
+			$v->addProduto($this);
+		}
+
+		return $this;
+	}
+
+
+	/**
+	 * Get the associated GrupoProduto object
+	 *
+	 * @param      PropelPDO Optional Connection object.
+	 * @return     GrupoProduto The associated GrupoProduto object.
+	 * @throws     PropelException
+	 */
+	public function getGrupoProduto(PropelPDO $con = null)
+	{
+		if ($this->aGrupoProduto === null && ($this->grupo_produto_id !== null)) {
+			$this->aGrupoProduto = GrupoProdutoPeer::retrieveByPk($this->grupo_produto_id);
+			/* The following can be used additionally to
+			   guarantee the related object contains a reference
+			   to this object.  This level of coupling may, however, be
+			   undesirable since it could result in an only partially populated collection
+			   in the referenced object.
+			   $this->aGrupoProduto->addProdutos($this);
+			 */
+		}
+		return $this->aGrupoProduto;
 	}
 
 	/**
@@ -1842,6 +1917,53 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 
 			if (!isset($this->lastProdutoRelatedByProdutoIdCriteria) || !$this->lastProdutoRelatedByProdutoIdCriteria->equals($criteria)) {
 				$this->collProdutosRelatedByProdutoId = ProdutoPeer::doSelectJoinFornecedor($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastProdutoRelatedByProdutoIdCriteria = $criteria;
+
+		return $this->collProdutosRelatedByProdutoId;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Produto is new, it will return
+	 * an empty collection; or if this Produto has previously
+	 * been saved, it will retrieve related ProdutosRelatedByProdutoId from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Produto.
+	 */
+	public function getProdutosRelatedByProdutoIdJoinGrupoProduto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(ProdutoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collProdutosRelatedByProdutoId === null) {
+			if ($this->isNew()) {
+				$this->collProdutosRelatedByProdutoId = array();
+			} else {
+
+				$criteria->add(ProdutoPeer::PRODUTO_ID, $this->id);
+
+				$this->collProdutosRelatedByProdutoId = ProdutoPeer::doSelectJoinGrupoProduto($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(ProdutoPeer::PRODUTO_ID, $this->id);
+
+			if (!isset($this->lastProdutoRelatedByProdutoIdCriteria) || !$this->lastProdutoRelatedByProdutoIdCriteria->equals($criteria)) {
+				$this->collProdutosRelatedByProdutoId = ProdutoPeer::doSelectJoinGrupoProduto($criteria, $con, $join_behavior);
 			}
 		}
 		$this->lastProdutoRelatedByProdutoIdCriteria = $criteria;
@@ -2921,6 +3043,7 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 		$this->collItemPedidos = null;
 			$this->aFornecedor = null;
 			$this->aProdutoRelatedByProdutoId = null;
+			$this->aGrupoProduto = null;
 	}
 
 } // BaseProduto
