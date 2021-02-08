@@ -253,6 +253,7 @@
                                                 <option value="074-SAFRA" >SAFRA</option>
                                                 <option value="033-SANTANDER" >SANTANDER</option>
                                                 <option value="756-SICOOB" >SICOOB</option>
+                                                <option value="655-ASTECAS/VOTORANTIM" >VOTORANTIM / ASTECAS</option>
                                             </select>
                                         </div>
                                         <div class="col-lg-3 campoValidar">
