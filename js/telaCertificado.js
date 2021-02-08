@@ -1,4 +1,4 @@
-var msnPadrao = 'entre em contato com o administrador do sistema (3321-5061)';
+var msnPadrao = 'entre em contato com o administrador do sistema';
 
 // var urlPadrao = 'funcoes/certificado/';
 var pageUrl = 'funcoes/funcoesCertificado.php';
