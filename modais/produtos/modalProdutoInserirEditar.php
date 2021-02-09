@@ -43,7 +43,7 @@
                                         <label for="edtCodigoProduto">C&oacute;digo</label>
                                     </div>
                                     <div class="col-lg-6">
-                                        <label for="edtComissaoProduto">Comiss&atilde;o</label>
+                                        <label for="edtPrecoVenda">Preco de venda</label>
                                     </div>
 
                                 </div>
@@ -52,7 +52,7 @@
                                         <input type="text" name="edtCodigoProduto" id="edtCodigoProduto" class="form-control" placeholder="C&oacute;digo do Produto">
                                     </div>
                                     <div class="col-lg-6 campoValidar">
-                                        <input type="text" name="edtComissaoProduto" id="edtComissaoProduto" class="form-control" placeholder="Comiss&atilde;o do Produto">
+                                        <input type="text" name="edtPrecoVenda" id="edtPrecoVenda" class="form-control" placeholder="Preco de venda para o parceiro comercial">
                                     </div>
 
                                 </div>
@@ -107,6 +107,26 @@
                                     </div>
 
                                 </div>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="edtGrupoProduto">Grupo do Produto</label>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <label for="edtComissaoProduto">Comiss&atilde;o</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 campoValidar">
+                                        <div id="divGrupoProdutos"></div>
+                                    </div>
+                                    <div class="col-lg-6 campoValidar">
+                                        <input type="text" name="edtComissaoProduto" id="edtComissaoProduto" class="form-control" placeholder="Comiss&atilde;o do Produto">
+                                    </div>
+
+                                </div>
+
                             </form>
 
                         </div> <!--FIM PANEL-BODY-->
@@ -138,6 +158,11 @@
                     },
 
                     edtValidadeProduto: {
+                        required: true,
+                        number: true
+                    },
+
+                    edtGrupoProduto: {
                         required: true,
                         number: true
                     },

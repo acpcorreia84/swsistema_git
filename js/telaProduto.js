@@ -114,7 +114,7 @@ function carregarModalDetalharProduto (produtoId) {
                     $('#labelComissao').html(resultado.comissao + "%");
                     $('#labelProdutoPai').html(resultado.produtoPai);
                     $('#labelProdutoContador').html(resultado.produtoContador);
-
+                    $('#labelPrecoVenda').html(resultado.precoVenda);
                     /*
                     * INSERE DADOS NO MODAL EDITAR
                     * */
@@ -126,6 +126,8 @@ function carregarModalDetalharProduto (produtoId) {
                     $('#edtValidadeProduto').val(resultado.validadeId);
                     $('#edtPrecoProduto').val(resultado.precoSemFormatacao);
                     $('#edtProdutoContador').val(resultado.produtoContadorId);
+
+                    $('#edtPrecoVenda').val(resultado.precoVendaSemFormatacao);
                     /*
                     * MONTA SELECT DE PRODUTOS DE REFERENCIA
                     * */
@@ -159,7 +161,9 @@ function salvarProduto () {
         'validade': $('#edtValidadeProduto').val(),
         'preco': $('#edtPrecoProduto').val(),
         'produtoReferenciaId': $('#edtProdutoReferencia').val(),
-        'produtoContador':$('#edtProdutoContador').val()
+        'produtoContador':$('#edtProdutoContador').val(),
+        'precoVenda':$('#edtPrecoVenda').val(),
+        'grupoProduto':$('#edtGrupoProduto').val()
     };
     $.ajax ({
         url : pageUrl,
@@ -214,44 +218,44 @@ function carregarModalInserirEditarProduto (acao) {
         $('#edtValidadeProduto').val('');
         $('#edtPrecoProduto').val('');
         $('#edtProdutoContador').val('');
+        $('#edtPrecoVenda').val('');
 
 
         $('#acaoProduto').val('inserir');
         $('#edtTipoProduto').prop("disabled",false);
-
-        $.ajax ({
-            url : pageUrl,
-            data : {'funcao':'carregar_modal_inserir_editar_produto'},
-            type : 'POST',
-            cache : true,
-            error : function (){
-                alertErro ('Error P004 - Erro ao tentar carregar tela de inserir produtos,' + msnPadrao + '.');
-                $('#modalCarregando').modal('hide');
-            },
-            success : function(result){
-                try {
-                    resultado = JSON.parse(result);
-
-                    if (resultado.mensagem == 'Ok') {
-                        $('#modalCarregando').modal('hide');
-                        montarSelect('edtProdutoReferencia', resultado.produtos, 'divProdutosReferencia', '');
-                    }
-
-                } catch (e) {
-                    $('#modalCarregando').modal('hide');
-                    console.log(result, e);
-                    alertErro('Error P104 - Erro ao tentar carregar tela de inserir produtos, Erro:' + e + msnPadrao + '.');
-                }
-
-            }
-        });
-
     } else if (acao == 'editar') {
         $('#acaoProduto').val('editar');
         $('#edtTipoProduto').prop("disabled",true);
 
     }
 
+    $.ajax ({
+        url : pageUrl,
+        data : {'funcao':'carregar_modal_inserir_editar_produto'},
+        type : 'POST',
+        cache : true,
+        error : function (){
+            alertErro ('Error P004 - Erro ao tentar carregar tela de inserir produtos,' + msnPadrao + '.');
+            $('#modalCarregando').modal('hide');
+        },
+        success : function(result){
+            try {
+                resultado = JSON.parse(result);
+
+                if (resultado.mensagem == 'Ok') {
+                    $('#modalCarregando').modal('hide');
+                    montarSelect('edtProdutoReferencia', resultado.produtos, 'divProdutosReferencia', '');
+                    montarSelect('edtGrupoProduto', resultado.grupoProdutos, 'divGrupoProdutos', resultado.grupoSelecionado);
+                }
+
+            } catch (e) {
+                $('#modalCarregando').modal('hide');
+                console.log(result, e);
+                alertErro('Error P104 - Erro ao tentar carregar tela de inserir produtos, Erro:' + e + msnPadrao + '.');
+            }
+
+        }
+    });
 
 }
 

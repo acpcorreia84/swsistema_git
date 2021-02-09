@@ -58,6 +58,9 @@
                                 <label>Contador?:</label> <span id="labelProdutoContador">...</span>
                             </div>
 
+                            <div class="col-lg-6">
+                                <label>Preco de venda parceiro:</label> <span id="labelPrecoVenda">...</span>
+                            </div>
 
                         </div> <!--DIV CLASS row-->
                     </div>

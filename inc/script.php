@@ -15,6 +15,7 @@
             break;
         case 'telaCertificado.php':
             echo '<script src="../js/telaCertificado.js"></script>
+            <script src="https://assets.pagar.me/js/pagarme.min.js"></script>
             <script type="text/javascript" src="inc/jquery-validation-1.15.0/dist/jquery.validate.js"></script>
             <script type="text/javascript" src="inc/jquery-validation-1.15.0/dist/additional-methods.js"></script>
             <script type="text/javascript" src="inc/jquery-validation-1.15.0/dist/localization/messages_pt_BR.min.js"></script>

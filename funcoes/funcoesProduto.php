@@ -21,6 +21,9 @@ function salvarProduto() {
         $produto->setPessoaTipo($_POST['pessoaTipo']);
         $produto->setValidade($_POST['validade']);
         $produto->setPreco($_POST['preco']);
+        $produto->setPrecoVenda($_POST['precoVenda']);
+        $produto->setGrupoProdutoId($_POST['grupoProduto']);
+
         if ($_POST['produtoContador']=='contadores')
             $produto->setSituacao(10);
         else
@@ -120,12 +123,12 @@ function carregarProdutos(){
             else
                 $produtoContador = 'Pre&ccedil;o Normal';
 
-            $produtos[] =  array('.'=>$i++, 'Id'=>$produto->getId(), 'Contador?'=>$produtoContador,'Nome'=>utf8_encode($produto->getNome()), utf8_encode('Preço')=>$produto->getPreco(), 'Tipo'=>$produto->getPessoaTipo(), 'Validade'=>$validade,
-                utf8_encode('Ação')=>'<button onclick="carregarModalDetalharProduto(\''.$produto->getId().'\'); $(\'#modalProdutoDetalhar\').modal(\'show\')"><i class="fa fa-arrows"></i></button> '
+            $produtos[] =  array('.'=>$i++, 'Id'=>$produto->getId(), 'Contador?'=>$produtoContador,'Nome'=>utf8_encode($produto->getNome()), utf8_encode('Preco')=>$produto->getPreco(), 'Tipo'=>$produto->getPessoaTipo(), 'Validade'=>$validade,
+                utf8_encode('Acao')=>'<button onclick="carregarModalDetalharProduto(\''.$produto->getId().'\'); $(\'#modalProdutoDetalhar\').modal(\'show\')"><i class="fa fa-arrows"></i></button> '
             );
         }
         $colunas = array(array('nome'=>'.'),
-            array('nome'=>'Id'), array('nome'=>'Nome'), array('nome'=>utf8_encode('Preço')),array('nome'=>utf8_encode('Tipo')),array('nome'=>'Validade'), array('nome'=>'Contador?') ,array('nome'=>utf8_encode('Ação'))
+            array('nome'=>'Id'), array('nome'=>'Nome'), array('nome'=>utf8_encode('Preco')),array('nome'=>utf8_encode('Tipo')),array('nome'=>'Validade'), array('nome'=>'Contador?') ,array('nome'=>utf8_encode('Acao'))
         );
 
         $retorno = array();
@@ -195,7 +198,9 @@ function carregarModalDetalharProduto() {
         'produtoReferenciaId'=>$produto->getProdutoId(),
         'produtos'=>json_encode($produtos),
         'produtoContador'=>$produtoContador,
-        'produtoContadorId'=>$produtoContadorId
+        'produtoContadorId'=>$produtoContadorId,
+        'precoVenda'=>formataMoeda($produto->getPrecoVenda()),
+        'precoVendaSemFormatacao'=>$produto->getPrecoVenda(),
     );
 
     echo json_encode($retorno);
@@ -210,9 +215,19 @@ function carregarModalInserirEditarProduto () {
     $produtos[] = array('id'=>'', 'nome'=>'Escolha um produto');
     foreach ($produtosObj as $produto)
         $produtos[] = array('id'=>$produto->getId(), 'nome'=>utf8_encode($produto->getNome()));
+    $cGrupo = new Criteria();
+    $cGrupo->add(GrupoProdutoPeer::SITUACAO, -1, Criteria::NOT_EQUAL);
+    $grupoProdutosObj = GrupoProdutoPeer::doSelect($cGrupo);
+    $gruposProdutos = array();
+    $gruposProdutos[] = array('id'=>'', 'nome'=>'Escolha um grupo de produto');
+    foreach ($grupoProdutosObj as $grupo)
+        $gruposProdutos[] = array('id'=>$grupo->getId(), 'nome'=>utf8_encode($grupo->getNome()));
+
     $retorno = array(
         'mensagem'=>'Ok',
-        'produtos'=>json_encode($produtos)
+        'produtos'=>json_encode($produtos),
+        'grupoProdutos'=>json_encode($gruposProdutos),
+        'grupoSelecionado' => $produto->getGrupoProdutoId()
     );
 
     echo json_encode($retorno);
