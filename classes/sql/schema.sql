@@ -677,6 +677,7 @@ CREATE TABLE `grupo_produto`
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`nome` VARCHAR(100)  NOT NULL,
 	`descricao` VARCHAR(150)  NOT NULL,
+	`situacao` INTEGER  NOT NULL,
 	PRIMARY KEY (`id`)
 )Type=MyISAM;
 

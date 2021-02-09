@@ -39,6 +39,7 @@ class GrupoProdutoTableMap extends TableMap {
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
 		$this->addColumn('NOME', 'Nome', 'VARCHAR', true, 100, null);
 		$this->addColumn('DESCRICAO', 'Descricao', 'VARCHAR', true, 150, null);
+		$this->addColumn('SITUACAO', 'Situacao', 'INTEGER', true, null, null);
 		// validators
 	} // initialize()
 

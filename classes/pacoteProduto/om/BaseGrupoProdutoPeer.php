@@ -25,7 +25,7 @@ abstract class BaseGrupoProdutoPeer {
 	const TM_CLASS = 'GrupoProdutoTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 3;
+	const NUM_COLUMNS = 4;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -38,6 +38,9 @@ abstract class BaseGrupoProdutoPeer {
 
 	/** the column name for the DESCRICAO field */
 	const DESCRICAO = 'grupo_produto.DESCRICAO';
+
+	/** the column name for the SITUACAO field */
+	const SITUACAO = 'grupo_produto.SITUACAO';
 
 	/**
 	 * An identiy map to hold any loaded instances of GrupoProduto objects.
@@ -55,11 +58,11 @@ abstract class BaseGrupoProdutoPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'Nome', 'Descricao', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'nome', 'descricao', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::NOME, self::DESCRICAO, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'nome', 'descricao', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'Nome', 'Descricao', 'Situacao', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'nome', 'descricao', 'situacao', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::NOME, self::DESCRICAO, self::SITUACAO, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'nome', 'descricao', 'situacao', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
 
 	/**
@@ -69,11 +72,11 @@ abstract class BaseGrupoProdutoPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Nome' => 1, 'Descricao' => 2, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'nome' => 1, 'descricao' => 2, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NOME => 1, self::DESCRICAO => 2, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'nome' => 1, 'descricao' => 2, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Nome' => 1, 'Descricao' => 2, 'Situacao' => 3, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'nome' => 1, 'descricao' => 2, 'situacao' => 3, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NOME => 1, self::DESCRICAO => 2, self::SITUACAO => 3, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'nome' => 1, 'descricao' => 2, 'situacao' => 3, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
 
 	/**
@@ -146,6 +149,7 @@ abstract class BaseGrupoProdutoPeer {
 		$criteria->addSelectColumn(GrupoProdutoPeer::ID);
 		$criteria->addSelectColumn(GrupoProdutoPeer::NOME);
 		$criteria->addSelectColumn(GrupoProdutoPeer::DESCRICAO);
+		$criteria->addSelectColumn(GrupoProdutoPeer::SITUACAO);
 	}
 
 	/**

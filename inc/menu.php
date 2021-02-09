@@ -53,6 +53,12 @@ require_once 'modais/modalListaProdutos.php';
                     <li><a title="Inserir novo usu&aacute;rio" data-target="#modalUsuarioInserirEditar" data-toggle="modal" onclick="$('#acaoUsuario').val('inserir'); $('#idUsuario').val(''); limparModalInserirUsuario();"><i class="fa fa-lg fa-user-plus"></i></a></li>
                 <? }?>
 
+                <? if (($_SERVER['REQUEST_URI'] == '/telaGrupoProduto.php') && (array_search('telaGrupoProduto.php', $arrTelasMenu)!==false) ) {?>
+
+                    <li><a title="Inserir / editar grupo de produtos"  class="btn btn-primary" data-toggle="modal" data-target="#modalInserirEditarGrupoProduto" onclick="carregarModalInserirEditarGrupoProduto('inserir')"><i class="fa fa-lg fa-plus"></i></a></li>
+                <? }?>
+
+
                 <? if($_SERVER['REQUEST_URI'] == '/telaCentralNegocios.php' ) {?>
                     <li ><a href="telaCertificado.php" target="_blank" title="Tela antiga de certificados" class="text-success"><i class="fa fa-lg fa-id-card"></i> Certificados </a></li>
                 <? }?>
@@ -149,6 +155,9 @@ require_once 'modais/modalListaProdutos.php';
                             <li><a href="telaContador.php"><i class="fa fa-address-card"></i> Contador Amigo </a></li>
                             <? if (array_search('telaUsuario.php', $arrTelasMenu)!==false) {?>
                                 <li><a href="telaUsuario.php"><i class="fa fa-users"></i> Usu&aacute;rios </a></li>
+                            <? }?>
+                            <? if (array_search('telaGrupoProduto.php', $arrTelasMenu)!==false) {?>
+                                <li><a href="telaGrupoProduto.php"><i class="fa fa-product-hunt"></i> Grupo de produtos </a></li>
                             <? }?>
                             <? if (array_search('telaFuncionario.php', $arrTelasMenu)!==false) {?>
                                 <!--<li><a href="#">Funcion&aacute;rios</a></li>-->
