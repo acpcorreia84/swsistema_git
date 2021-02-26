@@ -536,10 +536,10 @@ function salvarContador(acao){
     else
         var recebeComissao = 0;
 
-    if ($('#chkConcedeDescontoContador').prop('checked'))
-        var recebeDesconto = 1;
+    if ($('#chkEscolhePagtoContador').prop('checked'))
+        var pagaContador = 'Sim';
     else
-        var recebeDesconto = 0;
+        var pagaContador = 'Nao';
 
     if ($('input[name=edtTipoComissionamentoContador]:checked').val()=='cartao')
         var possuiCartao = 1;
@@ -590,7 +590,8 @@ function salvarContador(acao){
         'emailContato':$('#edtEmailContatoContador').val(),
         'digitoAgencia':$('#ecEdtDigitoAg').val(),
         'digitoConta':$('#ecEdtDigitoCc').val(),
-        'possuiCartao' : possuiCartao
+        'possuiCartao' : possuiCartao,
+        'pagaContador' : pagaContador
     };
 
     $.ajax ({

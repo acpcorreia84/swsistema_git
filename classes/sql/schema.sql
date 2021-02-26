@@ -39,6 +39,7 @@ CREATE TABLE `parceiro`
 	`comissao_venda_validacao` INTEGER  NOT NULL,
 	`observacao` VARCHAR(150),
 	`tipo_canal` VARCHAR(8),
+	`paga_contador` VARCHAR(1),
 	PRIMARY KEY (`id`),
 	INDEX `FI__parceiro_local` (`local_id`),
 	CONSTRAINT `Rel_parceiro_local`
@@ -678,6 +679,19 @@ CREATE TABLE `grupo_produto`
 	`nome` VARCHAR(100)  NOT NULL,
 	`descricao` VARCHAR(150)  NOT NULL,
 	`situacao` INTEGER  NOT NULL,
+	PRIMARY KEY (`id`)
+)Type=MyISAM;
+
+#-----------------------------------------------------------------------------
+#-- usuario_grupo_produto
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `usuario_grupo_produto`;
+
+
+CREATE TABLE `usuario_grupo_produto`
+(
+	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	PRIMARY KEY (`id`)
 )Type=MyISAM;
 

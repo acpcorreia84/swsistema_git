@@ -25,7 +25,7 @@ abstract class BaseParceiroPeer {
 	const TM_CLASS = 'ParceiroTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 27;
+	const NUM_COLUMNS = 28;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -111,6 +111,9 @@ abstract class BaseParceiroPeer {
 	/** the column name for the TIPO_CANAL field */
 	const TIPO_CANAL = 'parceiro.TIPO_CANAL';
 
+	/** the column name for the PAGA_CONTADOR field */
+	const PAGA_CONTADOR = 'parceiro.PAGA_CONTADOR';
+
 	/**
 	 * An identiy map to hold any loaded instances of Parceiro objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -127,11 +130,11 @@ abstract class BaseParceiroPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'Nome', 'Empresa', 'Cnpj', 'Endereco', 'Numero', 'Bairro', 'Cidade', 'Complemento', 'Email', 'Uf', 'Cep', 'Ibge', 'Fone', 'Celular', 'LocalId', 'Situacao', 'DataCadastro', 'Banco', 'ContaCorrente', 'Agencia', 'Operacao', 'ComissaoVenda', 'ComissaoValidacao', 'ComissaoVendaValidacao', 'Observacao', 'TipoCanal', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'nome', 'empresa', 'cnpj', 'endereco', 'numero', 'bairro', 'cidade', 'complemento', 'email', 'uf', 'cep', 'ibge', 'fone', 'celular', 'localId', 'situacao', 'dataCadastro', 'banco', 'contaCorrente', 'agencia', 'operacao', 'comissaoVenda', 'comissaoValidacao', 'comissaoVendaValidacao', 'observacao', 'tipoCanal', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::NOME, self::EMPRESA, self::CNPJ, self::ENDERECO, self::NUMERO, self::BAIRRO, self::CIDADE, self::COMPLEMENTO, self::EMAIL, self::UF, self::CEP, self::IBGE, self::FONE, self::CELULAR, self::LOCAL_ID, self::SITUACAO, self::DATA_CADASTRO, self::BANCO, self::CONTA_CORRENTE, self::AGENCIA, self::OPERACAO, self::COMISSAO_VENDA, self::COMISSAO_VALIDACAO, self::COMISSAO_VENDA_VALIDACAO, self::OBSERVACAO, self::TIPO_CANAL, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'nome', 'empresa', 'cnpj', 'endereco', 'numero', 'bairro', 'cidade', 'complemento', 'email', 'uf', 'cep', 'ibge', 'fone', 'celular', 'local_id', 'situacao', 'data_cadastro', 'banco', 'conta_corrente', 'agencia', 'operacao', 'comissao_venda', 'comissao_validacao', 'comissao_venda_validacao', 'observacao', 'tipo_canal', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'Nome', 'Empresa', 'Cnpj', 'Endereco', 'Numero', 'Bairro', 'Cidade', 'Complemento', 'Email', 'Uf', 'Cep', 'Ibge', 'Fone', 'Celular', 'LocalId', 'Situacao', 'DataCadastro', 'Banco', 'ContaCorrente', 'Agencia', 'Operacao', 'ComissaoVenda', 'ComissaoValidacao', 'ComissaoVendaValidacao', 'Observacao', 'TipoCanal', 'PagaContador', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'nome', 'empresa', 'cnpj', 'endereco', 'numero', 'bairro', 'cidade', 'complemento', 'email', 'uf', 'cep', 'ibge', 'fone', 'celular', 'localId', 'situacao', 'dataCadastro', 'banco', 'contaCorrente', 'agencia', 'operacao', 'comissaoVenda', 'comissaoValidacao', 'comissaoVendaValidacao', 'observacao', 'tipoCanal', 'pagaContador', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::NOME, self::EMPRESA, self::CNPJ, self::ENDERECO, self::NUMERO, self::BAIRRO, self::CIDADE, self::COMPLEMENTO, self::EMAIL, self::UF, self::CEP, self::IBGE, self::FONE, self::CELULAR, self::LOCAL_ID, self::SITUACAO, self::DATA_CADASTRO, self::BANCO, self::CONTA_CORRENTE, self::AGENCIA, self::OPERACAO, self::COMISSAO_VENDA, self::COMISSAO_VALIDACAO, self::COMISSAO_VENDA_VALIDACAO, self::OBSERVACAO, self::TIPO_CANAL, self::PAGA_CONTADOR, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'nome', 'empresa', 'cnpj', 'endereco', 'numero', 'bairro', 'cidade', 'complemento', 'email', 'uf', 'cep', 'ibge', 'fone', 'celular', 'local_id', 'situacao', 'data_cadastro', 'banco', 'conta_corrente', 'agencia', 'operacao', 'comissao_venda', 'comissao_validacao', 'comissao_venda_validacao', 'observacao', 'tipo_canal', 'paga_contador', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, )
 	);
 
 	/**
@@ -141,11 +144,11 @@ abstract class BaseParceiroPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Nome' => 1, 'Empresa' => 2, 'Cnpj' => 3, 'Endereco' => 4, 'Numero' => 5, 'Bairro' => 6, 'Cidade' => 7, 'Complemento' => 8, 'Email' => 9, 'Uf' => 10, 'Cep' => 11, 'Ibge' => 12, 'Fone' => 13, 'Celular' => 14, 'LocalId' => 15, 'Situacao' => 16, 'DataCadastro' => 17, 'Banco' => 18, 'ContaCorrente' => 19, 'Agencia' => 20, 'Operacao' => 21, 'ComissaoVenda' => 22, 'ComissaoValidacao' => 23, 'ComissaoVendaValidacao' => 24, 'Observacao' => 25, 'TipoCanal' => 26, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'nome' => 1, 'empresa' => 2, 'cnpj' => 3, 'endereco' => 4, 'numero' => 5, 'bairro' => 6, 'cidade' => 7, 'complemento' => 8, 'email' => 9, 'uf' => 10, 'cep' => 11, 'ibge' => 12, 'fone' => 13, 'celular' => 14, 'localId' => 15, 'situacao' => 16, 'dataCadastro' => 17, 'banco' => 18, 'contaCorrente' => 19, 'agencia' => 20, 'operacao' => 21, 'comissaoVenda' => 22, 'comissaoValidacao' => 23, 'comissaoVendaValidacao' => 24, 'observacao' => 25, 'tipoCanal' => 26, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NOME => 1, self::EMPRESA => 2, self::CNPJ => 3, self::ENDERECO => 4, self::NUMERO => 5, self::BAIRRO => 6, self::CIDADE => 7, self::COMPLEMENTO => 8, self::EMAIL => 9, self::UF => 10, self::CEP => 11, self::IBGE => 12, self::FONE => 13, self::CELULAR => 14, self::LOCAL_ID => 15, self::SITUACAO => 16, self::DATA_CADASTRO => 17, self::BANCO => 18, self::CONTA_CORRENTE => 19, self::AGENCIA => 20, self::OPERACAO => 21, self::COMISSAO_VENDA => 22, self::COMISSAO_VALIDACAO => 23, self::COMISSAO_VENDA_VALIDACAO => 24, self::OBSERVACAO => 25, self::TIPO_CANAL => 26, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'nome' => 1, 'empresa' => 2, 'cnpj' => 3, 'endereco' => 4, 'numero' => 5, 'bairro' => 6, 'cidade' => 7, 'complemento' => 8, 'email' => 9, 'uf' => 10, 'cep' => 11, 'ibge' => 12, 'fone' => 13, 'celular' => 14, 'local_id' => 15, 'situacao' => 16, 'data_cadastro' => 17, 'banco' => 18, 'conta_corrente' => 19, 'agencia' => 20, 'operacao' => 21, 'comissao_venda' => 22, 'comissao_validacao' => 23, 'comissao_venda_validacao' => 24, 'observacao' => 25, 'tipo_canal' => 26, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Nome' => 1, 'Empresa' => 2, 'Cnpj' => 3, 'Endereco' => 4, 'Numero' => 5, 'Bairro' => 6, 'Cidade' => 7, 'Complemento' => 8, 'Email' => 9, 'Uf' => 10, 'Cep' => 11, 'Ibge' => 12, 'Fone' => 13, 'Celular' => 14, 'LocalId' => 15, 'Situacao' => 16, 'DataCadastro' => 17, 'Banco' => 18, 'ContaCorrente' => 19, 'Agencia' => 20, 'Operacao' => 21, 'ComissaoVenda' => 22, 'ComissaoValidacao' => 23, 'ComissaoVendaValidacao' => 24, 'Observacao' => 25, 'TipoCanal' => 26, 'PagaContador' => 27, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'nome' => 1, 'empresa' => 2, 'cnpj' => 3, 'endereco' => 4, 'numero' => 5, 'bairro' => 6, 'cidade' => 7, 'complemento' => 8, 'email' => 9, 'uf' => 10, 'cep' => 11, 'ibge' => 12, 'fone' => 13, 'celular' => 14, 'localId' => 15, 'situacao' => 16, 'dataCadastro' => 17, 'banco' => 18, 'contaCorrente' => 19, 'agencia' => 20, 'operacao' => 21, 'comissaoVenda' => 22, 'comissaoValidacao' => 23, 'comissaoVendaValidacao' => 24, 'observacao' => 25, 'tipoCanal' => 26, 'pagaContador' => 27, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NOME => 1, self::EMPRESA => 2, self::CNPJ => 3, self::ENDERECO => 4, self::NUMERO => 5, self::BAIRRO => 6, self::CIDADE => 7, self::COMPLEMENTO => 8, self::EMAIL => 9, self::UF => 10, self::CEP => 11, self::IBGE => 12, self::FONE => 13, self::CELULAR => 14, self::LOCAL_ID => 15, self::SITUACAO => 16, self::DATA_CADASTRO => 17, self::BANCO => 18, self::CONTA_CORRENTE => 19, self::AGENCIA => 20, self::OPERACAO => 21, self::COMISSAO_VENDA => 22, self::COMISSAO_VALIDACAO => 23, self::COMISSAO_VENDA_VALIDACAO => 24, self::OBSERVACAO => 25, self::TIPO_CANAL => 26, self::PAGA_CONTADOR => 27, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'nome' => 1, 'empresa' => 2, 'cnpj' => 3, 'endereco' => 4, 'numero' => 5, 'bairro' => 6, 'cidade' => 7, 'complemento' => 8, 'email' => 9, 'uf' => 10, 'cep' => 11, 'ibge' => 12, 'fone' => 13, 'celular' => 14, 'local_id' => 15, 'situacao' => 16, 'data_cadastro' => 17, 'banco' => 18, 'conta_corrente' => 19, 'agencia' => 20, 'operacao' => 21, 'comissao_venda' => 22, 'comissao_validacao' => 23, 'comissao_venda_validacao' => 24, 'observacao' => 25, 'tipo_canal' => 26, 'paga_contador' => 27, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, )
 	);
 
 	/**
@@ -242,6 +245,7 @@ abstract class BaseParceiroPeer {
 		$criteria->addSelectColumn(ParceiroPeer::COMISSAO_VENDA_VALIDACAO);
 		$criteria->addSelectColumn(ParceiroPeer::OBSERVACAO);
 		$criteria->addSelectColumn(ParceiroPeer::TIPO_CANAL);
+		$criteria->addSelectColumn(ParceiroPeer::PAGA_CONTADOR);
 	}
 
 	/**

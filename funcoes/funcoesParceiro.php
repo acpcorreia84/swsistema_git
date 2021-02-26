@@ -6,7 +6,7 @@ if (isset($_POST['parceiro_id']) && $_POST['parceiro_id']!= null && $_POST['parc
     $parceiro_id = $_POST['parceiro_id'];
 }
 $funcao = $_POST['funcao'];
-//VARIAVEL PARA A FUN��O INSERIR OBSERVA��O
+//VARIAVEL PARA A FUNCAO INSERIR OBSERVACAO
 
 if ($funcao == 'carregar_parceiros'){carregar_parceiros();}
 if ($funcao == 'carregar_dados_paginacao'){carregar_dados_paginacao();}
@@ -79,6 +79,7 @@ function salvar_parceiro(){
         $parceiro->setComissaoValidacao($_POST['comissao_validacao']);
         $parceiro->setComissaoVendaValidacao($_POST['comissao_venda_validacao']);
         $parceiro->setObservacao($_POST['observacao']);
+        $parceiro->setPagaContador($_POST['pagaContador']);
 
         $parceiro->save();
         echo 'Ok';
@@ -164,7 +165,7 @@ function carregar_dados_parceiro($parceiro_id){
             'celular'=>$parceiro->getCelular(), 'fone'=> $parceiro->getFone(), 'banco'=> $parceiro->getBanco(),
             'agencia'=> $parceiro->getAgencia(),'conta_corrente' =>$parceiro->getContaCorrente(), 'operacao'=> $parceiro->getOperacao(),
             'comissaoVenda'=> $parceiro->getComissaoVenda(),'comissaoValidacao' =>$parceiro->getComissaoValidacao(), 'comissaoVendaValidacao'=> $parceiro->getComissaoVendaValidacao(),
-            'observacao'=> $parceiro->getObservacao(), 'tipoCanal'=>$parceiro->getTipoCanal()
+            'observacao'=> $parceiro->getObservacao(), 'tipoCanal'=>$parceiro->getTipoCanal(), 'pagaContador'=> $parceiro->getPagaContador()
             );
 
         echo "Ok&&".json_encode($retorno);

@@ -181,6 +181,12 @@ abstract class BaseParceiro extends BaseObject  implements Persistent {
 	protected $tipo_canal;
 
 	/**
+	 * The value for the paga_contador field.
+	 * @var        string
+	 */
+	protected $paga_contador;
+
+	/**
 	 * @var        Local
 	 */
 	protected $aLocal;
@@ -525,6 +531,16 @@ abstract class BaseParceiro extends BaseObject  implements Persistent {
 	public function getTipoCanal()
 	{
 		return $this->tipo_canal;
+	}
+
+	/**
+	 * Get the [paga_contador] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getPagaContador()
+	{
+		return $this->paga_contador;
 	}
 
 	/**
@@ -1101,6 +1117,26 @@ abstract class BaseParceiro extends BaseObject  implements Persistent {
 	} // setTipoCanal()
 
 	/**
+	 * Set the value of [paga_contador] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     Parceiro The current object (for fluent API support)
+	 */
+	public function setPagaContador($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->paga_contador !== $v) {
+			$this->paga_contador = $v;
+			$this->modifiedColumns[] = ParceiroPeer::PAGA_CONTADOR;
+		}
+
+		return $this;
+	} // setPagaContador()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1159,6 +1195,7 @@ abstract class BaseParceiro extends BaseObject  implements Persistent {
 			$this->comissao_venda_validacao = ($row[$startcol + 24] !== null) ? (int) $row[$startcol + 24] : null;
 			$this->observacao = ($row[$startcol + 25] !== null) ? (string) $row[$startcol + 25] : null;
 			$this->tipo_canal = ($row[$startcol + 26] !== null) ? (string) $row[$startcol + 26] : null;
+			$this->paga_contador = ($row[$startcol + 27] !== null) ? (string) $row[$startcol + 27] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1168,7 +1205,7 @@ abstract class BaseParceiro extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 27; // 27 = ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 28; // 28 = ParceiroPeer::NUM_COLUMNS - ParceiroPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Parceiro object", $e);
@@ -1559,6 +1596,7 @@ abstract class BaseParceiro extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(ParceiroPeer::COMISSAO_VENDA_VALIDACAO)) $criteria->add(ParceiroPeer::COMISSAO_VENDA_VALIDACAO, $this->comissao_venda_validacao);
 		if ($this->isColumnModified(ParceiroPeer::OBSERVACAO)) $criteria->add(ParceiroPeer::OBSERVACAO, $this->observacao);
 		if ($this->isColumnModified(ParceiroPeer::TIPO_CANAL)) $criteria->add(ParceiroPeer::TIPO_CANAL, $this->tipo_canal);
+		if ($this->isColumnModified(ParceiroPeer::PAGA_CONTADOR)) $criteria->add(ParceiroPeer::PAGA_CONTADOR, $this->paga_contador);
 
 		return $criteria;
 	}
@@ -1664,6 +1702,8 @@ abstract class BaseParceiro extends BaseObject  implements Persistent {
 		$copyObj->setObservacao($this->observacao);
 
 		$copyObj->setTipoCanal($this->tipo_canal);
+
+		$copyObj->setPagaContador($this->paga_contador);
 
 
 		if ($deepCopy) {

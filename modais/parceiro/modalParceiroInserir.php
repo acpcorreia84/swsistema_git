@@ -309,6 +309,29 @@
                                     </div>
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h4>PAGAMENTO DE CONTADORES:</h4>
+                                        <h5>Escolher se pagaremos o contador do parceiro ou nao:</h5>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div id="divEscolhePagtoContador">
+                                            <input checked="checked" type="checkbox" id="chkEscolhePagtoContador" name="chkEscolhePagtoContador" data-onstyle="success" data-offstyle="danger" class="datepicker-here form-control oculto" >
+                                        </div>
+                                        <script>
+
+                                            $(function() {
+                                                $("#chkEscolhePagtoContador").bootstrapToggle({
+                                                    on: "Pagar",
+                                                    off: "N&atilde;o Pagar",
+                                                    width: 120
+                                                });
+
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+
                             </div><!--FIM panel-body-->
                         </div><!--FIM panel-default-->
 

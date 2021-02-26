@@ -78,6 +78,19 @@ function salvar_parceiro(acao){
 
     $('#mensagemModalEspera').html('<i class="fa fa-lg fa-cart-plus"></i> '+mensagemCarregando);
     $('#esperaModal').modal('show');
+
+    if ($('#chkConcedeDescontoContador').prop('checked'))
+        var recebeDesconto = 1;
+    else
+        var recebeDesconto = 0;
+
+
+
+    if ($("#chkEscolhePagtoContador").prop('checked') == true)
+        var pagaContador = 'SIM';
+    else
+        var pagaContador = 'NAO';
+
     var dadosajax = {
         'funcao' : 'salvar_parceiro',
         'idParceiro' : $('#idParceiroEditando').val(),
@@ -103,7 +116,8 @@ function salvar_parceiro(acao){
         'comissao_validacao':$('#ipEdtComissaoValidacao').val(),
         'comissao_venda_validacao':$('#ipEdtComissaoVendaValidacao').val(),
         'observacao':$('#ipEdtObservacao').val(),
-        'tipo_canal' : $('input[name=edtTipoCanal]:checked').val()
+        'tipo_canal' : $('input[name=edtTipoCanal]:checked').val(),
+        'pagaContador' : pagaContador
     };
 
     $.ajax ({
@@ -297,6 +311,11 @@ function carregar_dados_parceiro(){
                 $('#ipEdtComissaoVendaValidacao').val(parceiro.comissaoVendaValidacao);
                 $('#ipEdtObservacao').val(parceiro.observacao);
                 $('#labelTipoCanal').html(': ' + parceiro.tipoCanal);
+
+                if (parceiro.pagaContador == 'SIM')
+                    $("#chkEscolhePagtoContador").bootstrapToggle('on');
+                else
+                    $("#chkEscolhePagtoContador").bootstrapToggle('off');
 
                 if (parceiro.tipoCanal ==  'unidade') {
                     /*

@@ -63,6 +63,7 @@ class ParceiroTableMap extends TableMap {
 		$this->addColumn('COMISSAO_VENDA_VALIDACAO', 'ComissaoVendaValidacao', 'INTEGER', true, null, null);
 		$this->addColumn('OBSERVACAO', 'Observacao', 'VARCHAR', false, 150, null);
 		$this->addColumn('TIPO_CANAL', 'TipoCanal', 'VARCHAR', false, 8, null);
+		$this->addColumn('PAGA_CONTADOR', 'PagaContador', 'VARCHAR', false, 1, null);
 		// validators
 	} // initialize()
 
