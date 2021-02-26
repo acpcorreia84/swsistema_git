@@ -311,7 +311,7 @@ function carregar_dados_parceiro(){
                 $('#ipEdtComissaoVendaValidacao').val(parceiro.comissaoVendaValidacao);
                 $('#ipEdtObservacao').val(parceiro.observacao);
                 $('#labelTipoCanal').html(': ' + parceiro.tipoCanal);
-
+console.log('paga contador:', parceiro.pagaContador);
                 if (parceiro.pagaContador == 'SIM')
                     $("#chkEscolhePagtoContador").bootstrapToggle('on');
                 else
