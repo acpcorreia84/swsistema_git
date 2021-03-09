@@ -15,8 +15,6 @@
             <option value="contas_receber.CERTIFICADO_ID">C&oacute;digo do Certificado</option>
             <option value="certificado.CLIENTE_ID">C&oacute;digo do Cliente</option>
             <option value="contas_receber.DATA_DOCUMENTO">Data do documento</option>
-            <option value="cliente.CPF_CNPJ">CPF</option>
-            <option value="cliente.CPF_CNPJ">CNPJ</option>
         </select>
     </div>
     <div class="col-lg-3">

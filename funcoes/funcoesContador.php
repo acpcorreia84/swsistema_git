@@ -144,6 +144,7 @@ function carregarContadoresRelatorioMensal() {
         $sql .= ' certificado.data_validacao <= "'.$dataAte[2] . '/' . $dataAte[1] . '/' . $dataAte[0].' 23:59:59" and';
 
         $sql .= ' contador.comissao = 1 and ';
+        $sql .= ' usuario.setor_id <> 8 and ';
         $sql .= ' certificado.apagado = 0  ';
         //INSERE AS CONDICOES DE FILTRO
         $sql .= $condicaoSql;

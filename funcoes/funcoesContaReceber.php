@@ -87,7 +87,7 @@ function salvarContaReceber() {
             }
             elseif( ($_POST['edtFormaPagamento'] == 1) && ($_POST['edtCodigoDocumento'] == '') )
             {
-                js_aviso('Você deve informar o numero(codigo) do boleto!');
+                js_aviso('Vocï¿½ deve informar o numero(codigo) do boleto!');
                 echo '<script language="javascript">window.location="telaLancamentoContaReceber.php"</script>';
             }
 
@@ -169,15 +169,15 @@ function carregarDetalheContaReceber() {
                 $usuario = $certificadoSituacao->getUsuario()->getNome();
             else
                 $usuario = '---';
-                $situacoes[] = array('Id'=>$certificadoSituacao->getId(), 'Data'=>$certificadoSituacao->getData('d/m/Y H:i:s'), utf8_encode('Usuário')=>utf8_encode($usuario),
-                    utf8_encode('Descrição')=>utf8_encode($certificadoSituacao->getSituacao()->getNome()),
-                    utf8_encode('Comentário')=>utf8_encode($certificadoSituacao->getComentario())
+                $situacoes[] = array('Id'=>$certificadoSituacao->getId(), 'Data'=>$certificadoSituacao->getData('d/m/Y H:i:s'), utf8_encode('Usuï¿½rio')=>utf8_encode($usuario),
+                    utf8_encode('Descriï¿½ï¿½o')=>utf8_encode($certificadoSituacao->getSituacao()->getNome()),
+                    utf8_encode('Comentï¿½rio')=>utf8_encode($certificadoSituacao->getComentario())
             );
         }
 
         $colunasSituacoes = array(
-            array('nome'=>'Id'),array('nome'=>'Data'), array('nome'=>utf8_encode('Usuário')), array('nome'=>utf8_encode('Descrição')),
-            array('nome'=>utf8_encode('Comentário'))
+            array('nome'=>'Id'),array('nome'=>'Data'), array('nome'=>utf8_encode('Usuï¿½rio')), array('nome'=>utf8_encode('Descriï¿½ï¿½o')),
+            array('nome'=>utf8_encode('Comentï¿½rio'))
         );
 
 
@@ -196,13 +196,13 @@ function carregarDetalheContaReceber() {
 
                 $boletos[] = array(
                     'Id'=>$boleto->getId(),'Tid'=>$boleto->getTid(),'Data'=>$boleto->getDataProcessamento('d/m/Y'),'Vencimento'=>$boleto->getVencimento('d/m/Y'),
-                    'valor'=>formataMoeda($boleto->getValor()),utf8_encode('Situação')=>$situacaoBoleto,
+                    'valor'=>formataMoeda($boleto->getValor()),utf8_encode('Situaï¿½ï¿½o')=>$situacaoBoleto,
                     'D. Pagt'=>($boleto->getDataConfirmacaoPagamento('d/m/Y'))?($boleto->getDataConfirmacaoPagamento('d/m/Y H:i:s')): '---'
                 );
 
                 $colunasBoletos = array(
                     array('nome'=>'Id'),array('nome'=>'Tid'), array('nome'=>'Data'), array('nome'=>'Vencimento'), array('nome'=>'valor'),
-                    array('nome'=>utf8_encode('Situação')), array('nome'=>'D. Pagt')
+                    array('nome'=>utf8_encode('Situaï¿½ï¿½o')), array('nome'=>'D. Pagt')
                 );
 
             }
@@ -428,20 +428,20 @@ function carregarContasReceber(){
 
                 if ($adicionarConta)
                     $contasReceber[] =  array(' '=>(++$key),'Id'=>$contaReceber->getId(),'Sit.'=>$situacaoPagamento, 'Data'=> ($contaReceber->getDataDocumento('d/m/Y'))?$contaReceber->getDataDocumento('d/m/Y'):'---',
-                        utf8_encode('Descrição')=> utf8_encode($descricao), 'Valor'=> formataMoeda($certificado->getProduto()->getPreco()), 'Venc.'=>$contaReceber->getVencimento('d/m/Y'),
+                        utf8_encode('Descriï¿½ï¿½o')=> utf8_encode($descricao), 'Valor'=> formataMoeda($certificado->getProduto()->getPreco()), 'Venc.'=>$contaReceber->getVencimento('d/m/Y'),
                         'Desc.'=> ($certificado->getDesconto())?formataMoeda($certificado->getDesconto()):'---',
                         'Total'=> formataMoeda($certificado->getProduto()->getPreco() - $certificado->getDesconto()),
                         'Forma' => $formaPagamento,
                         'Comp.' => $urlThumbImagemComprovante,
-                        utf8_encode('Ação')=>'<button onclick="carregarDetalhesContaReceber(\''.$contaReceber->getId().'\'); $(\'#modalContaReceberDetalhar\').modal(\'show\')"><i class="fa fa-arrows"></i></button> '
+                        utf8_encode('Aï¿½ï¿½o')=>'<button onclick="carregarDetalhesContaReceber(\''.$contaReceber->getId().'\'); $(\'#modalContaReceberDetalhar\').modal(\'show\')"><i class="fa fa-arrows"></i></button> '
                 );
             }
         }
 
         $colunas = array(
-            array('nome'=>' '),array('nome'=>'Id'), array('nome'=>'Sit.'),array('nome'=>'Comp.'), array('nome'=>'Data'), array('nome'=>utf8_encode('Descrição')),
+            array('nome'=>' '),array('nome'=>'Id'), array('nome'=>'Sit.'),array('nome'=>'Comp.'), array('nome'=>'Data'), array('nome'=>utf8_encode('Descriï¿½ï¿½o')),
             array('nome'=>'Venc.'),  array('nome'=>'Valor'),  array('nome'=>'Desc.'),  array('nome'=>'Total'),  array('nome'=>'Forma'),
-            array('nome'=>utf8_encode('Ação'))
+            array('nome'=>utf8_encode('Aï¿½ï¿½o'))
         );
 
         echo "Ok&&".json_encode($colunas)."&&".json_encode($contasReceber) . "&&";
@@ -460,7 +460,7 @@ function extornarContaReceber() {
         /*ANTES DE ALTERAR AS INFORMACOES DA CONTA A RECEBER SETA NO LANCAMENTO*/
         $lancamentoConta = new LancamentoConta();
         $lancamentoConta->setDataLancamento($dataLancamento);
-        $lancamentoConta->setDescricao(utf8_decode('Extorno de lançamento da conta: ' . $contaReceber->getDescricao() ) );
+        $lancamentoConta->setDescricao(utf8_decode('Extorno de lanï¿½amento da conta: ' . $contaReceber->getDescricao() ) );
         $lancamentoConta->setObservacao('CONTA EXTORNADA. dia:'. date('d/m/Y'));
         $lancamentoConta->setTipo('D');
         $lancamentoConta->setContaReceberId($contaReceber->getId());
