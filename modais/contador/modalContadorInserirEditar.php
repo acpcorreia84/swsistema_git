@@ -203,12 +203,14 @@ NAO PERMITIR ESCONDER/MOSTRAR QUADRO PJ
                                                 <option value="104" >CAIXA ECONOMICA</option>
                                                 <option value="077" >INTER</option>
                                                 <option value="341" >ITAU</option>
-                                                <option value="212" >ORIGINAL</option>
+                                                <option value="389" >MERCANTIL</option>
                                                 <option value="260" >NUBANK</option>
+                                                <option value="212" >ORIGINAL</option>
                                                 <option value="074" >SAFRA</option>
                                                 <option value="033" >SANTANDER</option>
                                                 <option value="748" >SICREDI</option>
                                                 <option value="756" >SICOOB</option>
+
 
                                             </select>
 
