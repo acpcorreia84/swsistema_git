@@ -144,6 +144,13 @@ function dataCalendarDMA($data) {
 	$dataFinal = $dataAux[2] .'/'. $dataAux[1] .'/'. $dataAux[0];
 	return $dataFinal;
 };
+function dataDMAtoAMD($data) {
+    //Data gerada pelo componente calend�rio
+    $dataAux = explode('/', $data);
+    $dataFinal = $dataAux[2] .'-'. $dataAux[1] .'-'. $dataAux[0];
+    return $dataFinal;
+};
+
 function timestampCalendarDMA($data) {
 	//Data gerada pelo componente calend�rio
 	$dataAux = explode('-', $data);

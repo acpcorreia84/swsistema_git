@@ -107,7 +107,7 @@
                                                                         <label for="edtRazaoSocial">Raz&atilde;o*:</label>
                                                                     </div>
                                                                     <div class="col-lg-5 col-md-5 col-xs-5">
-                                                                        <input type="text" class="form-control" name="edtRazaoSocial" id="edtRazaoSocial" "/>
+                                                                        <input type="text" class="form-control" name="edtRazaoSocial" id="edtRazaoSocial" onblur="consultaClienteBase();" />
                                                                     </div>
                                                                     <div class="col-lg-1 col-md-1 col-xs-1">
                                                                         <label for="edtNomeFantasia">Fantasia*:</label>
@@ -249,7 +249,7 @@
                                                                 <label for="edtNomeRepresentanteVendaInterna">Representante*:</label>
                                                             </div>
                                                             <div class="col-lg-10 col-md-6 col-xs-6 campoValidar">
-                                                                <input type="text" class="form-control" name="edtNomeRepresentanteVendaInterna" id="edtNomeRepresentanteVendaInterna"  "/>
+                                                                <input type="text" class="form-control" name="edtNomeRepresentanteVendaInterna" id="edtNomeRepresentanteVendaInterna"  onblur="consultaClienteBase();" />
                                                             </div>
                                                         </div>
                                                         <div class="row form-group">
@@ -599,7 +599,7 @@
                 }
             });
 
-            if ($('#frmEscolhaPessoaJuridica').valid()) consultaClienteBase();
+            if ($('#frmEscolhaPessoaJuridica').valid()) consultaPrevia();
         });
 
         $('#edtDataNascimento').blur(function () {
@@ -631,7 +631,7 @@
                 }
             });
 
-            if ($('#frmEscolhaPessoaFisica').valid()) consultaClienteBase();
+            if ($('#frmEscolhaPessoaFisica').valid()) consultaPrevia();
 
         });
 

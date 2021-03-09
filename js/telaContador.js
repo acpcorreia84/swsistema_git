@@ -576,7 +576,6 @@ function salvarContador(acao){
         'uf' : $('#ecEdtUfContador').val(),
         'emailEscritorio' :  $('#ecEdtEmailEscritorio').val(),
         'comissao' : recebeComissao,
-        'desconto': recebeDesconto,
         'banco' : $('#ecEdtBanco').val(),
         'nomeBanco' : $('#ecEdtBanco option[value="'+$('#ecEdtBanco').val()+'"]').text(),
         'contaCorrente' : $('#ecEdtCc').val(),
