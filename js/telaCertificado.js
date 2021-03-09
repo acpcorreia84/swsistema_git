@@ -2502,7 +2502,7 @@ function consultaClienteBase() {
 	var checado = '';
 	var mensagemErro = '';
 
-	$('#btnAvancar1').prop("disabled",false);
+	//$('#btnAvancar1').prop("disabled",false);
 
 	$('#btnAvancar1').css({
 		visibility: "visible",
@@ -2586,8 +2586,6 @@ function consultaClienteBase() {
 						$('#divFormCliente').css('display', 'inline');
 						$('#codigo_cliente_' + checado).html('Novo Cliente');
 						$('#div_codigo_cliente_' + checado).css({'visibility': 'visible', "display": "block"});
-
-						$('#edtNomeRepresentanteVendaInterna').val('');
 						$('#edtEnderecoRepresentanteVendaInterna').val('');
 						$('#edtComplementoRepresentanteVendaInterna').val('');
 						$('#edtNumeroRepresentanteVendaInterna').val('');
@@ -2656,7 +2654,6 @@ function consultaClienteBase() {
 							$('#codigo_cliente_pj').html(arrCliente.codigoEmpresa);
 							$('#div_codigo_cliente_pj').css({'visibility': 'visible', "display": "block"});
 							/*SE FOR UMA PESSOA FISICA, ATRIBUI O NOME AO CAMPO NOME, SE FOR PJ ATRIBUI O NOME A RAZAO SOCIAL*/
-							$('#edtRazaoSocial').val(arrCliente.razaoSocial);
 							$('#edtNomeFantasia').val(arrCliente.nomeFantasia);
 							$('#edtEnderecoVendaInternaPj').val(arrCliente.enderecoEmpresa);
 							$('#edtComplementoVendaInterna').val(arrCliente.complementoEmpresa);
@@ -2672,7 +2669,6 @@ function consultaClienteBase() {
 						} else {
 							$('#codigo_cliente_pj').html("Novo Cliente");
 							/*SE FOR UMA PESSOA FISICA, ATRIBUI O NOME AO CAMPO NOME, SE FOR PJ ATRIBUI O NOME A RAZAO SOCIAL*/
-							$('#edtRazaoSocial').val('');
 							$('#edtNomeFantasia').val('');
 							$('#edtCepPjVendaInterna').val('');
 							$('#edtBairroPjVendaInterna').val('');
