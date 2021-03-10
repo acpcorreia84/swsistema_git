@@ -249,7 +249,7 @@
                                                                 <label for="edtNomeRepresentanteVendaInterna">Representante*:</label>
                                                             </div>
                                                             <div class="col-lg-10 col-md-6 col-xs-6 campoValidar">
-                                                                <input type="text" class="form-control" name="edtNomeRepresentanteVendaInterna" id="edtNomeRepresentanteVendaInterna"  onblur="if ($("input[name='tipoPessoa']:checked").val()=="pf") consultaClienteBase();" />
+                                                                <input type="text" class="form-control" name="edtNomeRepresentanteVendaInterna" id="edtNomeRepresentanteVendaInterna"  onblur="if ($('input[name=\'tipoPessoa\']:checked').val()=='pf') consultaClienteBase();" />
                                                             </div>
                                                         </div>
                                                         <div class="row form-group">
