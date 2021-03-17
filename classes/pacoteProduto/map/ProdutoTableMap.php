@@ -50,6 +50,7 @@ class ProdutoTableMap extends TableMap {
 		$this->addForeignKey('GRUPO_PRODUTO_ID', 'GrupoProdutoId', 'INTEGER', 'grupo_produto', 'ID', true, null, null);
 		$this->addColumn('COMISSAO', 'Comissao', 'FLOAT', false, null, null);
 		$this->addColumn('PRODUTO_LOJA', 'ProdutoLoja', 'INTEGER', true, null, null);
+		$this->addColumn('TIPO_EMISSAO', 'TipoEmissao', 'INTEGER', true, null, null);
 		// validators
 	} // initialize()
 

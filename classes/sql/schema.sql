@@ -648,6 +648,7 @@ CREATE TABLE `produto`
 	`grupo_produto_id` INTEGER  NOT NULL,
 	`comissao` FLOAT,
 	`produto_loja` INTEGER  NOT NULL,
+	`tipo_emissao` INTEGER  NOT NULL,
 	PRIMARY KEY (`id`),
 	INDEX `FI__produto_fornecedor` (`fornecedor_id`),
 	CONSTRAINT `Rel_produto_fornecedor`

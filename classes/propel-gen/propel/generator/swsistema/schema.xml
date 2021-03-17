@@ -456,6 +456,7 @@
         <column name="grupo_produto_id" type="INTEGER" required="true"/>
         <column name="comissao" type="FLOAT"/>
         <column name="produto_loja" type="INTEGER" required="true"/>
+        <column name="tipo_emissao" type="INTEGER" required="true"/>
 
         <foreign-key foreignTable="fornecedor" name="Rel_produto_fornecedor" onDelete="restrict">
             <reference local="fornecedor_id" foreign="id"/>

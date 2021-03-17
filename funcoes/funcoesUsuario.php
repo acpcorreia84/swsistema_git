@@ -2,8 +2,6 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/loader.php';
 
 $funcao = $_REQUEST['funcao'];
-
-if($funcao == 'geral'){consulta_geral();}
 if($funcao == 'bloquear_usuario'){bloquearUsuario();}
 if($funcao == 'apagar_usuario'){apagarUsuario();}
 if($funcao == 'carregar_usuarios'){carregarUsuarios();}

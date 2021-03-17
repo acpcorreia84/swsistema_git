@@ -103,6 +103,12 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 	protected $produto_loja;
 
 	/**
+	 * The value for the tipo_emissao field.
+	 * @var        int
+	 */
+	protected $tipo_emissao;
+
+	/**
 	 * @var        Fornecedor
 	 */
 	protected $aFornecedor;
@@ -319,6 +325,16 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 	public function getProdutoLoja()
 	{
 		return $this->produto_loja;
+	}
+
+	/**
+	 * Get the [tipo_emissao] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getTipoEmissao()
+	{
+		return $this->tipo_emissao;
 	}
 
 	/**
@@ -614,6 +630,26 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 	} // setProdutoLoja()
 
 	/**
+	 * Set the value of [tipo_emissao] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     Produto The current object (for fluent API support)
+	 */
+	public function setTipoEmissao($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->tipo_emissao !== $v) {
+			$this->tipo_emissao = $v;
+			$this->modifiedColumns[] = ProdutoPeer::TIPO_EMISSAO;
+		}
+
+		return $this;
+	} // setTipoEmissao()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -659,6 +695,7 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 			$this->grupo_produto_id = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
 			$this->comissao = ($row[$startcol + 12] !== null) ? (double) $row[$startcol + 12] : null;
 			$this->produto_loja = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
+			$this->tipo_emissao = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -668,7 +705,7 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 14; // 14 = ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 15; // 15 = ProdutoPeer::NUM_COLUMNS - ProdutoPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Produto object", $e);
@@ -1118,6 +1155,7 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(ProdutoPeer::GRUPO_PRODUTO_ID)) $criteria->add(ProdutoPeer::GRUPO_PRODUTO_ID, $this->grupo_produto_id);
 		if ($this->isColumnModified(ProdutoPeer::COMISSAO)) $criteria->add(ProdutoPeer::COMISSAO, $this->comissao);
 		if ($this->isColumnModified(ProdutoPeer::PRODUTO_LOJA)) $criteria->add(ProdutoPeer::PRODUTO_LOJA, $this->produto_loja);
+		if ($this->isColumnModified(ProdutoPeer::TIPO_EMISSAO)) $criteria->add(ProdutoPeer::TIPO_EMISSAO, $this->tipo_emissao);
 
 		return $criteria;
 	}
@@ -1197,6 +1235,8 @@ abstract class BaseProduto extends BaseObject  implements Persistent {
 		$copyObj->setComissao($this->comissao);
 
 		$copyObj->setProdutoLoja($this->produto_loja);
+
+		$copyObj->setTipoEmissao($this->tipo_emissao);
 
 
 		if ($deepCopy) {

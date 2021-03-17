@@ -25,7 +25,7 @@ abstract class BaseProdutoPeer {
 	const TM_CLASS = 'ProdutoTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 14;
+	const NUM_COLUMNS = 15;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -72,6 +72,9 @@ abstract class BaseProdutoPeer {
 	/** the column name for the PRODUTO_LOJA field */
 	const PRODUTO_LOJA = 'produto.PRODUTO_LOJA';
 
+	/** the column name for the TIPO_EMISSAO field */
+	const TIPO_EMISSAO = 'produto.TIPO_EMISSAO';
+
 	/**
 	 * An identiy map to hold any loaded instances of Produto objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -88,11 +91,11 @@ abstract class BaseProdutoPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'FornecedorId', 'Codigo', 'Nome', 'Preco', 'PrecoVenda', 'PrecoCusto', 'PessoaTipo', 'Situacao', 'Validade', 'ProdutoId', 'GrupoProdutoId', 'Comissao', 'ProdutoLoja', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'fornecedorId', 'codigo', 'nome', 'preco', 'precoVenda', 'precoCusto', 'pessoaTipo', 'situacao', 'validade', 'produtoId', 'grupoProdutoId', 'comissao', 'produtoLoja', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::FORNECEDOR_ID, self::CODIGO, self::NOME, self::PRECO, self::PRECO_VENDA, self::PRECO_CUSTO, self::PESSOA_TIPO, self::SITUACAO, self::VALIDADE, self::PRODUTO_ID, self::GRUPO_PRODUTO_ID, self::COMISSAO, self::PRODUTO_LOJA, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'fornecedor_id', 'codigo', 'nome', 'preco', 'preco_venda', 'preco_custo', 'pessoa_tipo', 'situacao', 'validade', 'produto_id', 'grupo_produto_id', 'comissao', 'produto_loja', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'FornecedorId', 'Codigo', 'Nome', 'Preco', 'PrecoVenda', 'PrecoCusto', 'PessoaTipo', 'Situacao', 'Validade', 'ProdutoId', 'GrupoProdutoId', 'Comissao', 'ProdutoLoja', 'TipoEmissao', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'fornecedorId', 'codigo', 'nome', 'preco', 'precoVenda', 'precoCusto', 'pessoaTipo', 'situacao', 'validade', 'produtoId', 'grupoProdutoId', 'comissao', 'produtoLoja', 'tipoEmissao', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::FORNECEDOR_ID, self::CODIGO, self::NOME, self::PRECO, self::PRECO_VENDA, self::PRECO_CUSTO, self::PESSOA_TIPO, self::SITUACAO, self::VALIDADE, self::PRODUTO_ID, self::GRUPO_PRODUTO_ID, self::COMISSAO, self::PRODUTO_LOJA, self::TIPO_EMISSAO, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'fornecedor_id', 'codigo', 'nome', 'preco', 'preco_venda', 'preco_custo', 'pessoa_tipo', 'situacao', 'validade', 'produto_id', 'grupo_produto_id', 'comissao', 'produto_loja', 'tipo_emissao', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
 	);
 
 	/**
@@ -102,11 +105,11 @@ abstract class BaseProdutoPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'FornecedorId' => 1, 'Codigo' => 2, 'Nome' => 3, 'Preco' => 4, 'PrecoVenda' => 5, 'PrecoCusto' => 6, 'PessoaTipo' => 7, 'Situacao' => 8, 'Validade' => 9, 'ProdutoId' => 10, 'GrupoProdutoId' => 11, 'Comissao' => 12, 'ProdutoLoja' => 13, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'fornecedorId' => 1, 'codigo' => 2, 'nome' => 3, 'preco' => 4, 'precoVenda' => 5, 'precoCusto' => 6, 'pessoaTipo' => 7, 'situacao' => 8, 'validade' => 9, 'produtoId' => 10, 'grupoProdutoId' => 11, 'comissao' => 12, 'produtoLoja' => 13, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::FORNECEDOR_ID => 1, self::CODIGO => 2, self::NOME => 3, self::PRECO => 4, self::PRECO_VENDA => 5, self::PRECO_CUSTO => 6, self::PESSOA_TIPO => 7, self::SITUACAO => 8, self::VALIDADE => 9, self::PRODUTO_ID => 10, self::GRUPO_PRODUTO_ID => 11, self::COMISSAO => 12, self::PRODUTO_LOJA => 13, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'fornecedor_id' => 1, 'codigo' => 2, 'nome' => 3, 'preco' => 4, 'preco_venda' => 5, 'preco_custo' => 6, 'pessoa_tipo' => 7, 'situacao' => 8, 'validade' => 9, 'produto_id' => 10, 'grupo_produto_id' => 11, 'comissao' => 12, 'produto_loja' => 13, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'FornecedorId' => 1, 'Codigo' => 2, 'Nome' => 3, 'Preco' => 4, 'PrecoVenda' => 5, 'PrecoCusto' => 6, 'PessoaTipo' => 7, 'Situacao' => 8, 'Validade' => 9, 'ProdutoId' => 10, 'GrupoProdutoId' => 11, 'Comissao' => 12, 'ProdutoLoja' => 13, 'TipoEmissao' => 14, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'fornecedorId' => 1, 'codigo' => 2, 'nome' => 3, 'preco' => 4, 'precoVenda' => 5, 'precoCusto' => 6, 'pessoaTipo' => 7, 'situacao' => 8, 'validade' => 9, 'produtoId' => 10, 'grupoProdutoId' => 11, 'comissao' => 12, 'produtoLoja' => 13, 'tipoEmissao' => 14, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::FORNECEDOR_ID => 1, self::CODIGO => 2, self::NOME => 3, self::PRECO => 4, self::PRECO_VENDA => 5, self::PRECO_CUSTO => 6, self::PESSOA_TIPO => 7, self::SITUACAO => 8, self::VALIDADE => 9, self::PRODUTO_ID => 10, self::GRUPO_PRODUTO_ID => 11, self::COMISSAO => 12, self::PRODUTO_LOJA => 13, self::TIPO_EMISSAO => 14, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'fornecedor_id' => 1, 'codigo' => 2, 'nome' => 3, 'preco' => 4, 'preco_venda' => 5, 'preco_custo' => 6, 'pessoa_tipo' => 7, 'situacao' => 8, 'validade' => 9, 'produto_id' => 10, 'grupo_produto_id' => 11, 'comissao' => 12, 'produto_loja' => 13, 'tipo_emissao' => 14, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
 	);
 
 	/**
@@ -190,6 +193,7 @@ abstract class BaseProdutoPeer {
 		$criteria->addSelectColumn(ProdutoPeer::GRUPO_PRODUTO_ID);
 		$criteria->addSelectColumn(ProdutoPeer::COMISSAO);
 		$criteria->addSelectColumn(ProdutoPeer::PRODUTO_LOJA);
+		$criteria->addSelectColumn(ProdutoPeer::TIPO_EMISSAO);
 	}
 
 	/**
