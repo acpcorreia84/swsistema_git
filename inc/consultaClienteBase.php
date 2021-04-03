@@ -54,12 +54,12 @@ if ($tipoPessoa == 'pf') { //SE FOR PESSOA F?SICA
             $nomeCliente = "";
         }
         $codCliente = $cliente->getId();
-        $endereco = removeEspeciais($cliente->getEndereco());
-        $complemento = removeEspeciais($cliente->getComplemento());
+        $endereco = $cliente->getEndereco();
+        $complemento = $cliente->getComplemento();
         $numero = $cliente->getNumero();
         $uf = $cliente->getUf();
-        $bairro = removeEspeciais($cliente->getBairro());
-        $cidade = removeEspeciais($cliente->getCidade());
+        $bairro = $cliente->getBairro();
+        $cidade = $cliente->getCidade();
         $fone = $cliente->getFone1();
         $fone2 = $cliente->getFone2();
         $celular = $cliente->getCelular();
@@ -68,7 +68,7 @@ if ($tipoPessoa == 'pf') { //SE FOR PESSOA F?SICA
         $contadorId = $cliente->getContadorId();
 
         $arrCl = $codCliente.";".$nomeCliente .";".$endereco.";".$complemento.";".$numero .";".$uf.";".$bairro;
-        $arrCl.=";".utf8_encode($cidade).";".$fone.";".$fone2.";".$celular.";".$email .";".$cep .";".$contadorId;
+        $arrCl.=";".$cidade.";".$fone.";".$fone2.";".$celular.";".$email .";".$cep .";".$contadorId;
         $retorno = $arrCl.';0';
         echo $retorno;
     }
@@ -117,13 +117,13 @@ if ($tipoPessoa == 'pf') { //SE FOR PESSOA F?SICA
         $codResponsavel = $responsavel->getId();
         $cpfResponsavel = $responsavel->getCpf();
         $nascimentoResponsavel = $responsavel->getNascimento('d/m/Y');
-        $nomeResponsavel = utf8_encode(trim($responsavel->getNome()));
+        $nomeResponsavel = trim($responsavel->getNome());
         $enderecoResponsavel = trim($responsavel->getEndereco());
         $complementoResponsavel = $responsavel->getComplemento();
         $numeroResponsavel = $responsavel->getNumero();
         $ufResponsavel = $responsavel->getUf();
-        $bairroResponsavel = utf8_encode(trim($responsavel->getBairro()));
-        $cidadeResponsavel = utf8_encode(trim($responsavel->getCidade()));
+        $bairroResponsavel = trim($responsavel->getBairro());
+        $cidadeResponsavel = trim($responsavel->getCidade());
         $foneResponsavel = $responsavel->getFone1();
         $fone2Responsavel = $responsavel->getFone2();
         $celularResponsavel = $responsavel->getCelular();

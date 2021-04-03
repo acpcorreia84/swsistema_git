@@ -9,7 +9,7 @@
                 <div class ="col-lg-6">
                     <h3>
                         <span id="dcDivModaisPermissao"></span>
-                        <button id='btnGerarProtocolo' class='btn btn-primary' title='Gerar Protocolo' data-toggle='modal' data-target='#gerarProtocolo' onclick='gerarProtocoloCertificado()' ><i class='fa fa-internet-explorer'></i></button>
+                        <button id='btnGerarProtocolo' class='btn btn-primary' title='Gerar Protocolo' data-toggle='modal' data-target='#gerarProtocolo' onclick='gerarProtocoloApi()' ><i class='fa fa-internet-explorer'></i></button>
                         <!--<button id="btnCarregarModalBoleto" class="btn btn-primary" data-toggle="modal" data-target="#gerarBoleto" title="Gerar Boleto" onclick="carregarModalBoleto()"> <i class="fa fa-barcode"></i></button>-->
                         <button id="btnSafeToPay" class="btn btn-primary"> <i class="fa fa-barcode"></i></button>
                         <button id="btnCarregarModalDesconto"  class="btn btn-primary" data-toggle="modal" data-target="#modalDesconto" title="Desconto" onclick="carregarModalDesconto();"><i class ="fa fa-tag"></i></button>
@@ -87,7 +87,7 @@
                             </div>
 
                             <div class="col-lg-6">
-                                <label>Protocolo:</label> <span id="dcSpanProtocolo">...</span>
+                                <label>Protocolo:</label> <span id="dcSpanProtocolo" class="text-warning">...</span>
                             </div>
 
                         </div> <!--DIV CLASS row-->
@@ -132,9 +132,14 @@
                             <div class="col-lg-6">
                                 <label>Agente de Registro: </label><span class="text-danger" id="dcSpanAgrValidacao"></span>
                             </div>
-
-
                         </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label>URL HOPE: </label><div id="spanInserirProtocoloHope"></div> <span id="dcSpanUrlHope">....</span>
+                            </div>
+                        </div>
+
 
                     </div>
                 </div>

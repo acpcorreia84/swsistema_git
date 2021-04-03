@@ -115,6 +115,10 @@ function carregarModalDetalharProduto (produtoId) {
                     $('#labelProdutoPai').html(resultado.produtoPai);
                     $('#labelProdutoContador').html(resultado.produtoContador);
                     $('#labelPrecoVenda').html(resultado.precoVenda);
+                    $('#labelProdutoGrupo').html(resultado.grupoProduto);
+                    $('#labelProdutoTipoEmissao').html(resultado.nomeTipoEmissao);
+
+
                     /*
                     * INSERE DADOS NO MODAL EDITAR
                     * */
@@ -128,6 +132,7 @@ function carregarModalDetalharProduto (produtoId) {
                     $('#edtProdutoContador').val(resultado.produtoContadorId);
 
                     $('#edtPrecoVenda').val(resultado.precoVendaSemFormatacao);
+                    $('#edtTipoEmissao').val(resultado.tipoEmissao);
                     /*
                     * MONTA SELECT DE PRODUTOS DE REFERENCIA
                     * */
@@ -163,7 +168,8 @@ function salvarProduto () {
         'produtoReferenciaId': $('#edtProdutoReferencia').val(),
         'produtoContador':$('#edtProdutoContador').val(),
         'precoVenda':$('#edtPrecoVenda').val(),
-        'grupoProduto':$('#edtGrupoProduto').val()
+        'grupoProduto':$('#edtGrupoProduto').val(),
+        'tipoEmissao':$('#edtTipoEmissao').val(),
     };
     $.ajax ({
         url : pageUrl,

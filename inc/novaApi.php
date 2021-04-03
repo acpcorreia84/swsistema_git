@@ -41,7 +41,6 @@ function consultaPrevia() {
     $tipoCliente = $_POST['tipo'];
     $nascimentoCliente = dataDMAtoAMD($_POST['nascimento']);
     $cnpjCliente = removeTracoPontoBarra($_POST['cnpj']);
-//var_dump($cpfCliente, $tipoCliente, $nascimentoCliente, $cnpjCliente);
     $opcoes = array(
         CURLOPT_URL=>"https://acsafeweb.safewebpss.com.br/Service/Microservice/Shared/ConsultaPrevia/api/RealizarConsultaPrevia",
         CURLOPT_RETURNTRANSFER=>true,
@@ -66,6 +65,9 @@ function consultaPrevia() {
         print curl_error($cr);
     }
 
+    if ($res->Codigo == 90)
+        $res->Codigo = 0;
+
     $resultado = array(
       'codigo'=>trim($res->Codigo),
       'mensagem'=>trim($res->Mensagem),
@@ -75,15 +77,57 @@ function consultaPrevia() {
     echo trim(json_encode($resultado));
 }
 
-function gerarProtocolo () {
+function gerarProtocoloPfNovo (
+        $idProduto, $nome, $cpf, $dataNascimento, $ddd, $celular,
+        $email, $logradouro, $cep, $bairro, $numero, $uf, $cidade, $clienteNota, $documentoNota, $bairroNota, $cepNota,
+        $cidadeNota, $emailNota, $enderecoNota, $numeroNota,  $estadoNota, $ieNota, $tipoProduto, $produtoValor = 0, $produtoDescricao =''
+        ) {
+
+    $CnpjAR='23917962000105';
     $cr = curl_init();
 
     $payload = '
-   { "CnpjAR":"23917962000105", "idProduto":"28555", "Nome":"ANTONIO CALOS CORREIA", "CPF":"51397862220", "DataNascimento":"1984-03-03", "Contato":{ "DDD":"51", "Telefone":"991049465", "Email":"teste@safeweb.com.br" }, "Endereco":{ "Logradouro":"Avenida Princesa Isabel", "Numero":"828", "Bairro":"Santana", "UF":"RS", "Cidade":"Porto Alegre", "CodigoIbgeMunicipio": "4314902", "CodigoIbgeUF": "43", "CEP":"90620000" }, "ClienteNotaFiscal":{ "Sacado":"Antonio Correia", "Documento":"51397862220", "Bairro":"Santana", "Cep":"90620000", "Cidade":"Porto Alegre", "CidadeCodigo":"4314902", "Email1":"teste@safeweb.com.br", "Email2":"teste2@safeweb.com.br", "Endereco":"Avenida Princesa Isabel", "Numero":"828", "UF":"RS", "UFCodigo":"43", "Pais":"Brasil", "PaisCodigoAlpha3":"BRA", "IE":"" } }
-    ';
-
+    {
+   "CnpjAR":"'.$CnpjAR.'",
+   "idProduto":"'.$idProduto.'",
+   "Nome":"'.$nome.'",
+   "CPF":"'.$cpf.'",
+   "DataNascimento":"'.$dataNascimento.'",
+   "Contato":{
+      "DDD":"'.$ddd.'",
+      "Telefone":"'.$celular.'",
+      "Email":"'.$email.'"
+   },
+   "Endereco":{
+      "Logradouro":"'.$logradouro.'",
+      "Numero":"'.$numero.'",
+      "Bairro":"'.$bairro.'",
+      "UF":"'.$uf.'",
+      "Cidade":"'.$cidade.'",
+      "CodigoIbgeMunicipio": "4314902",
+      "CodigoIbgeUF": "43",
+      "CEP":"'.$cep.'"
+   },
+    "ClienteNotaFiscal":{
+      "Sacado":"'.$clienteNota.'",
+      "Documento":"'.$documentoNota.'",
+      "Bairro":"'.$bairroNota.'",
+      "Cep":"'.$cepNota.'",
+      "Cidade":"'.$cidadeNota.'",
+      "CidadeCodigo":"'.$idProduto.'",
+      "Email1":"'.$emailNota.'",
+      "Endereco":"'.$enderecoNota.'",
+      "Numero":"'.$numeroNota.'",
+      "UF":"'.$estadoNota.'",
+      "UFCodigo":"43",
+      "Pais":"Brasil",
+      "PaisCodigoAlpha3":"BRA",
+      "IE":"'.$ieNota.'"
+   }
+}
+';
     $opcoes = array(
-        CURLOPT_URL=>"https://acsafeweb.safewebpss.com.br/Service/Microservice/Shared/Partner/api/Add/3",
+        CURLOPT_URL=>"https://acsafeweb.safewebpss.com.br/Service/Microservice/Shared/Partner/api/Add/". $tipoProduto,
         CURLOPT_RETURNTRANSFER=>true,
         CURLOPT_ENCODING=>'',
         CURLOPT_MAXREDIRS=>10,
@@ -100,24 +144,162 @@ function gerarProtocolo () {
     curl_setopt_array($cr, $opcoes);
 
     $postResult = curl_exec($cr);
-    var_dump($postResult);
+
     $res = json_decode($postResult);
-    var_dump($res);
-    exit;
+
+    if (curl_errno($cr)) {
+        $resultado = array('protocolo' => 'erro',
+            'mensagem'=>trim(curl_error($cr)),
+            'payload' => $payload
+        );
+
+    }
+
+    if (is_string($res)) {
+        $resultado = array ('protocolo'=>$res);
+    } else {
+        //echo $payload;
+        $resultado = array('protocolo' => 'erro',
+            'CustomErrorType'=>trim($res->CustomErrorType),
+            'CustomErrorCode'=>trim($res->CustomErrorCode),
+            'mensagem'=>trim($res->Message),
+            'payload' => $payload
+        );
+    }
+
+    curl_close($cr);
+    return $resultado;
+}
+
+function gerarProtocoloPjNovo (
+    $idProduto, $razaoSocial, $nomeFantasia, $nome, $cnpj = '', $cpf, $dataNascimento,
+    $enderecoResponsavel, $cepResponsavel, $bairroResponsavel, $numeroResponsavel, $ufResponsavel, $cidadeResponsavel, $dddResponsavel, $celularResponsavel,
+    $emailResponsavel, $ddd, $celular, $email, $logradouro, $cep, $bairro, $numero, $uf, $cidade, $clienteNota, $documentoNota, $bairroNota, $cepNota,
+    $cidadeNota, $emailNota, $enderecoNota, $numeroNota,  $estadoNota, $ieNota, $tipoProduto, $produtoValor = 0, $produtoDescricao =''
+) {
+
+    $CnpjAR='23917962000105';
+    $cr = curl_init();
+
+    $payload = '
+   { "CnpjAR":"'.$CnpjAR.'", "idProduto":"'.$idProduto.'", "RazaoSocial":"'.$razaoSocial.'", "NomeFantasia":"'.$nomeFantasia.'" ,
+   "CNPJ":"'.$cnpj.'", "Contato":{ "DDD":"'.$ddd.'", "Telefone":"'.$celular.'", "Email":"'.$email.'" },
+    "Titular":{
+      "Nome":"'.$nome.'",
+      "CPF":"'.$cpf.'",
+      "DataNascimento":"'.$dataNascimento.'",
+      "Contato":{
+         "DDD":"'.$dddResponsavel.'",
+         "Telefone":"'.$celularResponsavel.'",
+         "Email":"'.$emailResponsavel.'"
+      },
+      "Endereco":{
+         "Logradouro":"'.$enderecoResponsavel.'",
+         "Numero":"'.$numeroResponsavel.'",
+         "Bairro":"'.$bairroResponsavel.'",
+         "UF":"'.$ufResponsavel.'",
+         "Cidade":"'.$cidadeResponsavel.'",
+         "CodigoIbgeMunicipio": "4314902",
+         "CodigoIbgeUF": "43",
+         "CEP":"'.$cepResponsavel.'"
+      },      
+   }, 
+   "Endereco":{ "Logradouro":"'.$logradouro.'", "Numero":"'.$numero.'", "Bairro":"'.$bairro.'", "UF":"'.$uf.'", "Cidade":"'.$cidade.'", "CodigoIbgeMunicipio": "4314902", "CodigoIbgeUF": "43", 
+   "CEP":"'.$cep.'" }, "ClienteNotaFiscal":{ "Sacado":"'.$clienteNota.'", "Documento":"'.$documentoNota.'", "Bairro":"'.$bairroNota.'", "Cep":"'.$cepNota.'", 
+   "Cidade":"'.$cidadeNota.'", "CidadeCodigo":"4314902", "Email1":"'.$emailNota.'", 
+   "Endereco":"'.$enderecoNota.'", "Numero":"'.$numeroNota.'", "UF":"'.$estadoNota.'", "UFCodigo":"43", "Pais":"Brasil", "PaisCodigoAlpha3":"BRA", "IE":"'.$ieNota.'", 
+   "ProdutoValor":"'.$produtoValor.'","ProdutoDescricao":"'.$produtoDescricao.'"
+   } }
+    ';
+    $opcoes = array(
+        CURLOPT_URL=>"https://acsafeweb.safewebpss.com.br/Service/Microservice/Shared/Partner/api/Add/". $tipoProduto,
+        CURLOPT_RETURNTRANSFER=>true,
+        CURLOPT_ENCODING=>'',
+        CURLOPT_MAXREDIRS=>10,
+        CURLOPT_TIMEOUT=>0,
+        CURLOPT_FOLLOWLOCATION=>true,
+        CURLOPT_HTTP_VERSION=>CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST=>'POST',
+        CURLOPT_HTTPHEADER=>array('Authorization:9gafzq4qneqftj5sx6qj','Content-Type:application/json'),
+        //CURLOPT_POSTFIELDS=>"{'CNPJ':'28410978000140','CPF':'51397862220','DocumentoTipo':'2','DtNascimento':'1984-03-03'}​​​​​",
+        CURLOPT_POSTFIELDS=>$payload,
+
+    );
+
+    curl_setopt_array($cr, $opcoes);
+
+    $postResult = curl_exec($cr);
+    $res = json_decode($postResult);
+
+    if (curl_errno($cr)) {
+        $resultado = array('protocolo' => 'erro',
+            'mensagem'=>trim(curl_error($cr)),
+            'payload' => $payload
+        );
+
+    }
+
+    if (is_string($res)) {
+        $resultado = array ('protocolo'=>$res);
+    } else {
+        //echo $payload;
+        $resultado = array('protocolo' => 'erro',
+            'CustomErrorType'=>trim($res->CustomErrorType),
+            'CustomErrorCode'=>trim($res->CustomErrorCode),
+            'mensagem'=>trim($res->Message),
+            'payload' => $payload
+        );
+    }
+
+    curl_close($cr);
+    return $resultado;
+}
+
+function inserirHope ($protocolo, $tipoEmissao){
+    $cr = curl_init();
+
+    if ($tipoEmissao == 2) {
+        $url = 'https://acsafeweb.safewebpss.com.br/Service/Microservice/Hope/Shared/api/integration/renovation';
+    } elseif ($tipoEmissao == 3) {
+        $url = 'https://acsafeweb.safewebpss.com.br/Service/Microservice/Hope/Shared/api/integration/solicitation';
+    }
+
+    $payload = '
+        {
+        "protocol":"'.$protocolo.'"
+        }
+    ';
+
+
+    $opcoes = array(
+        CURLOPT_URL=>$url,
+        CURLOPT_RETURNTRANSFER=>true,
+        CURLOPT_ENCODING=>'',
+        CURLOPT_MAXREDIRS=>10,
+        CURLOPT_TIMEOUT=>0,
+        CURLOPT_FOLLOWLOCATION=>true,
+        CURLOPT_HTTP_VERSION=>CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST=>'POST',
+        CURLOPT_HTTPHEADER=>array('Authorization: bearer e2f3c4a3f3be74fb7449fba7d19d2cbd27f92e99574a54acdfa655e5274d87a4','Content-Type:application/json'),
+        CURLOPT_POSTFIELDS=>$payload,
+
+    );
+
+    curl_setopt_array($cr, $opcoes);
+
+    $postResult = curl_exec($cr);
+    $res = json_decode($postResult);
 
     if (curl_errno($cr)) {
         print curl_error($cr);
     }
 
     $resultado = array(
-        'codigo'=>trim($res->Codigo),
-        'mensagem'=>trim($res->Mensagem),
+        'url'=>trim($res->url),
+        'mensagemApi'=>trim($res->message),
     );
 
     curl_close($cr);
-    echo trim(json_encode($resultado));
+    return $resultado;
 }
-
-gerarProtocolo();
 ?>
- 

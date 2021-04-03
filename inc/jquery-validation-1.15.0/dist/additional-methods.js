@@ -109,6 +109,17 @@ $.validator.addMethod("nascimento", function(value, element) {
 	return this.optional(element) || /\d{2}[/]\d{2}[/]\d{4}/g.test(value);
 }, "Por favor informe a data de nascimento com o padr&atilde;o: dd/mm/aaaa .");
 
+$.validator.addMethod("IECliente", function(value, element) {
+    if (element.checked==true)
+        return true;
+    else
+        if (value!='')
+            return true;
+        else
+            return false;
+
+}, "Caso o cliente não seja isento de inscrição estadual, ela deve ser informada. Caso seja, clieque na opção isenta.");
+
 $.validator.addMethod("emailSerama", function(value, element) {
     return this.optional(element) || /\[A-Za-z0-9\\._-][@]\[serama.com.br]/g.test(value);
 }, "N&atilde;o pode ser cadastrado e-mail com dom&iacute;nios @serama.com.br");

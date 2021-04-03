@@ -67,6 +67,8 @@ class CertificadoTableMap extends TableMap {
 		$this->addColumn('APAGADO', 'Apagado', 'INTEGER', true, null, null);
 		$this->addForeignKey('PARCEIRO_ID', 'ParceiroId', 'INTEGER', 'parceiro', 'ID', false, null, null);
 		$this->addForeignKey('STATUS_FOLLOWUP', 'StatusFollowup', 'INTEGER', 'situacao', 'ID', false, null, null);
+		$this->addColumn('INSERIU_HOPE', 'InseriuHope', 'INTEGER', false, null, null);
+		$this->addColumn('URL_DOCUMENTACAO', 'UrlDocumentacao', 'VARCHAR', false, 80, null);
 		// validators
 		$this->addValidator('PRODUTO_ID', 'minValue', 'propel.validator.MinValueValidator', '1', 'O Pedido do Certificado deve conter um produto!');
 		$this->addValidator('CLIENTE_ID', 'required', 'propel.validator.RequiredValidator', '', 'O Pedido do Certificado deve conter um cliente!');
@@ -95,6 +97,7 @@ class CertificadoTableMap extends TableMap {
     $this->addRelation('CertificadoSituacao', 'CertificadoSituacao', RelationMap::ONE_TO_MANY, array('id' => 'certificado_id', ), 'RESTRICT', null);
     $this->addRelation('CuponsDescontoCertificado', 'CuponsDescontoCertificado', RelationMap::ONE_TO_MANY, array('id' => 'certificado_id', ), 'RESTRICT', null);
     $this->addRelation('CertificadoCupom', 'CertificadoCupom', RelationMap::ONE_TO_MANY, array('id' => 'certificado_id', ), 'RESTRICT', null);
+    $this->addRelation('CertificadoNota', 'CertificadoNota', RelationMap::ONE_TO_MANY, array('id' => 'certificado_id', ), 'RESTRICT', null);
     $this->addRelation('CertificadoRelatedByCertificadoRenovado', 'Certificado', RelationMap::ONE_TO_MANY, array('id' => 'certificado_renovado', ), 'RESTRICT', null);
     $this->addRelation('CertificadoPagamento', 'CertificadoPagamento', RelationMap::ONE_TO_MANY, array('id' => 'certificado_id', ), 'RESTRICT', null);
     $this->addRelation('Boleto', 'Boleto', RelationMap::ONE_TO_MANY, array('id' => 'certificado_id', ), 'RESTRICT', null);

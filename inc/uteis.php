@@ -268,6 +268,20 @@ function checaDataDMY($data) {
     return true;
 
 };
+
+function retornaCelularDDD ($celularStr) {
+    $ddd = substr($celularStr, 0, 2);
+    $celular = substr($celularStr, 3);
+    $celular = removeTracoPontoBarra($celular);
+    return array('ddd'=>$ddd, 'fone'=>$celular);
+}
+function retornaTelefoneDDD ($telefoneStr) {
+    $ddd = substr($telefoneStr, 0, 2);
+    $telefone = substr($telefoneStr, 3);
+    $telefone = removeTracoPontoBarra($telefone);
+    return array('ddd'=>$ddd, 'fone'=>$telefone);
+}
+
 function geraSenha($tamanho = 6, $maiusculas = true, $numeros = true, $simbolos = false){
 
 	$lmin = 'abcdefghijklmnopqrstuvwxyz';

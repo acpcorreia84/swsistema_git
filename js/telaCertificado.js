@@ -2,6 +2,81 @@ var msnPadrao = 'entre em contato com o administrador do sistema';
 
 // var urlPadrao = 'funcoes/certificado/';
 var pageUrl = 'funcoes/funcoesCertificado.php';
+function limpaDadosNota () {
+    $('#edtClienteNota').val('');
+    $('#edtDocumentoNota').val('');
+    $('#edtEmailNota').val('');
+    $('#edtEnderecoNota').val('');
+    $('#edtCepNota').val('');
+    $('#edtBairroNota').val('');
+    $('#edtNumeroNota').val('');
+    $('#edtUfNota').val('');
+    $('#edtCidadeNota').val('');
+    $('#edtIeNota').val('');
+    $('#edtIeIsenta').prop( "checked", false );
+
+    $("#chkTipoNota1").prop('disabled',false);
+    $('#chkTipoNota2').prop('disabled',false);
+
+    $("#chkTipoNota1").prop("checked", false);
+    $("#chkTipoNota2").prop("checked", false);
+
+
+    $("#edtDocumentoNota").prop('disabled',true);
+
+}
+
+function replicaDadosEmpresaNfe () {
+    $('#edtDocumentoNota').val($('#edtCnpjVendaInterna').val());
+
+    $('#edtClienteNota').val($('#edtRazaoSocial').val());
+    $('#edtCepNota').val($('#edtCepPjVendaInterna').val());
+    $('#edtBairroNota').val($('#edtBairroPjVendaInterna').val());
+    $('#edtCidadeNota').val($('#edtCidadePjVendaInterna').val());
+    $('#edtEnderecoNota').val($('#edtEnderecoVendaInternaPj').val());
+    $('#edtNumeroNota').val($('#edtNumeroVendaInterna').val());
+    $('#edtComplementoNota').val($('#edtComplementoVendaInterna').val());
+    $('#edtUfNota option[value="'+$('#edtUfVendaInterna').val()+'"]').prop("selected", true);
+    $('#edtFoneNota').val($('#edtFonePjVendaInterna').val());
+    $('#edtCelularNota').val($('#edtCelularPjVendaInterna').val());
+    $('#edtEmailNota').val($('#edtEmailPjVendaInterna').val());
+    $('#edtIeIsenta').prop( "checked", false);
+    $('#edtIeNota').prop('disabled', false);
+    $("edtDocumentoNota").prop('disabled',true);
+
+    $("#chkTipoNota1").prop('disabled',true);
+    $("#chkTipoNota2").prop('display',true);
+
+}
+
+function replicaDadosResponsavelNfe () {
+    if ($("input[name='tipoPessoa']:checked").val()=='pf') {
+        $('#edtDocumentoNota').val($('#edtCpfVendaInterna').val());
+    } else {
+        $('#edtDocumentoNota').val($('#edtCpfVendaInternaPj').val());
+    }
+
+    $('#edtClienteNota').val($('#edtNomeRepresentanteVendaInterna').val());
+    $('#edtCepNota').val($('#edtCepRepresentanteVendaInterna').val());
+    $('#edtBairroNota').val($('#edtBairroRepresentanteVendaInterna').val());
+    $('#edtCidadeNota').val($('#edtCidadeRepresentanteVendaInterna').val());
+    $('#edtEnderecoNota').val($('#edtEnderecoRepresentanteVendaInterna').val());
+    $('#edtNumeroNota').val($('#edtNumeroRepresentanteVendaInterna').val());
+    $('#edtComplementoNota').val($('#edtComplementoRepresentanteVendaInterna').val());
+    $('#edtUfNota option[value="'+$('#edtUfRepresentanteVendaInterna').val()+'"]').prop("selected", true);
+    $('#edtFoneNota').val($('#edtFoneRepresentanteVendaInterna').val());
+    $('#edtCelularNota').val($('#edtCelularRepresentanteVendaInterna').val());
+    $('#edtEmailNota').val($('#edtEmailRepresentanteVendaInterna').val());
+    $('#edtIeIsenta').prop( "checked", true);
+    $('#edtIeNota').prop('disabled', true);
+
+    $("edtDocumentoNota").prop('disabled',true);
+    $("#chkTipoNota1").prop('disabled',true);
+    $("#chkTipoNota2").prop('disabled',true);
+
+
+
+}
 
 function liberaBtn(src1 , src2){
 	if(src1.value != "" && src1.value != null){
@@ -200,6 +275,47 @@ function inserirDescontoCertificado(){
 		}
 	});
 };
+
+
+function inserirProtocoloHope(){
+    $('#mensagemLoading').html('<i class="fa fa-lg fa-tag"> </i> Inserindo protocolo no HOPE e gerando URL');
+    $('#modalCarregando').modal('show');
+
+    var dadosajax = {
+        'certificado_id' : $('#idCertificado').val(),
+        'funcao' : 'inserir_protocolo_hope',
+    }
+    $.ajax({
+        url: pageUrl,
+        data : dadosajax,
+        type : 'POST',
+        cache : true,
+        error : function(){
+            alertErro('Error CD82390 - Erro ao inserir o protocolo no HOPE,' + msnPadrao + '.');
+            $('#modalCarregando').modal('hide');
+        },
+        success : function(result){
+            try {
+                console.log('inserindo  protocolo');
+                resultado = JSON.parse(result);
+                if (resultado.mensagem == 'Ok') {
+                    alertSucesso('Protocolo inserido no HOPE com sucesso e URL gerada!');
+                    carregarModalDetalharCertificado($('#idCertificado').val());
+                }
+                else if (resultado.mensagem == 'Erro') {
+                    $('#modalCarregando').modal('hide');
+                    alertErro('Erro ao tentar inserir o protocolo no HOPE, por favor verifique se falta alguma informa&ccedil;&atilde;o')
+                }
+            } catch (e) {
+                $('#modalCarregando').modal('hide');
+                console.log(result);
+                alertErro ('Error CD82390 - Erro ao tentar inserir protocolo no HOPE,' + e + ', '+ msnPadrao + '.');
+            }
+
+        }
+    });
+};
+
 function revogar_certificado(motivo){
     $('#mensagemLoading').html('<i class="fa fa-lg fa-ban"> </i> Revogando certificado');
     $('#modalCarregando').modal('show');
@@ -493,21 +609,33 @@ function verificaTipoCliente(campo){
 	$("#divPrimeiraEtapa").css('visibility','visible');
 	$('#divPrimeiraEtapa').css('display','block');
 
-	if(tipoCliente == 'pf'){
-		$("#divEdtCpf").css('visibility','visible');
+    if(tipoCliente == 'pf'){
+        $('#edtCpfVendaInterna').prop('disabled', false);
+        $('#edtDataNascimento').prop('disabled', false);
+
+        $("#divEdtCpf").css('visibility','visible');
 		$('#divEdtCpf').css('display','inline-block');
 		$("#divEdtDataNascimento").css('visibility','visible');
 		$('#divEdtDataNascimento').css('display','inline-block');
 		$("#divEdtCnpj").css('visibility','hidden');
 		$('#divEdtCnpj').css('display','none');
+        $("#btnDuplicaEmpresa").css('visibility','hidden');
+        $('#btnDuplicaEmpresa').css('display','none');
         $('#edtCpfVendaInterna').focus();
 	}else if(tipoCliente == 'pj'){
-		$("#divEdtCpf").css('visibility','hidden');
+        $('#edtCnpjVendaInterna').prop('disabled', false);
+        $('#edtCpfVendaInternaPj').prop('disabled', false);
+        $('#edtDataNascimentoPj').prop('disabled', false);
+
+        $("#divEdtCpf").css('visibility','hidden');
 		$("#divEdtDataNascimento").css('visibility','hidden');
 		$('#divEdtCpf').css('display','none');
 		$('#divEdtDataNascimento').css('display','none');
 		$("#divEdtCnpj").css('visibility','visible');
 		$('#divEdtCnpj').css('display','inline-block');
+        $("#btnDuplicaEmpresa").css('visibility','visible');
+        $('#btnDuplicaEmpresa').css('display','block');
+
         $('#edtCnpjVendaInterna').focus();
 	}
 };
@@ -517,17 +645,35 @@ function limpa_formulario_cep(campoEndereco, campoCidade, campoBairro, campoUf, 
     document.getElementById(campoEndereco).value="";
     document.getElementById(campoBairro).value="";
     document.getElementById(campoCidade).value="";
-    document.getElementById(campoComplemento).value="";
+//    document.getElementById(campoComplemento).value="";
     document.getElementById(campoUf).value="";
+}
+
+function meu_callback_nfe(conteudo) {
+    if (!("erro" in conteudo)) {
+        //Atualiza os campos com os valores.
+        document.getElementById('edtEnderecoNota').value=removerAcentos((conteudo.logradouro).toUpperCase());
+        document.getElementById('edtBairroNota').value=removerAcentos((conteudo.bairro).toUpperCase());
+        //document.getElementById('edtComplementoVendaInterna').value=(conteudo.complemento).toUpperCase();
+        document.getElementById('edtCidadeNota').value=removerAcentos((conteudo.localidade).toUpperCase());
+        document.getElementById('edtCidadeNota').value = removerAcentos(document.getElementById('edtCidadeNota').value);
+        document.getElementById('edtUfNota').value=(conteudo.uf).toUpperCase();
+        document.getElementById('edtNumeroNota').focus();
+    } //end if.
+    else {
+        //CEP n?o Encontrado.
+        limpa_formulario_cep('edtEnderecoNota','edtCidadeNota', 'edtBairroNota', 'edtUfNota', 'edtComplementoNota');
+        alert("CEP nao encontrado.");
+    }
 }
 function meu_callback(conteudo) {
     if (!("erro" in conteudo)) {
         //Atualiza os campos com os valores.
-        document.getElementById('edtEnderecoVendaInternaPj').value=(conteudo.logradouro).toUpperCase();
-        document.getElementById('edtBairroPjVendaInterna').value=(conteudo.bairro).toUpperCase();
+        document.getElementById('edtEnderecoVendaInternaPj').value=removerAcentos((conteudo.logradouro).toUpperCase());
+        document.getElementById('edtBairroPjVendaInterna').value=removerAcentos((conteudo.bairro).toUpperCase());
         //document.getElementById('edtComplementoVendaInterna').value=(conteudo.complemento).toUpperCase();
-        document.getElementById('edtCidadePjVendaInterna').value=(conteudo.localidade).toUpperCase();
-        document.getElementById('edtUfVendaInterna').value=(conteudo.uf).toUpperCase();
+        document.getElementById('edtCidadePjVendaInterna').value=removerAcentos((conteudo.localidade).toUpperCase());
+        document.getElementById('edtUfVendaInterna').value=removerAcentos((conteudo.uf).toUpperCase());
         document.getElementById('edtNumeroVendaInterna').focus();
     } //end if.
     else {
@@ -539,11 +685,11 @@ function meu_callback(conteudo) {
 function meu_callback_pf(conteudo) {
     if (!("erro" in conteudo)) {
         //Atualiza os campos com os valores.
-        document.getElementById('edtEnderecoRepresentanteVendaInterna').value=(conteudo.logradouro).toUpperCase();
-        document.getElementById('edtBairroRepresentanteVendaInterna').value=(conteudo.bairro).toUpperCase();
-        document.getElementById('edtComplementoRepresentanteVendaInterna').value=(conteudo.complemento).toUpperCase();
-        document.getElementById('edtCidadeRepresentanteVendaInterna').value=(conteudo.localidade).toUpperCase();
-        document.getElementById('edtUfRepresentanteVendaInterna').value=(conteudo.uf).toUpperCase();
+        document.getElementById('edtEnderecoRepresentanteVendaInterna').value=removerAcentos((conteudo.logradouro).toUpperCase());
+        document.getElementById('edtBairroRepresentanteVendaInterna').value=removerAcentos((conteudo.bairro).toUpperCase());
+        //document.getElementById('edtComplementoRepresentanteVendaInterna').value=removerAcentos((conteudo.complemento).toUpperCase());
+        document.getElementById('edtCidadeRepresentanteVendaInterna').value=removerAcentos((conteudo.localidade).toUpperCase());
+        document.getElementById('edtUfRepresentanteVendaInterna').value=removerAcentos((conteudo.uf).toUpperCase());
         document.getElementById('edtNumeroRepresentanteVendaInterna').focus();
     } //end if.
     else {
@@ -553,7 +699,7 @@ function meu_callback_pf(conteudo) {
     }
 }
 
-function pesquisa_cep_cliente(valor, campoEndereco, campoCidade, campoBairro, campoUf, campoComplemento, pessoa_tipo) {
+function pesquisa_cep_cliente(valor, campoEndereco, campoCidade, campoBairro, campoUf, campoComplemento, pessoa_tipo, campo='') {
     //Nova vari?vel "cep" somente com d?gitos.
     var cep = valor.replace(/\D/g, '');
 
@@ -577,11 +723,14 @@ function pesquisa_cep_cliente(valor, campoEndereco, campoCidade, campoBairro, ca
             var script = document.createElement('script');
 
             //Sincroniza com o callback.
-            if (pessoa_tipo=='J')
-                script.src = '//viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
-            else if (pessoa_tipo=='F')
-                script.src = '//viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback_pf';
-
+            if (campo == 'nfe') {
+                script.src = '//viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback_nfe';
+            }else {
+                if (pessoa_tipo=='J')
+                    script.src = '//viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
+                else if (pessoa_tipo=='F')
+                    script.src = '//viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback_pf';
+            }
             //Insere script no documento e carrega o conte?do.
             document.body.appendChild(script);
 
@@ -895,6 +1044,9 @@ function limparModalVendaInterna(){
     $('#divNovoPedido').css('visibility', 'hidden');
     $('#divNovoPedido').css('display', 'none');
 
+    $('#frmClienteNota').css('visibility', 'hidden');
+    $('#frmClienteNota').css('display', 'none');
+
     $('#divMotivoDuplicidade').css('visibility', 'hidden');
     $('#divMotivoDuplicidade').css('display', 'none');
 
@@ -1015,20 +1167,6 @@ function finalizarVendaInterna(){
         alertErro('Por favor informe o motivo da duplicacao do certificado');
         validaformulario = false;
     }
-    
-    /*SE FOR BOLETO PEGA A DATA DE VENCIMENTO
-    if (formaPagamento == 1) {
-        var dataVencimento = $('#edtVenVenc').val().split(' ');
-        dataVencimento = dataVencimento[0].split('/');
-        var dataVencimento = new Date(dataVencimento[2], (dataVencimento[1]-1), dataVencimento[0]);
-        var dataHoje = new Date();
-    
-        if (dataVencimento < dataHoje) {
-            alertErro('A data de vencimento do boleto deve ser maior ou igual a data de hoje.');
-            validaformulario = false;
-        }
-    }*/
-
 
     if (produtoVenda =='') {
         alertErro('Por favor selecione o produto do Certificado');
@@ -1047,7 +1185,7 @@ function finalizarVendaInterna(){
         else if ($('#edtSelectContador').val()!='')
             var id_contador = $("#edtCodigoContadorPedido").val();
 
-        $('#mensagemLoading').html('<i class="fa fa-lg fa-cart-plus"></i> Salvando o pedido');
+        $('#mensagemLoading').html('<i class="fa fa-lg fa-cart-plus"></i> Aguarde enquanto estamos gerando o pedido');
         $("#modalCarregando").modal('show');
 
         if (pessoa_tipo == 'F') {
@@ -1081,7 +1219,18 @@ function finalizarVendaInterna(){
                 'edtCelular':$('#edtCelularRepresentanteVendaInterna').val(),
                 'idCertificadoRenovacao':$('#idCertificadoRenovacao').val(),
                 'idCertificadoDuplicado':$('#idCertificadoDuplicado').val(),
-				'motivoDuplicacao': $('#txtMotivoDuplicacao').val()
+				'motivoDuplicacao': $('#txtMotivoDuplicacao').val(),
+                'clienteNota': $('#edtClienteNota').val(),
+                'documentoNota': $('#edtDocumentoNota').val(),
+                'emailNota': $('#edtEmailNota').val(),
+                'enderecoNota': $('#edtEnderecoNota').val(),
+                'cepNota': $('#edtCepNota').val(),
+                'bairroNota': $('#edtBairroNota').val(),
+                'numeroNota': $('#edtNumeroNota').val(),
+                'estadoNota': $('#edtUfNota').val(),
+                'cidadeNota': $('#edtCidadeNota').val(),
+                'ieNota': $('#edtIeNota').val(),
+                'clienteTipoNota': $("input[name='chkTipoNota']:checked").val()
             };
         } else {
             var dadosajax = {
@@ -1127,7 +1276,18 @@ function finalizarVendaInterna(){
                 'edtCelularResponsavel':$('#edtCelularRepresentanteVendaInterna').val(),
                 'idCertificadoRenovacao':$('#idCertificadoRenovacao').val(),
                 'idCertificadoDuplicado':$('#idCertificadoDuplicado').val(),
-                'motivoDuplicacao': $('#txtMotivoDuplicacao').val()
+                'motivoDuplicacao': $('#txtMotivoDuplicacao').val(),
+                'clienteNota': $('#edtClienteNota').val(),
+                'documentoNota': $('#edtDocumentoNota').val(),
+                'emailNota': $('#edtEmailNota').val(),
+                'enderecoNota': $('#edtEnderecoNota').val(),
+                'cepNota': $('#edtCepNota').val(),
+                'bairroNota': $('#edtBairroNota').val(),
+                'numeroNota': $('#edtNumeroNota').val(),
+                'estadoNota': $('#edtUfNota').val(),
+                'cidadeNota': $('#edtCidadeNota').val(),
+                'ieNota': $('#edtIeNota').val(),
+                'clienteTipoNota': $("input[name='chkTipoNota']:checked").val()
             };
         }
         var x = $.ajax({
@@ -1147,6 +1307,7 @@ function finalizarVendaInterna(){
             },
             //retorna o resultado da pagina para onde enviamos os dados
             success: function(result){
+                console.log('finalizando a venda');
                 console.log(result);
                 resultado = result.split(';');
 
@@ -1156,25 +1317,16 @@ function finalizarVendaInterna(){
                     carregarCertificados();
                     $('#modalCarregando').modal('hide');
                     $('#vendaInterna').modal('hide');
+
+                    carregarCertificados();
+
                 }else if (resultado[0].trim() == 'Erro') {
                     alertErro(resultado[1].trim());
                     $('#modalCarregando').modal('hide');
                 } else {
-                    alertErro('Erro!');
+                    $('#modalCarregando').modal('hide');
+                    alertErro('Verifique o cadastro completo, se existe alguma informa&ccedil;&atilde;o incorreta ou com caracteres especiais!');
                 }
-                /*if (formaPagamento == 1) {
-                    if(resultado[1].trim() == 'boletoOk'){
-                        alertSucesso("Boleto gerado com sucesso!");
-                    }else if (resultado[0].trim() == 'Erro') {
-                        alertErro(resultado[1].trim());
-                        $('#modalCarregando').modal('hide');
-                    }
-                }*/
-                $('#modalCarregando').modal('hide');
-                $('#vendaInterna').modal('hide');
-
-                carregarCertificados();
-
 
             }
         });
@@ -1334,6 +1486,9 @@ function informarPagamentoCertificado(acao, boleto){
                     carregarModalDetalharCertificado(dadosajax['certificado_id']);
                     alertSucesso(resultado.mensagemSucesso);
                 }
+                else if (resultado.mensagem == 'Erro') {
+                    alertErro(resultado.mensagemErro);
+                }
             } catch (e){
                 $("#modalCarregando").modal('hide');
                 console.log(result, e);
@@ -1353,7 +1508,7 @@ function carregarCertificados(paginaSelecionada, qtdItensPorPagina, paginando, c
         var pagina = 0;
     else
         var pagina = paginaSelecionada;
-    console.log('pagina selecionada:'+pagina);
+    //console.log('pagina selecionada:'+pagina);
     /*INICIALIZA SE NAO PASSAR PARAMETRO SETA 20 ITENS POR PAGINA POR PADRAO*/
     if (qtdItensPorPagina === undefined)
         var qtdItens = 30;
@@ -1531,7 +1686,6 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
 			},
 			error : function (){
 				$("#modalCarregando").modal('hide');
-				console.log(result, e);
 				alertErro ('Error CD6001 - Erro na a&ccedil;&atilde;o detalhar certificado,' + msnPadrao + '.');
 			},
 			success : function(result){
@@ -1543,7 +1697,9 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
 					var situacoes = JSON.parse(resultado.dadosSituacoes);
 
 					if (resultado.mensagem == 'Ok') {
-
+                        $('#spanInserirProtocoloHope').html(resultado.btnInserirHope);
+                        $('#dcSpanUrlHope').html(certificado.urlHope);
+                        
 						/*
 						 * SET AS PERMISSOES DOS BOTOES
 						 * */
@@ -1574,14 +1730,33 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
                         else
                             $('#btnBaixarPagamento').prop("disabled",true);
 
-						/*
-						 * HABILITA O BOTAO DE GERAR PROTOCOLO SE
-						 * SE JA FOI PAGO, SE NAO ESTIVER VALIDADO E SE NAO TIVER PROTOCOLO
-						 * */
+
+                        /*
+                        * MOSTRA O PROTOCOLO GERADO CASO ELE TENHA LIMITE DE CREDITO
+                        * */
+                        if ((permissoes.permiteVisualizarProtocolo == 'sim') && certificado.dataPagamento!='-') {
+                            $('#dcSpanProtocolo').html(certificado.protocolo);
+                        } else {
+                            console.log(certificado.dataPagamento);
+                            if (certificado.dataPagamento=='-')
+                                $('#dcSpanProtocolo').html('Voc&ecirc; precisa informar pagamento para visualizar este protocolo.');
+                            else
+                                $('#dcSpanProtocolo').html('Voc&ecirc; est&eacute; com o limite de cr&eacute;dito comprometido.');
+
+                        }
+
+                        /*
+                         * HABILITA O BOTAO DE GERAR PROTOCOLO SE
+                         * SE JA FOI PAGO, SE NAO ESTIVER VALIDADO E SE NAO TIVER PROTOCOLO
+                         * */
 						if ((permissoes.permiteGerarProtocolo == 'sim') && certificado.dataPagamento!='-' && certificado.dataValidacaoCertificado=='-' && (certificado.protocolo=='-')) {
 							$('#btnGerarProtocolo').prop("disabled",false);
 							$('#btnGerarProtocolo').prop("title", 'Gerar Protocolo');
-						}
+
+                            $('#btnGerarProtocolo').prop("disabled",false);
+                            $('#btnGerarProtocolo').prop("title", 'Gerar Protocolo');
+
+                        }
 						else {
 							$('#btnGerarProtocolo').prop("disabled",true);
 							$('#btnGerarProtocolo').prop("title", resultado.mensagemErroGerarProtocolo);
@@ -1654,7 +1829,6 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
 						$('#idCliente').val(certificado.clienteId);
 						$('#tcSpanNomeContador').html(certificado.nomeContador);
 						$('#dcSpanNomeCliente').html(certificado.nomeCliente);
-						$('#dcSpanProtocolo').html(certificado.protocolo);
 						$('#dcSpanNomeProduto').html(certificado.nomeProduto);
 						$('#dcSpanPrecoProduto').html(certificado.precoProduto);
 						$('#dcSpanDesconto').html(certificado.desconto);
@@ -1665,6 +1839,15 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
 						$('#dcSpanConsultor').html(certificado.consultor);
 						$('#dcSpanAgrValidacao').html(certificado.agr);
 						$('#dcSpanValidadeCertificado').html(certificado.validade);
+/*
+						if (certificado.urlHope != '') {
+                            $('#dcSpanUrlHope').html(certificado.urlHope);
+                            $('#divUrlHope').css({display: 'block', visibility: 'visible'});
+                        } else
+                            $('#divUrlHope').css({display: 'none', visibility: 'hidden'});
+*/
+
+
 
 
 						/*
@@ -2363,6 +2546,47 @@ function carregarModalCupomDesconto() {
     });
 }
 
+
+function gerarProtocoloApi() {
+
+    $('#mensagemLoading').html('<i class="fa fa-lg fa-money"></i> Gerando protocolo');
+    $("#modalCarregando").modal('show');
+
+    var dadosajax = {
+        'idCertificado': $('#idCertificado').val(),
+        funcao: 'gerar_protocolo_api'
+    }
+
+    $.ajax({
+        url: pageUrl,
+        data : dadosajax,
+        type : 'POST',
+        cache : true,
+        error : function(){
+            alertErro('Error CD34920 - Erro ao tentar gerar protocolo, Erro:' + e+ '. '+ msnPadrao + '.')
+            $("#modalCarregando").modal('hide');
+        },
+        success : function(result){
+            try {
+                var resultado = JSON.parse(result);
+
+                if (resultado.mensagem == 'Ok') {
+                    alertSucesso('Protocolo gerado com sucesso!');
+                    carregarModalDetalharCertificado($('#idCertificado').val());
+                } else if (resultado.mensagem == 'erro') {
+                    alertErro('Ocorreu um erro ao tentar gerar o protocolo!');
+                    $("#modalInserirCupom").modal('hide');
+                }
+
+            } catch (e) {
+                alertErro('Error CD34921 - Erro ao tentar gerar protocolo, Erro:' + result + e+ '. '+ msnPadrao + '.')
+                console.log(e, result);
+                $("#modalCarregando").modal('hide');
+            }
+        }
+    });
+}
+
 function usarCupom() {
     $('#mensagemLoading').html('<i class="fa fa-lg fa-money"></i> Aplicando cupom de desconto');
     $("#modalCarregando").modal('show');
@@ -2425,7 +2649,7 @@ function avancarVendaInterna(idCertificadoRenovacao='', $idCertificadoDuplicado=
 
     }
 
-    console.log('ids:'+$('#idCertificadoRenovacao').val(), $('#idCertificadoDuplicado').val());
+//    console.log('ids:'+$('#idCertificadoRenovacao').val(), $('#idCertificadoDuplicado').val());
 
     /*CHECA SE O CERTIFICADO E RENOVACAO */
 
@@ -2746,13 +2970,28 @@ function consultaPrevia () {
             try {
                 if (res.codigo == 0) {
                     $('#btnAvancar1').prop('disabled', false);
+                    $("#frmClienteNota").css('visibility','visible');
+                    $('#frmClienteNota').css('display','block');
+
+                    $("#chkTipoNota1").prop('disabled',false);
+                    $('#chkTipoNota2').prop('disabled',false);
+
+                    $("#edtDocumentoNota").prop('disabled',true);
+
                     if (tipo_cliente == 1) {
+                        $('#edtCpfVendaInterna').prop('disabled', true);
+                        $('#edtDataNascimento').prop('disabled', true);
+
                         $('#edtNomeRepresentanteVendaInterna').val(res.mensagem);
                         $('#divFormCliente').css('visibility', 'visible');
                         $('#divFormCliente').css('display', 'inline');
-                        $('#edtNomeRepresentanteVendaInterna').focus();
 
+                        $('#edtNomeRepresentanteVendaInterna').focus();
                     } else if (tipo_cliente == 2) {
+                        $('#edtCnpjVendaInterna').prop('disabled', true);
+                        $('#edtCpfVendaInternaPj').prop('disabled', true);
+                        $('#edtDataNascimentoPj').prop('disabled', true);
+
                         $('#edtRazaoSocial').val(res.mensagem);
 
                         $('#divPessoaJuridica').css('visibility', 'visible');
@@ -2786,7 +3025,7 @@ function consultarCertificadosVendaInterna() {
 
 	$('#mensagemLoading').html('<i class="fa fa-circle-o"></i> Consultar certificados duplicados');
 	$("#modalCarregando").modal('show');
-	console.log('idClienteConsultar:'+$('#idClienteVendaInterna').val());
+	//console.log('idClienteConsultar:'+$('#idClienteVendaInterna').val());
 	/*
 	* SE FOR CLIENTE NOVO NEM ENTRA AQUI
 	* */
@@ -2807,7 +3046,6 @@ function consultarCertificadosVendaInterna() {
 			},
 			success: function (result) {
 				try {
-					console.log('saida: ' + result);
 					resultado = JSON.parse(result);
 					$('#modalCarregando').modal('hide');
 					if (resultado.mensagem == 'Ok') {

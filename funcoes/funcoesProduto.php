@@ -15,7 +15,7 @@ function salvarProduto() {
         elseif ($_POST['acao']=='editar')
             $produto = ProdutoPeer::retrieveByPK($_POST['produtoId']);
 
-        $produto->setNome(utf8_decode($_POST['nome']));
+        $produto->setNome($_POST['nome']);
         $produto->setCodigo($_POST['codigoProduto']);
         $produto->setComissao($_POST['comissaoProduto']);
         $produto->setPessoaTipo($_POST['pessoaTipo']);
@@ -23,6 +23,7 @@ function salvarProduto() {
         $produto->setPreco($_POST['preco']);
         $produto->setPrecoVenda($_POST['precoVenda']);
         $produto->setGrupoProdutoId($_POST['grupoProduto']);
+        $produto->setTipoEmissao($_POST['tipoEmissao']);
 
         if ($_POST['produtoContador']=='contadores')
             $produto->setSituacao(10);
@@ -123,7 +124,7 @@ function carregarProdutos(){
             else
                 $produtoContador = 'Pre&ccedil;o Normal';
 
-            $produtos[] =  array('.'=>$i++, 'Id'=>$produto->getId(), 'Contador?'=>$produtoContador,'Nome'=>utf8_encode($produto->getNome()), utf8_encode('Preco')=>$produto->getPreco(), 'Tipo'=>$produto->getPessoaTipo(), 'Validade'=>$validade,
+            $produtos[] =  array('.'=>$i++, 'Id'=>$produto->getId(), 'Contador?'=>$produtoContador,'Nome'=>$produto->getNome(), utf8_encode('Preco')=>$produto->getPreco(), 'Tipo'=>$produto->getPessoaTipo(), 'Validade'=>$validade,
                 utf8_encode('Acao')=>'<button onclick="carregarModalDetalharProduto(\''.$produto->getId().'\'); $(\'#modalProdutoDetalhar\').modal(\'show\')"><i class="fa fa-arrows"></i></button> '
             );
         }
@@ -151,7 +152,7 @@ function carregarModalDetalharProduto() {
     $produtos = array();
     $produtos[] = array('id'=>'', 'nome'=>'Escolha um produto');
     foreach ($produtosObj as $produto)
-        $produtos[] = array('id'=>$produto->getId(), 'nome'=>utf8_encode($produto->getNome()));
+        $produtos[] = array('id'=>$produto->getId(), 'nome'=>$produto->getNome());
 
     $produto = ProdutoPeer::retrieveByPk($_POST['produtoId']);
 
@@ -181,10 +182,20 @@ function carregarModalDetalharProduto() {
         $produtoContadorId = 'normal';
     }
 
+    if ($produto->getTipoEmissao()== 1) {
+        $nomeTipoEmissao = 'Presencial';
+    } elseif ($produto->getTipoEmissao()== 2) {
+        $nomeTipoEmissao = 'Renova&ccedil;&atilde;o On-Line';
+    } elseif ($produto->getTipoEmissao()== 3) {
+        $nomeTipoEmissao = 'V&iacute;deo Confer&ecirc;ncia';
+    } else
+        $nomeTipoEmissao = 'N&atilde;o permitido valida&ccedil;&atilde;o';
+
+
     $retorno = array(
         'mensagem'=>'Ok',
         'id'=>$produto->getId(),
-        'nome'=>utf8_encode($produto->getNome()),
+        'nome'=>$produto->getNome(),
         'pessoaTipo'=>$pessoaTipo,
         'preco'=>formataMoeda($produto->getPreco()),
         'precoSemFormatacao'=>$produto->getPreco(),
@@ -201,6 +212,10 @@ function carregarModalDetalharProduto() {
         'produtoContadorId'=>$produtoContadorId,
         'precoVenda'=>formataMoeda($produto->getPrecoVenda()),
         'precoVendaSemFormatacao'=>$produto->getPrecoVenda(),
+        'tipoEmissao' =>$produto->getTipoEmissao(),
+        'nomeTipoEmissao' =>$nomeTipoEmissao,
+        'grupoProduto'=> $produto->getGrupoProduto()->getNome()
+
     );
 
     echo json_encode($retorno);
@@ -214,14 +229,14 @@ function carregarModalInserirEditarProduto () {
     $produtos = array();
     $produtos[] = array('id'=>'', 'nome'=>'Escolha um produto');
     foreach ($produtosObj as $produto)
-        $produtos[] = array('id'=>$produto->getId(), 'nome'=>utf8_encode($produto->getNome()));
+        $produtos[] = array('id'=>$produto->getId(), 'nome'=>$produto->getNome());
     $cGrupo = new Criteria();
     $cGrupo->add(GrupoProdutoPeer::SITUACAO, -1, Criteria::NOT_EQUAL);
     $grupoProdutosObj = GrupoProdutoPeer::doSelect($cGrupo);
     $gruposProdutos = array();
     $gruposProdutos[] = array('id'=>'', 'nome'=>'Escolha um grupo de produto');
     foreach ($grupoProdutosObj as $grupo)
-        $gruposProdutos[] = array('id'=>$grupo->getId(), 'nome'=>utf8_encode($grupo->getNome()));
+        $gruposProdutos[] = array('id'=>$grupo->getId(), 'nome'=>$grupo->getNome());
 
     $retorno = array(
         'mensagem'=>'Ok',

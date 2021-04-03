@@ -63,6 +63,18 @@
                             </div>
 
                         </div> <!--DIV CLASS row-->
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label>Grupo do produto:</label> <span id="labelProdutoGrupo">...</span>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <label>Tipo de emiss&atilde;o:</label> <span id="labelProdutoTipoEmissao">...</span>
+                            </div>
+
+                        </div> <!--DIV CLASS row-->
+
                     </div>
                 </div>
 

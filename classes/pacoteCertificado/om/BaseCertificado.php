@@ -205,6 +205,18 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 	protected $status_followup;
 
 	/**
+	 * The value for the inseriu_hope field.
+	 * @var        int
+	 */
+	protected $inseriu_hope;
+
+	/**
+	 * The value for the url_documentacao field.
+	 * @var        string
+	 */
+	protected $url_documentacao;
+
+	/**
 	 * @var        Situacao
 	 */
 	protected $aSituacao;
@@ -293,6 +305,16 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 	 * @var        Criteria The criteria used to select the current contents of collCertificadoCupoms.
 	 */
 	private $lastCertificadoCupomCriteria = null;
+
+	/**
+	 * @var        array CertificadoNota[] Collection to store aggregation of CertificadoNota objects.
+	 */
+	protected $collCertificadoNotas;
+
+	/**
+	 * @var        Criteria The criteria used to select the current contents of collCertificadoNotas.
+	 */
+	private $lastCertificadoNotaCriteria = null;
 
 	/**
 	 * @var        array Certificado[] Collection to store aggregation of Certificado objects.
@@ -966,6 +988,26 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 	public function getStatusFollowup()
 	{
 		return $this->status_followup;
+	}
+
+	/**
+	 * Get the [inseriu_hope] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getInseriuHope()
+	{
+		return $this->inseriu_hope;
+	}
+
+	/**
+	 * Get the [url_documentacao] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getUrlDocumentacao()
+	{
+		return $this->url_documentacao;
 	}
 
 	/**
@@ -1919,6 +1961,46 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 	} // setStatusFollowup()
 
 	/**
+	 * Set the value of [inseriu_hope] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     Certificado The current object (for fluent API support)
+	 */
+	public function setInseriuHope($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->inseriu_hope !== $v) {
+			$this->inseriu_hope = $v;
+			$this->modifiedColumns[] = CertificadoPeer::INSERIU_HOPE;
+		}
+
+		return $this;
+	} // setInseriuHope()
+
+	/**
+	 * Set the value of [url_documentacao] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     Certificado The current object (for fluent API support)
+	 */
+	public function setUrlDocumentacao($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->url_documentacao !== $v) {
+			$this->url_documentacao = $v;
+			$this->modifiedColumns[] = CertificadoPeer::URL_DOCUMENTACAO;
+		}
+
+		return $this;
+	} // setUrlDocumentacao()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1981,6 +2063,8 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 			$this->apagado = ($row[$startcol + 28] !== null) ? (int) $row[$startcol + 28] : null;
 			$this->parceiro_id = ($row[$startcol + 29] !== null) ? (int) $row[$startcol + 29] : null;
 			$this->status_followup = ($row[$startcol + 30] !== null) ? (int) $row[$startcol + 30] : null;
+			$this->inseriu_hope = ($row[$startcol + 31] !== null) ? (int) $row[$startcol + 31] : null;
+			$this->url_documentacao = ($row[$startcol + 32] !== null) ? (string) $row[$startcol + 32] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1990,7 +2074,7 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 31; // 31 = CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 33; // 33 = CertificadoPeer::NUM_COLUMNS - CertificadoPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Certificado object", $e);
@@ -2103,6 +2187,9 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 
 			$this->collCertificadoCupoms = null;
 			$this->lastCertificadoCupomCriteria = null;
+
+			$this->collCertificadoNotas = null;
+			$this->lastCertificadoNotaCriteria = null;
 
 			$this->collCertificadosRelatedByCertificadoRenovado = null;
 			$this->lastCertificadoRelatedByCertificadoRenovadoCriteria = null;
@@ -2362,6 +2449,14 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 				}
 			}
 
+			if ($this->collCertificadoNotas !== null) {
+				foreach ($this->collCertificadoNotas as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
+			}
+
 			if ($this->collCertificadosRelatedByCertificadoRenovado !== null) {
 				foreach ($this->collCertificadosRelatedByCertificadoRenovado as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
@@ -2587,6 +2682,14 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 					}
 				}
 
+				if ($this->collCertificadoNotas !== null) {
+					foreach ($this->collCertificadoNotas as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
+
 				if ($this->collCertificadosRelatedByCertificadoRenovado !== null) {
 					foreach ($this->collCertificadosRelatedByCertificadoRenovado as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
@@ -2690,6 +2793,8 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(CertificadoPeer::APAGADO)) $criteria->add(CertificadoPeer::APAGADO, $this->apagado);
 		if ($this->isColumnModified(CertificadoPeer::PARCEIRO_ID)) $criteria->add(CertificadoPeer::PARCEIRO_ID, $this->parceiro_id);
 		if ($this->isColumnModified(CertificadoPeer::STATUS_FOLLOWUP)) $criteria->add(CertificadoPeer::STATUS_FOLLOWUP, $this->status_followup);
+		if ($this->isColumnModified(CertificadoPeer::INSERIU_HOPE)) $criteria->add(CertificadoPeer::INSERIU_HOPE, $this->inseriu_hope);
+		if ($this->isColumnModified(CertificadoPeer::URL_DOCUMENTACAO)) $criteria->add(CertificadoPeer::URL_DOCUMENTACAO, $this->url_documentacao);
 
 		return $criteria;
 	}
@@ -2804,6 +2909,10 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 
 		$copyObj->setStatusFollowup($this->status_followup);
 
+		$copyObj->setInseriuHope($this->inseriu_hope);
+
+		$copyObj->setUrlDocumentacao($this->url_documentacao);
+
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -2831,6 +2940,12 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 			foreach ($this->getCertificadoCupoms() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 					$copyObj->addCertificadoCupom($relObj->copy($deepCopy));
+				}
+			}
+
+			foreach ($this->getCertificadoNotas() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addCertificadoNota($relObj->copy($deepCopy));
 				}
 			}
 
@@ -4356,6 +4471,160 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 		$this->lastCertificadoCupomCriteria = $criteria;
 
 		return $this->collCertificadoCupoms;
+	}
+
+	/**
+	 * Clears out the collCertificadoNotas collection (array).
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addCertificadoNotas()
+	 */
+	public function clearCertificadoNotas()
+	{
+		$this->collCertificadoNotas = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collCertificadoNotas collection (array).
+	 *
+	 * By default this just sets the collCertificadoNotas collection to an empty array (like clearcollCertificadoNotas());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @return     void
+	 */
+	public function initCertificadoNotas()
+	{
+		$this->collCertificadoNotas = array();
+	}
+
+	/**
+	 * Gets an array of CertificadoNota objects which contain a foreign key that references this object.
+	 *
+	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
+	 * Otherwise if this Certificado has previously been saved, it will retrieve
+	 * related CertificadoNotas from storage. If this Certificado is new, it will return
+	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 *
+	 * @param      PropelPDO $con
+	 * @param      Criteria $criteria
+	 * @return     array CertificadoNota[]
+	 * @throws     PropelException
+	 */
+	public function getCertificadoNotas($criteria = null, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(CertificadoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCertificadoNotas === null) {
+			if ($this->isNew()) {
+			   $this->collCertificadoNotas = array();
+			} else {
+
+				$criteria->add(CertificadoNotaPeer::CERTIFICADO_ID, $this->id);
+
+				CertificadoNotaPeer::addSelectColumns($criteria);
+				$this->collCertificadoNotas = CertificadoNotaPeer::doSelect($criteria, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return the collection.
+
+
+				$criteria->add(CertificadoNotaPeer::CERTIFICADO_ID, $this->id);
+
+				CertificadoNotaPeer::addSelectColumns($criteria);
+				if (!isset($this->lastCertificadoNotaCriteria) || !$this->lastCertificadoNotaCriteria->equals($criteria)) {
+					$this->collCertificadoNotas = CertificadoNotaPeer::doSelect($criteria, $con);
+				}
+			}
+		}
+		$this->lastCertificadoNotaCriteria = $criteria;
+		return $this->collCertificadoNotas;
+	}
+
+	/**
+	 * Returns the number of related CertificadoNota objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related CertificadoNota objects.
+	 * @throws     PropelException
+	 */
+	public function countCertificadoNotas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(CertificadoPeer::DATABASE_NAME);
+		} else {
+			$criteria = clone $criteria;
+		}
+
+		if ($distinct) {
+			$criteria->setDistinct();
+		}
+
+		$count = null;
+
+		if ($this->collCertificadoNotas === null) {
+			if ($this->isNew()) {
+				$count = 0;
+			} else {
+
+				$criteria->add(CertificadoNotaPeer::CERTIFICADO_ID, $this->id);
+
+				$count = CertificadoNotaPeer::doCount($criteria, false, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return count of the collection.
+
+
+				$criteria->add(CertificadoNotaPeer::CERTIFICADO_ID, $this->id);
+
+				if (!isset($this->lastCertificadoNotaCriteria) || !$this->lastCertificadoNotaCriteria->equals($criteria)) {
+					$count = CertificadoNotaPeer::doCount($criteria, false, $con);
+				} else {
+					$count = count($this->collCertificadoNotas);
+				}
+			} else {
+				$count = count($this->collCertificadoNotas);
+			}
+		}
+		return $count;
+	}
+
+	/**
+	 * Method called to associate a CertificadoNota object to this object
+	 * through the CertificadoNota foreign key attribute.
+	 *
+	 * @param      CertificadoNota $l CertificadoNota
+	 * @return     void
+	 * @throws     PropelException
+	 */
+	public function addCertificadoNota(CertificadoNota $l)
+	{
+		if ($this->collCertificadoNotas === null) {
+			$this->initCertificadoNotas();
+		}
+		if (!in_array($l, $this->collCertificadoNotas, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collCertificadoNotas, $l);
+			$l->setCertificado($this);
+		}
 	}
 
 	/**
@@ -6690,6 +6959,11 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 					$o->clearAllReferences($deep);
 				}
 			}
+			if ($this->collCertificadoNotas) {
+				foreach ((array) $this->collCertificadoNotas as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 			if ($this->collCertificadosRelatedByCertificadoRenovado) {
 				foreach ((array) $this->collCertificadosRelatedByCertificadoRenovado as $o) {
 					$o->clearAllReferences($deep);
@@ -6731,6 +7005,7 @@ abstract class BaseCertificado extends BaseObject  implements Persistent {
 		$this->collCertificadoSituacaos = null;
 		$this->collCuponsDescontoCertificados = null;
 		$this->collCertificadoCupoms = null;
+		$this->collCertificadoNotas = null;
 		$this->collCertificadosRelatedByCertificadoRenovado = null;
 		$this->collCertificadoPagamentos = null;
 		$this->collBoletos = null;

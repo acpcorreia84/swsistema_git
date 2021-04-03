@@ -127,6 +127,26 @@
 
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label for="edtTipoEmissao">Tipo de Emiss&atilde;o</label>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 campoValidar">
+                                        <select name="edtTipoEmissao" id="edtTipoEmissao" class="form-control">
+                                            <option value="">Selecione o tipo de emiss&atilde;o</option>
+                                            <option value="1">Presencial</option>
+                                            <option value="2">Renova&ccedil;&atilde;o On-Line</option>
+                                            <option value="3">V&iacute;deo confer&ecirc;ncia</option>
+                                            <option value="0">N&atilde;o permitido valida&ccedil;&atilde;o</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
                             </form>
 
                         </div> <!--FIM PANEL-BODY-->

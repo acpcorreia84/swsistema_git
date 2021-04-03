@@ -850,6 +850,40 @@ CREATE TABLE `certificado_cupom`
 )Type=MyISAM;
 
 #-----------------------------------------------------------------------------
+#-- certificado_nota
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `certificado_nota`;
+
+
+CREATE TABLE `certificado_nota`
+(
+	`id` INTEGER  NOT NULL AUTO_INCREMENT,
+	`certificado_id` INTEGER,
+	`pessoa_tipo` CHAR(1)  NOT NULL,
+	`sacado` VARCHAR(80)  NOT NULL,
+	`endereco` VARCHAR(100)  NOT NULL,
+	`numero` VARCHAR(4)  NOT NULL,
+	`bairro` VARCHAR(50)  NOT NULL,
+	`complemento` VARCHAR(80),
+	`cidade` VARCHAR(30)  NOT NULL,
+	`email` VARCHAR(60)  NOT NULL,
+	`uf` CHAR(2)  NOT NULL,
+	`cep` CHAR(10)  NOT NULL,
+	`fone1` VARCHAR(15)  NOT NULL,
+	`celular` VARCHAR(15),
+	`cpf_cnpj` VARCHAR(20)  NOT NULL,
+	`situacao` INTEGER  NOT NULL,
+	`ie` VARCHAR(15),
+	PRIMARY KEY (`id`),
+	INDEX `FI__certificado_nota` (`certificado_id`),
+	CONSTRAINT `Rel_certificado_nota`
+		FOREIGN KEY (`certificado_id`)
+		REFERENCES `certificado` (`id`)
+		ON DELETE RESTRICT
+)Type=MyISAM;
+
+#-----------------------------------------------------------------------------
 #-- certificado
 #-----------------------------------------------------------------------------
 
@@ -889,6 +923,8 @@ CREATE TABLE `certificado`
 	`apagado` INTEGER  NOT NULL,
 	`parceiro_id` INTEGER,
 	`status_followup` INTEGER,
+	`inseriu_hope` INTEGER,
+	`url_documentacao` VARCHAR(80),
 	PRIMARY KEY (`id`),
 	INDEX `FI__certificado_followup` (`status_followup`),
 	CONSTRAINT `Rel_certificado_followup`

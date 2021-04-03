@@ -168,7 +168,7 @@
                                                                         <label for="edtUfVendaInterna">Estado*:</label>
                                                                     </div>
                                                                     <div class="col-lg-3 col-md-3 col-xs-12 campoValidar">
-                                                                        <select name="clEdtUfResponsavel" id="edtUfVendaInterna" class="form-control" onblur="liberaBtn(this,'altCliente')">
+                                                                        <select name="edtUfVendaInterna" id="edtUfVendaInterna" class="form-control" onblur="liberaBtn(this,'altCliente')">
                                                                             <option value="">Selecione</option>
                                                                             <option value="AC" >AC</option>
                                                                             <option value="AL" >AL</option>
@@ -361,7 +361,165 @@
                                                         </div>
                                                     </form>
 
+
                                                 </div>
+
+                                                <!--CAMPOS RELATIVOS AO DADOS DO CLIENTE DA NOTA FISCAL NF-E-->
+                                                <form action="" name="frmClienteNota" id="frmClienteNota" class="oculto">
+                                                    <script>
+                                                        $(document).ready(function(){
+
+
+                                                        $('#chkTipoNota1').on("click", function () {
+                                                            $("#chkTipoNota1").prop('disabled',true);
+                                                            $('#chkTipoNota2').prop('disabled',true);
+
+                                                            $("#edtDocumentoNota").prop('disabled',false);
+
+                                                            $('#edtDocumentoNota').mask('000.000.000-00', {reverse: true});
+                                                        });
+                                                        $('#chkTipoNota2').on("click",function () {
+                                                            $("#chkTipoNota1").prop('disabled',true);
+                                                            $('#chkTipoNota2').prop('disabled',true);
+
+                                                            $("#edtDocumentoNota").prop('disabled',false);
+                                                            $('#edtDocumentoNota').mask('99.999.999/9999-99', {reverse: false});
+                                                        });
+                                                        });
+                                                    </script>
+                                                    <div class="row form-group">
+                                                        <div class="col-lg-12 col-md-12 col-xs-12">
+                                                            <span class="text-info"><i class="fa fa-user-plus" aria-hidden="true"></i> DADOS DA NOTA FISCAL ELETR&Ocirc;NICA</span><br/> <small>Copiar dados: <button class="btn btn-warning btn-sm" id="btnDuplicaEmpresa" name="btnDuplicaEmpresa" onclick="replicaDadosEmpresaNfe()">EMPRESA</button> <a class="btn btn-warning btn-sm " onclick="replicaDadosResponsavelNfe()">RESPONS&Aacute;VEL</a> <a class="btn btn-danger btn-sm" id="btnLimpar" onclick="limpaDadosNota()">LIMPAR</a>  </small>
+                                                            <div class="custom-control custom-radio custom-control-inline"> <input name="chkTipoNota" id="chkTipoNota1" type="radio" value="F" class="custom-control-input" />  <label  class="custom-control-label" for="chkTipoNota1">PF </label> <input name="chkTipoNota" id="chkTipoNota2" value="J" type="radio" class="custom-control-input" /> <label  class="custom-control-label" for="chkTipoNota2">PJ</label></div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col-lg-2 col-md-2 col-xs-2">
+                                                            <label for="edtDocumentoNota">Documento*:</label>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-xs-3 campoValidar">
+                                                            <input type="text" class="form-control" name="edtDocumentoNota" id="edtDocumentoNota" />
+                                                        </div>
+
+                                                        <div class="col-lg-1 col-md-1 col-xs-1">
+                                                            <label for="edtClienteNota">Nome*:</label>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-xs-6 campoValidar">
+                                                            <input type="text" class="form-control" name="edtClienteNota" id="edtClienteNota" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col-lg-1 col-md-1 col-xs-12">
+                                                            <label for="edtCepNota">CEP*:</label>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-4 col-xs-12 campoValidar">
+                                                            <input type="text" class="form-control" name="edtCepNota" id="edtCepNota" onkeypress="formatar(this,'cep');"  onblur="formatarBlur(this,'cep'); pesquisa_cep_cliente(this.value, 'edtEnderecoNota', 'edtCidadeNota', 'edtBairroNota', 'edtUfNota', 'edtNota', 'F', 'nfe' ); " />
+                                                        </div>
+                                                        <div class="col-lg-1 col-md-1 col-xs-12">
+                                                            <label for="edtBairroNota">Bairro*:</label>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-4 col-xs-12 campoValidar">
+                                                            <input type="text" class="form-control" name="edtBairroNota" id="edtBairroNota" />
+                                                        </div>
+                                                        <div class="col-lg-1 col-md-1 col-xs-12">
+                                                            <label for="edtCidadeNota">Cidade*:</label>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-4 col-xs-12 campoValidar">
+                                                            <input type="text" class="form-control" name="edtCidadeNota" id="edtCidadeNota" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col-lg-1 col-md-3 col-xs-12">
+                                                            <label for="edtEnderecoNota">End*.:</label>
+                                                        </div>
+                                                        <div class="col-lg-11 col-md-11 col-xs-12 campoValidar">
+                                                            <input type="text" class="form-control" name="edtEnderecoNota" id="edtEnderecoNota" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col-lg-1 col-md-1 col-xs-12">
+                                                            <label for="edtNumeroNota">N*:</label>
+                                                        </div>
+                                                        <div class="col-lg-2 col-md-2 col-xs-12 campoValidar">
+                                                            <input type="text" class="form-control" name="edtNumeroNota" id="edtNumeroNota" " />
+                                                        </div>
+                                                        <div class="col-lg-1 col-md-1 col-xs-12">
+                                                            <label for="edtComplementoNota">Compl.::</label>
+                                                        </div>
+                                                        <div class="col-lg-4 col-md-4 col-xs-12">
+                                                            <input type="text" class="form-control" name="edtComplementoNota" id="edtComplementoNota" />
+                                                        </div>
+                                                        <div class="col-lg-1 col-md-1 col-xs-12">
+                                                            <label for="edtUfNota">Estado*:</label>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-xs-12 campoValidar">
+                                                            <select name="edtUfNota" id="edtUfNota" class="form-control" onblur="liberaBtn(this,'altCliente')">
+                                                                <option value="">Selecione</option>
+                                                                <option value="AC" >AC</option>
+                                                                <option value="AL" >AL</option>
+                                                                <option value="AP" >AP</option>
+                                                                <option value="AM" >AM</option>
+                                                                <option value="BA" >BA</option>
+                                                                <option value="CE" >CE</option>
+                                                                <option value="DF" >DF</option>
+                                                                <option value="ES" >ES</option>
+                                                                <option value="GO" >GO</option>
+                                                                <option value="MA" >MA</option>
+                                                                <option value="MT" >MT</option>
+                                                                <option value="MS" >MS</option>
+                                                                <option value="MG" >MG</option>
+                                                                <option value="PA" >PA</option>
+                                                                <option value="PB" >PB</option>
+                                                                <option value="PR" >PR</option>
+                                                                <option value="PE" >PE</option>
+                                                                <option value="PI" >PI</option>
+                                                                <option value="RJ" >RJ</option>
+                                                                <option value="RN" >RN</option>
+                                                                <option value="RS" >RS</option>
+                                                                <option value="RO" >RO</option>
+                                                                <option value="RR" >RR</option>
+                                                                <option value="SC" >SC</option>
+                                                                <option value="SP" >SP</option>
+                                                                <option value="SE" >SE</option>
+                                                                <option value="TO" >TO</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row form-group">
+                                                        <div class="col-lg-1 col-md-1 col-xs-12">
+                                                            <label for="edtFoneNota">Telefone*:</label>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-xs-12 campoValidar">
+                                                            <input type="text" class="form-control" name="edtFoneNota" id="edtFoneNota" onkeypress="formatar(this,'fone')" onblur="formatarBlur(this,'fone');"/>
+                                                        </div>
+                                                        <div class="col-lg-1 col-md-1 col-xs-12">
+                                                            <label for="edtCelularNota">Celular:</label>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-xs-12 campoValidar">
+                                                            <input type="text" class="form-control" name="edtCelularNota" id="edtCelularNota" onkeypress="formatar(this,'celular')" onblur="formatarBlur(this,'celular');"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row form-group">
+                                                        <div class="col-lg-1 col-md-1 col-xs-1">
+                                                            <label for="edtEmailNota">Email*:</label>
+                                                        </div>
+                                                        <div class="col-lg-5 col-md-5 col-xs-1 campoValidar">
+                                                            <input type="text" class="form-control" name="edtEmailNota" id="edtEmailNota" " />
+                                                        </div>
+
+                                                        <div class="col-lg-1 col-md-1 col-xs-1">
+                                                            <label for="edtIeNota">I.E.* : </label>
+                                                        </div>
+                                                        <div class="col-lg-5 col-md-5 col-xs-5 campoValidar">
+                                                            <input type="text" class="form-control" name="edtIeNota" id="edtIeNota"/>
+                                                            <br/><input type="checkbox" name="edtIeIsenta" id="edtIeIsenta" value="isenta" onclick="if ($('#edtIeIsenta').prop('checked')) $('#edtIeNota').prop('disabled', true); else $('#edtIeNota').prop('disabled', false);     "/> <label for="edtIeIsenta">Isenta</label>
+                                                        </div>
+
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -648,7 +806,7 @@
                     },
                     edtBairroPjVendaInterna: "required",
                     edtEnderecoVendaInternaPj: "required",
-                    eedtCidadePjVendaInterna: "required",
+                    edtCidadePjVendaInterna: "required",
                     edtNumeroVendaInterna: "required",
                     edtUfVendaInterna: "required",
                     edtFone2PjVendaInterna: {
@@ -661,10 +819,6 @@
                     edtEmailPjVendaInterna: {
                         required: true,
                         email: true,
-/*
-                        emailSerama: true,
-                        emailGrupoSerama:true
-*/
                     }
                 },
                 errorElement: "em",
@@ -707,11 +861,56 @@
                 edtEmailRepresentanteVendaInterna: {
                     required: true,
                     email: true,
-/*
-                    emailSerama: true,
-                    emailGrupoSerama:true
-*/
                 }
+            },
+            errorElement: "em",
+            errorPlacement: function ( error, element ) {
+                // Add the `help-block` class to the error element
+                error.addClass( "help-block" );
+                error.insertAfter( element );
+            },
+            highlight: function ( element, errorClass, validClass ) {
+                $( element ).parents( ".campoValidar" ).addClass( "has-error" ).removeClass( "has-success" );
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $( element ).parents( ".campoValidar" ).addClass( "has-success" ).removeClass( "has-error" );
+            }
+        });
+
+
+        $("#frmClienteNota").validate({
+            rules: {
+                edtIeNota: {
+                    required:false,
+                    number: true,
+                    IECliente:true
+                },
+                edtDocumentoNota: {
+                    required:true,
+                },
+                edtClienteNota: "required",
+                edtCepNota: {
+                    required:true,
+                    cep: true
+                },
+                edtFoneNota: {
+                    required:true,
+                    telefone:true,
+                },
+                edtBairroNota: "required",
+                edtEnderecoNota: "required",
+                edtCidadeNota: "required",
+                edtNumeroNota: "required",
+                edtUfNota: "required",
+                edtCelularNota: {
+                    required: false,
+                    celular: true
+                },
+                edtEmailNota: {
+                    required:true,
+                    email:true
+                }
+
             },
             errorElement: "em",
             errorPlacement: function ( error, element ) {
@@ -730,10 +929,10 @@
         $('#btnAvancar1').click(function () {
             var pessoaTipo = $("input[name='tipoPessoa']:checked").val();
             if (pessoaTipo == "pf") {
-                if ( ($('#frmRepresentanteLegal').valid()) && ($('#frmEscolhaPessoaFisica').valid()) )
+                if ( ($('#frmRepresentanteLegal').valid()) && ($('#frmEscolhaPessoaFisica').valid()) && ($("#frmClienteNota").valid()) )
                     consultarCertificadosVendaInterna();
             } else if (pessoaTipo == 'pj') {
-                if (($('#frmDadosPessoaJuridica').valid()) && ($('#frmRepresentanteLegal').valid()) && ($("#frmEscolhaPessoaJuridica").valid()))
+                if (($('#frmDadosPessoaJuridica').valid()) && ($('#frmRepresentanteLegal').valid()) && ($("#frmEscolhaPessoaJuridica").valid()) && ($("#frmClienteNota").valid()) )
                     consultarCertificadosVendaInterna();
             }
         });

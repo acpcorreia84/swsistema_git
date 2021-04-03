@@ -100,6 +100,170 @@ if ($funcao == 'salvar_comprovante_pagamento') salvarComprovantePagamento();
 
 if ($funcao == 'carregarProdutoSelecionado') carregarProdutoSelecionado();
 
+if ($funcao == 'gerar_protocolo_api') gerarProtocoloApi();
+if ($funcao == 'inserir_protocolo_hope') inserirProtocoloHope();
+
+function inserirProtocoloHope() {
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/novaApi.php';
+    /*CADASTRO DO CLIENTE NOVO*/
+    try {
+        $con = Propel::getConnection(CertificadoPeer::DATABASE_NAME);
+        $con->beginTransaction();
+
+        $usuarioLogado = ControleAcesso::getUsuarioLogado();
+        $certificado = CertificadoPeer::retrieveByPK($_POST['certificado_id']);
+        $produto = $certificado->getProduto();
+
+        if ($certificado->getProtocolo()) {
+            $resultadoHope = inserirHope($certificado->getProtocolo(), $produto->getTipoEmissao());
+
+            if ($resultadoHope['mensagemApi'] != '') {
+                throw new Exception('Erro ao inserir o certificado no HOPE:' . $resultadoHope['mensagemApi']);
+                echo json_encode(array('mensagem'=>'Erro', 'mensagemErro'=>'Erro ao inserir o certificado no HOPE:' . $resultadoHope['mensagemApi']));
+                exit;
+            } else {
+                $certSitHope = new CertificadoSituacao();
+                $certSitHope->setCertificadoId($certificado->getId());
+                $certSitHope->setUsuarioId($usuarioLogado->getId());
+                $certSitHope->setComentario('Depois de gerado, o protocolo <b>' . $certificado->getProtocolo() . '</b> foi inserido com sucesso no HOPE para emissao. URL: ' . $resultadoHope['url']);
+                $certSitHope->setSituacaoId(63);
+                $certSitHope->setData(date("Y-m-d H:i:s"));
+                $certSitHope->save();
+                $mensagemSucesso = 'Protocolo inserido no hope com sucesso!';
+                $certificado->setUrlDocumentacao($resultadoHope['url']);
+                $certificado->setInseriuHope(1);
+            }
+        }
+        $certificado->save();
+
+        /*FIM DO CADASTRO DO CERTIFICADO*/
+
+
+        $con->commit();
+
+        echo json_encode(array('mensagem'=>'Ok'));
+
+    } catch(Exception $e){
+        $con->rollBack();
+    }
+
+
+}
+function gerarProtocoloApi() {
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/novaApi.php';
+    /*CADASTRO DO CLIENTE NOVO*/
+    try {
+        $con = Propel::getConnection(CertificadoPeer::DATABASE_NAME);
+        $con->beginTransaction();
+
+        $certificado = CertificadoPeer::retrieveByPK($_POST['idCertificado']);
+        $certificadoNotas = $certificado->getCertificadoNotas();
+        if ($certificadoNotas)
+            $certificadoNota = $certificadoNotas[0];
+        $cliente = $certificado->getCliente();
+        $responsavel = $cliente->getResponsavel();
+        $produtoNovo = $certificado->getProduto();
+
+        /*
+        * GERACAO DE PROTOCOLO NOVA API
+        * */
+
+        $clienteNota = $certificadoNota->getSacado();
+        $documentoNota = removeTracoPontoBarra($certificadoNota->getCpfCnpj());
+        $emailNota = $certificadoNota->getEmail();
+        $enderecoNota = $certificadoNota->getEndereco();
+        $cepNota = removeTracoPontoBarra($certificadoNota->getCep());
+        $bairroNota = $certificadoNota->getBairro();
+        $numeroNota = $certificadoNota->getNumero();
+        $estadoNota = $certificadoNota->getUf();
+        $cidadeNota = $certificadoNota->getCidade();
+        $ieNota = $certificadoNota->getIe();
+        $tipoProduto = $produtoNovo->getTipoEmissao();
+
+        if ($clienteNota =='' || $documentoNota=='' ||
+                    $bairroNota == ''|| $cepNota=='' || $cidadeNota=='' || $emailNota ==''|| $enderecoNota=='' || $numeroNota ==''||
+                    $estadoNota=='' ) {
+            echo json_encode(array('mensagem'=>'erro', 'mensagemErro'=> 'Erro; Est&aacute; faltando informar algum dado da nota fiscal eletr&ocirc;nica!'));
+        }
+
+
+        if ($cliente->getCelular()) {
+            $telefoneCliente = retornaCelularDDD($cliente->getCelular());
+        } elseif ($cliente->getFone1()) {
+            $telefoneCliente = retornaTelefoneDDD($cliente->getFone1());
+        } else {
+            $telefoneCliente = retornaTelefoneDDD($cliente->getFone2());
+        }
+
+        if ($cliente->getPessoaTipo() == 'F') {
+
+            if ($produtoNovo->getCodigo()) {
+                $resultado = gerarProtocoloPfNovo(
+                    $produtoNovo->getCodigo(), $cliente->getNomeFantasia(), removeTracoPontoBarra($cliente->getCpfCnpj()), $cliente->getNascimento('Y-m-d'),
+                    $telefoneCliente['ddd'], $telefoneCliente['fone'], $cliente->getEmail(), $cliente->getEndereco(), removeTracoPontoBarra($cliente->getCep()),
+                    $cliente->getBairro(), $cliente->getNumero(), $cliente->getUf(), $cliente->getCidade(), $clienteNota, $documentoNota,
+                    $bairroNota, $cepNota, $cidadeNota, $emailNota, $enderecoNota, $numeroNota,
+                    $estadoNota, $ieNota, $tipoProduto, 0, ''
+                );
+                if ($resultado["protocolo"] !== 'erro') {
+                    $certificado->setProtocolo($resultado['protocolo']);
+                }
+                else {
+                    json_encode(array('mensagem'=>'erro', 'mensagemErro'=> $resultado['CustomErrorCode'] . ' - ' . $resultado['mensagem']));
+                    echo $resultado['payload'];
+                    throw new Exception($resultado['CustomErrorCode'] . ' - ' . $resultado['mensagem']);
+                }
+            }
+        } else {
+            if ($responsavel->getCelular()) {
+                $telefoneResponsavel = retornaCelularDDD($responsavel->getCelular());
+            } elseif ($responsavel->getFone1()) {
+                $telefoneResponsavel = retornaTelefoneDDD($responsavel->getFone1());
+            } else {
+                $telefoneResponsavel = retornaTelefoneDDD($responsavel->getFone2());
+            }
+            if ($produtoNovo->getCodigo()) {
+                $resultado = gerarProtocoloPjNovo(
+                    $produtoNovo->getCodigo(), $cliente->getRazaoSocial(), $cliente->getNomeFantasia(), $responsavel->getNome(), removeTracoPontoBarra($cliente->getCpfCnpj()),
+                    $responsavel->getCpf(), $responsavel->getNascimento('Y-m-d'),
+                    $responsavel->getEndereco(), removeTracoPontoBarra($responsavel->getCep()),
+                    $responsavel->getBairro(), $responsavel->getNumero(), $responsavel->getUf(), $responsavel->getCidade(),
+                    $telefoneResponsavel['ddd'], $telefoneResponsavel['fone'], $responsavel->getEmail(),
+                    $telefoneCliente['ddd'], $telefoneCliente['fone'], $responsavel->getEmail(), $cliente->getEndereco(), removeTracoPontoBarra($cliente->getCep()),
+                    $cliente->getBairro(), $cliente->getNumero(), $cliente->getUf(), $cliente->getCidade(), $clienteNota, $documentoNota,
+                    $bairroNota, $cepNota, $cidadeNota, $emailNota, $enderecoNota, $numeroNota,
+                    $estadoNota, $ieNota, $tipoProduto, 0 ,''
+                );
+
+                if ($resultado["protocolo"] !== 'erro') {
+                    $certificado->setProtocolo($resultado['protocolo']);
+                }
+                else {
+                    echo $resultado['payload'];
+                    json_encode(array('mensagem'=>'erro', 'mensagemErro'=> $resultado['CustomErrorCode'] . ' - ' . $resultado['mensagem']));
+                    throw new Exception($resultado['CustomErrorCode'] . ' - ' . $resultado['mensagem']);
+                }
+            }
+
+        }
+
+        /*
+         * FIM DA GERACAO DO PROTOCOLO
+         * */
+
+        $certificado->save();
+
+        /*FIM DO CADASTRO DO CERTIFICADO*/
+
+
+        $con->commit();
+
+        echo json_encode(array('mensagem'=>'Ok'));
+
+    } catch(Exception $e){
+        $con->rollBack();
+    }
+}
 
 function carregarModalVincularContador() {
     try {
@@ -1039,12 +1203,46 @@ function alterar_cliente($certificado_id){
 	}
 };
 function informarPagamentoExtornoCertificado(){
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/novaApi.php';
     try {
         $usuario = ControleAcesso::getUsuarioLogado();
         $certificado = CertificadoPeer::retrieveByPK($_POST['certificado_id']);
+        $produto = $certificado->getProduto();
 
         if ($_POST['acao'] == 'pagar') {
-            $mensagemSucesso = 'Informe de pagamento do certificado realizado com sucesso!';
+            /*
+             * SE O TIPO DE EMISSAO FOR RENOVACAO OU VIDEO CONFERENCIA E PRECISO INSERIR NO HOPE
+             * */
+            $mensagemSucesso = 'Informe de pagamento realizado com sucesso!';
+            if ($produto->getTipoEmissao()==3 || $produto->getTipoEmissao()==2) {
+                /*
+                 * SO INSERE NO HOPE SE JA TIVER PROTOCOLO
+                 * */
+                if ($certificado->getProtocolo()) {
+                    $resultadoHope = inserirHope($certificado->getProtocolo(), $produto->getTipoEmissao());
+
+                    if ($resultadoHope['mensagemApi'] != '') {
+                        throw new Exception('Erro ao inserir o certificado no HOPE:' . $resultadoHope['mensagemApi']);
+                        echo json_encode(array('mensagem'=>'Erro', 'mensagemErro'=>'Erro ao inserir o certificado no HOPE:' . $resultadoHope['mensagemApi']));
+                        exit;
+                    } else {
+                        $certSitHope = new CertificadoSituacao();
+                        $certSitHope->setCertificadoId($certificado->getId());
+                        $certSitHope->setUsuarioId($usuario->getId());
+                        $certSitHope->setComentario('O protocolo <b>' . $certificado->getProtocolo() . '</b> foi inserido com sucesso no HOPE para emissao. URL: ' . $resultadoHope['url']);
+                        $certSitHope->setSituacaoId(63);
+                        $certSitHope->setData(date("Y-m-d H:i:s"));
+                        $certSitHope->save();
+                        $mensagemSucesso = 'Informe de pagamento realizado e protocolo inserido no HOPE para emissao com sucesso!';
+                        $certificado->setUrlDocumentacao($resultadoHope['url']);
+                        $certificado->setInseriuHope(1);
+                    }
+                }
+            }
+
+
+
+
             $certificado->setDataPagamento(date('Y-m-d H:i:s'));
 
             $certSit = new CertificadoSituacao();
@@ -1083,10 +1281,11 @@ function informarPagamentoExtornoCertificado(){
 
         $certSit->save();
         $certificado->save();
-        echo json_encode(array('mensagem'=>'Sucesso', 'mensagemSucesso'=>$mensagemSucesso));
+        echo trim(json_encode(array('mensagem'=>'Sucesso', 'mensagemSucesso'=>$mensagemSucesso)));
     }catch (Exception $e){
-        erroEmail($e->getMessage(),"Erro na funcao de salvar a informacao de pagamento");
-        echo $e->getMessage();
+        //erroEmail($e->getMessage(),"Erro na funcao de salvar a informacao de pagamento");
+        echo 'entrou aqui';
+        echo json_encode($e->getMessage());
     }
 
 };
@@ -1697,7 +1896,7 @@ function detalharCertificado(){
         }
 
         if ($certificado->getFormaPagamento())
-        	$formaPagamento = utf8_encode($certificado->getFormaPagamento()->getNome());
+        	$formaPagamento = $certificado->getFormaPagamento()->getNome();
 
         if ($certificado->getDataInicioValidade() && $certificado->getDataFimValidade()) {
             $validade = 'V&aacute;lido de '. $certificado->getDataInicioValidade('d/m/Y') . ' at&eacute; ' . $certificado->getDataFimValidade('d/m/Y');
@@ -1793,17 +1992,109 @@ function detalharCertificado(){
             array('nome'=>'Tipo'), array('nome'=>'Telefone'), array('nome'=>'Celular'), array('nome'=>'E-mail')
         );
 
+
+        /*
+         * ESQUEMA DE PERMISSOES
+         * */
+
+        $permissoes = array();
+
+        if (ControleAcesso::permitido('telaCertificado.php', 'altConsCd', $usuarioLogado->getPerfilId()))
+            $permissoes['permiteAlterarConsultorCertificado'] = 'sim';
+        else
+            $permissoes['permiteAlterarConsultorCertificado'] = 'nao';
+
+        if (ControleAcesso::permitido('telaContaReceber.php', 'acessar', $usuarioLogado->getPerfilId()))
+            $permissoes['permiteBaixarContaReceber'] = 'sim';
+        else
+            $permissoes['permiteBaixarContaReceber'] = 'nao';
+
+        if (ControleAcesso::permitido('apagarProtocolo', 'apagarProt', $usuarioLogado->getPerfilId()))
+            $permissoes['permiteApagarProtocolo'] = 'sim';
+        else
+            $permissoes['permiteApagarProtocolo'] = 'nao';
+
+        if (ControleAcesso::permitido('telaCertificado.php', 'apagar', $usuarioLogado->getPerfilId()))
+            $permissoes['permiteApagarCertificado'] = 'sim';
+        else
+            $permissoes['permiteApagarCertificado'] = 'nao';
+        /*
+         * PERMITE INSERIR DESCONTO MESMO APOS VALIDACAO APENAS PARA O PERFIL ALTA GESTAO
+         * */
+        if ($usuarioLogado->getPerfilId() == 4) {
+            $permissoes['permiteInserirDesconto'] = 'sim';
+        }
+
+        /*
+         * CHECA SE TEM LIMITE DE CREDITO PARA GERAR O PROTOCOLO DESDE 01-05-2017
+         * */
+        $cCertificadosEmAbertoUsuario = new Criteria();
+
+        /*
+         * SE NAO FOR NEM DIRETOR NEM FINANCEIRO CHECA OS USUARIOS
+         * */
+        $urlHope = '---';
+        $permissoes['permiteGerarProtocolo'] = 'sim';
+        $permissoes['permiteVisualizarProtocolo'] = 'sim';
+        if (  ($usuarioLogado->getPerfilId() != 4) && ($usuarioLogado->getPerfilId()!=11)) {
+
+            $cCertificadosEmAbertoUsuario->add(CertificadoPeer::DATA_VALIDACAO, '2017-05-01 00:00:00', Criteria::GREATER_EQUAL);
+
+            $cCertificadosEmAbertoUsuario->add(CertificadoPeer::CONFIRMACAO_VALIDACAO, array(1,2), Criteria::IN);
+            $cCertificadosEmAbertoUsuario->add(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, null, Criteria::ISNULL);
+            $cCertificadosEmAbertoUsuario->addOr(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, '0000-00-00 00:00:00');
+            $cCertificadosEmAbertoUsuario->add(CertificadoPeer::USUARIO_ID, $usuarioLogado->getId());
+            $qtdCertificadosEmAberto = CertificadoPeer::doCount($cCertificadosEmAbertoUsuario);
+            /*
+            * SE O LIMITE DE CREDITO FOR MENOR DO QUE A QUANTIDADE DE CERTIFICADOS EM ABERTO NAO PERMITE
+            * SE NAO PERMITE GERAR
+            * */
+
+            if ($qtdCertificadosEmAberto >= $usuarioLogado->getLimiteQuantidade() ) {
+                $permissoes['permiteVisualizarProtocolo'] = 'nao';
+                $permissoes['permiteGerarProtocolo'] = 'nao';
+                $mensagemErroGerarProtocolo = utf8_encode('Voc&ecirc; possui '. $qtdCertificadosEmAberto . ' certificados em aberto. Porem seu limite e de apenas ' . $usuarioLogado->getLimiteQuantidade());
+                $urlHope = $certificado->getUrlDocumentacao();
+
+            } else {
+                $urlHope = $certificado->getUrlDocumentacao();
+                $produto = $certificado->getProduto();
+                if ($certificado->getProtocolo() && $certificado->getDataPagamento() && (!$certificado->getUrlDocumentacao()) && (($produto->getTipoEmissao() == 2) || ($produto->getTipoEmissao() == 3)) ) {
+                    $btnInserirHope = '<button id="btnInserirProtocoloHope" class="btn btn-primary" title="Gerar URL Hope" onclick="inserirProtocoloHope()"><i class="fa fa-link" aria-hidden="true"></i></button>';
+                }
+                else
+                    $btnInserirHope = '';
+            }
+
+        } else {
+            $urlHope = $certificado->getUrlDocumentacao();
+            $produto = $certificado->getProduto();
+            if ($certificado->getProtocolo() && $certificado->getDataPagamento() && (!$certificado->getUrlDocumentacao()) && (($produto->getTipoEmissao() == 2) || ($produto->getTipoEmissao() == 3)) ) {
+                $btnInserirHope = '<button id="btnInserirProtocoloHope" class="btn btn-primary" title="Gerar URL Hope" onclick="inserirProtocoloHope()"><i class="fa fa-link" aria-hidden="true"></i></button>';
+            }
+            else
+                $btnInserirHope = '';
+        }
+
+
+        /*
+         * PERMITE INSERIR DESCONTO MESMO APOS VALIDACAO APENAS PARA O PERFIL ALTA GESTAO
+         * */
+        if ($usuarioLogado->getPerfilId() == 4) {
+            $permissoes['permiteAlterarProduto'] = 'sim';
+        }
+
         $dadosCertificado = array(
             'id'=>$idCertificado, 'clienteId'=>$idCliente, 'nomeContador'=>utf8_encode($contador), 'nomeCliente'=>utf8_encode($nomeCliente), 'protocolo'=>$protocolo,
             'nomeProduto'=>$certificado->getProduto()->getId() .' - ' .  utf8_encode($nomeProduto), 'precoProduto'=>formataMoeda($preco), 'desconto'=>formataMoeda($desconto), 'valorTotal'=>formataMoeda($valor),
-            'dataValidacaoCertificado'=>utf8_encode($dataValidacaoCertificado), 'dataCompra'=>$certificado->getDataCompra('d/m/Y'),'formaPagamento'=>$formaPagamento,
+            'dataValidacaoCertificado'=>utf8_encode($dataValidacaoCertificado), 'dataCompra'=>$certificado->getDataCompra('d/m/Y H:m:s'),'formaPagamento'=>$formaPagamento,
             'formaPagamentoId'=>$certificado->getFormaPagamentoId(),'revogado'=>$certificadoRevogado, 'dataPagamento'=>$dataPagamento,
             'consultor'=>utf8_encode($certificado->getUsuario()->getId() . ' - '. $certificado->getUsuario()->getNome()), 'email'=>$email, 'valorTotalSemFormatacao'=>$valor,
             'agr'=>($certificado->getUsuarioValidouId())?utf8_encode($certificado->getUsuarioValidouId() .' - ' . $certificado->getUsuarioRelatedByUsuarioValidouId()->getNome()):'---',
             'validade'=>$validade, 'contatosCliente'=>json_encode($contatosCliente), 'colunasContatos'=>json_encode($colunasContatos),
             'documento'=>removeTracoPontoBarra($cliente->getCpfCnpj()), 'logradouro'=>utf8_encode($cliente->getEndereco()), 'numero'=>$cliente->getNumero(),
 			'bairro'=>utf8_encode($cliente->getBairro()),'complemento'=>utf8_encode($cliente->getComplemento()),'cep'=>removeTracoPontoBarra($cliente->getCep()), 'cidade'=>utf8_encode($cliente->getCidade())  ,'uf'=>$cliente->getUf(),
-            'precoProdutoSemFormatacao'=>$valor, 'codigoProdutoSafeweb'=>$certificado->getProduto()->getProdutoId()
+            'precoProdutoSemFormatacao'=>$valor, 'codigoProdutoSafeweb'=>$certificado->getProduto()->getProdutoId(), 'urlHope'=> $urlHope
         );
         //var_dump($dadosCertificado);
 
@@ -1832,8 +2123,8 @@ function detalharCertificado(){
 
         $informacoesRecibo = array(
             'id'=>$certificado->getId(),'cliente'=>utf8_encode($certificado->getCliente()->getId().' - '.$nomeCliente),
-            'formaPagamento'=>utf8_encode( $certificado->getFormaPagamento()->getNome()),'documento'=>$cliente->getCpfCnpj(),
-            'consultor'=>utf8_encode($certificado->getUsuario()->getNome()),'contato'=>$telefone,
+            'formaPagamento'=>$certificado->getFormaPagamento()->getNome(),'documento'=>$cliente->getCpfCnpj(),
+            'consultor'=>$certificado->getUsuario()->getNome(),'contato'=>$telefone,
             'dataCompra'=>$certificado->getDataCompra('d/m/Y'),'email'=>$cliente->getEmail(),
             'valor'=>formataMoeda($certificado->getProduto()->getPreco() - $certificado->getDesconto()),
             'dataPagamento'=>$dataPagamento,
@@ -1843,6 +2134,10 @@ function detalharCertificado(){
 
         $_SESSION['informacoesRecibo'] = serialize($informacoesRecibo);
 
+
+
+
+
         /*
          * MONTANDO INFORMACOES DE PAGAMENTOS
          * */
@@ -1850,7 +2145,6 @@ function detalharCertificado(){
         /*
          * SE A FORMA DE PAGAMENTO FOR BOLETO, LISTA TODOS OS BOLETOS EMITIDOS
          * */
-/////////////////////////////PAREI AQUI////////////////////////
         if($certificado->getFormaPagamentoId() ==1){
             $cBoleto = new Criteria();
             $cBoleto->add(BoletoPeer::CERTIFICADO_ID, $_POST['certificado_id']);
@@ -1867,39 +2161,44 @@ function detalharCertificado(){
                 }elseif ($boleto->getDataPagamento()) {
                     $dataConfirmacaoPagamento =$boleto->getDataPagamento('d/m/Y');
                     $situacaoPamento="<i class='fa fa-circle text-success'></i>";
-                    $btnPagarExtornar = '<input type="checkbox" id="chkPagarExtornarBoleto'.$boleto->getId().'" checked="checked" data-onstyle="danger" data-offstyle="success">
-                <script>
-                $(function() {
-                    $("#chkPagarExtornarBoleto'.$boleto->getId().'").bootstrapToggle({
-                        on: "Extornar",
-                        off: "Informar Pagto."
-                    });
-                    
-                    $("#chkPagarExtornarBoleto'.$boleto->getId().'").change(function() {                        
-                            informarPagamentoCertificado(\'extornar\', '.$boleto->getId().');
-                    });
-                });
-                </script>';
 
+                        $btnPagarExtornar = '<input type="checkbox" id="chkPagarExtornarBoleto'.$boleto->getId().'" checked="checked" data-onstyle="danger" data-offstyle="success">
+                    <script>
+                    $(function() {
+                        $("#chkPagarExtornarBoleto'.$boleto->getId().'").bootstrapToggle({
+                            on: "Extornar",
+                            off: "Informar Pagto."
+                        });
+                        
+                        $("#chkPagarExtornarBoleto'.$boleto->getId().'").change(function() {                        
+                                informarPagamentoCertificado(\'extornar\', '.$boleto->getId().');
+                        });
+                    });
+                    </script>';
                 }
                 else{
                     $dataConfirmacaoPagamento ='---';
                     $situacaoPamento="<i class='fa fa-circle' style='color: red'></i>";
-                    $btnPagarExtornar = '<input type="checkbox" id="chkPagarExtornarBoleto'.$boleto->getId().'" data-onstyle="danger" data-offstyle="success">
-                <script>
-                $(function() {
-                    $("#chkPagarExtornarBoleto'.$boleto->getId().'").bootstrapToggle({
-                        on: "Extornar",
-                        off: "Informar Pagto."
-                    });
-                    
-                    $("#chkPagarExtornarBoleto'.$boleto->getId().'").change(function() {
-                        if ($(this).prop("checked"))
-                            informarPagamentoCertificado(\'pagar\', '.$boleto->getId().');
-                    });
-                });
-                </script>';
 
+                    if ($permissoes['permiteGerarProtocolo'] == 'nao')
+                        $btnPagarExtornar = 'Voc&ecirc; possui certificados em aberto. Por favor, entre em contato com a ger&ecirc;ncia';
+                    else {
+
+                        $btnPagarExtornar = '<input type="checkbox" id="chkPagarExtornarBoleto' . $boleto->getId() . '" data-onstyle="danger" data-offstyle="success">
+                        <script>
+                        $(function() {
+                            $("#chkPagarExtornarBoleto' . $boleto->getId() . '").bootstrapToggle({
+                                on: "Extornar",
+                                off: "Informar Pagto."
+                            });
+                            
+                            $("#chkPagarExtornarBoleto' . $boleto->getId() . '").change(function() {
+                                if ($(this).prop("checked"))
+                                    informarPagamentoCertificado(\'pagar\', ' . $boleto->getId() . ');
+                            });
+                        });
+                        </script>';
+                    }
                 }
 
                 $consultorBoleto = '-';
@@ -1907,7 +2206,7 @@ function detalharCertificado(){
                     $consultorBoleto = utf8_encode($boleto->getUsuario()->getNome());
                 $boletos[] =  array('Id'=>$boleto->getId(),'Tid'=>$boleto->getTid(), utf8_encode('Situação')=> $situacaoPamento,
                     'Venc.'=>$boleto->getVencimento('d/m/Y'),'Dt.Pagt.'=> $dataConfirmacaoPagamento, 'Valor'=>formataMoeda($boleto->getValor()),
-                    'Forma'=> utf8_encode($certificado->getFormaPagamento()->getNome()) . ' <a href="'.$boleto->getUrlBoleto().'" target="_blank" title="Visualizar Boleto"><i class="fa fa-barcode" aria-hidden="true"></i></a>',
+                    'Forma'=> $certificado->getFormaPagamento()->getNome() . ' <a href="'.$boleto->getUrlBoleto().'" target="_blank" title="Visualizar Boleto"><i class="fa fa-barcode" aria-hidden="true"></i></a>',
                     'Cons.'=>$consultorBoleto,
                     utf8_encode('Ação')=>$btnPagarExtornar
                 );
@@ -1966,43 +2265,48 @@ function detalharCertificado(){
             }elseif ($certificado->getDataPagamento()) {
                 $dataConfirmacaoPagamento =$certificado->getDataPagamento('d/m/Y');
                 $situacaoPamento="<i class='fa fa-circle text-success'></i>";
-                $btnPagarExtornar = '<input type="checkbox" id="chkPagarExtornarPagamento'.$certificado->getId().'" checked="checked" data-onstyle="danger" data-offstyle="success">
-                <script>
-                $(function() {
-                    $("#chkPagarExtornarPagamento'.$certificado->getId().'").bootstrapToggle({
-                        on: "Extornar",
-                        off: "Informar Pagto."
+                    $btnPagarExtornar = '<input type="checkbox" id="chkPagarExtornarPagamento' . $certificado->getId() . '" checked="checked" data-onstyle="danger" data-offstyle="success">
+                    <script>
+                    $(function() {
+                        $("#chkPagarExtornarPagamento' . $certificado->getId() . '").bootstrapToggle({
+                            on: "Extornar",
+                            off: "Informar Pagto."
+                        });
+                        $("#chkPagarExtornarPagamento' . $certificado->getId() . '").change(function() {
+                            informarPagamentoCertificado(\'extornar\');
+                        });
                     });
-                    $("#chkPagarExtornarPagamento'.$certificado->getId().'").change(function() {
-                        informarPagamentoCertificado(\'extornar\');
-                    });
-                });
-                </script>';
+                    </script>';
 
             }
             else{
                 $dataConfirmacaoPagamento ='---';
                 $situacaoPamento="<i class='fa fa-circle' style='color: red'></i>";
-                $btnPagarExtornar = '<input type="checkbox" id="chkPagarExtornarPagamento'.$certificado->getId().'" data-onstyle="danger" data-offstyle="success">
-                <script>
-                $(function() {
-                    $("#chkPagarExtornarPagamento'.$certificado->getId().'").bootstrapToggle({
-                        on: "Extornar",
-                        off: "Informar Pagto."
-                    });
-                    
-                    $("#chkPagarExtornarPagamento'.$certificado->getId().'").change(function() {
-                        if ($(this).prop("checked"))
-                            informarPagamentoCertificado(\'pagar\');
-                    });
-                });
-                </script>';
 
+                if ($permissoes['permiteGerarProtocolo'] == 'nao')
+                    $btnPagarExtornar = 'Voc&ecirc; possui certificados em aberto. Por favor, entre em contato com a ger&ecirc;ncia';
+                else {
+
+                    $btnPagarExtornar = '<input type="checkbox" id="chkPagarExtornarPagamento' . $certificado->getId() . '" data-onstyle="danger" data-offstyle="success">
+                    <script>
+                    $(function() {
+                        $("#chkPagarExtornarPagamento' . $certificado->getId() . '").bootstrapToggle({
+                            on: "Extornar",
+                            off: "Informar Pagto."
+                        });
+                        
+                        $("#chkPagarExtornarPagamento' . $certificado->getId() . '").change(function() {
+                            if ($(this).prop("checked"))
+                                informarPagamentoCertificado(\'pagar\');
+                        });
+                    });
+                    </script>';
+                }
             }
 
             $pagamento[] =  array(utf8_encode('Situação')=> $situacaoPamento,
                 'Dt.Pagt.'=> $dataConfirmacaoPagamento, 'Valor'=>formataMoeda($certificado->getProduto()->getPreco() - $certificado->getDesconto()),
-                'Forma'=> utf8_encode($certificado->getFormaPagamento()->getNome()),
+                'Forma'=> $certificado->getFormaPagamento()->getNome(),
                 utf8_encode('Ação')=>$btnInformarPagamento . ' '. $btnPagarExtornar
             );
             $colunas = array(
@@ -2025,7 +2329,6 @@ function detalharCertificado(){
         $cSituacao->add(CertificadoSituacaoPeer::CERTIFICADO_ID, $_POST['certificado_id']);
         $cSituacao->addDescendingOrderByColumn(CertificadoSituacaoPeer::DATA);
         $situacoesCertificado = $certificado->getCertificadoSituacaos($cSituacao);
-        /*$situacoes = CertificadoSituacaoPeer::doSelectJoinUsuario();*/
         $situacoes = array();
         foreach ($situacoesCertificado as $situacaoCertificado) {
             if ($situacaoCertificado->getUsuario()) $nomeUsuario = $situacaoCertificado->getUsuario()->getNome(); else $nomeUsuario = '-';
@@ -2047,74 +2350,11 @@ function detalharCertificado(){
          * FIM MONTAGEM INFORMACOES SITUACAO
          * */
 
-        $permissoes = array();
-
-        if (ControleAcesso::permitido('telaCertificado.php', 'altConsCd', $usuarioLogado->getPerfilId()))
-            $permissoes['permiteAlterarConsultorCertificado'] = 'sim';
-        else
-            $permissoes['permiteAlterarConsultorCertificado'] = 'nao';
-
-        if (ControleAcesso::permitido('telaContaReceber.php', 'acessar', $usuarioLogado->getPerfilId()))
-            $permissoes['permiteBaixarContaReceber'] = 'sim';
-        else
-            $permissoes['permiteBaixarContaReceber'] = 'nao';
-
-        if (ControleAcesso::permitido('apagarProtocolo', 'apagarProt', $usuarioLogado->getPerfilId()))
-            $permissoes['permiteApagarProtocolo'] = 'sim';
-        else
-            $permissoes['permiteApagarProtocolo'] = 'nao';
-
-        if (ControleAcesso::permitido('telaCertificado.php', 'apagar', $usuarioLogado->getPerfilId()))
-            $permissoes['permiteApagarCertificado'] = 'sim';
-        else
-            $permissoes['permiteApagarCertificado'] = 'nao';
-        /*
-         * PERMITE INSERIR DESCONTO MESMO APOS VALIDACAO APENAS PARA O PERFIL ALTA GESTAO
-         * */
-        if ($usuarioLogado->getPerfilId() == 4) {
-            $permissoes['permiteInserirDesconto'] = 'sim';
-        }
-
-        /*
-         * CHECA SE TEM LIMITE DE CREDITO PARA GERAR O PROTOCOLO DESDE 01-05-2017
-         * */
-        $cCertificadosEmAbertoUsuario = new Criteria();
-
-        /*
-         * SE NAO FOR NEM DIRETOR NEM FINANCEIRO CHECA OS USUARIOS
-         * */
-
-        $permissoes['permiteGerarProtocolo'] = 'sim';
-        if (  ($usuarioLogado->getPerfilId() != 4) && ($usuarioLogado->getPerfilId()!=11)) {
-
-            $cCertificadosEmAbertoUsuario->add(CertificadoPeer::DATA_VALIDACAO, '2017-05-01 00:00:00', Criteria::GREATER_EQUAL);
-
-            $cCertificadosEmAbertoUsuario->add(CertificadoPeer::CONFIRMACAO_VALIDACAO, array(1,2), Criteria::IN);
-            $cCertificadosEmAbertoUsuario->add(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, null, Criteria::ISNULL);
-            $cCertificadosEmAbertoUsuario->addOr(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, '0000-00-00 00:00:00');
-            $cCertificadosEmAbertoUsuario->add(CertificadoPeer::USUARIO_ID, $usuarioLogado->getId());
-            $qtdCertificadosEmAberto = CertificadoPeer::doCount($cCertificadosEmAbertoUsuario);
-            /*
-            * SE O LIMITE DE CREDITO FOR MENOR DO QUE A QUANTIDADE DE CERTIFICADOS EM ABERTO NAO PERMITE
-            * SE NAO PERMITE GERAR
-            * */
-            if ($qtdCertificadosEmAberto >= $usuarioLogado->getLimiteQuantidade() ) {
-                $permissoes['permiteGerarProtocolo'] = 'nao';
-                $mensagemErroGerarProtocolo = utf8_encode('Voc? possui '. $qtdCertificadosEmAberto . ' certificados em aberto. Por?m seu limite ? de apenas ' . $usuarioLogado->getLimiteQuantidade());
-            }
-        }
-
-
-        /*
-         * PERMITE INSERIR DESCONTO MESMO APOS VALIDACAO APENAS PARA O PERFIL ALTA GESTAO
-         * */
-        if ($usuarioLogado->getPerfilId() == 4) {
-            $permissoes['permiteAlterarProduto'] = 'sim';
-        }
 
         echo json_encode(
             array('mensagem'=>'Ok','dadosCertificado'=>json_encode($dadosCertificado), 'dadosPagamento'=>json_encode($dadosPagamento),
-                'dadosSituacoes'=>json_encode($dadosSituacoes), 'permissoes'=>json_encode($permissoes), 'mensagemErroGerarProtocolo'=>$mensagemErroGerarProtocolo
+                'dadosSituacoes'=>json_encode($dadosSituacoes), 'permissoes'=>json_encode($permissoes), 'mensagemErroGerarProtocolo'=>$mensagemErroGerarProtocolo,
+                'btnInserirHope' => $btnInserirHope
             )
         );
     }catch(Exception $e){
@@ -2194,7 +2434,7 @@ function vincula_contador(){
 };
 
 function finalizarVendaCertificado() {
-
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/novaApi.php';
     $usuarioLogadoRn = ControleAcesso::getUsuarioLogado();
     /*CADASTRO DO CLIENTE NOVO*/
     try {
@@ -2329,15 +2569,99 @@ function finalizarVendaCertificado() {
                 $mensagemErro .= $falha->getMessage() . '<br/>';
         }
 
-        $certificadoNovo->save();
 
+
+        /*
+        * GERACAO DE PROTOCOLO NOVA API
+        * */
+        $certificadoNota = new CertificadoNota();
+        $clienteNota = $_POST['clienteNota']; $certificadoNota->setSacado($clienteNota);
+        $documentoNota = removeTracoPontoBarra($_POST['documentoNota']); $certificadoNota->setCpfCnpj($_POST['documentoNota']);
+        $emailNota = $_POST['emailNota']; $certificadoNota->setEmail($emailNota);
+        $enderecoNota = $_POST['enderecoNota']; $certificadoNota->setEndereco($enderecoNota);
+        $cepNota = removeTracoPontoBarra($_POST['cepNota']); $certificadoNota->setCep($_POST['cepNota']);
+        $bairroNota = $_POST['bairroNota']; $certificadoNota->setBairro($bairroNota);
+        $numeroNota = $_POST['numeroNota']; $certificadoNota->setNumero($numeroNota);
+        $estadoNota = $_POST['estadoNota']; $certificadoNota->setUf($estadoNota);
+        $cidadeNota = $_POST['cidadeNota']; $certificadoNota->setCidade($cidadeNota);
+        $ieNota = $_POST['ieNota']; $certificadoNota->setIe($ieNota);
+        $tipoProduto = $produtoNovo->getTipoEmissao();
+        $certificadoNota->setPessoaTipo($_POST['clienteTipoNota']);
+
+        if ($cliente->getCelular()) {
+            $telefoneCliente = retornaCelularDDD($cliente->getCelular());
+        } elseif ($cliente->getFone1()) {
+            $telefoneCliente = retornaTelefoneDDD($cliente->getFone1());
+        } else {
+            $telefoneCliente = retornaTelefoneDDD($cliente->getFone2());
+        }
+        $certificadoNota->setFone1($telefoneCliente['ddd'] . ' ' .$telefoneCliente['fone']);
+
+        if ($cliente->getPessoaTipo() == 'F') {
+            if ($produtoNovo->getCodigo()) {
+                $resultado = gerarProtocoloPfNovo(
+                    $produtoNovo->getCodigo(), $cliente->getNomeFantasia(), removeTracoPontoBarra($cliente->getCpfCnpj()), $cliente->getNascimento('Y-m-d'),
+                    $telefoneCliente['ddd'], $telefoneCliente['fone'], $cliente->getEmail(), $cliente->getEndereco(), removeTracoPontoBarra($cliente->getCep()),
+                    $cliente->getBairro(), $cliente->getNumero(), $cliente->getUf(), $cliente->getCidade(), $clienteNota, $documentoNota,
+                    $bairroNota, $cepNota, $cidadeNota, $emailNota, $enderecoNota, $numeroNota,
+                    $estadoNota, $ieNota, $tipoProduto, 0, ''
+                );
+                if ($resultado["protocolo"] !== 'erro') {
+                    $certificadoNovo->setProtocolo($resultado['protocolo']);
+                }
+                else {
+                    echo 'Erro; ' . $resultado['CustomErrorCode'] . ' - ' . $resultado['mensagem'] . ';';
+                    echo $resultado['payload'];
+                    throw new Exception($resultado['CustomErrorCode'] . ' - ' . $resultado['mensagem']);
+                }
+            }
+        } else {
+            if ($responsavel->getCelular()) {
+                $telefoneResponsavel = retornaCelularDDD($responsavel->getCelular());
+            } elseif ($responsavel->getFone1()) {
+                $telefoneResponsavel = retornaTelefoneDDD($responsavel->getFone1());
+            } else {
+                $telefoneResponsavel = retornaTelefoneDDD($responsavel->getFone2());
+            }
+            $certificadoNota->setFone1($telefoneCliente['ddd'] . ' ' .$telefoneCliente['fone']);
+            if ($produtoNovo->getCodigo()) {
+                $resultado = gerarProtocoloPjNovo(
+                    $produtoNovo->getCodigo(), $cliente->getRazaoSocial(), $cliente->getNomeFantasia(), $responsavel->getNome(), removeTracoPontoBarra($cliente->getCpfCnpj()),
+                    $responsavel->getCpf(), $responsavel->getNascimento('Y-m-d'),
+                    $responsavel->getEndereco(), removeTracoPontoBarra($responsavel->getCep()),
+                    $responsavel->getBairro(), $responsavel->getNumero(), $responsavel->getUf(), $responsavel->getCidade(),
+                    $telefoneResponsavel['ddd'], $telefoneResponsavel['fone'], $responsavel->getEmail(),
+                    $telefoneCliente['ddd'], $telefoneCliente['fone'], $responsavel->getEmail(), $cliente->getEndereco(), removeTracoPontoBarra($cliente->getCep()),
+                    $cliente->getBairro(), $cliente->getNumero(), $cliente->getUf(), $cliente->getCidade(), $clienteNota, $documentoNota,
+                    $bairroNota, $cepNota, $cidadeNota, $emailNota, $enderecoNota, $numeroNota,
+                    $estadoNota, $ieNota, $tipoProduto, 0 ,''
+                );
+                if ($resultado["protocolo"] !== 'erro') {
+                    $certificadoNovo->setProtocolo($resultado['protocolo']);
+                }
+                else {
+                    echo 'Erro; ' . $resultado['CustomErrorCode'] . ' - ' . $resultado['mensagem'] . ';';
+                    echo $resultado['payload'];
+                    throw new Exception($resultado['CustomErrorCode'] . ' - ' . $resultado['mensagem']);
+                }
+            }
+
+        }
+
+        /*
+         * FIM DA GERACAO DO PROTOCOLO
+         * */
+
+        $certificadoNovo->save();
+        $certificadoNota->setCertificadoId($certificadoNovo->getId());
+        $certificadoNota->save();
 
         /*FIM DO CADASTRO DO CERTIFICADO*/
 
         /*INICIO CADASTRO PEDIDO, ITEM PEDIDO, SITUACAO E CONTAS A RECEBER*/
         $situacao = new CertificadoSituacao();
         $situacao->setSituacaoId(3);
-        $situacao->setComentario("Relizou pedido pelo ERP 3.0");
+        $situacao->setComentario("Relizou pedido pelo ERP 4.0 - nova integracao");
         $situacao->setCertificadoId($certificadoNovo->getId());
         $situacao->setData(date("Y-m-d H:i:s"));
         $situacao->setUsuarioId($usuarioLogadoRn->getId());
@@ -2416,19 +2740,14 @@ function finalizarVendaCertificado() {
 
         /*FIM CADASTRO PEDIDO, ITEM PEDIDO, SITUACAO E CONTAS A RECEBER*/
 
-
         $con->commit();
-        $resultado = "tudoOk";
+        $resultado = "tudoOk;";
         echo $resultado;
 
     } catch(Exception $e){
         $con->rollBack();
-        echo 'Erro;Aconteceu um erro na gravacao do pedido do certificado: '.$e->getMessage();
+        //echo 'Erro;Aconteceu um erro na gravacao do pedido do certificado: '.$e->getMessage();
     }
-
-
-
-
 
 }
 
@@ -2871,7 +3190,7 @@ function carregarCertificados() {
             $nomeCliente = ($certificado->getCliente()->getRazaoSocial() != '')?utf8_encode($certificado->getCliente()->getRazaoSocial()):utf8_encode($certificado->getCliente()->getNomeFantasia());
             $usuarioConsultor = $certificado->getUsuario()?$certificado->getUsuario()->getNome():'---';
             $usuarioAgr = (($certificado->getUsuarioValidouId())?$certificado->getUsuarioValidouId().'-'.utf8_encode($certificado->getUsuarioRelatedByUsuarioValidouId()->getNome()):'---');
-            $produto = ($certificado->getProduto()) ? utf8_encode($certificado->getProduto()->getNome()) : '---';
+            $produto = ($certificado->getProduto()) ? $certificado->getProduto()->getNome() : '---';
 
             if ($certificado->getDataConfirmacaoPagamento()) {
                 $dataPagamento = $certificado->getDataConfirmacaoPagamento('d/m/Y');
@@ -2928,7 +3247,7 @@ function carregarCertificados() {
                 'Cont.'=>$tipoCd.' '.(DiferencaEntreDatas(date('Y-m-d'), $certificado->getDataCompra('Y-m-d'))).'d',
                 'Pago'=>$situacaoPagamento,
                 'D.Pag.'=>$dataPagamento,
-                'Proto.'=> ($certificado->getProtocolo())?$certificado->getProtocolo():'-',
+                //'Proto.'=> ($certificado->getProtocolo())?$certificado->getProtocolo():'-',
                 'Cliente'=> $certificado->getCliente()->getId() . ' - '.$nomeCliente,
                 'Tipo'=>$produto,
                 'Consultor'=>utf8_encode($usuarioConsultor),
@@ -2955,19 +3274,19 @@ function carregarCertificados() {
 
         if (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']=='Vencimento')) {
             $colunas = array(
-                array('nome'=>' '), array('nome'=>'Cod.'),array('nome'=>'Cont.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Venc.'), array('nome'=>'Proto.'),
+                array('nome'=>' '), array('nome'=>'Cod.'),array('nome'=>'Cont.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Venc.'), /*array('nome'=>'Proto.'),*/
                 array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
             );
 
         } elseif (($_POST['filtros']['filtroTipoData']) && ($_POST['filtros']['filtroTipoData']==utf8_encode('Validação'))) {
             $colunas = array(
-                array('nome'=>' '), array('nome'=>'Cod.'),array('nome'=>'Cont.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Val.'), array('nome'=>'Proto.'),
+                array('nome'=>' '), array('nome'=>'Cod.'),array('nome'=>'Cont.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Val.'), /*array('nome'=>'Proto.'),*/
                 array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
             );
 
         } else {
             $colunas = array(
-                array('nome'=>' '), array('nome'=>'Cod.'),array('nome'=>'Cont.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Com.'), array('nome'=>'Proto.'),
+                array('nome'=>' '), array('nome'=>'Cod.'),array('nome'=>'Cont.'), array('nome'=>'Pago'),array('nome'=>'D.Pag.'), array('nome'=>'D.Com.'), /*array('nome'=>'Proto.'),*/
                 array('nome'=>'Cliente'), array('nome'=>'Tipo'), array('nome'=>'Consultor'), array('nome'=>'Tot'), array('nome'=>'.'), array('nome'=>utf8_encode('Ações'))
             );
         }
@@ -3012,7 +3331,7 @@ function carregarModalTrocarProdutos() {
         $produtosObj = ProdutoPeer::doSelect($cProdutos);
         $produtos = array();
         foreach ($produtosObj as $produto)
-            $produtos[] = array("id"=>$produto->getId(), "nome"=>utf8_encode($produto->getNome() ) . ' = '.formataMoeda($produto->getPreco()));
+            $produtos[] = array("id"=>$produto->getId(), "nome"=>$produto->getNome()  . ' = '.formataMoeda($produto->getPreco()));
 
         $resultado = array(
             'mensagem'=>'Ok', 'produtos'=>json_encode($produtos),

@@ -581,6 +581,33 @@
 
     </table>
 
+    <table name="certificado_nota" package="pacoteCertificado">
+
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="certificado_id" type="INTEGER"/>
+
+        <column name="pessoa_tipo" type="CHAR" size="1" required="true"/>
+        <column name="sacado" type="VARCHAR" size="80" required="true"/>
+        <column name="endereco" type="VARCHAR" size="100" required="true"/>
+        <column name="numero" type="VARCHAR" size="4" required="true"/>
+        <column name="bairro" type="VARCHAR" size="50" required="true"/>
+        <column name="complemento" type="VARCHAR" size="80"/>
+        <column name="cidade" type="VARCHAR" size="30" required="true"/>
+        <column name="email" type="VARCHAR" size="60" required="true"/>
+        <column name="uf" type="CHAR" size="2" required="true"/>
+        <column name="cep" type="CHAR" size="10" required="true"/>
+        <column name="fone1" type="VARCHAR" size="15" required="true"/>
+        <column name="celular" type="VARCHAR" size="15"/>
+        <column name="cpf_cnpj" type="VARCHAR" size="20" required="true"/>
+        <column name="situacao" type="INTEGER" required="true"/>
+        <column name="ie" type="VARCHAR" size="15" />
+
+        <foreign-key foreignTable="certificado" name="Rel_certificado_nota" onDelete="restrict">
+            <reference local="certificado_id" foreign="id"/>
+        </foreign-key>
+
+    </table>
+
     <table name="certificado" package="pacoteCertificado">
 
         <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
@@ -643,6 +670,8 @@
         <column name="apagado" type="INTEGER"  required="true"/>
         <column name="parceiro_id" type="INTEGER"/>
         <column name="status_followup" type="INTEGER"/>
+        <column name="inseriu_hope" type="INTEGER"/>
+        <column name="url_documentacao" type="VARCHAR" size="80"/>
 
         <foreign-key foreignTable="situacao" name="Rel_certificado_followup" onDelete="restrict">
             <reference local="status_followup" foreign="id"/>
