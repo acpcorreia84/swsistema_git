@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="GUIAR 3.2">
-    <meta name="author" content="Yan Lincoln Menezes Galucio">
+    <meta name="author" content="">
     <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="expires" content="0" />
@@ -75,8 +75,10 @@
                             } else {
                                 alert('O seu navegados nao possui suporte para Gravacao de dados. Por favor entre em contato com o departamento de suporte para solucionar o problema.');
                             }
-
-                            ir('home.php');
+                            if (resultado.perfilId == 4)
+                                ir('home.php');
+                            else
+                                alertErro('Este é um ambiente de teste e você não possui acesso...');
                         } else if (resultado.mensagem == 'Erro'){
                             //caso tenha acontecido algum erro
                             $('#loginbox').html('<i class="fa fa-5x fas fa-exclamation-triangle text-danger"></i> </br><span class="fa-1x text-danger">'+resultado.descricaoErro+'</span></br></br><button class="btn btn-primary" onclick="ir(\'index.php\')"><i class="icon-arrow-left"></i> Voltar</button>').css({'text-align':'center'});
@@ -104,11 +106,13 @@
     @import url('https://fonts.googleapis.com/css?family=Numans');
 
     html,body{
-        background-image: url('img/bg/convencao-sw.jpeg');
+        background-image: url('img/bg/convencao-sw.jpg');
         background-size: cover;
         background-repeat: no-repeat;
         height: 100%;
         font-family: 'Numans', sans-serif;
+		
+		background-attachment: fixed;
     }
 
     .container{
@@ -121,7 +125,7 @@
         margin-top: auto;
         margin-bottom: auto;
         width: auto;
-        background-color: rgba(0,0,0,0.5) !important;
+        background-color: rgba(255, 255, 255, 0.8) !important;
     }
 
     .social_icon span{
@@ -142,7 +146,7 @@
     .social_icon{
         position: absolute;
         right: 20px;
-        top: -45px;
+        top: -15px;
     }
 
     .input-group-prepend span{
@@ -171,7 +175,7 @@
     }
 
     .login_btn{
-        color: black;
+        color: #fff;
         background-color: #0b62a4;
         width: 100px;
     }
@@ -193,40 +197,75 @@
         color: red;
     }
 </style>
-<div class="container">
-    <div class="d-flex justify-content-center h-100">
-        <div class="card" >
-            <div class="card-header">
-                <div class="center-block">
-                    <img src="img/logo safeweb.png">
-                </div>
-                <div class="d-flex justify-content-end social_icon">
-                    <span><i class="fab fa-facebook-square"></i></span>
-                    <span><i class="fab fa-instagram"></i></span>
-                </div>
-            </div>
-            <div class="card-body" id="loginbox">
-                <form id="frmLogin" name="frmLogin" action="" method="post">
-                    <div class="input-group form-group col-lg-12">
-                        <div class="input-group-prepend ">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
-                        <input id="edtUsuario" name="edtUsuario" type="text" class="form-control" placeholder="usu&aacute;rio">
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v6.0"></script>
 
-                    </div>
-                    <div class="input-group form-group col-lg-12 ">
-                        <div class="input-group-prepend ">
-                            <span class="input-group-text"><i class="fas fa-key"></i></span>
-                        </div>
-                        <input id="edtSenha" name="edtSenha" type="password" class="form-control" placeholder="senha">
-                    </div>
-                    <div class="form-group">
-                        <input id="btnLogin" type="button" class="btn float-right login_btn" value="Entrar">
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+<div class="container d-flex justify-content-center h-100">
+
+	<div class="row margin-top" style="padding-top:10px;">
+
+		<div class="col-md-6">
+			<div class="col-md-12">
+				<img src="img/bg/foto.png" class="img-responsive center-block" alt="" style="width:30%;display:block; margin:0 auto">
+				
+			</div>
+			<div class="col-md-12" style="color:#fff; font-weight:bold">
+				“Não é o mais forte que sobrevive, nem o mais inteligente, mas o que melhor se adapta às mudanças.”
+				<span class="col-md-12 block" style="margin-top:20px;display:block; font-weight:500; padding:0">Leon C. Megginson</span>
+			</div>
+			<div class="col-md-12" style="padding-top:30px;">
+				
+				
+				
+				
+				
+				<iframe width="100%" height="315" src="https://www.youtube.com/embed/qZiTLBYRvmc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+			</div>
+			
+		</div>
+
+		<div class="col-md-6" style="padding-top:40px;">
+				<div class="col-md-12 " style="padding:0">
+							<div class="fb-page" data-href="https://www.facebook.com/safewebnne" data-tabs="timeline" data-width="363" data-height="70" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/safewebnne" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/safewebnne">Safewebnne</a></blockquote></div>
+						</div>
+				<div class="d-flex h-100">
+				
+					<div class="card" style="margin-top:0">
+						<div class="card-header">
+							<div class="center-block">
+								<img src="img/logo safeweb.png">
+							</div>
+							<div class="d-flex justify-content-end social_icon">
+								<span><i class="fab fa-facebook-square" style="font-size:28px;"></i></span>
+								<span><i class="fab fa-instagram" style="font-size:28px;"></i></span>
+							</div>
+						</div>
+						
+						<div class="card-body" id="loginbox">
+					
+							<form id="frmLogin" name="frmLogin" action="" method="post">
+								<div class="input-group form-group col-lg-12">
+									<div class="input-group-prepend ">
+										<span class="input-group-text"><i class="fas fa-user" style="color:#fff; margin:0 auto"></i></span>
+									</div>
+									<input id="edtUsuario" name="edtUsuario" type="text" class="form-control" placeholder="usu&aacute;rio">
+
+								</div>
+								<div class="input-group form-group col-lg-12 ">
+									<div class="input-group-prepend ">
+										<span class="input-group-text"><i class="fas fa-key" style="color:#fff; margin:0 auto"></i></span>
+									</div>
+									<input id="edtSenha" name="edtSenha" type="password" class="form-control" placeholder="senha">
+								</div>
+								<div class="form-group">
+									<input id="btnLogin" type="button" class="btn float-right login_btn" value="Entrar">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+		</div>
+	</div>
 </div>
 
 </body>

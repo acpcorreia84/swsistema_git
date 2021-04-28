@@ -6,7 +6,7 @@
 	
 	if (isset($_POST['edtLogin']) && !empty($_POST['edtLogin']))  {
 		if ($acesso->login($_POST['edtLogin'], $_POST['edtSenha'])) {
-
+            var_dump($_SESSION); exit;
 			if ($_POST['pagina']  == 'front') 
 				$url = 'front/home.php';
 			else
