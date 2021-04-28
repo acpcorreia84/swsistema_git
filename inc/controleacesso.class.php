@@ -26,26 +26,6 @@ class ControleAcesso {
              * */
             $acessoSede = true;
 
-            /*if ($usuario)
-                if ($usuario->getLocalId()== 1) {
-                    $ipRemoto = $_SERVER['REMOTE_ADDR'];
-                    $ipTest = explode('.', $ipRemoto);
-
-                    if ($_SERVER['HTTP_HOST']== 'serama3.0') {
-
-                        if ($ipTest[0]!=127 || $ipTest[1]!=0 || $ipTest[2]!=0  ) {
-                            throw new Exception('Voc&ecirc; s&oacute; pode acessar o sistema a partir do endere&ccedil;o da sede da empresa');
-                            $acessoSede = false;
-                        }
-                    }
-                    else
-                        //if ( ($usuario->getId() != 16 ) && ($usuario->getId() != 1 ) && ($usuario->getId() != 873 ) )
-                                                    if (  $ipTest[0]!=189 || $ipTest[1]!=42 || $ipTest[2]!=171 || ($ipTest[3]<=18 && $ipTest[3]>=25 ) ) {
-                                throw new Exception('Voc&ecirc; s&oacute; pode acessar o sistema a partir do endere&ccedil;o da sede da empresa');
-                                $acessoSede = false;
-                            }
-                }*/
-
         } catch (Exception $ex){
             erroEmail($ex->getMessage(), "Tentativa de login");
             echo "Erro ao tentar logar no sistema." . $ex->getMessage();
