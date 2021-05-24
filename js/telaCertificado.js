@@ -1699,7 +1699,7 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
 					if (resultado.mensagem == 'Ok') {
                         $('#spanInserirProtocoloHope').html(resultado.btnInserirHope);
                         $('#dcSpanUrlHope').html(certificado.urlHope);
-                        
+
 						/*
 						 * SET AS PERMISSOES DOS BOTOES
 						 * */
@@ -2263,6 +2263,45 @@ function desabilitarTelaDetalharCertificados() {
     $('#btnCupomDesconto').prop("disabled",false);
 }
 
+function importarBaixasPagamentos(){
+    var dadosajax = {
+        'funcao' : 'importar_baixas_pagamento'
+    };
+    $.ajax ({
+        url : '../../funcoes/funcoesCertificado.php',
+        data : dadosajax,
+        type : 'POST',
+        cache : true,
+        beforeSend: function () {
+            /*CHAMA A TELA QUE CARREGA O FILTRO DE USUARIOS*/
+            $('#divTabelaPagamentosImportados2').html('<i class="fa fa-5x fa-circle-o-notch fa-spin text-info"></i>').css({'text-align':'center'});
+        },
+        error : function (){
+            alert ('Error CD3457 - Erro ao tentar importar os pagamentos,' + msnPadrao + '.');
+        },
+        success : function(result){
+            try {
+                console.log(result);
+                var resultado = JSON.parse(result);
+
+                if (resultado.mensagem == 'Ok') {
+
+                    $('#spanQuantidadePagamentosImportados').html(resultado.quantidadeTotalImportada);
+
+                    alertSucesso('Baixas de pagamento concluida!');
+                    $('#divTabelaPagamentosImportados2').html('<h4>Importacao finalizada!</h4>');
+                }
+
+            } catch (e) {
+                console.log(result, e);
+                alertErro('Error CD3452 - Erro ao tentar importar os pagamentos, Erro:' + e+ '. '+ msnPadrao + '.')
+            }
+        }
+
+
+    });
+};
+
 function importarBaixaPagamentosStone(){
     var dadosajax = {
         'certificadoId' : $('#idCertificado').val(),
@@ -2574,7 +2613,10 @@ function gerarProtocoloApi() {
                     alertSucesso('Protocolo gerado com sucesso!');
                     carregarModalDetalharCertificado($('#idCertificado').val());
                 } else if (resultado.mensagem == 'erro') {
-                    alertErro('Ocorreu um erro ao tentar gerar o protocolo!');
+                    alertErro('Ocorreu um erro ao tentar gerar o protocolo!' + resultado.mensagemErro);
+                    $("#modalInserirCupom").modal('hide');
+                } else {
+                    alertErro('Ocorreu um erro ao tentar gerar o protocolo!' + resultado.mensagemErro);
                     $("#modalInserirCupom").modal('hide');
                 }
 

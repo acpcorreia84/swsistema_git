@@ -26,6 +26,11 @@ require_once 'modais/modalListaProdutos.php';
 
                 <li><a href="home.php" title="Painel Inicial"><i class="fa fa-lg fa-home"></i></a></li>
 
+                <? if($usuarioLogado->getPerfilId() == 4 ) {?>
+                    <li ><a href="telaCertificado.php" target="_blank" title="Tela de Certificados" class="text-success"><i class="fa fa-lg fa-id-card"></i> Certificados </a></li>
+                <? }?>
+
+
 
                 <? if (array_search('telaFinanceiro', $arrTelasMenu)!==false) {?>
                     <li>
@@ -63,7 +68,6 @@ require_once 'modais/modalListaProdutos.php';
                     <li ><a href="telaCertificado.php" target="_blank" title="Tela antiga de certificados" class="text-success"><i class="fa fa-lg fa-id-card"></i> Certificados </a></li>
                 <? }?>
                 <? if(strpos($_SERVER['REQUEST_URI'], 'telaCertificado.php') ) {?>
-                    <li ><a href="telaCertificado.php" target="_blank" title="Tela antiga de certificados" class="text-success"><i class="fa fa-lg fa-id-card"></i> Certificados </a></li>
                     <li><a title="Venda ERP 3.0" data-target="#vendaInterna" data-toggle="modal" onclick="abreModalVendaInterna()"><i class="fa fa-lg fa-cart-plus"></i></a></li>
                     <!--
                     SO MOSTRAR ICONE DE CERTIFICADOS VALIDADOS NA TELA DE CERTIFICADOS
@@ -74,6 +78,10 @@ require_once 'modais/modalListaProdutos.php';
 
                     <? if (array_search('importarCertificadosValidados', $arrTelasMenu)!==false) {?>
                         <li><a data-toggle="modal" data-target="#modalBaixaStone" title="Baixar pagamentos stone" ><i class="fa fa-lg fa-money" aria-hidden="true"></i></a></li>
+                    <? }?>
+
+                    <? if (array_search('importarBaixasPagamento', $arrTelasMenu)!==false) {?>
+                        <li><a data-toggle="modal" data-target="#modalBaixaPagamentos" title="Baixar pagamentos S2P" ><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a></li>
                     <? }?>
 
                     <!--<li><a title="Venda pelo Sistema" href=""><i class="fa fa-lg fa-plus-circle"></i></a></li>-->

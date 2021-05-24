@@ -91,6 +91,7 @@ if($funcao == 'carregar_modal_alterar_consultor_certificado'){ carregarModalAlte
 if($funcao == 'alterar_consultor_certificado'){ alterarConsultorCertificado();}
 
 if ($funcao == 'importar_certificados_validados') importarCertificadosValidados();
+if ($funcao == 'importar_baixas_pagamento') importarBaixaPagamentos();
 if ($funcao == 'importar_baixa_pagamento_stone') importarBaixaPagamentoStone();
 
 if ($funcao == 'registrar_pagamento_cartao_credito') registrarPagamentoCartaoCredito();
@@ -2434,6 +2435,7 @@ function vincula_contador(){
 };
 
 function finalizarVendaCertificado() {
+
     require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/novaApi.php';
     $usuarioLogadoRn = ControleAcesso::getUsuarioLogado();
     /*CADASTRO DO CLIENTE NOVO*/
@@ -2489,7 +2491,6 @@ function finalizarVendaCertificado() {
         $cliente->setCelular($_POST['edtCelular']);
         $cliente->setContadorId($_POST['edtCodigoContadorPedido']);
         $cliente->save();
-
 
         if ($_POST['edtPessoaTipo'] == "J") {
             if ($_POST['responsavelId'])
@@ -2562,14 +2563,11 @@ function finalizarVendaCertificado() {
          * SALVA OS OBJETOS:
          * CLIENTE | RESPONSAVEL E CERTIFICADO
          * */
-
         if (!$certificadoNovo->validate()) {
             $mensagemErro = '';
             foreach ($certificadoNovo->getValidationFailures() as $falha)
                 $mensagemErro .= $falha->getMessage() . '<br/>';
         }
-
-
 
         /*
         * GERACAO DE PROTOCOLO NOVA API
@@ -3461,7 +3459,89 @@ function alterarConsultorCertificado() {
 
 }
 
+function importarBaixaPagamentos() {
+    try {
+        ini_set('memory_limit', '256M');
+        set_time_limit(180);
+        $usuarioLogado = ControleAcesso::getUsuarioLogado();
+        if ($_SESSION['arrayBaixas'])
+            $pagamentosS2P = unserialize($_SESSION['arrayBaixas']);
 
+        $arrPagamentosS2P = array();
+        $arrPagamentosS2PIndex = array();
+
+        foreach ($pagamentosS2P as $pagamentoS2P ) {
+            $arrPagamentosS2P[] = $pagamentoS2P['TID'];
+            $arrPagamentosS2PIndex[$pagamentoS2P['TID']] = $pagamentoS2P['DATA'];
+        }
+
+        /*
+         * BUSCA TODOS OS CERTIFICADOS QUE TEM TID DO BOLETO INFORMADO
+         * */
+
+        $cCert = new Criteria();
+        $cCert->add(BoletoPeer::TID, $arrPagamentosS2P, Criteria::IN);
+        $cCert->add(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, NULL, Criteria::ISNULL);
+        $cCert->addOr(CertificadoPeer::DATA_CONFIRMACAO_PAGAMENTO, '0000-00-00 00:00:00');
+        $boletos = BoletoPeer::doSelectJoinCertificado($cCert);
+
+        $con = Propel::getConnection(CertificadoPeer::DATABASE_NAME);
+        $con->beginTransaction();
+        $qtdImportada = 0;
+        foreach ($boletos as $boleto) {
+            $boletoId = $boleto->getTid();
+            $certificado = $boleto->getCertificado();
+            $key = array_search($boletoId, $arrPagamentosS2P);
+
+            if ($key !== false) {
+                $dataPagamento = dataDMAHIStoAMD($arrPagamentosS2PIndex[$boletoId]);
+                if ( strlen($dataPagamento) == 19 ) {
+                    $qtdImportada++;
+                    $certificado->setDataConfirmacaoPagamento($dataPagamento);
+                    $certificado->save();
+                    $boleto->setDataConfirmacaoPagamento($dataPagamento);
+                    $boleto->save();
+
+                    $certSit = new CertificadoSituacao();
+                    $certSit->setCertificadoId($certificado->getId());
+                    $certSit->setUsuarioId($usuarioLogado->getId());
+                    $certSit->setSituacaoId(64);
+                    $certSit->setData(date());
+                    $certSit->save();
+
+                    $pedido = $boleto->getPedido();
+                    if ($pedido) {
+                        $pedido->setDataConfirmacaoPagamento($dataPagamento);
+                        $pedido->save();
+
+                        $contasReceber = $pedido->getContasRecebers();
+                        $contaReceber = $contasReceber[0];
+                        if ($contaReceber) {
+                            $contaReceber->setDataPagamento($dataPagamento);
+                            $contaReceber->save();
+                        }
+
+                    }
+                }
+            }
+
+        } /* FIM DO FOREACH */
+        /*}*/
+        $con->commit();
+
+        echo json_encode(array('mensagem'=>'Ok',
+                'quantidadeTotalImportada'=>$qtdImportada
+            )
+        );
+
+    } catch (Exception $e) {
+        $con->rollBack();
+        var_dump($e);
+        echo $e->getMessage();
+    }
+
+
+}
 function importarBaixaPagamentoStone() {
     try {
         ini_set('memory_limit', '256M');

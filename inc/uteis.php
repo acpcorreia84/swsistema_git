@@ -151,6 +151,15 @@ function dataDMAtoAMD($data) {
     return $dataFinal;
 };
 
+function dataDMAHIStoAMD($data) {
+    //formato d/m/Y H:i:s
+    $dataAux = explode(' ', $data);
+    $dataAuxFinal = explode('/', $dataAux[0]);
+    $dataFinal = $dataAuxFinal[2] .'-'. $dataAuxFinal[1] .'-'. $dataAuxFinal[0] . ' ' . $dataAux[1];
+    return $dataFinal;
+};
+
+
 function timestampCalendarDMA($data) {
 	//Data gerada pelo componente calend�rio
 	$dataAux = explode('-', $data);

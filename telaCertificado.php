@@ -125,6 +125,7 @@ include 'inc/script.php';
 <div class="container">
     <? require_once 'modais/modalImportarBaixaStone.php' ?>
     <? require_once 'modais/modalImportarCertificadosValidados.php'?>
+    <? require_once 'modais/modalImportarBaixaPagamentos.php' ?>
     <? include 'modais/certificados/certificadoModalDetalharCertificado.php';?>
     <? //include 'modais/certificados/certificadoInserirCupom.php';?>
 
