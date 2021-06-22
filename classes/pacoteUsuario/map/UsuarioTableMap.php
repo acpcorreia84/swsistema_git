@@ -88,6 +88,7 @@ class UsuarioTableMap extends TableMap {
     $this->addRelation('CertificadoSituacao', 'CertificadoSituacao', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('CuponsDescontoCertificadoRelatedByUsuarioId', 'CuponsDescontoCertificado', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('CuponsDescontoCertificadoRelatedByUsuarioAutorizacaoId', 'CuponsDescontoCertificado', RelationMap::ONE_TO_MANY, array('id' => 'usuario_autorizacao_id', ), 'RESTRICT', null);
+    $this->addRelation('UsuarioGrupoProduto', 'UsuarioGrupoProduto', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('LocalUsuario', 'LocalUsuario', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('Importacao', 'Importacao', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('CertificadoRelatedByUsuarioId', 'Certificado', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);

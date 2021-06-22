@@ -19,10 +19,26 @@ abstract class BaseUsuarioGrupoProduto extends BaseObject  implements Persistent
 	protected static $peer;
 
 	/**
-	 * The value for the id field.
+	 * The value for the grupo_produto_id field.
 	 * @var        int
 	 */
-	protected $id;
+	protected $grupo_produto_id;
+
+	/**
+	 * The value for the usuario_id field.
+	 * @var        int
+	 */
+	protected $usuario_id;
+
+	/**
+	 * @var        GrupoProduto
+	 */
+	protected $aGrupoProduto;
+
+	/**
+	 * @var        Usuario
+	 */
+	protected $aUsuario;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -39,34 +55,72 @@ abstract class BaseUsuarioGrupoProduto extends BaseObject  implements Persistent
 	protected $alreadyInValidation = false;
 
 	/**
-	 * Get the [id] column value.
+	 * Get the [grupo_produto_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getId()
+	public function getGrupoProdutoId()
 	{
-		return $this->id;
+		return $this->grupo_produto_id;
 	}
 
 	/**
-	 * Set the value of [id] column.
+	 * Get the [usuario_id] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getUsuarioId()
+	{
+		return $this->usuario_id;
+	}
+
+	/**
+	 * Set the value of [grupo_produto_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     UsuarioGrupoProduto The current object (for fluent API support)
 	 */
-	public function setId($v)
+	public function setGrupoProdutoId($v)
 	{
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->id !== $v) {
-			$this->id = $v;
-			$this->modifiedColumns[] = UsuarioGrupoProdutoPeer::ID;
+		if ($this->grupo_produto_id !== $v) {
+			$this->grupo_produto_id = $v;
+			$this->modifiedColumns[] = UsuarioGrupoProdutoPeer::GRUPO_PRODUTO_ID;
+		}
+
+		if ($this->aGrupoProduto !== null && $this->aGrupoProduto->getId() !== $v) {
+			$this->aGrupoProduto = null;
 		}
 
 		return $this;
-	} // setId()
+	} // setGrupoProdutoId()
+
+	/**
+	 * Set the value of [usuario_id] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     UsuarioGrupoProduto The current object (for fluent API support)
+	 */
+	public function setUsuarioId($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->usuario_id !== $v) {
+			$this->usuario_id = $v;
+			$this->modifiedColumns[] = UsuarioGrupoProdutoPeer::USUARIO_ID;
+		}
+
+		if ($this->aUsuario !== null && $this->aUsuario->getId() !== $v) {
+			$this->aUsuario = null;
+		}
+
+		return $this;
+	} // setUsuarioId()
 
 	/**
 	 * Indicates whether the columns in this object are only set to default values.
@@ -100,7 +154,8 @@ abstract class BaseUsuarioGrupoProduto extends BaseObject  implements Persistent
 	{
 		try {
 
-			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+			$this->grupo_produto_id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+			$this->usuario_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -110,7 +165,7 @@ abstract class BaseUsuarioGrupoProduto extends BaseObject  implements Persistent
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 1; // 1 = UsuarioGrupoProdutoPeer::NUM_COLUMNS - UsuarioGrupoProdutoPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 2; // 2 = UsuarioGrupoProdutoPeer::NUM_COLUMNS - UsuarioGrupoProdutoPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating UsuarioGrupoProduto object", $e);
@@ -133,6 +188,12 @@ abstract class BaseUsuarioGrupoProduto extends BaseObject  implements Persistent
 	public function ensureConsistency()
 	{
 
+		if ($this->aGrupoProduto !== null && $this->grupo_produto_id !== $this->aGrupoProduto->getId()) {
+			$this->aGrupoProduto = null;
+		}
+		if ($this->aUsuario !== null && $this->usuario_id !== $this->aUsuario->getId()) {
+			$this->aUsuario = null;
+		}
 	} // ensureConsistency
 
 	/**
@@ -172,6 +233,8 @@ abstract class BaseUsuarioGrupoProduto extends BaseObject  implements Persistent
 
 		if ($deep) {  // also de-associate any related objects?
 
+			$this->aGrupoProduto = null;
+			$this->aUsuario = null;
 		} // if (deep)
 	}
 
@@ -280,9 +343,25 @@ abstract class BaseUsuarioGrupoProduto extends BaseObject  implements Persistent
 		if (!$this->alreadyInSave) {
 			$this->alreadyInSave = true;
 
-			if ($this->isNew() ) {
-				$this->modifiedColumns[] = UsuarioGrupoProdutoPeer::ID;
+			// We call the save method on the following object(s) if they
+			// were passed to this object by their coresponding set
+			// method.  This object relates to these object(s) by a
+			// foreign key reference.
+
+			if ($this->aGrupoProduto !== null) {
+				if ($this->aGrupoProduto->isModified() || $this->aGrupoProduto->isNew()) {
+					$affectedRows += $this->aGrupoProduto->save($con);
+				}
+				$this->setGrupoProduto($this->aGrupoProduto);
 			}
+
+			if ($this->aUsuario !== null) {
+				if ($this->aUsuario->isModified() || $this->aUsuario->isNew()) {
+					$affectedRows += $this->aUsuario->save($con);
+				}
+				$this->setUsuario($this->aUsuario);
+			}
+
 
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
@@ -291,8 +370,6 @@ abstract class BaseUsuarioGrupoProduto extends BaseObject  implements Persistent
 					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
 										 // should always be true here (even though technically
 										 // BasePeer::doInsert() can insert multiple rows).
-
-					$this->setId($pk);  //[IMV] update autoincrement primary key
 
 					$this->setNew(false);
 				} else {
@@ -368,6 +445,24 @@ abstract class BaseUsuarioGrupoProduto extends BaseObject  implements Persistent
 			$failureMap = array();
 
 
+			// We call the validate method on the following object(s) if they
+			// were passed to this object by their coresponding set
+			// method.  This object relates to these object(s) by a
+			// foreign key reference.
+
+			if ($this->aGrupoProduto !== null) {
+				if (!$this->aGrupoProduto->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->aGrupoProduto->getValidationFailures());
+				}
+			}
+
+			if ($this->aUsuario !== null) {
+				if (!$this->aUsuario->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->aUsuario->getValidationFailures());
+				}
+			}
+
+
 			if (($retval = UsuarioGrupoProdutoPeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
 			}
@@ -389,7 +484,8 @@ abstract class BaseUsuarioGrupoProduto extends BaseObject  implements Persistent
 	{
 		$criteria = new Criteria(UsuarioGrupoProdutoPeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(UsuarioGrupoProdutoPeer::ID)) $criteria->add(UsuarioGrupoProdutoPeer::ID, $this->id);
+		if ($this->isColumnModified(UsuarioGrupoProdutoPeer::GRUPO_PRODUTO_ID)) $criteria->add(UsuarioGrupoProdutoPeer::GRUPO_PRODUTO_ID, $this->grupo_produto_id);
+		if ($this->isColumnModified(UsuarioGrupoProdutoPeer::USUARIO_ID)) $criteria->add(UsuarioGrupoProdutoPeer::USUARIO_ID, $this->usuario_id);
 
 		return $criteria;
 	}
@@ -406,29 +502,41 @@ abstract class BaseUsuarioGrupoProduto extends BaseObject  implements Persistent
 	{
 		$criteria = new Criteria(UsuarioGrupoProdutoPeer::DATABASE_NAME);
 
-		$criteria->add(UsuarioGrupoProdutoPeer::ID, $this->id);
+		$criteria->add(UsuarioGrupoProdutoPeer::GRUPO_PRODUTO_ID, $this->grupo_produto_id);
+		$criteria->add(UsuarioGrupoProdutoPeer::USUARIO_ID, $this->usuario_id);
 
 		return $criteria;
 	}
 
 	/**
-	 * Returns the primary key for this object (row).
-	 * @return     int
+	 * Returns the composite primary key for this object.
+	 * The array elements will be in same order as specified in XML.
+	 * @return     array
 	 */
 	public function getPrimaryKey()
 	{
-		return $this->getId();
+		$pks = array();
+
+		$pks[0] = $this->getGrupoProdutoId();
+
+		$pks[1] = $this->getUsuarioId();
+
+		return $pks;
 	}
 
 	/**
-	 * Generic method to set the primary key (id column).
+	 * Set the [composite] primary key.
 	 *
-	 * @param      int $key Primary key.
+	 * @param      array $keys The elements of the composite key (order must match the order in XML file).
 	 * @return     void
 	 */
-	public function setPrimaryKey($key)
+	public function setPrimaryKey($keys)
 	{
-		$this->setId($key);
+
+		$this->setGrupoProdutoId($keys[0]);
+
+		$this->setUsuarioId($keys[1]);
+
 	}
 
 	/**
@@ -444,10 +552,12 @@ abstract class BaseUsuarioGrupoProduto extends BaseObject  implements Persistent
 	public function copyInto($copyObj, $deepCopy = false)
 	{
 
+		$copyObj->setGrupoProdutoId($this->grupo_produto_id);
+
+		$copyObj->setUsuarioId($this->usuario_id);
+
 
 		$copyObj->setNew(true);
-
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
 
 	}
 
@@ -490,6 +600,104 @@ abstract class BaseUsuarioGrupoProduto extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Declares an association between this object and a GrupoProduto object.
+	 *
+	 * @param      GrupoProduto $v
+	 * @return     UsuarioGrupoProduto The current object (for fluent API support)
+	 * @throws     PropelException
+	 */
+	public function setGrupoProduto(GrupoProduto $v = null)
+	{
+		if ($v === null) {
+			$this->setGrupoProdutoId(NULL);
+		} else {
+			$this->setGrupoProdutoId($v->getId());
+		}
+
+		$this->aGrupoProduto = $v;
+
+		// Add binding for other direction of this n:n relationship.
+		// If this object has already been added to the GrupoProduto object, it will not be re-added.
+		if ($v !== null) {
+			$v->addUsuarioGrupoProduto($this);
+		}
+
+		return $this;
+	}
+
+
+	/**
+	 * Get the associated GrupoProduto object
+	 *
+	 * @param      PropelPDO Optional Connection object.
+	 * @return     GrupoProduto The associated GrupoProduto object.
+	 * @throws     PropelException
+	 */
+	public function getGrupoProduto(PropelPDO $con = null)
+	{
+		if ($this->aGrupoProduto === null && ($this->grupo_produto_id !== null)) {
+			$this->aGrupoProduto = GrupoProdutoPeer::retrieveByPk($this->grupo_produto_id);
+			/* The following can be used additionally to
+			   guarantee the related object contains a reference
+			   to this object.  This level of coupling may, however, be
+			   undesirable since it could result in an only partially populated collection
+			   in the referenced object.
+			   $this->aGrupoProduto->addUsuarioGrupoProdutos($this);
+			 */
+		}
+		return $this->aGrupoProduto;
+	}
+
+	/**
+	 * Declares an association between this object and a Usuario object.
+	 *
+	 * @param      Usuario $v
+	 * @return     UsuarioGrupoProduto The current object (for fluent API support)
+	 * @throws     PropelException
+	 */
+	public function setUsuario(Usuario $v = null)
+	{
+		if ($v === null) {
+			$this->setUsuarioId(NULL);
+		} else {
+			$this->setUsuarioId($v->getId());
+		}
+
+		$this->aUsuario = $v;
+
+		// Add binding for other direction of this n:n relationship.
+		// If this object has already been added to the Usuario object, it will not be re-added.
+		if ($v !== null) {
+			$v->addUsuarioGrupoProduto($this);
+		}
+
+		return $this;
+	}
+
+
+	/**
+	 * Get the associated Usuario object
+	 *
+	 * @param      PropelPDO Optional Connection object.
+	 * @return     Usuario The associated Usuario object.
+	 * @throws     PropelException
+	 */
+	public function getUsuario(PropelPDO $con = null)
+	{
+		if ($this->aUsuario === null && ($this->usuario_id !== null)) {
+			$this->aUsuario = UsuarioPeer::retrieveByPk($this->usuario_id);
+			/* The following can be used additionally to
+			   guarantee the related object contains a reference
+			   to this object.  This level of coupling may, however, be
+			   undesirable since it could result in an only partially populated collection
+			   in the referenced object.
+			   $this->aUsuario->addUsuarioGrupoProdutos($this);
+			 */
+		}
+		return $this->aUsuario;
+	}
+
+	/**
 	 * Resets all collections of referencing foreign keys.
 	 *
 	 * This method is a user-space workaround for PHP's inability to garbage collect objects
@@ -503,6 +711,8 @@ abstract class BaseUsuarioGrupoProduto extends BaseObject  implements Persistent
 		if ($deep) {
 		} // if ($deep)
 
+			$this->aGrupoProduto = null;
+			$this->aUsuario = null;
 	}
 
 } // BaseUsuarioGrupoProduto

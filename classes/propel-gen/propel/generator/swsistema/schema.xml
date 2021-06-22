@@ -480,8 +480,17 @@
     </table>
 
     <table name="usuario_grupo_produto" package="pacoteProduto">
+        <column name="grupo_produto_id" type="INTEGER" required="true" primaryKey="true"/>
+        <column name="usuario_id" type="INTEGER" required="true" primaryKey="true"/>
 
-        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <foreign-key foreignTable="grupo_produto" name="Rel_grupo_produto_id" onDelete="restrict">
+            <reference local="grupo_produto_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="usuario" name="Rel_usuario_grupo_produto_id" onDelete="restrict">
+            <reference local="usuario_id" foreign="id"/>
+        </foreign-key>
+
     </table>
 
     <table name="local_produto" package="pacoteProduto">

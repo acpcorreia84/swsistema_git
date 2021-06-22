@@ -28,12 +28,12 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-6">
-                                        <label for="ipEdtCnpj">Tipo do Canal <small id="labelTipoCanal"></small></label>
+                                    <div class="col-lg-12">
+                                        <label for="divBotoesTipoCanal">Tipo do Canal <small id="labelTipoCanal"></small></label>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-6" id="divBotoesTipoCanal">
+                                    <div class="col-lg-12" id="divBotoesTipoCanal">
                                         <div class="btn-group" >
                                             <label class="btn btn-default">
                                                 <input type="radio" name="edtTipoCanal" value="parceiro" autocomplete="off"  checked="checked"> Parceiro
@@ -43,10 +43,15 @@
                                                 <input type="radio"  name="edtTipoCanal" value="unidade" autocomplete="off" required="required" > Unidade Pr&oacute;pria
                                             </label>
 
+                                            <label class="btn btn-default">
+                                                <input type="radio"  name="edtTipoCanal" value="tabela" autocomplete="off" required="required" > Parceiro Tabela Fixa
+                                            </label>
+
                                         </div>
 
                                     </div>
                                     <script>
+                                        /*
                                         $('input[name=edtTipoCanal]').change(function () {
                                             if ($('input[name=edtTipoCanal]:checked').val()=='unidade') {
                                                 $('#divBotoesTipoCanal').css( {display:'none', visibility:'hidden'} );
@@ -55,6 +60,8 @@
                                             }
 
                                         })
+
+                                         */
                                     </script>
 
                                 </div>

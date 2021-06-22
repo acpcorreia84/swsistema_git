@@ -692,8 +692,18 @@ DROP TABLE IF EXISTS `usuario_grupo_produto`;
 
 CREATE TABLE `usuario_grupo_produto`
 (
-	`id` INTEGER  NOT NULL AUTO_INCREMENT,
-	PRIMARY KEY (`id`)
+	`grupo_produto_id` INTEGER  NOT NULL,
+	`usuario_id` INTEGER  NOT NULL,
+	PRIMARY KEY (`grupo_produto_id`,`usuario_id`),
+	CONSTRAINT `Rel_grupo_produto_id`
+		FOREIGN KEY (`grupo_produto_id`)
+		REFERENCES `grupo_produto` (`id`)
+		ON DELETE RESTRICT,
+	INDEX `FI__usuario_grupo_produto_id` (`usuario_id`),
+	CONSTRAINT `Rel_usuario_grupo_produto_id`
+		FOREIGN KEY (`usuario_id`)
+		REFERENCES `usuario` (`id`)
+		ON DELETE RESTRICT
 )Type=MyISAM;
 
 #-----------------------------------------------------------------------------

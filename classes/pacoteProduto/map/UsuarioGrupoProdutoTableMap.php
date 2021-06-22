@@ -34,9 +34,10 @@ class UsuarioGrupoProdutoTableMap extends TableMap {
 		$this->setPhpName('UsuarioGrupoProduto');
 		$this->setClassname('UsuarioGrupoProduto');
 		$this->setPackage('pacoteProduto');
-		$this->setUseIdGenerator(true);
+		$this->setUseIdGenerator(false);
 		// columns
-		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
+		$this->addForeignPrimaryKey('GRUPO_PRODUTO_ID', 'GrupoProdutoId', 'INTEGER' , 'grupo_produto', 'ID', true, null, null);
+		$this->addForeignPrimaryKey('USUARIO_ID', 'UsuarioId', 'INTEGER' , 'usuario', 'ID', true, null, null);
 		// validators
 	} // initialize()
 
@@ -45,6 +46,8 @@ class UsuarioGrupoProdutoTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
+    $this->addRelation('GrupoProduto', 'GrupoProduto', RelationMap::MANY_TO_ONE, array('grupo_produto_id' => 'id', ), 'RESTRICT', null);
+    $this->addRelation('Usuario', 'Usuario', RelationMap::MANY_TO_ONE, array('usuario_id' => 'id', ), 'RESTRICT', null);
 	} // buildRelations()
 
 } // UsuarioGrupoProdutoTableMap

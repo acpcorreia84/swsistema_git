@@ -2,6 +2,40 @@ var msnPadrao = 'entre em contato com o administrador do sistema';
 
 var pageUrl = 'funcoes/funcoesParceiro.php';
 
+function carregarParceirosRelatorioComissaoTabelaFixa(){
+    $('#mensagemLoading').html('<i class="fa fa-lg fa-arrows"></i> Carregando a lista de parceiros para pagamento de comissionamento');
+    var dadosajax = {
+        'filtroPeriodoComissao':$('#filtroPeriodoComissao').val(),
+        'funcao' : "carregar_parceiros_relatorio_comissao_tabela_fixa",
+    };
+    $.ajax ({
+        url : pageUrl,
+        data : dadosajax,
+        type : 'POST',
+        cache : true,
+        error : function (){
+            alertErro ('Error 458 - Erro ao carregar a tela de relat&aacute;rio de comissionamento de parceiros,' + msnPadrao + '.');
+            $('#modalCarregando').modal('hide');
+        },
+        success : function(result){
+            $('#modalCarregando').modal('hide');
+
+            try {
+                parceiros = JSON.parse(result);
+                if (parceiros.mensagem == 'Ok') {
+                    montarTabelaDinamica(parceiros.colunas, parceiros.parceiros, 'tabelaParceiros', 'divTabelaParceirosComissionamento');
+
+                }
+            } catch (e) {
+                $('#modalCarregando').modal('hide');
+                console.log(result, e);
+                alertErro('Error 459 - Erro ao carregar a tela de relat&aacute;rio de comissionamento de parceiros,' + msnPadrao + '.');
+            }
+
+        }
+    });
+}
+
 function carregarParceirosRelatorioComissao(){
     $('#mensagemLoading').html('<i class="fa fa-lg fa-arrows"></i> Carregando a lista de parceiros para pagamento de comissionamento');
     var dadosajax = {

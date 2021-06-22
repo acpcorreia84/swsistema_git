@@ -34,6 +34,8 @@ if($funcao == 'registrar_lancamento_comissao_parceiro') {registrarLancamentoComi
 if($funcao == 'apagar_lancamento_comissao_parceiro') {apagarLancamentoComissaoParceiro();}
 if($funcao == 'apagar_registro_comissao_parceiro') {apagarRegistroComissao();}
 if($funcao == 'carregar_parceiros_relatorio_comissao') {carregarParceirosRelatorioComissao();}
+if($funcao == 'carregar_parceiros_relatorio_comissao_tabela_fixa') {carregarParceirosRelatorioComissaoTabelaFixa();}
+
 if($funcao == 'informar_pagamento_extorno_comissao_parceiro') {informarPagamentoExtornoComissaoParceiro();}
 
 
@@ -996,6 +998,124 @@ function apagarRegistroComissao () {
 
         echo json_encode(array('mensagem'=>'Ok'));
     } catch(Exception $e){
+        echo var_dump($e->getMessage());
+    }
+}
+
+function carregarParceirosRelatorioComissaoTabelaFixa () {
+    try {
+        $cParceiro = new Criteria();
+        $cParceiro->add(ParceiroPeer::SITUACAO, -1, Criteria::NOT_EQUAL);
+        $cParceiro->add(ParceiroPeer::TIPO_CANAL, 'tabela');
+        $cParceiro->addAscendingOrderByColumn(ParceiroPeer::NOME);
+        $parceirosObj = ParceiroPeer::doSelect($cParceiro);
+
+        $parceiros = array();
+
+        foreach ($parceirosObj as $key=>$parceiro) {
+            $cRegistroComissao = new Criteria();
+            $cRegistroComissao->add(ParceiroComissionamentoPeer::SITUACAO, -1, Criteria::NOT_EQUAL);
+            $cRegistroComissao->add(ParceiroComissionamentoPeer::PARCEIRO_ID, $parceiro->getId());
+
+            if ($_POST['filtroPeriodoComissao'])
+                $filtroData = explode(',',$_POST['filtroPeriodoComissao']);
+
+            if ($filtroData) {
+                $dataDe = explode('/',$filtroData[0]);
+                $dataAte = explode('/',$filtroData[1]);
+
+                $cRegistroComissao->add(ParceiroComissionamentoPeer::PERIODO_INICIAL, $dataDe[2].'/'.$dataDe[1].'/'.$dataDe[0]);
+                $cRegistroComissao->add(ParceiroComissionamentoPeer::PERIODO_FINAL, $dataAte[2].'/'.$dataAte[1].'/'.$dataAte[0]);
+            } else {
+                $cRegistroComissao->add(ParceiroComissionamentoPeer::PERIODO_INICIAL, date('Y').'-'.(date('m')-1).'-01');
+                $cRegistroComissao->add(ParceiroComissionamentoPeer::PERIODO_FINAL, date('Y').'-'.(date('m')-1).'-'.getLastDayOfMonth((date('m')-1), date('Y')));
+            }
+            $registroComissao = ParceiroComissionamentoPeer::doSelectOne($cRegistroComissao);
+            $somaTotalComissionamento = 0.0;
+
+            if ($registroComissao) {
+                if ($registroComissao->getComissaoVendaValidacao())
+                    $somaTotalComissionamento += $registroComissao->getVendaValidacao() * ($registroComissao->getComissaoVendaValidacao()/100);
+                if ($registroComissao->getComissaoVenda())
+                    $somaTotalComissionamento += $registroComissao->getVenda() * ($registroComissao->getComissaoVenda()/100);
+                if ($registroComissao->getComissaoValidacao())
+                    $somaTotalComissionamento += $registroComissao->getValidacao() * ($registroComissao->getComissaoValidacao()/100);
+
+                $cLancamentoComissao = new Criteria();
+                $cLancamentoComissao->add(ParceiroLancamentoPeer::SITUACAO, -1, Criteria::NOT_EQUAL);
+                $lancamentosComissao = $registroComissao->getParceiroLancamentos($cLancamentoComissao);
+
+
+                $somaDescontosLancamentos = 0;
+                $somaAcrescimosLancamentos = 0;
+                foreach ($lancamentosComissao as $lancamentoComissao) {
+                    if (trim($lancamentoComissao->getTipoLancamento()) == 'C')
+                        $somaAcrescimosLancamentos += $lancamentoComissao->getValor();
+                    elseif (trim($lancamentoComissao->getTipoLancamento()) == 'D')
+                        $somaDescontosLancamentos += $lancamentoComissao->getValor();
+                }
+
+                /*if ($registroComissao->getId() == 17)
+                    var_dump($somaTotalComissionamento, $somaAcrescimosLancamentos, $somaDescontosLancamentos);*/
+                $somaTotalComissionamento = $somaTotalComissionamento + ($somaAcrescimosLancamentos -  $somaDescontosLancamentos);
+
+
+                $descricaoRegistroComissao = utf8_encode($registroComissao->getDescricao());
+                if ($registroComissao->getDataPagamento())
+                    $pago = 'checked="checked"';
+                else
+                    $pago = '';
+
+                $dataPagamento = $registroComissao->getDataPagamento() ? $registroComissao->getDataPagamento('d/m/Y H:i:s') : '---';
+
+                $btnPago = '<input type="checkbox" id="chkPago'.$parceiro->getId().'" '.$pago.' data-onstyle="danger" data-offstyle="success">
+                <script>
+                $(function() {
+                    $("#chkPago'.$parceiro->getId().'").bootstrapToggle({
+                        on: "Extornar",
+                        off: "Pagar"
+                    });
+                    
+                    $("#chkPago'.$parceiro->getId().'").change(function() {
+                        
+                        if ($(this).prop("checked"))
+                            informarPagamentoExtornoComissaoParceiro('.$registroComissao->getId().', "pagar");
+                        else
+                            informarPagamentoExtornoComissaoParceiro('.$registroComissao->getId().', "extornar");
+                    });
+                });
+                </script>';
+            }
+            else {
+                $dataPagamento = '---';
+                $descricaoRegistroComissao = '---';
+                $btnPago = 'Necessita Registro';
+            }
+
+
+            $btnDetalhar = '<button onclick="$(\'#detalharParceiro\').modal(\'show\'); detalhar_parceiro('.$parceiro->getId().')"><i class="fa fa-arrows"></i></button> ';
+
+            if ($parceiro->getLocal()) $local = $parceiro->getLocal()->getNome();
+
+
+            $valor = ($somaTotalComissionamento!=0)?formataMoeda($somaTotalComissionamento):'-';
+
+            $parceiros[] =  array('Id'=>$parceiro->getId(),'Nome'=>utf8_encode($parceiro->getNome()). ' '. $btnDetalhar,
+                'Empresa'=> (utf8_encode($parceiro->getEmpresa()))?utf8_encode($parceiro->getEmpresa()):'---',
+                'Localidade'=> utf8_encode($parceiro->getCidade() .'/' . $parceiro->getUf()),
+                'Dados'=> utf8_encode($parceiro->getBanco()). '<br/> (Ag: ' .$parceiro->getAgencia() .') <strong> CC:' . $parceiro->getContaCorrente() .'</strong> - Op:'. $parceiro->getOperacao(),
+                'Registro'=>$descricaoRegistroComissao, 'Pagto.'=>$dataPagamento, 'Valor' =>$valor,
+                utf8_encode('A��o')=>$btnPago
+            );
+        }/*FIM DO FOR*/
+
+        $colunas = array(
+            array('nome'=>'Id'), array('nome'=>'Nome'), array('nome'=>'Empresa'), array('nome'=>'Localidade'),array('nome'=>'Dados'),
+            array('nome'=>'Registro'),  array('nome'=>'Pagto.'),array('nome'=>'Valor'), array('nome'=>utf8_encode('A��o'))
+        );
+
+        echo json_encode(array('mensagem'=>'Ok', 'colunas'=>json_encode($colunas), 'parceiros'=>json_encode($parceiros)));
+    } catch (Exception $e ) {
         echo var_dump($e->getMessage());
     }
 }

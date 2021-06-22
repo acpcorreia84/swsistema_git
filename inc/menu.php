@@ -22,8 +22,9 @@ require_once 'modais/modalListaProdutos.php';
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
+                <!--
                 <li><a href="#" title="AMBIENTE DE HOMOLOGACAO" >******************** BETA - AMBIENTE DE TESTE ********************</a></li>
-
+-->
                 <li><a href="home.php" title="Painel Inicial"><i class="fa fa-lg fa-home"></i></a></li>
 
                 <? if($usuarioLogado->getPerfilId() == 4 ) {?>
@@ -232,6 +233,12 @@ require_once 'modais/modalListaProdutos.php';
                                     <a href="telaRelatorioComissionamentoContador.php"><i class="fa fa-address-card"></i> Comissionamento de Contadores</a>
                                 </li>
 -->                            <? //}?>
+
+                            <? if (array_search('telaRelatorioComissionamentoParceiros.php', $arrTelasMenu)!==false) {?>
+                                <li>
+                                    <a href="telaRelatorioIndividualParceiro.php"><i class="fa fa-user-circle"></i> Comissionamento de Parceiros tabela fixa</a>
+                                </li>
+                            <? }?>
 
                             <? if (array_search('telaRelatorioComissionamentoParceiros.php', $arrTelasMenu)!==false) {?>
                                 <li>
