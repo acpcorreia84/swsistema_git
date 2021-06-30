@@ -43,6 +43,12 @@
                                 <kbd><span class="" id="dpSpanContatos">...</span></kbd>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                Tipo do canal: <span class="" id="dpSpanTipoCanal">...</span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 

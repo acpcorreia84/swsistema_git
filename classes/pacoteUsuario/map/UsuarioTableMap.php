@@ -67,6 +67,7 @@ class UsuarioTableMap extends TableMap {
 		$this->addColumn('VOLTA_FERIAS', 'VoltaFerias', 'DATE', true, null, null);
 		$this->addColumn('LIMITE_QUANTIDADE', 'LimiteQuantidade', 'INTEGER', true, null, null);
 		$this->addColumn('MARGEM_DESCONTO', 'MargemDesconto', 'INTEGER', true, null, null);
+		$this->addForeignKey('GRUPO_PRODUTO_ID', 'GrupoProdutoId', 'INTEGER', 'grupo_produto', 'ID', true, null, null);
 		// validators
 		$this->addValidator('EMAIL', 'unique', 'propel.validator.UniqueValidator', '', 'Ja existe um Usuario cadastrado com este E-MAIL.');
 		$this->addValidator('LOGIN', 'unique', 'propel.validator.UniqueValidator', '', 'Ja existe um Usuario cadastrado com este LOGIN.');
@@ -81,6 +82,7 @@ class UsuarioTableMap extends TableMap {
     $this->addRelation('Local', 'Local', RelationMap::MANY_TO_ONE, array('local_id' => 'id', ), 'RESTRICT', null);
     $this->addRelation('Cargo', 'Cargo', RelationMap::MANY_TO_ONE, array('cargo_id' => 'id', ), 'RESTRICT', null);
     $this->addRelation('Perfil', 'Perfil', RelationMap::MANY_TO_ONE, array('perfil_id' => 'id', ), 'RESTRICT', null);
+    $this->addRelation('GrupoProduto', 'GrupoProduto', RelationMap::MANY_TO_ONE, array('grupo_produto_id' => 'id', ), 'RESTRICT', null);
     $this->addRelation('ParceiroUsuario', 'ParceiroUsuario', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('UsuarioComissionamento', 'UsuarioComissionamento', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('LogSerama', 'LogSerama', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
@@ -88,7 +90,6 @@ class UsuarioTableMap extends TableMap {
     $this->addRelation('CertificadoSituacao', 'CertificadoSituacao', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('CuponsDescontoCertificadoRelatedByUsuarioId', 'CuponsDescontoCertificado', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('CuponsDescontoCertificadoRelatedByUsuarioAutorizacaoId', 'CuponsDescontoCertificado', RelationMap::ONE_TO_MANY, array('id' => 'usuario_autorizacao_id', ), 'RESTRICT', null);
-    $this->addRelation('UsuarioGrupoProduto', 'UsuarioGrupoProduto', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('LocalUsuario', 'LocalUsuario', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('Importacao', 'Importacao', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);
     $this->addRelation('CertificadoRelatedByUsuarioId', 'Certificado', RelationMap::ONE_TO_MANY, array('id' => 'usuario_id', ), 'RESTRICT', null);

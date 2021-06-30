@@ -75,6 +75,7 @@
                                         <label><input  type="radio" name="edtPagamentoTrocar" value="3" > <i class="fa fa-money"> Esp&eacute;cie</i>  </label><br/>
                                         <label><input  type="radio" name="edtPagamentoTrocar" value="2" > <i class="fa fa-envelope-o"> Dep&oacute;sito</i></label><br/>
                                         <label><input  type="radio" name="edtPagamentoTrocar" value="4" > <i class="fa fa-exchange"> Transfer&ecirc;ncia</i></label><br/>
+                                        <label><input type="radio" name="edtPagamentoTrocar" value="11" > <i class="fa fa-exchange"> PIX</i></label><br/>
                                     </div>
                                 </div>
                             </fieldset>

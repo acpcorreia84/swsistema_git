@@ -205,6 +205,12 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 	protected $margem_desconto;
 
 	/**
+	 * The value for the grupo_produto_id field.
+	 * @var        int
+	 */
+	protected $grupo_produto_id;
+
+	/**
 	 * @var        Setor
 	 */
 	protected $aSetor;
@@ -223,6 +229,11 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 	 * @var        Perfil
 	 */
 	protected $aPerfil;
+
+	/**
+	 * @var        GrupoProduto
+	 */
+	protected $aGrupoProduto;
 
 	/**
 	 * @var        array ParceiroUsuario[] Collection to store aggregation of ParceiroUsuario objects.
@@ -293,16 +304,6 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 	 * @var        Criteria The criteria used to select the current contents of collCuponsDescontoCertificadosRelatedByUsuarioAutorizacaoId.
 	 */
 	private $lastCuponsDescontoCertificadoRelatedByUsuarioAutorizacaoIdCriteria = null;
-
-	/**
-	 * @var        array UsuarioGrupoProduto[] Collection to store aggregation of UsuarioGrupoProduto objects.
-	 */
-	protected $collUsuarioGrupoProdutos;
-
-	/**
-	 * @var        Criteria The criteria used to select the current contents of collUsuarioGrupoProdutos.
-	 */
-	private $lastUsuarioGrupoProdutoCriteria = null;
 
 	/**
 	 * @var        array LocalUsuario[] Collection to store aggregation of LocalUsuario objects.
@@ -964,6 +965,16 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 	public function getMargemDesconto()
 	{
 		return $this->margem_desconto;
+	}
+
+	/**
+	 * Get the [grupo_produto_id] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getGrupoProdutoId()
+	{
+		return $this->grupo_produto_id;
 	}
 
 	/**
@@ -1777,6 +1788,30 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 	} // setMargemDesconto()
 
 	/**
+	 * Set the value of [grupo_produto_id] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     Usuario The current object (for fluent API support)
+	 */
+	public function setGrupoProdutoId($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->grupo_produto_id !== $v) {
+			$this->grupo_produto_id = $v;
+			$this->modifiedColumns[] = UsuarioPeer::GRUPO_PRODUTO_ID;
+		}
+
+		if ($this->aGrupoProduto !== null && $this->aGrupoProduto->getId() !== $v) {
+			$this->aGrupoProduto = null;
+		}
+
+		return $this;
+	} // setGrupoProdutoId()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1839,6 +1874,7 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 			$this->volta_ferias = ($row[$startcol + 28] !== null) ? (string) $row[$startcol + 28] : null;
 			$this->limite_quantidade = ($row[$startcol + 29] !== null) ? (int) $row[$startcol + 29] : null;
 			$this->margem_desconto = ($row[$startcol + 30] !== null) ? (int) $row[$startcol + 30] : null;
+			$this->grupo_produto_id = ($row[$startcol + 31] !== null) ? (int) $row[$startcol + 31] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1848,7 +1884,7 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 31; // 31 = UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 32; // 32 = UsuarioPeer::NUM_COLUMNS - UsuarioPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Usuario object", $e);
@@ -1882,6 +1918,9 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 		}
 		if ($this->aCargo !== null && $this->cargo_id !== $this->aCargo->getId()) {
 			$this->aCargo = null;
+		}
+		if ($this->aGrupoProduto !== null && $this->grupo_produto_id !== $this->aGrupoProduto->getId()) {
+			$this->aGrupoProduto = null;
 		}
 	} // ensureConsistency
 
@@ -1926,6 +1965,7 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 			$this->aLocal = null;
 			$this->aCargo = null;
 			$this->aPerfil = null;
+			$this->aGrupoProduto = null;
 			$this->collParceiroUsuarios = null;
 			$this->lastParceiroUsuarioCriteria = null;
 
@@ -1946,9 +1986,6 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 
 			$this->collCuponsDescontoCertificadosRelatedByUsuarioAutorizacaoId = null;
 			$this->lastCuponsDescontoCertificadoRelatedByUsuarioAutorizacaoIdCriteria = null;
-
-			$this->collUsuarioGrupoProdutos = null;
-			$this->lastUsuarioGrupoProdutoCriteria = null;
 
 			$this->collLocalUsuarios = null;
 			$this->lastLocalUsuarioCriteria = null;
@@ -2142,6 +2179,13 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 				$this->setPerfil($this->aPerfil);
 			}
 
+			if ($this->aGrupoProduto !== null) {
+				if ($this->aGrupoProduto->isModified() || $this->aGrupoProduto->isNew()) {
+					$affectedRows += $this->aGrupoProduto->save($con);
+				}
+				$this->setGrupoProduto($this->aGrupoProduto);
+			}
+
 			if ($this->isNew() ) {
 				$this->modifiedColumns[] = UsuarioPeer::ID;
 			}
@@ -2214,14 +2258,6 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 
 			if ($this->collCuponsDescontoCertificadosRelatedByUsuarioAutorizacaoId !== null) {
 				foreach ($this->collCuponsDescontoCertificadosRelatedByUsuarioAutorizacaoId as $referrerFK) {
-					if (!$referrerFK->isDeleted()) {
-						$affectedRows += $referrerFK->save($con);
-					}
-				}
-			}
-
-			if ($this->collUsuarioGrupoProdutos !== null) {
-				foreach ($this->collUsuarioGrupoProdutos as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
@@ -2459,6 +2495,12 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 				}
 			}
 
+			if ($this->aGrupoProduto !== null) {
+				if (!$this->aGrupoProduto->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->aGrupoProduto->getValidationFailures());
+				}
+			}
+
 
 			if (($retval = UsuarioPeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
@@ -2515,14 +2557,6 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 
 				if ($this->collCuponsDescontoCertificadosRelatedByUsuarioAutorizacaoId !== null) {
 					foreach ($this->collCuponsDescontoCertificadosRelatedByUsuarioAutorizacaoId as $referrerFK) {
-						if (!$referrerFK->validate($columns)) {
-							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-						}
-					}
-				}
-
-				if ($this->collUsuarioGrupoProdutos !== null) {
-					foreach ($this->collUsuarioGrupoProdutos as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -2712,6 +2746,7 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(UsuarioPeer::VOLTA_FERIAS)) $criteria->add(UsuarioPeer::VOLTA_FERIAS, $this->volta_ferias);
 		if ($this->isColumnModified(UsuarioPeer::LIMITE_QUANTIDADE)) $criteria->add(UsuarioPeer::LIMITE_QUANTIDADE, $this->limite_quantidade);
 		if ($this->isColumnModified(UsuarioPeer::MARGEM_DESCONTO)) $criteria->add(UsuarioPeer::MARGEM_DESCONTO, $this->margem_desconto);
+		if ($this->isColumnModified(UsuarioPeer::GRUPO_PRODUTO_ID)) $criteria->add(UsuarioPeer::GRUPO_PRODUTO_ID, $this->grupo_produto_id);
 
 		return $criteria;
 	}
@@ -2826,6 +2861,8 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 
 		$copyObj->setMargemDesconto($this->margem_desconto);
 
+		$copyObj->setGrupoProdutoId($this->grupo_produto_id);
+
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -2871,12 +2908,6 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 			foreach ($this->getCuponsDescontoCertificadosRelatedByUsuarioAutorizacaoId() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 					$copyObj->addCuponsDescontoCertificadoRelatedByUsuarioAutorizacaoId($relObj->copy($deepCopy));
-				}
-			}
-
-			foreach ($this->getUsuarioGrupoProdutos() as $relObj) {
-				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addUsuarioGrupoProduto($relObj->copy($deepCopy));
 				}
 			}
 
@@ -3223,6 +3254,55 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 			 */
 		}
 		return $this->aPerfil;
+	}
+
+	/**
+	 * Declares an association between this object and a GrupoProduto object.
+	 *
+	 * @param      GrupoProduto $v
+	 * @return     Usuario The current object (for fluent API support)
+	 * @throws     PropelException
+	 */
+	public function setGrupoProduto(GrupoProduto $v = null)
+	{
+		if ($v === null) {
+			$this->setGrupoProdutoId(NULL);
+		} else {
+			$this->setGrupoProdutoId($v->getId());
+		}
+
+		$this->aGrupoProduto = $v;
+
+		// Add binding for other direction of this n:n relationship.
+		// If this object has already been added to the GrupoProduto object, it will not be re-added.
+		if ($v !== null) {
+			$v->addUsuario($this);
+		}
+
+		return $this;
+	}
+
+
+	/**
+	 * Get the associated GrupoProduto object
+	 *
+	 * @param      PropelPDO Optional Connection object.
+	 * @return     GrupoProduto The associated GrupoProduto object.
+	 * @throws     PropelException
+	 */
+	public function getGrupoProduto(PropelPDO $con = null)
+	{
+		if ($this->aGrupoProduto === null && ($this->grupo_produto_id !== null)) {
+			$this->aGrupoProduto = GrupoProdutoPeer::retrieveByPk($this->grupo_produto_id);
+			/* The following can be used additionally to
+			   guarantee the related object contains a reference
+			   to this object.  This level of coupling may, however, be
+			   undesirable since it could result in an only partially populated collection
+			   in the referenced object.
+			   $this->aGrupoProduto->addUsuarios($this);
+			 */
+		}
+		return $this->aGrupoProduto;
 	}
 
 	/**
@@ -4724,207 +4804,6 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 		$this->lastCuponsDescontoCertificadoRelatedByUsuarioAutorizacaoIdCriteria = $criteria;
 
 		return $this->collCuponsDescontoCertificadosRelatedByUsuarioAutorizacaoId;
-	}
-
-	/**
-	 * Clears out the collUsuarioGrupoProdutos collection (array).
-	 *
-	 * This does not modify the database; however, it will remove any associated objects, causing
-	 * them to be refetched by subsequent calls to accessor method.
-	 *
-	 * @return     void
-	 * @see        addUsuarioGrupoProdutos()
-	 */
-	public function clearUsuarioGrupoProdutos()
-	{
-		$this->collUsuarioGrupoProdutos = null; // important to set this to NULL since that means it is uninitialized
-	}
-
-	/**
-	 * Initializes the collUsuarioGrupoProdutos collection (array).
-	 *
-	 * By default this just sets the collUsuarioGrupoProdutos collection to an empty array (like clearcollUsuarioGrupoProdutos());
-	 * however, you may wish to override this method in your stub class to provide setting appropriate
-	 * to your application -- for example, setting the initial array to the values stored in database.
-	 *
-	 * @return     void
-	 */
-	public function initUsuarioGrupoProdutos()
-	{
-		$this->collUsuarioGrupoProdutos = array();
-	}
-
-	/**
-	 * Gets an array of UsuarioGrupoProduto objects which contain a foreign key that references this object.
-	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this Usuario has previously been saved, it will retrieve
-	 * related UsuarioGrupoProdutos from storage. If this Usuario is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
-	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array UsuarioGrupoProduto[]
-	 * @throws     PropelException
-	 */
-	public function getUsuarioGrupoProdutos($criteria = null, PropelPDO $con = null)
-	{
-		if ($criteria === null) {
-			$criteria = new Criteria(UsuarioPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collUsuarioGrupoProdutos === null) {
-			if ($this->isNew()) {
-			   $this->collUsuarioGrupoProdutos = array();
-			} else {
-
-				$criteria->add(UsuarioGrupoProdutoPeer::USUARIO_ID, $this->id);
-
-				UsuarioGrupoProdutoPeer::addSelectColumns($criteria);
-				$this->collUsuarioGrupoProdutos = UsuarioGrupoProdutoPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(UsuarioGrupoProdutoPeer::USUARIO_ID, $this->id);
-
-				UsuarioGrupoProdutoPeer::addSelectColumns($criteria);
-				if (!isset($this->lastUsuarioGrupoProdutoCriteria) || !$this->lastUsuarioGrupoProdutoCriteria->equals($criteria)) {
-					$this->collUsuarioGrupoProdutos = UsuarioGrupoProdutoPeer::doSelect($criteria, $con);
-				}
-			}
-		}
-		$this->lastUsuarioGrupoProdutoCriteria = $criteria;
-		return $this->collUsuarioGrupoProdutos;
-	}
-
-	/**
-	 * Returns the number of related UsuarioGrupoProduto objects.
-	 *
-	 * @param      Criteria $criteria
-	 * @param      boolean $distinct
-	 * @param      PropelPDO $con
-	 * @return     int Count of related UsuarioGrupoProduto objects.
-	 * @throws     PropelException
-	 */
-	public function countUsuarioGrupoProdutos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
-	{
-		if ($criteria === null) {
-			$criteria = new Criteria(UsuarioPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collUsuarioGrupoProdutos === null) {
-			if ($this->isNew()) {
-				$count = 0;
-			} else {
-
-				$criteria->add(UsuarioGrupoProdutoPeer::USUARIO_ID, $this->id);
-
-				$count = UsuarioGrupoProdutoPeer::doCount($criteria, false, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(UsuarioGrupoProdutoPeer::USUARIO_ID, $this->id);
-
-				if (!isset($this->lastUsuarioGrupoProdutoCriteria) || !$this->lastUsuarioGrupoProdutoCriteria->equals($criteria)) {
-					$count = UsuarioGrupoProdutoPeer::doCount($criteria, false, $con);
-				} else {
-					$count = count($this->collUsuarioGrupoProdutos);
-				}
-			} else {
-				$count = count($this->collUsuarioGrupoProdutos);
-			}
-		}
-		return $count;
-	}
-
-	/**
-	 * Method called to associate a UsuarioGrupoProduto object to this object
-	 * through the UsuarioGrupoProduto foreign key attribute.
-	 *
-	 * @param      UsuarioGrupoProduto $l UsuarioGrupoProduto
-	 * @return     void
-	 * @throws     PropelException
-	 */
-	public function addUsuarioGrupoProduto(UsuarioGrupoProduto $l)
-	{
-		if ($this->collUsuarioGrupoProdutos === null) {
-			$this->initUsuarioGrupoProdutos();
-		}
-		if (!in_array($l, $this->collUsuarioGrupoProdutos, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collUsuarioGrupoProdutos, $l);
-			$l->setUsuario($this);
-		}
-	}
-
-
-	/**
-	 * If this collection has already been initialized with
-	 * an identical criteria, it returns the collection.
-	 * Otherwise if this Usuario is new, it will return
-	 * an empty collection; or if this Usuario has previously
-	 * been saved, it will retrieve related UsuarioGrupoProdutos from storage.
-	 *
-	 * This method is protected by default in order to keep the public
-	 * api reasonable.  You can provide public methods for those you
-	 * actually need in Usuario.
-	 */
-	public function getUsuarioGrupoProdutosJoinGrupoProduto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		if ($criteria === null) {
-			$criteria = new Criteria(UsuarioPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collUsuarioGrupoProdutos === null) {
-			if ($this->isNew()) {
-				$this->collUsuarioGrupoProdutos = array();
-			} else {
-
-				$criteria->add(UsuarioGrupoProdutoPeer::USUARIO_ID, $this->id);
-
-				$this->collUsuarioGrupoProdutos = UsuarioGrupoProdutoPeer::doSelectJoinGrupoProduto($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(UsuarioGrupoProdutoPeer::USUARIO_ID, $this->id);
-
-			if (!isset($this->lastUsuarioGrupoProdutoCriteria) || !$this->lastUsuarioGrupoProdutoCriteria->equals($criteria)) {
-				$this->collUsuarioGrupoProdutos = UsuarioGrupoProdutoPeer::doSelectJoinGrupoProduto($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastUsuarioGrupoProdutoCriteria = $criteria;
-
-		return $this->collUsuarioGrupoProdutos;
 	}
 
 	/**
@@ -9566,11 +9445,6 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 					$o->clearAllReferences($deep);
 				}
 			}
-			if ($this->collUsuarioGrupoProdutos) {
-				foreach ((array) $this->collUsuarioGrupoProdutos as $o) {
-					$o->clearAllReferences($deep);
-				}
-			}
 			if ($this->collLocalUsuarios) {
 				foreach ((array) $this->collLocalUsuarios as $o) {
 					$o->clearAllReferences($deep);
@@ -9665,7 +9539,6 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 		$this->collCertificadoSituacaos = null;
 		$this->collCuponsDescontoCertificadosRelatedByUsuarioId = null;
 		$this->collCuponsDescontoCertificadosRelatedByUsuarioAutorizacaoId = null;
-		$this->collUsuarioGrupoProdutos = null;
 		$this->collLocalUsuarios = null;
 		$this->collImportacaos = null;
 		$this->collCertificadosRelatedByUsuarioId = null;
@@ -9687,6 +9560,7 @@ abstract class BaseUsuario extends BaseObject  implements Persistent {
 			$this->aLocal = null;
 			$this->aCargo = null;
 			$this->aPerfil = null;
+			$this->aGrupoProduto = null;
 	}
 
 } // BaseUsuario

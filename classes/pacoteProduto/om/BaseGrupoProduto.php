@@ -43,6 +43,16 @@ abstract class BaseGrupoProduto extends BaseObject  implements Persistent {
 	protected $situacao;
 
 	/**
+	 * @var        array Usuario[] Collection to store aggregation of Usuario objects.
+	 */
+	protected $collUsuarios;
+
+	/**
+	 * @var        Criteria The criteria used to select the current contents of collUsuarios.
+	 */
+	private $lastUsuarioCriteria = null;
+
+	/**
 	 * @var        array Produto[] Collection to store aggregation of Produto objects.
 	 */
 	protected $collProdutos;
@@ -51,16 +61,6 @@ abstract class BaseGrupoProduto extends BaseObject  implements Persistent {
 	 * @var        Criteria The criteria used to select the current contents of collProdutos.
 	 */
 	private $lastProdutoCriteria = null;
-
-	/**
-	 * @var        array UsuarioGrupoProduto[] Collection to store aggregation of UsuarioGrupoProduto objects.
-	 */
-	protected $collUsuarioGrupoProdutos;
-
-	/**
-	 * @var        Criteria The criteria used to select the current contents of collUsuarioGrupoProdutos.
-	 */
-	private $lastUsuarioGrupoProdutoCriteria = null;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -303,11 +303,11 @@ abstract class BaseGrupoProduto extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
+			$this->collUsuarios = null;
+			$this->lastUsuarioCriteria = null;
+
 			$this->collProdutos = null;
 			$this->lastProdutoCriteria = null;
-
-			$this->collUsuarioGrupoProdutos = null;
-			$this->lastUsuarioGrupoProdutoCriteria = null;
 
 		} // if (deep)
 	}
@@ -439,16 +439,16 @@ abstract class BaseGrupoProduto extends BaseObject  implements Persistent {
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
 			}
 
-			if ($this->collProdutos !== null) {
-				foreach ($this->collProdutos as $referrerFK) {
+			if ($this->collUsuarios !== null) {
+				foreach ($this->collUsuarios as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
 				}
 			}
 
-			if ($this->collUsuarioGrupoProdutos !== null) {
-				foreach ($this->collUsuarioGrupoProdutos as $referrerFK) {
+			if ($this->collProdutos !== null) {
+				foreach ($this->collProdutos as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
@@ -526,16 +526,16 @@ abstract class BaseGrupoProduto extends BaseObject  implements Persistent {
 			}
 
 
-				if ($this->collProdutos !== null) {
-					foreach ($this->collProdutos as $referrerFK) {
+				if ($this->collUsuarios !== null) {
+					foreach ($this->collUsuarios as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
 					}
 				}
 
-				if ($this->collUsuarioGrupoProdutos !== null) {
-					foreach ($this->collUsuarioGrupoProdutos as $referrerFK) {
+				if ($this->collProdutos !== null) {
+					foreach ($this->collProdutos as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -628,15 +628,15 @@ abstract class BaseGrupoProduto extends BaseObject  implements Persistent {
 			// the getter/setter methods for fkey referrer objects.
 			$copyObj->setNew(false);
 
-			foreach ($this->getProdutos() as $relObj) {
+			foreach ($this->getUsuarios() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addProduto($relObj->copy($deepCopy));
+					$copyObj->addUsuario($relObj->copy($deepCopy));
 				}
 			}
 
-			foreach ($this->getUsuarioGrupoProdutos() as $relObj) {
+			foreach ($this->getProdutos() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addUsuarioGrupoProduto($relObj->copy($deepCopy));
+					$copyObj->addProduto($relObj->copy($deepCopy));
 				}
 			}
 
@@ -685,6 +685,348 @@ abstract class BaseGrupoProduto extends BaseObject  implements Persistent {
 			self::$peer = new GrupoProdutoPeer();
 		}
 		return self::$peer;
+	}
+
+	/**
+	 * Clears out the collUsuarios collection (array).
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addUsuarios()
+	 */
+	public function clearUsuarios()
+	{
+		$this->collUsuarios = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collUsuarios collection (array).
+	 *
+	 * By default this just sets the collUsuarios collection to an empty array (like clearcollUsuarios());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @return     void
+	 */
+	public function initUsuarios()
+	{
+		$this->collUsuarios = array();
+	}
+
+	/**
+	 * Gets an array of Usuario objects which contain a foreign key that references this object.
+	 *
+	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
+	 * Otherwise if this GrupoProduto has previously been saved, it will retrieve
+	 * related Usuarios from storage. If this GrupoProduto is new, it will return
+	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 *
+	 * @param      PropelPDO $con
+	 * @param      Criteria $criteria
+	 * @return     array Usuario[]
+	 * @throws     PropelException
+	 */
+	public function getUsuarios($criteria = null, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(GrupoProdutoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collUsuarios === null) {
+			if ($this->isNew()) {
+			   $this->collUsuarios = array();
+			} else {
+
+				$criteria->add(UsuarioPeer::GRUPO_PRODUTO_ID, $this->id);
+
+				UsuarioPeer::addSelectColumns($criteria);
+				$this->collUsuarios = UsuarioPeer::doSelect($criteria, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return the collection.
+
+
+				$criteria->add(UsuarioPeer::GRUPO_PRODUTO_ID, $this->id);
+
+				UsuarioPeer::addSelectColumns($criteria);
+				if (!isset($this->lastUsuarioCriteria) || !$this->lastUsuarioCriteria->equals($criteria)) {
+					$this->collUsuarios = UsuarioPeer::doSelect($criteria, $con);
+				}
+			}
+		}
+		$this->lastUsuarioCriteria = $criteria;
+		return $this->collUsuarios;
+	}
+
+	/**
+	 * Returns the number of related Usuario objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related Usuario objects.
+	 * @throws     PropelException
+	 */
+	public function countUsuarios(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(GrupoProdutoPeer::DATABASE_NAME);
+		} else {
+			$criteria = clone $criteria;
+		}
+
+		if ($distinct) {
+			$criteria->setDistinct();
+		}
+
+		$count = null;
+
+		if ($this->collUsuarios === null) {
+			if ($this->isNew()) {
+				$count = 0;
+			} else {
+
+				$criteria->add(UsuarioPeer::GRUPO_PRODUTO_ID, $this->id);
+
+				$count = UsuarioPeer::doCount($criteria, false, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return count of the collection.
+
+
+				$criteria->add(UsuarioPeer::GRUPO_PRODUTO_ID, $this->id);
+
+				if (!isset($this->lastUsuarioCriteria) || !$this->lastUsuarioCriteria->equals($criteria)) {
+					$count = UsuarioPeer::doCount($criteria, false, $con);
+				} else {
+					$count = count($this->collUsuarios);
+				}
+			} else {
+				$count = count($this->collUsuarios);
+			}
+		}
+		return $count;
+	}
+
+	/**
+	 * Method called to associate a Usuario object to this object
+	 * through the Usuario foreign key attribute.
+	 *
+	 * @param      Usuario $l Usuario
+	 * @return     void
+	 * @throws     PropelException
+	 */
+	public function addUsuario(Usuario $l)
+	{
+		if ($this->collUsuarios === null) {
+			$this->initUsuarios();
+		}
+		if (!in_array($l, $this->collUsuarios, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collUsuarios, $l);
+			$l->setGrupoProduto($this);
+		}
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this GrupoProduto is new, it will return
+	 * an empty collection; or if this GrupoProduto has previously
+	 * been saved, it will retrieve related Usuarios from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in GrupoProduto.
+	 */
+	public function getUsuariosJoinSetor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(GrupoProdutoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collUsuarios === null) {
+			if ($this->isNew()) {
+				$this->collUsuarios = array();
+			} else {
+
+				$criteria->add(UsuarioPeer::GRUPO_PRODUTO_ID, $this->id);
+
+				$this->collUsuarios = UsuarioPeer::doSelectJoinSetor($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(UsuarioPeer::GRUPO_PRODUTO_ID, $this->id);
+
+			if (!isset($this->lastUsuarioCriteria) || !$this->lastUsuarioCriteria->equals($criteria)) {
+				$this->collUsuarios = UsuarioPeer::doSelectJoinSetor($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastUsuarioCriteria = $criteria;
+
+		return $this->collUsuarios;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this GrupoProduto is new, it will return
+	 * an empty collection; or if this GrupoProduto has previously
+	 * been saved, it will retrieve related Usuarios from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in GrupoProduto.
+	 */
+	public function getUsuariosJoinLocal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(GrupoProdutoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collUsuarios === null) {
+			if ($this->isNew()) {
+				$this->collUsuarios = array();
+			} else {
+
+				$criteria->add(UsuarioPeer::GRUPO_PRODUTO_ID, $this->id);
+
+				$this->collUsuarios = UsuarioPeer::doSelectJoinLocal($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(UsuarioPeer::GRUPO_PRODUTO_ID, $this->id);
+
+			if (!isset($this->lastUsuarioCriteria) || !$this->lastUsuarioCriteria->equals($criteria)) {
+				$this->collUsuarios = UsuarioPeer::doSelectJoinLocal($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastUsuarioCriteria = $criteria;
+
+		return $this->collUsuarios;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this GrupoProduto is new, it will return
+	 * an empty collection; or if this GrupoProduto has previously
+	 * been saved, it will retrieve related Usuarios from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in GrupoProduto.
+	 */
+	public function getUsuariosJoinCargo($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(GrupoProdutoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collUsuarios === null) {
+			if ($this->isNew()) {
+				$this->collUsuarios = array();
+			} else {
+
+				$criteria->add(UsuarioPeer::GRUPO_PRODUTO_ID, $this->id);
+
+				$this->collUsuarios = UsuarioPeer::doSelectJoinCargo($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(UsuarioPeer::GRUPO_PRODUTO_ID, $this->id);
+
+			if (!isset($this->lastUsuarioCriteria) || !$this->lastUsuarioCriteria->equals($criteria)) {
+				$this->collUsuarios = UsuarioPeer::doSelectJoinCargo($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastUsuarioCriteria = $criteria;
+
+		return $this->collUsuarios;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this GrupoProduto is new, it will return
+	 * an empty collection; or if this GrupoProduto has previously
+	 * been saved, it will retrieve related Usuarios from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in GrupoProduto.
+	 */
+	public function getUsuariosJoinPerfil($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		if ($criteria === null) {
+			$criteria = new Criteria(GrupoProdutoPeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collUsuarios === null) {
+			if ($this->isNew()) {
+				$this->collUsuarios = array();
+			} else {
+
+				$criteria->add(UsuarioPeer::GRUPO_PRODUTO_ID, $this->id);
+
+				$this->collUsuarios = UsuarioPeer::doSelectJoinPerfil($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(UsuarioPeer::GRUPO_PRODUTO_ID, $this->id);
+
+			if (!isset($this->lastUsuarioCriteria) || !$this->lastUsuarioCriteria->equals($criteria)) {
+				$this->collUsuarios = UsuarioPeer::doSelectJoinPerfil($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastUsuarioCriteria = $criteria;
+
+		return $this->collUsuarios;
 	}
 
 	/**
@@ -936,207 +1278,6 @@ abstract class BaseGrupoProduto extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Clears out the collUsuarioGrupoProdutos collection (array).
-	 *
-	 * This does not modify the database; however, it will remove any associated objects, causing
-	 * them to be refetched by subsequent calls to accessor method.
-	 *
-	 * @return     void
-	 * @see        addUsuarioGrupoProdutos()
-	 */
-	public function clearUsuarioGrupoProdutos()
-	{
-		$this->collUsuarioGrupoProdutos = null; // important to set this to NULL since that means it is uninitialized
-	}
-
-	/**
-	 * Initializes the collUsuarioGrupoProdutos collection (array).
-	 *
-	 * By default this just sets the collUsuarioGrupoProdutos collection to an empty array (like clearcollUsuarioGrupoProdutos());
-	 * however, you may wish to override this method in your stub class to provide setting appropriate
-	 * to your application -- for example, setting the initial array to the values stored in database.
-	 *
-	 * @return     void
-	 */
-	public function initUsuarioGrupoProdutos()
-	{
-		$this->collUsuarioGrupoProdutos = array();
-	}
-
-	/**
-	 * Gets an array of UsuarioGrupoProduto objects which contain a foreign key that references this object.
-	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this GrupoProduto has previously been saved, it will retrieve
-	 * related UsuarioGrupoProdutos from storage. If this GrupoProduto is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
-	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array UsuarioGrupoProduto[]
-	 * @throws     PropelException
-	 */
-	public function getUsuarioGrupoProdutos($criteria = null, PropelPDO $con = null)
-	{
-		if ($criteria === null) {
-			$criteria = new Criteria(GrupoProdutoPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collUsuarioGrupoProdutos === null) {
-			if ($this->isNew()) {
-			   $this->collUsuarioGrupoProdutos = array();
-			} else {
-
-				$criteria->add(UsuarioGrupoProdutoPeer::GRUPO_PRODUTO_ID, $this->id);
-
-				UsuarioGrupoProdutoPeer::addSelectColumns($criteria);
-				$this->collUsuarioGrupoProdutos = UsuarioGrupoProdutoPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(UsuarioGrupoProdutoPeer::GRUPO_PRODUTO_ID, $this->id);
-
-				UsuarioGrupoProdutoPeer::addSelectColumns($criteria);
-				if (!isset($this->lastUsuarioGrupoProdutoCriteria) || !$this->lastUsuarioGrupoProdutoCriteria->equals($criteria)) {
-					$this->collUsuarioGrupoProdutos = UsuarioGrupoProdutoPeer::doSelect($criteria, $con);
-				}
-			}
-		}
-		$this->lastUsuarioGrupoProdutoCriteria = $criteria;
-		return $this->collUsuarioGrupoProdutos;
-	}
-
-	/**
-	 * Returns the number of related UsuarioGrupoProduto objects.
-	 *
-	 * @param      Criteria $criteria
-	 * @param      boolean $distinct
-	 * @param      PropelPDO $con
-	 * @return     int Count of related UsuarioGrupoProduto objects.
-	 * @throws     PropelException
-	 */
-	public function countUsuarioGrupoProdutos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
-	{
-		if ($criteria === null) {
-			$criteria = new Criteria(GrupoProdutoPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collUsuarioGrupoProdutos === null) {
-			if ($this->isNew()) {
-				$count = 0;
-			} else {
-
-				$criteria->add(UsuarioGrupoProdutoPeer::GRUPO_PRODUTO_ID, $this->id);
-
-				$count = UsuarioGrupoProdutoPeer::doCount($criteria, false, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(UsuarioGrupoProdutoPeer::GRUPO_PRODUTO_ID, $this->id);
-
-				if (!isset($this->lastUsuarioGrupoProdutoCriteria) || !$this->lastUsuarioGrupoProdutoCriteria->equals($criteria)) {
-					$count = UsuarioGrupoProdutoPeer::doCount($criteria, false, $con);
-				} else {
-					$count = count($this->collUsuarioGrupoProdutos);
-				}
-			} else {
-				$count = count($this->collUsuarioGrupoProdutos);
-			}
-		}
-		return $count;
-	}
-
-	/**
-	 * Method called to associate a UsuarioGrupoProduto object to this object
-	 * through the UsuarioGrupoProduto foreign key attribute.
-	 *
-	 * @param      UsuarioGrupoProduto $l UsuarioGrupoProduto
-	 * @return     void
-	 * @throws     PropelException
-	 */
-	public function addUsuarioGrupoProduto(UsuarioGrupoProduto $l)
-	{
-		if ($this->collUsuarioGrupoProdutos === null) {
-			$this->initUsuarioGrupoProdutos();
-		}
-		if (!in_array($l, $this->collUsuarioGrupoProdutos, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collUsuarioGrupoProdutos, $l);
-			$l->setGrupoProduto($this);
-		}
-	}
-
-
-	/**
-	 * If this collection has already been initialized with
-	 * an identical criteria, it returns the collection.
-	 * Otherwise if this GrupoProduto is new, it will return
-	 * an empty collection; or if this GrupoProduto has previously
-	 * been saved, it will retrieve related UsuarioGrupoProdutos from storage.
-	 *
-	 * This method is protected by default in order to keep the public
-	 * api reasonable.  You can provide public methods for those you
-	 * actually need in GrupoProduto.
-	 */
-	public function getUsuarioGrupoProdutosJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		if ($criteria === null) {
-			$criteria = new Criteria(GrupoProdutoPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collUsuarioGrupoProdutos === null) {
-			if ($this->isNew()) {
-				$this->collUsuarioGrupoProdutos = array();
-			} else {
-
-				$criteria->add(UsuarioGrupoProdutoPeer::GRUPO_PRODUTO_ID, $this->id);
-
-				$this->collUsuarioGrupoProdutos = UsuarioGrupoProdutoPeer::doSelectJoinUsuario($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(UsuarioGrupoProdutoPeer::GRUPO_PRODUTO_ID, $this->id);
-
-			if (!isset($this->lastUsuarioGrupoProdutoCriteria) || !$this->lastUsuarioGrupoProdutoCriteria->equals($criteria)) {
-				$this->collUsuarioGrupoProdutos = UsuarioGrupoProdutoPeer::doSelectJoinUsuario($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastUsuarioGrupoProdutoCriteria = $criteria;
-
-		return $this->collUsuarioGrupoProdutos;
-	}
-
-	/**
 	 * Resets all collections of referencing foreign keys.
 	 *
 	 * This method is a user-space workaround for PHP's inability to garbage collect objects
@@ -1148,20 +1289,20 @@ abstract class BaseGrupoProduto extends BaseObject  implements Persistent {
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
+			if ($this->collUsuarios) {
+				foreach ((array) $this->collUsuarios as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 			if ($this->collProdutos) {
 				foreach ((array) $this->collProdutos as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
-			if ($this->collUsuarioGrupoProdutos) {
-				foreach ((array) $this->collUsuarioGrupoProdutos as $o) {
-					$o->clearAllReferences($deep);
-				}
-			}
 		} // if ($deep)
 
+		$this->collUsuarios = null;
 		$this->collProdutos = null;
-		$this->collUsuarioGrupoProdutos = null;
 	}
 
 } // BaseGrupoProduto

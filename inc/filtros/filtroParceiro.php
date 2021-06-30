@@ -16,7 +16,6 @@
 </div>
 <div class="row form-group">
     <div class="col-lg-3">
-        <input type="checkbox" name="filtroEscolheCanal" id="filtroEscolheCanal" value="sim" >
         <label for="filtroEscolheCanal">Tipo do canal</label>
     </div>
 
@@ -25,27 +24,13 @@
 <div class="row">
     <div class="col-lg-3">
         <div id="divFiltroEscolheCanal">
-            <input checked="checked" type="checkbox" id="filtroChkTipoCanal" name="filtroChkTipoCanal" data-onstyle="success" data-offstyle="info" class="datepicker-here form-control">
+            <select name="filtroEscolheCanal" id="filtroEscolheCanal" class="form-control">
+                <option value="">Selecione o tipo do canal</option>
+                <option value="parceiro">Parceiro</option>
+                <option value="unidade">Unidade pr&oacute;pria</option>
+                <option value="tabela">Parceiro de Tabela Fixa</option>
+            </select>
         </div>
-        <script>
-
-            $(function() {
-
-                $('#filtroEscolheCanal').click (function () {
-                    if ($('#filtroEscolheCanal').prop('checked'))
-                        $("#divFiltroEscolheCanal").css({visibility: 'visible', display: 'block'});
-                    else
-                        $("#divFiltroEscolheCanal").css({visibility: 'hidden',  display: 'none'});
-                });
-
-                $("#filtroChkTipoCanal").bootstrapToggle({
-                    on: "Parceiros",
-                    off: "Unidades"
-                });
-                $("#divFiltroEscolheCanal").css({visibility: 'hidden', display: 'none'});
-
-            });
-        </script>
     </div>
 
     <div class="col-lg-3">

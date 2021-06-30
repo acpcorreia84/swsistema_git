@@ -119,7 +119,7 @@ function salvar_parceiro(acao){
         'tipo_canal' : $('input[name=edtTipoCanal]:checked').val(),
         'pagaContador' : pagaContador
     };
-
+console.log($('input[name=edtTipoCanal]:checked').val());
     $.ajax ({
         url : pageUrl,
         data : dadosajax,
@@ -287,6 +287,9 @@ function carregar_dados_parceiro(){
             resultado = result.split('&&');
             if (resultado[0].trim()=='Ok') {
                 var parceiro = JSON.parse(resultado[1]);
+
+                montarSelect('edtGrupoProdutoParceiro', parceiro.grupoProdutos, 'divGrupoProdutosParceiro');
+
                 $('#ipEdtNome').val(parceiro.nome);
                 $('#ipEdtEmpresa').val(parceiro.empresa);
                 $('#ipEdtCnpj').val(parceiro.cnpj);
@@ -311,24 +314,13 @@ function carregar_dados_parceiro(){
                 $('#ipEdtComissaoVendaValidacao').val(parceiro.comissaoVendaValidacao);
                 $('#ipEdtObservacao').val(parceiro.observacao);
                 $('#labelTipoCanal').html(': ' + parceiro.tipoCanal);
-console.log('paga contador:', parceiro.pagaContador);
+
+                $('#canal_'+parceiro.tipoCanal).prop("checked","checked");
+
                 if (parceiro.pagaContador == 'SIM')
                     $("#chkEscolhePagtoContador").bootstrapToggle('on');
                 else
                     $("#chkEscolhePagtoContador").bootstrapToggle('off');
-
-                if (parceiro.tipoCanal ==  'unidade') {
-                    /*
-                     * ESCONDE A OPCAO DE EDITAR O CANAL NO MOMENTO DA EDICAO
-                     * */
-                    $('#divBotoesTipoCanal').css({visibility: 'hidden', display: 'none'});
-                    $('#divComissionamento').css({visibility: 'hidden', display: 'none'});
-
-                } else {
-                    $('#divBotoesTipoCanal').css({visibility: 'visible', display: 'block'});
-                    $('#divComissionamento').css({visibility: 'visible', display: 'block'});
-
-                }
 
 
 
@@ -371,6 +363,7 @@ function detalhar_parceiro(parceiro_id){
                 $('#dpSpanNomeParceiro').html(parceiro.nome);
                 $('#dpSpanContatos').html(parceiro.contatos);
                 $('#btnBloqueio').html(parceiro.btnBloqueio);
+                $('#dpSpanTipoCanal').html(parceiro.tipoCanal);
 
                 if (parceiro.registroComissao=='sim') {
                     if (parceiro.comissaoPaga == 'sim')
@@ -534,14 +527,9 @@ function carregar_parceiros(paginaSelecionada, qtdItensPorPagina, carregarDivPag
     camposFiltro = {};
     camposFiltro[nomeCampoFiltro] = valorCampoFiltro;
 
-    var filtroCanal = '';
-    if ($('#filtroEscolheCanal').prop('checked')) {
-        var filtroCanal = $('#filtroChkTipoCanal').prop('checked');
-    }
-
     filtros = {
         'campoFiltro' : camposFiltro,
-        'filtroCanal' : filtroCanal
+        'filtroCanal' : $('#filtroEscolheCanal').val()
     };
 
     var dadosajax = {

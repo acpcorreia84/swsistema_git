@@ -189,6 +189,7 @@ CREATE TABLE `usuario`
 	`volta_ferias` DATE  NOT NULL,
 	`limite_quantidade` INTEGER  NOT NULL,
 	`margem_desconto` INTEGER  NOT NULL,
+	`grupo_produto_id` INTEGER  NOT NULL,
 	PRIMARY KEY (`id`),
 	INDEX `FI__funcionario_setor` (`setor_id`),
 	CONSTRAINT `Rel_funcionario_setor`
@@ -209,6 +210,11 @@ CREATE TABLE `usuario`
 	CONSTRAINT `Rel_usuario_perfil`
 		FOREIGN KEY (`perfil_id`)
 		REFERENCES `perfil` (`id`)
+		ON DELETE RESTRICT,
+	INDEX `FI__usuario_produto_grupo` (`grupo_produto_id`),
+	CONSTRAINT `rel_usuario_produto_grupo`
+		FOREIGN KEY (`grupo_produto_id`)
+		REFERENCES `grupo_produto` (`id`)
 		ON DELETE RESTRICT
 )Type=MyISAM;
 
@@ -681,29 +687,6 @@ CREATE TABLE `grupo_produto`
 	`descricao` VARCHAR(150)  NOT NULL,
 	`situacao` INTEGER  NOT NULL,
 	PRIMARY KEY (`id`)
-)Type=MyISAM;
-
-#-----------------------------------------------------------------------------
-#-- usuario_grupo_produto
-#-----------------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `usuario_grupo_produto`;
-
-
-CREATE TABLE `usuario_grupo_produto`
-(
-	`grupo_produto_id` INTEGER  NOT NULL,
-	`usuario_id` INTEGER  NOT NULL,
-	PRIMARY KEY (`grupo_produto_id`,`usuario_id`),
-	CONSTRAINT `Rel_grupo_produto_id`
-		FOREIGN KEY (`grupo_produto_id`)
-		REFERENCES `grupo_produto` (`id`)
-		ON DELETE RESTRICT,
-	INDEX `FI__usuario_grupo_produto_id` (`usuario_id`),
-	CONSTRAINT `Rel_usuario_grupo_produto_id`
-		FOREIGN KEY (`usuario_id`)
-		REFERENCES `usuario` (`id`)
-		ON DELETE RESTRICT
 )Type=MyISAM;
 
 #-----------------------------------------------------------------------------

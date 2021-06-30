@@ -3010,6 +3010,7 @@ function consultaPrevia () {
             var res = JSON.parse(result.trim());
             $("#modalCarregando").modal('hide');
             try {
+            	/*SE NAO DEU ERRO SEGUE*/
                 if (res.codigo == 0) {
                     $('#btnAvancar1').prop('disabled', false);
                     $("#frmClienteNota").css('visibility','visible');
@@ -3047,7 +3048,69 @@ function consultaPrevia () {
                         $('#div_codigo_cliente_pj').css({'visibility': 'visible', "display": "block"});
 
                     }
-				} else {
+				} else if (res.codigo == 24) {
+					$('#edtCpfVendaInternaPj').focus();
+					//Caso seja empresa inapta
+					BootstrapDialog.show({
+						title: 'Informa&ccedil;&atilde;o!',
+						type: BootstrapDialog.TYPE_WARNING,
+						message: 'Este CNPJ est&aacute; in&aacute;pto. Para continuar a emiss&atilde;o deste certificado, digite a informa&ccedil;&atilde;o da raz&atilde;o social manualmente.',
+						buttons: [{
+							label: 'Prosseguir',
+							action: function(dialog) {
+								$('#btnAvancar1').prop('disabled', false);
+								$("#frmClienteNota").css('visibility','visible');
+								$('#frmClienteNota').css('display','block');
+
+								$("#chkTipoNota1").prop('disabled',false);
+								$('#chkTipoNota2').prop('disabled',false);
+
+								$("#edtDocumentoNota").prop('disabled',true);
+
+								if (tipo_cliente == 1) {
+									$('#edtCpfVendaInterna').prop('disabled', true);
+									$('#edtDataNascimento').prop('disabled', true);
+
+									$('#edtNomeRepresentanteVendaInterna').val(res.mensagem);
+									$('#divFormCliente').css('visibility', 'visible');
+									$('#divFormCliente').css('display', 'inline');
+
+									$('#edtNomeRepresentanteVendaInterna').focus();
+								} else if (tipo_cliente == 2) {
+									$('#edtCnpjVendaInterna').prop('disabled', true);
+									$('#edtCpfVendaInternaPj').prop('disabled', true);
+									$('#edtDataNascimentoPj').prop('disabled', true);
+
+									$('#edtRazaoSocial').val(res.mensagem);
+
+									$('#divPessoaJuridica').css('visibility', 'visible');
+									$('#divPessoaJuridica').css('display', 'inline');
+									$('#divFormCliente').css('visibility', 'visible');
+									$('#divFormCliente').css('display', 'inline');
+
+									$('#edtRazaoSocial').focus();
+
+
+									$('#div_codigo_cliente_pj').css({'visibility': 'visible', "display": "block"});
+
+								}
+								dialog.close();
+							}
+						},
+							{
+								label: 'N&atilde;o',
+								action: function (dialog) {
+									limparModalVendaInterna();
+									dialog.close();
+
+								}
+							}
+
+						]
+					});
+
+				}
+                else {
                     alertErro(res.codigo + ' - ' + res.mensagem + ' Corrija o erro para avancar.');
                     $('#btnAvancar1').prop('disabled', true);
 				}

@@ -190,6 +190,7 @@ function salvarUsuario(){
         $usuario->setCargoId($_POST['cargo']);
         $usuario->setLimiteQuantidade($_POST['limite_quantidade']);
         $usuario->setMargemDesconto($_POST['margem_desconto']);
+        $usuario->setGrupoProdutoId(1);
 
 
         $usuario->save();

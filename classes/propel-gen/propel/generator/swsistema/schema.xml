@@ -144,6 +144,7 @@
         <column name="limite_quantidade" type="INTEGER" required="true"/>
         <column name="margem_desconto" type="INTEGER" required="true"/>
 
+        <column name="grupo_produto_id" type="INTEGER" required="true"/>
 
         <validator column="email">
             <rule name="unique"
@@ -168,6 +169,10 @@
 
         <foreign-key foreignTable="perfil" name="Rel_usuario_perfil" onDelete="restrict">
             <reference local="perfil_id" foreign="id"/>
+        </foreign-key>
+
+        <foreign-key foreignTable="grupo_produto" name="rel_usuario_produto_grupo" onDelete="restrict">
+            <reference local="grupo_produto_id" foreign="id"/>
         </foreign-key>
 
     </table>
@@ -479,7 +484,7 @@
         <column name="situacao" type="INTEGER" required="true"/>
     </table>
 
-    <table name="usuario_grupo_produto" package="pacoteProduto">
+    <!--<table name="usuario_grupo_produto" package="pacoteProduto">
         <column name="grupo_produto_id" type="INTEGER" required="true" primaryKey="true"/>
         <column name="usuario_id" type="INTEGER" required="true" primaryKey="true"/>
 
@@ -491,7 +496,7 @@
             <reference local="usuario_id" foreign="id"/>
         </foreign-key>
 
-    </table>
+    </table>-->
 
     <table name="local_produto" package="pacoteProduto">
 

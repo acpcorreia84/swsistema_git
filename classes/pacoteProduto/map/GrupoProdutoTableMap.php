@@ -48,8 +48,8 @@ class GrupoProdutoTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
+    $this->addRelation('Usuario', 'Usuario', RelationMap::ONE_TO_MANY, array('id' => 'grupo_produto_id', ), 'RESTRICT', null);
     $this->addRelation('Produto', 'Produto', RelationMap::ONE_TO_MANY, array('id' => 'grupo_produto_id', ), 'RESTRICT', null);
-    $this->addRelation('UsuarioGrupoProduto', 'UsuarioGrupoProduto', RelationMap::ONE_TO_MANY, array('id' => 'grupo_produto_id', ), 'RESTRICT', null);
 	} // buildRelations()
 
 } // GrupoProdutoTableMap

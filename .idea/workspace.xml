@@ -4,249 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/inc/putty.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telaRelatorioIndividualParceiro.php" afterDir="false" />
+    <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/conf/swsistema-conf.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/conf/swsistema-conf.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteAcesso/map/PerfilPermissaoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteAcesso/map/PerfilPermissaoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteAcesso/om/BasePerfilPermissao.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteAcesso/om/BasePerfilPermissao.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteAcesso/om/BasePerfilPermissaoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteAcesso/om/BasePerfilPermissaoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/map/CertificadoCupomTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/map/CertificadoCupomTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/map/CertificadoForaSistemaTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/map/CertificadoForaSistemaTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/map/CertificadoNotaTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/map/CertificadoNotaTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/map/CertificadoPagamentoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/map/CertificadoPagamentoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/map/CertificadoProtocoloTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/map/CertificadoProtocoloTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/map/CertificadoSituacaoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/map/CertificadoSituacaoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/map/CertificadoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/map/CertificadoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/map/CuponsDescontoCertificadoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/map/CuponsDescontoCertificadoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/map/SituacaoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/map/SituacaoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificado.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificado.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoCupom.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoCupom.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoCupomPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoCupomPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoForaSistema.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoForaSistema.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoForaSistemaPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoForaSistemaPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoNota.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoNota.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoNotaPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoNotaPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoPagamento.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoPagamento.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoPagamentoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoPagamentoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoProtocolo.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoProtocolo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoProtocoloPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoProtocoloPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoSituacao.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoSituacao.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoSituacaoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCertificadoSituacaoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCuponsDescontoCertificado.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCuponsDescontoCertificado.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCuponsDescontoCertificadoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseCuponsDescontoCertificadoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseSituacao.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseSituacao.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseSituacaoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCertificado/om/BaseSituacaoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCliente/map/ClienteCadastroTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCliente/map/ClienteCadastroTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCliente/map/ClienteContatoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCliente/map/ClienteContatoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCliente/map/ClienteHistoricoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCliente/map/ClienteHistoricoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCliente/map/ClienteTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCliente/map/ClienteTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseCliente.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseCliente.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseClienteCadastro.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseClienteCadastro.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseClienteCadastroPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseClienteCadastroPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseClienteContato.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseClienteContato.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseClienteContatoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseClienteContatoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseClienteHistorico.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseClienteHistorico.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseClienteHistoricoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseClienteHistoricoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseClientePeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteCliente/om/BaseClientePeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComercial/map/ItemPedidoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComercial/map/ItemPedidoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComercial/map/PedidoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComercial/map/PedidoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComercial/om/BaseItemPedido.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComercial/om/BaseItemPedido.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComercial/om/BaseItemPedidoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComercial/om/BaseItemPedidoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComercial/om/BasePedido.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComercial/om/BasePedido.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComercial/om/BasePedidoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComercial/om/BasePedidoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/map/AcaoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/map/AcaoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/map/AgendamentoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/map/AgendamentoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/map/ImportacaoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/map/ImportacaoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/map/LocalTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/map/LocalTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/map/LogAcessoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/map/LogAcessoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/map/LogSeramaTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/map/LogSeramaTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/om/BaseAcao.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/om/BaseAcao.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/om/BaseAcaoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/om/BaseAcaoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/om/BaseAgendamento.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/om/BaseAgendamento.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/om/BaseAgendamentoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/om/BaseAgendamentoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/om/BaseImportacao.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/om/BaseImportacao.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/om/BaseImportacaoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/om/BaseImportacaoPeer.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLocal.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLocal.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLocalPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLocalPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLogAcesso.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLogAcesso.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLogAcessoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLogAcessoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLogSerama.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLogSerama.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLogSeramaPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLogSeramaPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/map/ContadorComissionamentoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/map/ContadorComissionamentoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/map/ContadorContatoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/map/ContadorContatoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/map/ContadorDetalharTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/map/ContadorDetalharTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/map/ContadorLancamentoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/map/ContadorLancamentoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/map/ContadorTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/map/ContadorTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContador.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContador.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorComissionamento.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorComissionamento.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorComissionamentoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorComissionamentoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorContato.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorContato.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorContatoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorContatoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorDetalhar.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorDetalhar.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorDetalharPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorDetalharPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorLancamento.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorLancamento.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorLancamentoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorLancamentoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContador/om/BaseContadorPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContato/map/ContatoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContato/map/ContatoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContato/om/BaseContato.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContato/om/BaseContato.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteContato/om/BaseContatoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteContato/om/BaseContatoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/BancoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/BancoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/BoletoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/BoletoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/CaixaTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/CaixaTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/CategoriaContaContabilTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/CategoriaContaContabilTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/ContaContabilTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/ContaContabilTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/ContasPagarTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/ContasPagarTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/ContasReceberTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/ContasReceberTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/DetalheChequeTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/DetalheChequeTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/DetalheLancamentoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/DetalheLancamentoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/FormaPagamentoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/FormaPagamentoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/LancamentoCaixaTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/LancamentoCaixaTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/LancamentoContaTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/LancamentoContaTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/ReciboTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/map/ReciboTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseBanco.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseBanco.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseBancoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseBancoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseBoleto.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseBoleto.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseBoletoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseBoletoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseCaixa.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseCaixa.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseCaixaPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseCaixaPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseCategoriaContaContabil.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseCategoriaContaContabil.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseCategoriaContaContabilPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseCategoriaContaContabilPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseContaContabil.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseContaContabil.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseContaContabilPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseContaContabilPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseContasPagar.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseContasPagar.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseContasPagarPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseContasPagarPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseContasReceber.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseContasReceber.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseContasReceberPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseContasReceberPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseDetalheCheque.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseDetalheCheque.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseDetalheChequePeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseDetalheChequePeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseDetalheLancamento.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseDetalheLancamento.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseDetalheLancamentoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseDetalheLancamentoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseFormaPagamento.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseFormaPagamento.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseFormaPagamentoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseFormaPagamentoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseLancamentoCaixa.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseLancamentoCaixa.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseLancamentoCaixaPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseLancamentoCaixaPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseLancamentoConta.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseLancamentoConta.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseLancamentoContaPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseLancamentoContaPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseRecibo.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseRecibo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseReciboPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteFinanceiro/om/BaseReciboPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteInformacao/map/AvisoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteInformacao/map/AvisoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteInformacao/map/AvisoUsuarioTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteInformacao/map/AvisoUsuarioTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteInformacao/map/TipoAvisoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteInformacao/map/TipoAvisoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteInformacao/om/BaseAviso.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteInformacao/om/BaseAviso.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteInformacao/om/BaseAvisoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteInformacao/om/BaseAvisoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteInformacao/om/BaseAvisoUsuario.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteInformacao/om/BaseAvisoUsuario.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteInformacao/om/BaseAvisoUsuarioPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteInformacao/om/BaseAvisoUsuarioPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteInformacao/om/BaseTipoAviso.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteInformacao/om/BaseTipoAviso.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteInformacao/om/BaseTipoAvisoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteInformacao/om/BaseTipoAvisoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/map/ParceiroComissionamentoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/map/ParceiroComissionamentoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/map/ParceiroLancamentoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/map/ParceiroLancamentoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/map/ParceiroTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/map/ParceiroTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/map/ParceiroUsuarioTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/map/ParceiroUsuarioTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/map/ParceiroUsuarioTipoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/map/ParceiroUsuarioTipoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiro.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiro.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroComissionamento.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroComissionamento.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroComissionamentoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroComissionamentoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroLancamento.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroLancamento.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroLancamentoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroLancamentoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroUsuario.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroUsuario.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroUsuarioPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroUsuarioPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroUsuarioTipo.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroUsuarioTipo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroUsuarioTipoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteParceiro/om/BaseParceiroUsuarioTipoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/map/FornecedorTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/map/FornecedorTableMap.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/map/GrupoProdutoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/map/GrupoProdutoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/map/LocalProdutoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/map/LocalProdutoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/map/ProdutoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/map/ProdutoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/map/UsuarioGrupoProdutoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/map/UsuarioGrupoProdutoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseFornecedor.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseFornecedor.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseFornecedorPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseFornecedorPeer.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseGrupoProduto.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseGrupoProduto.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseGrupoProdutoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseGrupoProdutoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseLocalProduto.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseLocalProduto.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseLocalProdutoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseLocalProdutoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseProduto.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseProduto.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseProdutoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseProdutoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseUsuarioGrupoProduto.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseUsuarioGrupoProduto.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseUsuarioGrupoProdutoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseUsuarioGrupoProdutoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectAcaoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectAcaoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectAtendimentoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectAtendimentoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectConcorrenteTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectConcorrenteTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectContatoDetalheTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectContatoDetalheTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectContatoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectContatoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectMeioContatoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectMeioContatoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectMetaTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectMetaTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectNegocioTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectNegocioTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectRetencaoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectRetencaoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectSituacaoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectSituacaoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectTipoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/map/ProspectTipoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspect.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspect.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectAcao.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectAcao.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectAcaoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectAcaoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectAtendimento.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectAtendimento.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectAtendimentoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectAtendimentoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectConcorrente.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectConcorrente.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectConcorrentePeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectConcorrentePeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectContato.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectContato.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectContatoDetalhe.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectContatoDetalhe.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectContatoDetalhePeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectContatoDetalhePeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectContatoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectContatoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectMeioContato.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectMeioContato.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectMeioContatoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectMeioContatoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectMeta.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectMeta.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectMetaPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectMetaPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectNegocio.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectNegocio.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectNegocioPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectNegocioPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectRetencao.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectRetencao.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectRetencaoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectRetencaoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectSituacao.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectSituacao.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectSituacaoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectSituacaoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectTipo.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectTipo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectTipoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProspect/om/BaseProspectTipoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteResponsavel/map/ResponsavelTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteResponsavel/map/ResponsavelTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteResponsavel/om/BaseResponsavel.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteResponsavel/om/BaseResponsavel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteResponsavel/om/BaseResponsavelPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteResponsavel/om/BaseResponsavelPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/map/CargoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/map/CargoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/map/ContaBancariaTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/map/ContaBancariaTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/map/GrupoPermissaoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/map/GrupoPermissaoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/map/LocalUsuarioTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/map/LocalUsuarioTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/map/PerfilTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/map/PerfilTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/map/PermissaoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/map/PermissaoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/map/SetorTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/map/SetorTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/map/UsuarioComissionamentoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/map/UsuarioComissionamentoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/map/UsuarioLancamentoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/map/UsuarioLancamentoTableMap.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/map/UsuarioTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/map/UsuarioTableMap.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseCargo.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseCargo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseCargoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseCargoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseContaBancaria.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseContaBancaria.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseContaBancariaPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseContaBancariaPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseGrupoPermissao.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseGrupoPermissao.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseGrupoPermissaoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseGrupoPermissaoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseLocalUsuario.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseLocalUsuario.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseLocalUsuarioPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseLocalUsuarioPeer.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BasePerfil.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BasePerfil.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BasePerfilPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BasePerfilPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BasePermissao.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BasePermissao.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BasePermissaoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BasePermissaoPeer.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseSetor.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseSetor.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseSetorPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseSetorPeer.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuario.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuario.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuarioComissionamento.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuarioComissionamento.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuarioComissionamentoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuarioComissionamentoPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuarioLancamento.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuarioLancamento.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuarioLancamentoPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuarioLancamentoPeer.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuarioPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuarioPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/propel-gen/propel/generator/swsistema/build.properties" beforeDir="false" afterPath="$PROJECT_DIR$/classes/propel-gen/propel/generator/swsistema/build.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/propel-gen/propel/generator/swsistema/schema.xml" beforeDir="false" afterPath="$PROJECT_DIR$/classes/propel-gen/propel/generator/swsistema/schema.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/sql/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/classes/sql/schema.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/funcoes/funcoesParceiro.php" beforeDir="false" afterPath="$PROJECT_DIR$/funcoes/funcoesParceiro.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/geraclasses.bat" beforeDir="false" afterPath="$PROJECT_DIR$/geraclasses.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/menu.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/menu.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/script.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/script.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/telaRelatorioComissionamentoParceiros.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/telaRelatorioComissionamentoParceiros.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/funcoes/funcoesUsuario.php" beforeDir="false" afterPath="$PROJECT_DIR$/funcoes/funcoesUsuario.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/filtros/filtroParceiro.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/filtros/filtroParceiro.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/telaCertificado.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/telaCertificado.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/telaParceiro.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/telaParceiro.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modais/certificados/certificadoModalTrocarProduto.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/certificados/certificadoModalTrocarProduto.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modais/certificados/certificadoModalVendaInterna.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/certificados/certificadoModalVendaInterna.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modais/parceiro/modalParceiroDetalhar.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/parceiro/modalParceiroDetalhar.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modais/parceiro/modalParceiroInserir.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/parceiro/modalParceiroInserir.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -301,7 +80,28 @@
       <workItem from="1621967652150" duration="9714000" />
       <workItem from="1622116723912" duration="558000" />
       <workItem from="1622490265008" duration="1693000" />
+      <workItem from="1624365607005" duration="4363000" />
+      <workItem from="1624479221357" duration="615000" />
+      <workItem from="1624480197342" duration="3010000" />
+      <workItem from="1624548279606" duration="1438000" />
+      <workItem from="1624624899203" duration="842000" />
+      <workItem from="1624988686801" duration="10348000" />
     </task>
+    <task id="LOCAL-00001" summary="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida">
+      <created>1624365794378</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1624365794378</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida">
+      <created>1624365805948</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1624365805948</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -318,5 +118,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida" />
+    <option name="LAST_COMMIT_MESSAGE" value="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida" />
   </component>
 </project>

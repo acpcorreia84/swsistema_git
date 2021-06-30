@@ -36,15 +36,15 @@
                                     <div class="col-lg-12" id="divBotoesTipoCanal">
                                         <div class="btn-group" >
                                             <label class="btn btn-default">
-                                                <input type="radio" name="edtTipoCanal" value="parceiro" autocomplete="off"  checked="checked"> Parceiro
+                                                <input type="radio" name="edtTipoCanal" id='canal_parceiro' value="parceiro" autocomplete="off"  > Parceiro
                                             </label>
 
                                             <label class="btn btn-default">
-                                                <input type="radio"  name="edtTipoCanal" value="unidade" autocomplete="off" required="required" > Unidade Pr&oacute;pria
+                                                <input type="radio"  name="edtTipoCanal" id='canal_unidade' value="unidade" autocomplete="off"  > Unidade Pr&oacute;pria
                                             </label>
 
                                             <label class="btn btn-default">
-                                                <input type="radio"  name="edtTipoCanal" value="tabela" autocomplete="off" required="required" > Parceiro Tabela Fixa
+                                                <input type="radio"  name="edtTipoCanal" id='canal_tabela' value="tabela" autocomplete="off" required="required" > Parceiro Tabela Fixa
                                             </label>
 
                                         </div>
@@ -339,6 +339,16 @@
                                     </div>
                                 </div>
 
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h4>GRUPO DE PRODUTOS:</h4>
+                                        <h5>Trocar o grupo de produtos dos usuários do parceiro</h5>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div id="divGrupoProdutosParceiro"></div>
+                                    </div>
+                                </div>
                             </div><!--FIM panel-body-->
                         </div><!--FIM panel-default-->
 
