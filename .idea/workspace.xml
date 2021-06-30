@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida">
+    <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="- trabalhando na vinculacao do grupo de produtos ao usuario. A principio todo usuario inicia com o grupo de produtos principal. Ao Vincular ao parceiro, ele edita o parceiro e altera o grupo de produtos para o grupo de produtos do parceiro. Assim resolve a questão.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/conf/swsistema-conf.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/conf/swsistema-conf.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLocal.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLocal.php" afterDir="false" />
@@ -85,7 +85,7 @@
       <workItem from="1624480197342" duration="3010000" />
       <workItem from="1624548279606" duration="1438000" />
       <workItem from="1624624899203" duration="842000" />
-      <workItem from="1624988686801" duration="10348000" />
+      <workItem from="1624988686801" duration="10896000" />
     </task>
     <task id="LOCAL-00001" summary="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida">
       <created>1624365794378</created>
@@ -121,6 +121,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida" />
-    <option name="LAST_COMMIT_MESSAGE" value="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida" />
+    <MESSAGE value="- trabalhando na vinculacao do grupo de produtos ao usuario. A principio todo usuario inicia com o grupo de produtos principal. Ao Vincular ao parceiro, ele edita o parceiro e altera o grupo de produtos para o grupo de produtos do parceiro. Assim resolve a questão." />
+    <option name="LAST_COMMIT_MESSAGE" value="- trabalhando na vinculacao do grupo de produtos ao usuario. A principio todo usuario inicia com o grupo de produtos principal. Ao Vincular ao parceiro, ele edita o parceiro e altera o grupo de produtos para o grupo de produtos do parceiro. Assim resolve a questão." />
   </component>
 </project>
