@@ -79,6 +79,20 @@ function salvar_parceiro(){
         $parceiro->setObservacao($_POST['observacao']);
         $parceiro->setPagaContador($_POST['pagaContador']);
 
+        /*
+         * ALTERAR O GRUPO DE PRODUTOS DO USUARIO DO PARCEIRO
+         * */
+        $usuariosParceiros = $parceiro->getParceiroUsuarios();
+
+        foreach ($usuariosParceiros as $parceiroUsuario){
+            $usuario = $parceiroUsuario->getUsuario();
+            if ($usuario) {
+                $usuario->setGrupoProdutoId($_POST['grupoProdutoId']);
+                $usuario->save();
+            }
+        }
+
+
         $parceiro->save();
         echo 'Ok';
 

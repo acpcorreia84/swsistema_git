@@ -7,14 +7,14 @@ return array (
     'swsistema' => 
     array (
       'adapter' => 'sqlite',
-      'connection' => 
+      'connection' =>
       array (
-        'classname' => 'DebugPDO',
-        'dsn' => 'mysql:host=localhost;dbname=swsistem_master',
-        'user' => 'root',
-        'password' => '',
-        'options' => 
-        array (
+          'classname' => 'DebugPDO',
+          'dsn' => 'mysql:host=localhost;dbname=swsistem_principal',
+          'user' => 'swsistem_master',
+          'password' => 'NP%?4fLuXhsV',
+          'options' =>
+              array (
           'ATTR_PERSISTENT' => 
           array (
             'value' => false,

@@ -5,28 +5,80 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="- trabalhando na vinculacao do grupo de produtos ao usuario. A principio todo usuario inicia com o grupo de produtos principal. Ao Vincular ao parceiro, ele edita o parceiro e altera o grupo de produtos para o grupo de produtos do parceiro. Assim resolve a questão.">
+      <change afterPath="$USER_HOME$/PhpstormProjects/safe2pay_PHP/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$USER_HOME$/PhpstormProjects/safe2pay_PHP/.idea/safe2pay_PHP.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/.vscode/launch.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/composer.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/AccountDepositRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/AdvancedPaymentRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/BankTransferRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/InvoiceRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/MarketplaceRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/PaymentRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/TokenizationRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/TransactionRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/TransferenceRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Bank/AccountType.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Bank/Bank.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Bank/BankData.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Core/Client.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Core/Config.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/General/Address.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/General/Customer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/General/Product.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/Configuration.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/ListTax.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/Merchant.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantConfiguration.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantNotify.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantPaymentDate.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantPaymentMethod.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantSplit.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantSplitTax.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantType.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/Plan.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/PlanFrequence.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/TaxType.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/BankSlip.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/BankTransfer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/Carnet.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/CarnetItems.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/CarnetLot.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/CreditCard.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/Cryptocoin.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/DebitCard.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/PaymentMethod.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/Pix.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Response/Response.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/SingleSale/SingleSale.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/SingleSale/SingleSalePayment.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/SingleSale/SingleSalePaymentMethod.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/SingleSale/SingleSaleProduct.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Subscription/SubscriptionRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transactions/Base.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transactions/Splits.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transactions/Transaction.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transactions/TransactionStatus.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transference/Transfer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transference/TransferRegister.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/AccountDepositRequestTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/InvoiceTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/MarketplaceTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/PaymentTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/TokenizationTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/TransactionTests.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/TransferenceTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/swsistema.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/swsistema.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/conf/swsistema-conf-remote.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/conf/swsistema-conf-remote.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/conf/swsistema-conf.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/conf/swsistema-conf.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLocal.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteComum/om/BaseLocal.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/map/GrupoProdutoTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/map/GrupoProdutoTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseGrupoProduto.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteProduto/om/BaseGrupoProduto.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/map/UsuarioTableMap.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/map/UsuarioTableMap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseCargo.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseCargo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BasePerfil.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BasePerfil.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseSetor.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseSetor.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuario.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuario.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuarioPeer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/pacoteUsuario/om/BaseUsuarioPeer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/propel-gen/propel/generator/swsistema/schema.xml" beforeDir="false" afterPath="$PROJECT_DIR$/classes/propel-gen/propel/generator/swsistema/schema.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/sql/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/classes/sql/schema.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/funcoes/funcoesParceiro.php" beforeDir="false" afterPath="$PROJECT_DIR$/funcoes/funcoesParceiro.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/funcoes/funcoesUsuario.php" beforeDir="false" afterPath="$PROJECT_DIR$/funcoes/funcoesUsuario.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/filtros/filtroParceiro.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/filtros/filtroParceiro.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/telaCertificado.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/telaCertificado.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/telaParceiro.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/telaParceiro.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modais/certificados/certificadoModalTrocarProduto.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/certificados/certificadoModalTrocarProduto.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modais/certificados/certificadoModalVendaInterna.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/certificados/certificadoModalVendaInterna.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modais/parceiro/modalParceiroDetalhar.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/parceiro/modalParceiroDetalhar.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modais/parceiro/modalParceiroInserir.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/parceiro/modalParceiroInserir.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,19 +105,24 @@
     </include_path>
   </component>
   <component name="ProjectId" id="1syzFcWRA6MJwxd8nrdg4tE6yqg" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="web.server" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -85,7 +142,10 @@
       <workItem from="1624480197342" duration="3010000" />
       <workItem from="1624548279606" duration="1438000" />
       <workItem from="1624624899203" duration="842000" />
-      <workItem from="1624988686801" duration="10896000" />
+      <workItem from="1624988686801" duration="13923000" />
+      <workItem from="1625077416653" duration="1451000" />
+      <workItem from="1629488550008" duration="1027000" />
+      <workItem from="1629727448527" duration="2726000" />
     </task>
     <task id="LOCAL-00001" summary="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida">
       <created>1624365794378</created>
@@ -101,7 +161,21 @@
       <option name="project" value="LOCAL" />
       <updated>1624365805948</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="- trabalhando na vinculacao do grupo de produtos ao usuario. A principio todo usuario inicia com o grupo de produtos principal. Ao Vincular ao parceiro, ele edita o parceiro e altera o grupo de produtos para o grupo de produtos do parceiro. Assim resolve a questão.">
+      <created>1625064719966</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1625064719966</updated>
+    </task>
+    <task id="LOCAL-00004" summary="- trabalhando na vinculacao do grupo de produtos ao usuario. A principio todo usuario inicia com o grupo de produtos principal. Ao Vincular ao parceiro, ele edita o parceiro e altera o grupo de produtos para o grupo de produtos do parceiro. Assim resolve a questão.">
+      <created>1625064732905</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1625064732905</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -112,7 +186,13 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -120,6 +200,7 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida" />
     <MESSAGE value="- trabalhando na vinculacao do grupo de produtos ao usuario. A principio todo usuario inicia com o grupo de produtos principal. Ao Vincular ao parceiro, ele edita o parceiro e altera o grupo de produtos para o grupo de produtos do parceiro. Assim resolve a questão." />
     <option name="LAST_COMMIT_MESSAGE" value="- trabalhando na vinculacao do grupo de produtos ao usuario. A principio todo usuario inicia com o grupo de produtos principal. Ao Vincular ao parceiro, ele edita o parceiro e altera o grupo de produtos para o grupo de produtos do parceiro. Assim resolve a questão." />

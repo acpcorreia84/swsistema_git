@@ -117,9 +117,10 @@ function salvar_parceiro(acao){
         'comissao_venda_validacao':$('#ipEdtComissaoVendaValidacao').val(),
         'observacao':$('#ipEdtObservacao').val(),
         'tipo_canal' : $('input[name=edtTipoCanal]:checked').val(),
-        'pagaContador' : pagaContador
+        'pagaContador' : pagaContador,
+        'grupoProdutoId' : $('#edtGrupoProdutoParceiro').val()
     };
-console.log($('input[name=edtTipoCanal]:checked').val());
+
     $.ajax ({
         url : pageUrl,
         data : dadosajax,

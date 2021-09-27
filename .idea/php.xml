@@ -447,4 +447,7 @@
       </interpreter>
     </phpInfoCache>
   </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="7.1">
+    <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
 </project>
