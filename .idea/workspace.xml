@@ -4,81 +4,134 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="- trabalhando na vinculacao do grupo de produtos ao usuario. A principio todo usuario inicia com o grupo de produtos principal. Ao Vincular ao parceiro, ele edita o parceiro e altera o grupo de produtos para o grupo de produtos do parceiro. Assim resolve a questão.">
-      <change afterPath="$USER_HOME$/PhpstormProjects/safe2pay_PHP/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$USER_HOME$/PhpstormProjects/safe2pay_PHP/.idea/safe2pay_PHP.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/.vscode/launch.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/composer.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/AccountDepositRequest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/AdvancedPaymentRequest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/BankTransferRequest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/InvoiceRequest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/MarketplaceRequest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/PaymentRequest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/TokenizationRequest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/TransactionRequest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/TransferenceRequest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Bank/AccountType.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Bank/Bank.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Bank/BankData.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Core/Client.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Core/Config.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/General/Address.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/General/Customer.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/General/Product.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/Configuration.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/ListTax.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/Merchant.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantConfiguration.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantNotify.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantPaymentDate.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantPaymentMethod.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantSplit.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantSplitTax.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantType.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/Plan.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/PlanFrequence.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/TaxType.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/BankSlip.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/BankTransfer.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/Carnet.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/CarnetItems.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/CarnetLot.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/CreditCard.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/Cryptocoin.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/DebitCard.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/PaymentMethod.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/Pix.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Response/Response.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/SingleSale/SingleSale.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/SingleSale/SingleSalePayment.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/SingleSale/SingleSalePaymentMethod.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/SingleSale/SingleSaleProduct.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Subscription/SubscriptionRequest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transactions/Base.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transactions/Splits.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transactions/Transaction.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transactions/TransactionStatus.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transference/Transfer.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transference/TransferRegister.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/AccountDepositRequestTest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/InvoiceTest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/MarketplaceTest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/PaymentTest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/TokenizationTest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/TransactionTests.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/TransferenceTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/swsistema.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/swsistema.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="- alterações gerais">
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/.vscode/launch.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/composer.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/API/AccountDepositRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/API/AdvancedPaymentRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/API/BankTransferRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/API/InvoiceRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/API/MarketplaceRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/API/PaymentRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/API/TokenizationRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/API/TransactionRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/API/TransferenceRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Bank/AccountType.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Bank/Bank.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Bank/BankData.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Core/Client.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Core/Config.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/General/Address.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/General/Customer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/General/Product.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Merchant/Configuration.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Merchant/ListTax.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Merchant/Merchant.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Merchant/MerchantConfiguration.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Merchant/MerchantNotify.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Merchant/MerchantPaymentDate.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Merchant/MerchantPaymentMethod.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Merchant/MerchantSplit.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Merchant/MerchantSplitTax.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Merchant/MerchantType.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Merchant/Plan.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Merchant/PlanFrequence.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Merchant/TaxType.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Payment/BankSlip.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Payment/BankTransfer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Payment/Carnet.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Payment/CarnetItems.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Payment/CarnetLot.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Payment/CreditCard.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Payment/Cryptocoin.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Payment/DebitCard.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Payment/PaymentMethod.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Payment/Pix.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Response/Response.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/SingleSale/SingleSale.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/SingleSale/SingleSalePayment.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/SingleSale/SingleSalePaymentMethod.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/SingleSale/SingleSaleProduct.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Subscription/SubscriptionRequest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Transactions/Base.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Transactions/Splits.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Transactions/Transaction.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Transactions/TransactionStatus.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Transference/Transfer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/lib/Models/Transference/TransferRegister.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/test/AccountDepositRequestTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/test/InvoiceTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/test/MarketplaceTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/test/PaymentTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/test/TokenizationTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/test/TransactionTests.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/test/TransferenceTest.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/conf/swsistema-conf-remote.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/conf/swsistema-conf-remote.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/conf/swsistema-conf.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/conf/swsistema-conf.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/funcoes/funcoesParceiro.php" beforeDir="false" afterPath="$PROJECT_DIR$/funcoes/funcoesParceiro.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/telaParceiro.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/telaParceiro.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/.vscode/launch.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/composer.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/AccountDepositRequest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/AdvancedPaymentRequest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/BankTransferRequest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/InvoiceRequest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/MarketplaceRequest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/PaymentRequest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/TokenizationRequest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/TransactionRequest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/API/TransferenceRequest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Bank/AccountType.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Bank/Bank.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Bank/BankData.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Core/Client.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Core/Config.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/General/Address.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/General/Customer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/General/Product.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/Configuration.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/ListTax.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/Merchant.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantConfiguration.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantNotify.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantPaymentDate.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantPaymentMethod.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantSplit.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantSplitTax.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/MerchantType.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/Plan.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/PlanFrequence.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Merchant/TaxType.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/BankSlip.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/BankTransfer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/Carnet.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/CarnetItems.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/CarnetLot.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/CreditCard.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/Cryptocoin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/DebitCard.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/PaymentMethod.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Payment/Pix.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Response/Response.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/SingleSale/SingleSale.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/SingleSale/SingleSalePayment.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/SingleSale/SingleSalePaymentMethod.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/SingleSale/SingleSaleProduct.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Subscription/SubscriptionRequest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transactions/Base.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transactions/Splits.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transactions/Transaction.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transactions/TransactionStatus.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transference/Transfer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/lib/Models/Transference/TransferRegister.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/AccountDepositRequestTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/InvoiceTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/MarketplaceTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/PaymentTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/TokenizationTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/TransactionTests.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/PHP-master/test/TransferenceTest.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,6 +199,7 @@
       <workItem from="1625077416653" duration="1451000" />
       <workItem from="1629488550008" duration="1027000" />
       <workItem from="1629727448527" duration="2726000" />
+      <workItem from="1632754402602" duration="749000" />
     </task>
     <task id="LOCAL-00001" summary="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida">
       <created>1624365794378</created>
@@ -175,7 +229,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625064732905</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="- alterações gerais">
+      <created>1632754731115</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1632754731115</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -203,6 +264,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida" />
     <MESSAGE value="- trabalhando na vinculacao do grupo de produtos ao usuario. A principio todo usuario inicia com o grupo de produtos principal. Ao Vincular ao parceiro, ele edita o parceiro e altera o grupo de produtos para o grupo de produtos do parceiro. Assim resolve a questão." />
-    <option name="LAST_COMMIT_MESSAGE" value="- trabalhando na vinculacao do grupo de produtos ao usuario. A principio todo usuario inicia com o grupo de produtos principal. Ao Vincular ao parceiro, ele edita o parceiro e altera o grupo de produtos para o grupo de produtos do parceiro. Assim resolve a questão." />
+    <MESSAGE value="- alterações gerais" />
+    <option name="LAST_COMMIT_MESSAGE" value="- alterações gerais" />
   </component>
 </project>
