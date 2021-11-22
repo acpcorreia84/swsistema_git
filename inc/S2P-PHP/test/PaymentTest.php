@@ -682,7 +682,7 @@ class PaymentTest
 }
 
 
-//PaymentTest::GetPaymentMethods();
+PaymentTest::GetPaymentMethods();
 //PaymentTest::BankSlip();
 //PaymentTest::CreditCard();
 //PaymentTest::CryptoCurrency();
