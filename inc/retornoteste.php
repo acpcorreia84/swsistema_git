@@ -14,7 +14,7 @@ $tId = $retorno->TransactionID;
 $transactionStatus = '3';
 $tId = '1638245';*/
 
-    if ( ($secretKey == '28517135D5E1438398289AA82447E1B82E4B9E5EE829425DA0D9C082A1C5F6FF' && ($transactionStatus=="3"))  ) {
+    if ( ($secretKey == '011C0F0905AF488E8F8420F195161F5FC7DE6DCFB7DA4053957ACC16E  557675D' && ($transactionStatus=="3"))  ) {
             $cBol = new Criteria();
             $cBol->add(BoletoPeer::TID, $tId);
             $boleto = BoletoPeer::doSelectOne($cBol);

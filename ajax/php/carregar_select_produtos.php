@@ -4,8 +4,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/loader.php';
 //recebe os parâmetros
 
 try{
+    $usuarioLogado = ControleAcesso::getUsuarioLogado();
     $cProdutos = new Criteria();
+
     $cProdutos->add(ProdutoPeer::PESSOA_TIPO, $_POST['tipo_cliente']);
+    $cProdutos->add(ProdutoPeer::GRUPO_PRODUTO_ID, $usuarioLogado->getGrupoProdutoId());
     //$cProdutos->add(ProdutoPeer::PRECO, 0, Criteria::GREATER_THAN); /*SE FOR PRECO DE CONTADOR*/
     /*SE O CONTADOR TEM DESCONTO SO CARREGA OS PRODUTOS DE CONTADORES*/
     if ($_POST['tem_desconto']==1)

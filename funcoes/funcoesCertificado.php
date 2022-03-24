@@ -1,7 +1,6 @@
 <?
     date_default_timezone_set('America/Belem');
 	require_once $_SERVER['DOCUMENT_ROOT'].'/loader.php';
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/pagarme-php/Pagarme.php';
     require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/WSCertificado.php';
 	$certificado_id = $_POST['certificado_id'];
     $usuarioLogado = ControleAcesso::getUsuarioLogado();
@@ -1350,7 +1349,6 @@ function salvarBoletoSafeToPay(){
         $produto = $certificado->getProduto();
         $cliente = $certificado->getCliente();
 
-        /*MONTAGEM DO BOLETO DO PAGARME*/
         $valor_boleto = ( ($certificado->getProduto()->getPreco()) - ($certificado->getDesconto() ) );
 
         if ($cliente->getRazaoSocial())
@@ -1382,7 +1380,6 @@ function salvarBoletoSafeToPay(){
         $ano= $vencimento[2];
         $email=$emailEnvio;
 
-        //GerarBoletoPagarMe
         if ($cliente->getEndereco())
             $endereco = utf8_encode($cliente->getEndereco());
         else
@@ -1395,8 +1392,6 @@ function salvarBoletoSafeToPay(){
         $boleto_url = $_POST['urlBoleto']; // URL do boleto banc?rio
         $boleto_barcode = $_POST['codigoBarras']; // c?digo de barras do boleto banc?rio
         $transacaoId = $_POST['tid'];
-
-        /*FIM DA MONTAGEM DO BOLETO DO PAGARME*/
 
 
         $itensPedido = $certificado->getItemPedidos();
@@ -1450,8 +1445,25 @@ function salvarBoletoSafeToPay(){
     }
 
 };
+/*
+use Safe2Pay\API\PaymentRequest;
+use Safe2Pay\Models\Payment\BankSlip;
+use Safe2Pay\Models\Transactions\Transaction;
+use Safe2Pay\Models\General\Customer;
+use Safe2Pay\Models\General\Product;
+use Safe2Pay\Models\General\Address;
 
+use Safe2Pay\Models\Core\Config as Enviroment;
+*/
 function gerarBoletoCertificado($certificado_id){
+
+    //require_once 'vendor/autoload.php';
+    echo json_encode(array('mensagem'=>'Debug'));
+    exit;
+
+
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/S2P-PHP/lib';
+
     $resultadoBoleto = "";
     try{
         $usuarioLogado = ControleAcesso::getUsuarioLogado();
@@ -1462,7 +1474,6 @@ function gerarBoletoCertificado($certificado_id){
         $produto = $certificado->getProduto();
         $cliente = $certificado->getCliente();
 
-        /*MONTAGEM DO BOLETO DO PAGARME*/
         $valor_boleto = ( ($certificado->getProduto()->getPreco()) - ($certificado->getDesconto() ) );
 
         if ($cliente->getRazaoSocial())
@@ -1494,7 +1505,7 @@ function gerarBoletoCertificado($certificado_id){
         $ano= $vencimento[2];
         $email=$emailEnvio;
 
-        //GerarBoletoPagarMe
+
         if ($cliente->getEndereco())
             $endereco = utf8_encode($cliente->getEndereco());
         else
@@ -1504,8 +1515,6 @@ function gerarBoletoCertificado($certificado_id){
             $endereco = removeEspeciais( utf8_encode($cliente->getEndereco()));
 
 
-//        Pagarme::setApiKey("ak_live_snGWlbkg0GxidcKPpKfWyUojRPoaBC");
-        //  Pagarme::setApiKey("ak_test_sY6UfR8wCl8AmgWb7ra5MGoOLm54Ny");
 
         $customer = new PagarMe_Customer(array(
             "document_number" => removeTracoPontoBarra($cpfCnpj),
@@ -1582,7 +1591,7 @@ function gerarBoletoCertificado($certificado_id){
         $certSit->setUsuarioId($usuarioLogado->getId());
         $certSit->save();
 
-        enviarEmailBoleto($nome,$emailEnvio, $boleto_barcode,$boleto_url, $produto->getNome(), $valor_boleto);
+//        enviarEmailBoleto($nome,$emailEnvio, $boleto_barcode,$boleto_url, $produto->getNome(), $valor_boleto);
 
         echo json_encode(array('mensagem'=>'Ok'));
     }catch(Exception $e){
@@ -1598,6 +1607,7 @@ function gerarProtocolo(){
         $certificado = CertificadoPeer::retrieveByPK($certificado_id);
 		if(($certificado->getProtocolo()== null)|| $certificado->getProtocolo()=='0'){
             $ws = new WSCertificado();
+
             if ($certificado->getCliente()->getPessoaTipo() == 'F') { //SE FOR PESSOA F?SICA
                 //CONSULTA PREVIA CPF
                 if($certificado->getCliente()->getFone1()){

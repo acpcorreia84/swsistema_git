@@ -286,7 +286,7 @@ function geraSenha($tamanho = 6, $maiusculas = true, $numeros = true, $simbolos 
 
 };
 function enviarEmailResetarSenha($nomeUsuario,$emailUsuario, $senhaProvisoria){
-    require_once DOCUMENT_ROOT.'/inc/PHPMailer_v5.1/class.phpmailer.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/inc/PHPMailer_v5.1/class.phpmailer.php';
 
     try {
         $usuarioLogado = ControleAcesso::getUsuarioLogado();

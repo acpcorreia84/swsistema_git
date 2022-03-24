@@ -149,7 +149,7 @@ class PHPMailer {
    * Hosts will be tried in order.
    * @var string
    */
-  public $Host          = 'dedi-3746380.swsistema.com.br';//'localhost';
+  public $Host          = '162.214.66.87';//'localhost';
 
   /**
    * Sets the default SMTP server port.

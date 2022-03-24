@@ -279,14 +279,32 @@ function resetarSenhaUsuario() {
     try{
         $con = Propel::getConnection();
         $con->beginTransaction();
-
         $usuario = UsuarioPeer::retrieveByPK($usuarioId);
-        $usuario->setDataExpiracaoSenha(date('Y-m-d'));
         $senhaProvisoria = hash('ripemd160', $usuario->getEmail() . $usuario->getCpf() . $usuario->getCelular() . rand());
         $usuario->setSenha(substr($senhaProvisoria, 0, 30));
         $usuario->save();
+// To send HTML mail, the Content-type header must be set
+        $headers[] = 'MIME-Version: 1.0';
+        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
 
-        enviarEmailResetarSenha($usuario->getNome(), $usuario->getEmail(), substr($senhaProvisoria, 0, 30));
+// Additional headers
+/*        $headers[] = 'To: '.$usuario->getNome() . ' <' .$usuario->getEmail() .'>';
+        $headers[] = 'From: Sistema SW <pedro.souza@arsw.com.br>';
+        $headers[] = 'Cc: melo.joao85@gmail.com';*/
+
+        $body = '';
+        $body .= "Ol&aacute; <strong>".trim(removeEspeciais(strtoupper($usuario->getNome()))).",</strong><br><br>";
+        $body .= "Tudo bem?<br/>";
+        $body .= "<br/>";
+        $body .= "Conforme solicitado, pelo usu&aacute;rio ".$usuario->getNome(). " sua senha foi resetada. Utilize no seu pr&oacute;ximo login os dados abaixo:<br>";
+        $body .= "<br>";
+        $body .= "<strong>Login:</strong> ".$usuario->getEmail()."<br>";
+        $body .= "<strong>Senha Provis&oacute;ria:</strong> ".substr($senhaProvisoria, 0, 30)."<br>";
+        $body .= "<strong>Endere&ccedil;o:</strong> http://www.swsistema.com.br<br>";
+
+        $body .= "<p style='size:25px'>Data e Hora da Solicita&ccedil;&atilde;o:".date('d/m/Y')." Hora:".date('H:i:s')."</p>";
+
+        mail( $usuario->getEmail(), 'Alteração de senha do usuário', $body, implode("\r\n", $headers) );
 
         $con->commit();
         echo json_encode(array('mensagem'=>'Ok', 'email'=>$usuario->getEmail(), 'usuario'=>$usuario->getNome()));

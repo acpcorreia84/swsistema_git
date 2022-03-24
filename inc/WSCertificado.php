@@ -16,7 +16,7 @@ Class WSCertificado{
 
     //const LOCAL_CERT =  '/home/swsistema/public_html/inc/cert/SwDigital.pem'; // caminho para o certificado
     const LOCAL_CERT =  'C:/xampp/htdocs/swsistema/inc/cert/SwDigital.pem'; // caminho para o certificado
-    const ID_PARCEIRO = '385'; //id do parceiro, cadastrado na safeweb
+    public $idParceiro = '385'; //id do parceiro, cadastrado na safeweb
     const ENCODING = ''; //'utf8_encode' ou 'utf8_decode' ou '' para nao alterar o encoding
 
     const VALIDATOR_CPF = '/[0-9]{11}/';
@@ -247,7 +247,7 @@ Class WSCertificado{
 
 		$request = array(
 			'idProduto'			=> $idProduto,
-			'idParceiro'		=> self::ID_PARCEIRO,
+			'idParceiro'		=> $this->idParceiro,
 
 			'Nome' 				=> $nome,
 			'CPF' 				=> $cpf,
@@ -337,7 +337,7 @@ Class WSCertificado{
 
 		$request = array(
 			'idProduto'			=> $idProduto,
-			'idParceiro'		=> self::ID_PARCEIRO,
+			'idParceiro'		=> $this->idParceiro,
 
 			'RazaoSocial' 		=> $razaoSocial,
 			'CNPJ' 				=> $cnpj,

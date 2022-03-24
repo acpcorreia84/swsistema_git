@@ -11,7 +11,7 @@
                         <span id="dcDivModaisPermissao"></span>
                         <button id='btnGerarProtocolo' class='btn btn-primary' title='Gerar Protocolo' data-toggle='modal' data-target='#gerarProtocolo' onclick='gerarProtocoloApi()' ><i class='fa fa-internet-explorer'></i></button>
                         <!--<button id="btnCarregarModalBoleto" class="btn btn-primary" data-toggle="modal" data-target="#gerarBoleto" title="Gerar Boleto" onclick="carregarModalBoleto()"> <i class="fa fa-barcode"></i></button>-->
-                        <button id="btnSafeToPay" class="btn btn-primary"> <i class="fa fa-barcode"></i></button>
+                        <button id="btnBoleto" class="btn btn-primary" data-toggle='modal' data-target='#gerarBoleto'> <i class="fa fa-barcode"></i></button>
                         <button id="btnCarregarModalDesconto"  class="btn btn-primary" data-toggle="modal" data-target="#modalDesconto" title="Desconto" onclick="carregarModalDesconto();"><i class ="fa fa-tag"></i></button>
                         <button id="btnCarregarModalTrocaDeProduto" class="btn btn-primary" data-toggle="modal" data-target="#modalTrocarProdutoCerticado" title="Trocar Produto" onclick="carregarModalTrocarProdutos()"> <i class="fa fa-retweet"></i></button>
                         <button id="btnCarregarModalGerarRecibo" class="btn btn-primary" title="Gerar Recibo" onclick="window.location.href='inc/gerarReciboPdf.php'"> <i class="fa fa-file-pdf-o"></i> </button>
@@ -183,65 +183,6 @@
 </div> <!--DIV ID detalharCertificado-->
 <script src="https://cdn.safe2pay.com.br/safe2pay.js"></script>
 
-<script>
-    Safe2Pay.Init('A9519C7362984CB7944ACF1EB88162A6');
-    //Safe2Pay.Init('466d8827-e9f5-4bc7-bf21-9f9e41964ds');
-    // Comprar credito
-    $('#btnSafeToPay').click(function (e) {
-        // Parametros da Comprar
-
-        var parametrosCompra =
-            {
-                Produto: [{
-                    Codigo: $('#codigoProdutoSafeweb').val(), // C?digo do produto que est? sendo vendido
-                    Descricao: $('#dcSpanNomeProduto').html(), // Descri??o do que est? sendo vendido
-                    ValorUnitario: $('#precoProdutoSemFormatacao').val(), // Informar decimal como string. (Ex: 1.50)
-                    Quantidade: "1" // Informar int como string. (Ex: 15)
-                }],
-                DadosCobranca: {
-                    Nome: $('#dcSpanNomeCliente').html(),
-                    CPFCNPJ: $('#edtDocumentoCartaoCredito').val(),
-
-                    Logradouro: $('#edtDocumentoLogradouro').val(),
-                    Numero: $('#edtDocumentoNumero').val(),
-                    Bairro: $('#edtDocumentoBairro').val(),
-                    Complemento: $('#edtDocumentoComplemento').val(),
-                    CEP:  $('#edtDocumentoCep').val(),
-                    Pais: 'Brasil',
-                    UF: $('#edtDocumentoUf').val(),
-                    Cidade: $('#edtDocumentoCidade').val(),
-
-                    Email: $('#edtEmailCartaoCredito').val()
-                },
-                Aplicacao: "GuiarTransaction",
-                Vendedor: $('#dcSpanConsultor').html(), // Opcional
-                URLNotificacao: 'http://swsistema.com.br/inc/retornoteste.php?codigoGuiar='+$('#idCertificado').val() // Opcional
-            };
-
-
-        function callbackSucess(response)
-        {
-
-            console.log(response.TransactionID, response.UrlBoleto,response.Descricao, response.Mensagem, response.Numero, response.Status, response.Vencimento);
-            guardarBoletoSafeToPay(response.TransactionID, response.UrlBoleto,response.Descricao, response.Mensagem, response.Numero, response.Status, response.Vencimento);
-        }
-
-
-        function callbackError(error) {
-            // Fun??o que ser? executada quando ocorrer erros no plugin
-
-            console.log(error);
-        }
-
-        function callbackConclude(response) {
-            //console.log(response);
-            // Fun??o que ser? executada quando a modal do safe2pay for fechada
-        }
-
-        // Abre wizard
-        Safe2Pay.OpenWizard(parametrosCompra, callbackSucess, callbackError, callbackConclude);
-    });
-</script>
 <?php
 //ABRE O MODAL DE DETALHE DE PAGAMENTO E HABILITA APENAS O BOTAO DE CUPOM DE DESCONTO
 if (($_GET['funcao']=='aplica_cupom' || $_GET['funcao']=='detalhaCertificado') && isset($_GET['idCertificado'])) {

@@ -2016,9 +2016,12 @@ function gerarBoletoCertificado() {
         success : function(result){
             try {
                 var resultado = JSON.parse(result);
-                if (resultado.mensagem == 'Ok') {
-                    alertSucesso('Boleto Gerado com Sucesso!');
-                    $("#gerarBoleto").modal('hide');
+                if (resultado.mensagem == 'Debug') {
+					alertSucesso('Entrou aqui e esta ok!');
+					$("#gerarBoleto").modal('hide');
+				} else if (resultado.mensagem == 'Ok') {
+					alertSucesso('Boleto Gerado com Sucesso!');
+					$("#gerarBoleto").modal('hide');
 
                     carregarModalDetalharCertificado($('#idCertificado').val());
                 } else if (resultado.mensagem == 'Erro') {

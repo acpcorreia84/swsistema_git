@@ -4,18 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="- nova biblioteca do s2p">
-      <change afterPath="$PROJECT_DIR$/inc/S2P-PHP/test/teste.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="- iniciando o phpstorm novamente.">
+      <change afterPath="$PROJECT_DIR$/atualizacaoBancoDeDados/codigos dos produtos da NW.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/composer.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/S2P-PHP/test/PaymentTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/S2P-PHP/test/PaymentTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ajax/php/carregar_select_produtos.php" beforeDir="false" afterPath="$PROJECT_DIR$/ajax/php/carregar_select_produtos.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/funcoes/funcoesCertificado.php" beforeDir="false" afterPath="$PROJECT_DIR$/funcoes/funcoesCertificado.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/funcoes/funcoesUsuario.php" beforeDir="false" afterPath="$PROJECT_DIR$/funcoes/funcoesUsuario.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/PHPMailer_v5.1/class.phpmailer.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/PHPMailer_v5.1/class.phpmailer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/WSCertificado.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/WSCertificado.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/retornoteste.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/retornoteste.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/script.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/script.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/uteis_cron.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/uteis_cron.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/telaCertificado.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/telaCertificado.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modais/certificados/certificadoModalDetalharCertificado.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/certificados/certificadoModalDetalharCertificado.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="DONT_SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/inc/composer.json</pharConfigPath>
     <execution />
   </component>
   <component name="Git.Settings">
@@ -55,6 +65,21 @@
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\PhpStormProjects\swsistema" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="funcoesCertificado.php" type="PhpLocalRunConfigurationType" factoryName="PHP Console" temporary="true" path="$PROJECT_DIR$/funcoes/funcoesCertificado.php">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="PHP Script.funcoesCertificado.php" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -79,6 +104,13 @@
       <workItem from="1632754402602" duration="7505000" />
       <workItem from="1632851369869" duration="3610000" />
       <workItem from="1637583082425" duration="172000" />
+      <workItem from="1637583264023" duration="5126000" />
+      <workItem from="1639079949074" duration="1873000" />
+      <workItem from="1639145524753" duration="1716000" />
+      <workItem from="1640108914571" duration="540000" />
+      <workItem from="1643048684262" duration="2049000" />
+      <workItem from="1643639480759" duration="3333000" />
+      <workItem from="1647983949383" duration="1763000" />
     </task>
     <task id="LOCAL-00001" summary="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida">
       <created>1624365794378</created>
@@ -122,7 +154,14 @@
       <option name="project" value="LOCAL" />
       <updated>1632755195176</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="- iniciando o phpstorm novamente.">
+      <created>1637583356226</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1637583356226</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,6 +191,7 @@
     <MESSAGE value="- trabalhando na vinculacao do grupo de produtos ao usuario. A principio todo usuario inicia com o grupo de produtos principal. Ao Vincular ao parceiro, ele edita o parceiro e altera o grupo de produtos para o grupo de produtos do parceiro. Assim resolve a questão." />
     <MESSAGE value="- alterações gerais" />
     <MESSAGE value="- nova biblioteca do s2p" />
-    <option name="LAST_COMMIT_MESSAGE" value="- nova biblioteca do s2p" />
+    <MESSAGE value="- iniciando o phpstorm novamente." />
+    <option name="LAST_COMMIT_MESSAGE" value="- iniciando o phpstorm novamente." />
   </component>
 </project>
