@@ -1,5 +1,5 @@
 <!--Gerar Boleto-->
-<div id="gerarBoleto" class="modal fade" role="dialog" data-backdrop="static">
+<div id="modalGerarBoletoS2P" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
         <div class="modal-content">
@@ -9,7 +9,7 @@
                 </div>
                 <div class ="col-lg-2">
                     <button class="btn btn-primary" data-toggle="modal" data-target="#modalDuvida" onclick="modalDuvida(10)"><i class="fa fa-lg fa-question"></i></button>
-                    <a class="btn btn-danger" data-toggle="modal" data-target="#gerarBoleto"><i class="fa fa-lg fa-close"></i></a>
+                    <a class="btn btn-danger" data-toggle="modal" data-target="#modalGerarBoletoS2P"><i class="fa fa-lg fa-close"></i></a>
                 </div>
             </div>
             <div class="modal-body">
@@ -20,7 +20,7 @@
                                 <p><label>Cliente:</label> <span id="gbSpanCliente">...</span> </p>
                             </div>
                             <div class="col-lg-6">
-                                <p><label>Vendedor:</label> <span id="gbSpanVendedor">...</span> </p>
+                                <p><label>Consultor:</label> <span id="gbSpanVendedor">...</span> </p>
                             </div>
                         </div>
                         <div class="row">
@@ -44,7 +44,7 @@
                             <h4>Data de Vencimento:</h4>
                         </div>
                         <div class="col-lg-4 campoValidar">
-                            <input type="text" id="edtVencimentoBoletoCertificado" name="edtVencimentoBoletoCertificado" class="form-control" placeholder="Vencimento do boleto">
+                                <input type="text" id="edtVencimentoBoletoCertificado" name="edtVencimentoBoletoCertificado" class="form-control" placeholder="Vencimento do boleto">
                             <script>
                                 $( function() {
                                     $( "#edtVencimentoBoletoCertificado" ).datepicker({
@@ -95,7 +95,7 @@
 
         $("#btnGerarBoletoCertificado").click(function () {
             if ($("#frmGerarBoletoCertificado").valid()) {
-                gerarBoletoCertificado();
+                gerarBoletoS2P();
             }
         })
 

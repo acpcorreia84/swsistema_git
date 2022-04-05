@@ -563,7 +563,7 @@ function editar_cliente_certificado(funcao){
 		});
 };
 
-function gerarProtocoloCertificado() {
+function gerarProtocoloCertificado__DESABILITADO() {
 
     $("#esperaGerarProtocolo").modal('show');
 
@@ -1795,9 +1795,9 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
 						 * EXISTIR A FORMA DE PAGAMENTO FOR BOLETO, E AINDA NAO FOI PAGO
 						 * */
 						if (certificado.formaPagamento=='Boleto' && certificado.dataPagamento=='-')
-							$('#btnCarregarModalBoleto').prop("disabled",false);
+							$('#btnBoleto').css({display: 'none', visibility: 'hidden'});
 						else
-							$('#btnCarregarModalBoleto').prop("disabled",true);
+							$('#btnBoleto').css({display: 'block', visibility: 'visible'});
 						/*
 						 * HABILITA O BOTAO DE REVOGAR SE
 						 * EXISTIR PROTOCOLO, SE JA FOI VALIDADO E SE AINDA NAO FOI REVOGADO
@@ -1839,6 +1839,13 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
 						$('#dcSpanConsultor').html(certificado.consultor);
 						$('#dcSpanAgrValidacao').html(certificado.agr);
 						$('#dcSpanValidadeCertificado').html(certificado.validade);
+						//PREENCHENDO MODAL BOLETO
+						$('#gbSpanCliente').html(certificado.clienteId + ' - ' + certificado.nomeCliente);
+						$('#gbSpanVendedor').html(certificado.consultor);
+						$('#gbSpanProduto').html(certificado.nomeProduto);
+						$('#gbSpanPreco').html(certificado.valorTotal);
+
+
 /*
 						if (certificado.urlHope != '') {
                             $('#dcSpanUrlHope').html(certificado.urlHope);
@@ -1993,40 +2000,39 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
 };
 
 
-function gerarBoletoCertificado() {
-    $('#mensagemLoading').html('<i class="fa fa-retweet"></i> Gerando boleto para o cliente. Lembrete: O boleto ir&aacute; para o e-mail do cliente e do usu&aacute;rio logado.');
-    $("#modalCarregando").modal('show');
+function gerarBoletoS2P() {
 
     var dadosajax = {
-        'funcao' : "gerar_boleto",
+        'funcao' : "gerar_boleto_s2p",
         'certificado_id' : $('#idCertificado').val(),
         'vencimento' : $('#edtVencimentoBoletoCertificado').val()
     };
-    console.log (dadosajax);
+
     $.ajax ({
         url : pageUrl,
         data : dadosajax,
         type : 'POST',
         cache : true,
-
+		beforeSend: function () {
+			$('#mensagemLoading').html('<i class="fa fa-retweet"></i> Gerando boleto para o cliente.');
+			$("#modalCarregando").modal('show');
+		},
         error : function (){
             alert ('Error CD8001 - Erro na a&ccedil;&atilde;o de Gerar Boleto,' + msnPadrao + '.');
             $("#modalCarregando").modal('hide');
         },
         success : function(result){
             try {
-                var resultado = JSON.parse(result);
-                if (resultado.mensagem == 'Debug') {
-					alertSucesso('Entrou aqui e esta ok!');
-					$("#gerarBoleto").modal('hide');
-				} else if (resultado.mensagem == 'Ok') {
-					alertSucesso('Boleto Gerado com Sucesso!');
-					$("#gerarBoleto").modal('hide');
+				$('#gbSpanCliente').html($('#dcSpanIdCliente').html());
+				var resultado = JSON.parse(result);
 
+				if (resultado.mensagem == 'Ok') {
+					alertSucesso('Boleto Gerado com Sucesso!');
                     carregarModalDetalharCertificado($('#idCertificado').val());
                 } else if (resultado.mensagem == 'Erro') {
                     alertErro(resultado.mensagemErro);
                 }
+
             } catch (e){
                 $('#modalCarregando').modal('hide');
                 console.log(result, e);

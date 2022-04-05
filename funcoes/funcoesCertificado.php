@@ -62,8 +62,8 @@ if ($funcao == 'informar_pagamento_extorno_certificado'){
 if ($funcao == 'carrega_modal_boleto'){
     carrega_modal_boleto($certificado_id);
 }
-if ($funcao== 'gerar_boleto'){
-    gerarBoletoCertificado($certificado_id);
+if ($funcao== 'gerar_boleto_s2p'){
+    gerarBoletoS2P($certificado_id);
 }
 if ($funcao== 'salvar_boleto_safetoPay'){
     salvarBoletoSafeToPay();
@@ -1455,20 +1455,12 @@ use Safe2Pay\Models\General\Address;
 
 use Safe2Pay\Models\Core\Config as Enviroment;
 */
-function gerarBoletoCertificado($certificado_id){
-
-    //require_once 'vendor/autoload.php';
-    echo json_encode(array('mensagem'=>'Debug'));
-    exit;
-
-
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/S2P-PHP/lib';
+function gerarBoletoS2P($certificado_id){
 
     $resultadoBoleto = "";
     try{
         $usuarioLogado = ControleAcesso::getUsuarioLogado();
         $vencimento = $_POST['vencimento'];
-		$vencimento = explode('/',$vencimento);
 
         $certificado = CertificadoPeer::retrieveByPK($certificado_id);
         $produto = $certificado->getProduto();
@@ -1500,9 +1492,6 @@ function gerarBoletoCertificado($certificado_id){
         else
             $emailEnvio = $email;
 
-        $dia= $vencimento[0];
-        $mes= $vencimento[1];
-        $ano= $vencimento[2];
         $email=$emailEnvio;
 
 
@@ -1515,37 +1504,78 @@ function gerarBoletoCertificado($certificado_id){
             $endereco = removeEspeciais( utf8_encode($cliente->getEndereco()));
 
 
+        $cr = curl_init();
 
-        $customer = new PagarMe_Customer(array(
-            "document_number" => removeTracoPontoBarra($cpfCnpj),
-            "name" => strtoupper(trim(removeEspeciais($nome))),
-            "email" => strtolower(trim(removeEspeciais($email))),
-            "address" => array(
-                "street" => strtoupper(trim(removeEspeciais($endereco))),
-                "complementary" => strtoupper(trim(removeEspeciais(''))),
-                "street_number" => strtoupper(trim(removeEspeciais($cliente->getNumero()))),
-                "neighborhood" => strtoupper(trim(removeEspeciais($cliente->getBairro()))),
-                "city" => strtoupper(trim(removeEspeciais($cliente->getCidade()))),
-                "state" => $cliente->getUf(),
-                "zipcode" => removeTracoPontoBarra($cliente->getCep()),
-                "country" => "Brasil"
-            ),
-        ));
-        $transaction = new PagarMe_Transaction(array(
-            "customer" => $customer,
-            'amount' => removeTracoPontoBarra($valor_boleto.'.00'),
-            'postback_url' => "http://www.swsistema.com.br/retorno_transacao.php",
-            "boleto_expiration_date"=>$ano.'-'.$mes.'-'.$dia.'T21:54:56.000Z',
-            'payment_method' => "boleto"
-        ));
+        $informacoesBoleto = '{
+    "IsSandbox": false,
+    "Application": "GuiarTransaction",
+    "Vendor": "SW Certificacao digital ltda",
+    "CallbackUrl": "http://swsistema.com.br/inc/retornoteste.php?codigoGuiar='.$certificado->getId().'",
+    "PaymentMethod": "1",
+    "Reference": "certID: '.$certificado->getId().'",
+    "Customer": {
+        "Name": "'.strtoupper(trim(removeEspeciais($nome))).'",
+        "Identity": "'.removeTracoPontoBarra($cpfCnpj).'",
+        "Phone": "11997963124",
+        "Email": "'.strtolower(trim(removeEspeciais($email))).'",
+        "Address": {
+            "ZipCode": "'.removeTracoPontoBarra($cliente->getCep()).'",
+            "Street": "'.strtoupper(trim(removeEspeciais($endereco))).'",
+            "Number": "'.strtoupper(trim(removeEspeciais($cliente->getNumero()))).'",
+            "Complement": "",
+            "District": "'.strtoupper(trim(removeEspeciais($cliente->getBairro()))).'",
+            "CityName": "'.strtoupper(trim(removeEspeciais($cliente->getCidade()))).'",
+            "StateInitials": "'.$cliente->getUf().'",
+            "CountryName": "Brasil"
+        }
+    },
+    "Products": [
+        {
+            "Code": "'.$produto->getId().'",
+            "Description": "'.$produto->getNome().'",
+            "UnitPrice": '.$valor_boleto.',
+            "Quantity": 1
+        }        
+    ],
+    "PaymentObject": {
+        "DueDate": "'.$vencimento.'",
+        "Instruction": "Certificado digital",
+        "Message": [
+            "Certificado Digital: '.$produto->getId() . '-' . $produto->getNome().'",
+            "valor: '.$valor_boleto.'",
+        ],
+    }
+}';
+        $opcoes = array(
+            CURLOPT_URL=>"https://payment.safe2pay.com.br/v2/Payment",
+            CURLOPT_RETURNTRANSFER=>true,
+            CURLOPT_ENCODING=>'',
+            CURLOPT_MAXREDIRS=>10,
+            CURLOPT_TIMEOUT=>0,
+            CURLOPT_FOLLOWLOCATION=>true,
+            CURLOPT_HTTP_VERSION=>CURL_HTTP_VERSION_NONE,
+            CURLOPT_CUSTOMREQUEST=>'POST',
+            CURLOPT_HTTPHEADER=>array('x-api-key:E126ABEBE63F4790ACB2426EB7474A6B','Content-Type:application/json'),
+            CURLOPT_POSTFIELDS=>$informacoesBoleto,
 
-        $transaction->charge();
-        $boleto_url = $transaction->boleto_url; // URL do boleto banc?rio
-        $boleto_barcode = $transaction->boleto_barcode; // c?digo de barras do boleto banc?rio
-        $transacaoId = $transaction->id;
 
-        /*FIM DA MONTAGEM DO BOLETO DO PAGARME*/
 
+        );
+
+        curl_setopt_array($cr, $opcoes);
+
+        $postResult = curl_exec($cr);
+
+        $retornoBoleto = json_decode($postResult, true);
+
+
+
+        curl_close($cr);
+/*
+        echo json_encode(array('mensagem'=>'Debug','infoBol'=> $postResult, 'postResult'=>$postResult . '- ' . curl_errno($cr)));
+        exit;
+*/
+        $vencimento = explode('/',$vencimento);
 
         $itensPedido = $certificado->getItemPedidos();
         if ($itensPedido) {
@@ -1558,6 +1588,7 @@ function gerarBoletoCertificado($certificado_id){
             $contaReceber->save();
         }
 
+
         $boleto = new Boleto();
         $boleto->setUsuarioId($usuarioLogado->getId());
         $boleto->setCertificadoId($certificado->getId());
@@ -1569,8 +1600,8 @@ function gerarBoletoCertificado($certificado_id){
         $boleto->setContasReceberId($contaReceber->getId());
 
         /*SALVANDO A URL DO BOLETO*/
-        $boleto->setUrlBoleto($boleto_url);
-        $boleto->setTid($transacaoId);
+        $boleto->setUrlBoleto($retornoBoleto['ResponseDetail']['BankSlipUrl']);
+        $boleto->setTid($retornoBoleto['ResponseDetail']['IdTransaction']);
         $boleto->save();
 
         if ($pedido)
@@ -1591,7 +1622,7 @@ function gerarBoletoCertificado($certificado_id){
         $certSit->setUsuarioId($usuarioLogado->getId());
         $certSit->save();
 
-//        enviarEmailBoleto($nome,$emailEnvio, $boleto_barcode,$boleto_url, $produto->getNome(), $valor_boleto);
+//        enviaremailboleto($nome,$emailenvio, $boleto_barcode,$boleto_url, $produto->getnome(), $valor_boleto);
 
         echo json_encode(array('mensagem'=>'Ok'));
     }catch(Exception $e){
@@ -1599,7 +1630,8 @@ function gerarBoletoCertificado($certificado_id){
     }
 
 };
-function gerarProtocolo(){
+
+function gerarProtocolo__desabilitado(){
     try{
         $certificado_id = $_POST['certificado_id'];
         $usuario = ControleAcesso::getUsuarioLogado();

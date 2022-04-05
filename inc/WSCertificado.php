@@ -1,4 +1,6 @@
 <?php
+/*--------------DESABILITADAAAAAAAAAAA---------------------*/
+
 /**
  * Classe para comunicação com o webservice da SafeWeb
  * O objetivo desta classe é fazer a comunicação com o webservice da SafeWeb de forma simples, sem dependências e de r?pida configura??o.

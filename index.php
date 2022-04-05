@@ -75,10 +75,16 @@
                             } else {
                                 alert('O seu navegados nao possui suporte para Gravacao de dados. Por favor entre em contato com o departamento de suporte para solucionar o problema.');
                             }
+
+                            ir('home.php');
+
+                            /*
                             if (resultado.perfilId == 4)
                                 ir('home.php');
                             else
                                 alertErro('Este é um ambiente de teste e você não possui acesso...');
+                                */
+
                         } else if (resultado.mensagem == 'Erro'){
                             //caso tenha acontecido algum erro
                             $('#loginbox').html('<i class="fa fa-5x fas fa-exclamation-triangle text-danger"></i> </br><span class="fa-1x text-danger">'+resultado.descricaoErro+'</span></br></br><button class="btn btn-primary" onclick="ir(\'index.php\')"><i class="icon-arrow-left"></i> Voltar</button>').css({'text-align':'center'});

@@ -4,20 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="- iniciando o phpstorm novamente.">
-      <change afterPath="$PROJECT_DIR$/atualizacaoBancoDeDados/codigos dos produtos da NW.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/composer.json" afterDir="false" />
+    <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="- alteracao do sistema para nova integracao com o s2p no que diz respeito a boletos">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ajax/php/carregar_select_produtos.php" beforeDir="false" afterPath="$PROJECT_DIR$/ajax/php/carregar_select_produtos.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ajax/php/gerarBoleto.php" beforeDir="false" afterPath="$PROJECT_DIR$/ajax/php/gerarBoleto.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/funcoes/funcoesCertificado.php" beforeDir="false" afterPath="$PROJECT_DIR$/funcoes/funcoesCertificado.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/funcoes/funcoesUsuario.php" beforeDir="false" afterPath="$PROJECT_DIR$/funcoes/funcoesUsuario.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/PHPMailer_v5.1/class.phpmailer.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/PHPMailer_v5.1/class.phpmailer.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inc/WSCertificado.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/WSCertificado.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/retornoteste.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/retornoteste.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/script.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/script.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/uteis_cron.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/uteis_cron.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/telaCertificado.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/telaCertificado.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modais/certificados/certificadoModalDetalharCertificado.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/certificados/certificadoModalDetalharCertificado.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modais/certificados/certificadoModalGerarBoleto.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/certificados/certificadoModalGerarBoleto.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +34,7 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
-  <component name="PhpWorkspaceProjectConfiguration">
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="Remote PHP 5.6">
     <include_path>
       <path value="$PROJECT_DIR$" />
     </include_path>
@@ -62,7 +57,7 @@
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -70,12 +65,16 @@
       <recent name="D:\PhpStormProjects\swsistema" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="PHP Script.gerarBoleto.php">
     <configuration name="funcoesCertificado.php" type="PhpLocalRunConfigurationType" factoryName="PHP Console" temporary="true" path="$PROJECT_DIR$/funcoes/funcoesCertificado.php">
+      <method v="2" />
+    </configuration>
+    <configuration name="gerarBoleto.php" type="PhpLocalRunConfigurationType" factoryName="PHP Console" temporary="true" path="$PROJECT_DIR$/ajax/php/gerarBoleto.php">
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="PHP Script.gerarBoleto.php" />
         <item itemvalue="PHP Script.funcoesCertificado.php" />
       </list>
     </recent_temporary>
@@ -110,7 +109,9 @@
       <workItem from="1640108914571" duration="540000" />
       <workItem from="1643048684262" duration="2049000" />
       <workItem from="1643639480759" duration="3333000" />
-      <workItem from="1647983949383" duration="1763000" />
+      <workItem from="1647983949383" duration="16430000" />
+      <workItem from="1648226333168" duration="2715000" />
+      <workItem from="1649189979080" duration="1508000" />
     </task>
     <task id="LOCAL-00001" summary="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida">
       <created>1624365794378</created>
@@ -161,7 +162,14 @@
       <option name="project" value="LOCAL" />
       <updated>1637583356226</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="- iniciando o phpstorm novamente.">
+      <created>1648123697165</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1648123697165</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -192,6 +200,7 @@
     <MESSAGE value="- alterações gerais" />
     <MESSAGE value="- nova biblioteca do s2p" />
     <MESSAGE value="- iniciando o phpstorm novamente." />
-    <option name="LAST_COMMIT_MESSAGE" value="- iniciando o phpstorm novamente." />
+    <MESSAGE value="- alteracao do sistema para nova integracao com o s2p no que diz respeito a boletos" />
+    <option name="LAST_COMMIT_MESSAGE" value="- alteracao do sistema para nova integracao com o s2p no que diz respeito a boletos" />
   </component>
 </project>

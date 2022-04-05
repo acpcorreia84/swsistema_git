@@ -1,4 +1,5 @@
 <?
+/*
 date_default_timezone_set('America/Belem');
 require_once $_SERVER['DOCUMENT_ROOT'].'/loader.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/pagarme-php/Pagarme.php';
@@ -152,4 +153,5 @@ $usuario_id = $_REQUEST['usuario_id'];
         echo $e->getMessage();
     }
 };
+*/
 ?>

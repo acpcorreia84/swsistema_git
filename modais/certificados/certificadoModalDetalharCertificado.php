@@ -11,7 +11,7 @@
                         <span id="dcDivModaisPermissao"></span>
                         <button id='btnGerarProtocolo' class='btn btn-primary' title='Gerar Protocolo' data-toggle='modal' data-target='#gerarProtocolo' onclick='gerarProtocoloApi()' ><i class='fa fa-internet-explorer'></i></button>
                         <!--<button id="btnCarregarModalBoleto" class="btn btn-primary" data-toggle="modal" data-target="#gerarBoleto" title="Gerar Boleto" onclick="carregarModalBoleto()"> <i class="fa fa-barcode"></i></button>-->
-                        <button id="btnBoleto" class="btn btn-primary" data-toggle='modal' data-target='#gerarBoleto'> <i class="fa fa-barcode"></i></button>
+                        <button id="btnBoleto" class="btn btn-primary" data-toggle='modal' data-target='#modalGerarBoletoS2P'"> <i class="fa fa-barcode"></i></button>
                         <button id="btnCarregarModalDesconto"  class="btn btn-primary" data-toggle="modal" data-target="#modalDesconto" title="Desconto" onclick="carregarModalDesconto();"><i class ="fa fa-tag"></i></button>
                         <button id="btnCarregarModalTrocaDeProduto" class="btn btn-primary" data-toggle="modal" data-target="#modalTrocarProdutoCerticado" title="Trocar Produto" onclick="carregarModalTrocarProdutos()"> <i class="fa fa-retweet"></i></button>
                         <button id="btnCarregarModalGerarRecibo" class="btn btn-primary" title="Gerar Recibo" onclick="window.location.href='inc/gerarReciboPdf.php'"> <i class="fa fa-file-pdf-o"></i> </button>
