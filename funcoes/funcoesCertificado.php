@@ -1445,16 +1445,7 @@ function salvarBoletoSafeToPay(){
     }
 
 };
-/*
-use Safe2Pay\API\PaymentRequest;
-use Safe2Pay\Models\Payment\BankSlip;
-use Safe2Pay\Models\Transactions\Transaction;
-use Safe2Pay\Models\General\Customer;
-use Safe2Pay\Models\General\Product;
-use Safe2Pay\Models\General\Address;
 
-use Safe2Pay\Models\Core\Config as Enviroment;
-*/
 function gerarBoletoS2P($certificado_id){
 
     $resultadoBoleto = "";
@@ -1504,13 +1495,14 @@ function gerarBoletoS2P($certificado_id){
             $endereco = removeEspeciais( utf8_encode($cliente->getEndereco()));
 
 
+
         $cr = curl_init();
 
         $informacoesBoleto = '{
     "IsSandbox": false,
     "Application": "GuiarTransaction",
-    "Vendor": "SW Certificacao digital ltda",
-    "CallbackUrl": "http://swsistema.com.br/inc/retornoteste.php?codigoGuiar='.$certificado->getId().'",
+    "Vendor": "'.$certificado->getUsuario()->getNome().'",
+    "CallbackUrl": "http://swsistema.com.br/inc/retornoSafe2Pay.php?codigoGuiar='.$certificado->getId().'",
     "PaymentMethod": "1",
     "Reference": "certID: '.$certificado->getId().'",
     "Customer": {

@@ -1,14 +1,112 @@
 <?php
 
-$mensagem = '';
-$mensagem = json_encode( $_POST);
+require_once $_SERVER['DOCUMENT_ROOT'] . "/loader_off.php";
 
-// To send HTML mail, the Content-type header must be set
-$headers  = 'MIME-Version: 1.0' . "\r\n";
-$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+$result = file_get_contents('php://input');
 
-$headers .= 'from:SafetoPay Retorno<antonio.correia@arsw.com.br>' . "\r\n";
+$retorno = json_decode($result);
 
-//mail('antonio.correia@arsw.com.br', "Retorno Boleto SafeToPay|SW", $mensagem, $headers);
+$secretKey = $retorno->SecretKey;
+$transactionStatus = $retorno->TransactionStatus->Code;
+$tId = $retorno->IdTransaction;
+
+/*$secretKey = '28517135D5E1438398289AA82447E1B82E4B9E5EE829425DA0D9C082A1C5F6FF';
+$transactionStatus = '3';
+$tId = '1638245';*/
+
+if ( ($secretKey == '011C0F0905AF488E8F8420F195161F5FC7DE6DCFB7DA4053957ACC16E557675D' && ($transactionStatus=="3"))  ) {
+    $cBol = new Criteria();
+    $cBol->add(BoletoPeer::TID, $tId);
+    $boleto = BoletoPeer::doSelectOne($cBol);
+    $mensagem = "boleto: ".$boleto->getId() . ' - '. $boleto->getTid(). '\n\n';
+    $nome = '';
+    $valor = '';
+
+    if ($boleto) {
+        //SO ATUALIZA O BOLETO CASO ELE NAO TENHA DATA JA DE CONFIRMACAO
+        if ($boleto->getDataConfirmacaoPagamento() == '') {
+            $boleto->setDataConfirmacaoPagamento(date('Y-m-d'));
+            $boleto->setDataPagamento(date('Y-m-d'));
+            $boleto->save();
+        }
+        $valor = formataMoeda($boleto->getValor());
+
+        $certificado = $boleto->getCertificado();
+
+        /*
+         * CODIGO DE RECARTEIRIZACAO DE USUSUARIO
+         * */
+        if ($boleto->getUsuarioId())
+            if ($certificado->getUsuarioId() != $boleto->getUsuarioId()) {
+
+                $cSit = new Criteria();
+                $certSit = new CertificadoSituacao();
+                $certSit->setCertificadoId($certificado->getId());
+
+                //O USUARIO GUIAR VAI RECARTEIRIZAR O PEDIDO PARA O USUARIO QUE GEROU O BOLETO
+                $certSit->setUsuarioId(1039);
+                $certSit->setComentario('Certificado recarteirizado pela pol&iacute;tica de emiss&atilde;o do boleto, Usu&aacute;rio anterior: '.$certificado->getUsuario()->getNome());
+
+                $cSit->add(SituacaoPeer::SIGLA, 'recartbol');
+                $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
+                $certSit->setData(date("Y-m-d H:i:s",mtime()));
+                $certSit->save();
+                $usuarioRecart = $certificado->getUsuario();
+                /*
+                 * SO RECARTEIRIZA SE FOR CONSULTOR, CONSULTOR AGR OU SUPERVISOR
+                 * */
+                if ($usuarioRecart->getCargo() == 9 || $usuarioRecart->getCargo() == 10 || $usuarioRecart->getCargo() == 23)
+                    $certificado->setUsuarioId($boleto->getUsuarioId());
+
+            }
+
+        if ($certificado) {
+            if ($certificado->getDataConfirmacaoPagamento() == '') {
+                $certificado->setDataConfirmacaoPagamento(date('Y-m-d'));
+                $certificado->setDataPagamento(date('Y-m-d'));
+                $certificado->save();
+            }
+
+            $certSit = new CertificadoSituacao();
+            $certSit->setCertificadoId($certificado->getId());
+            $cSit = new Criteria();
+
+            //INSERI UM USUÁRIO NO SISTEMA CHAMADO SAFE2PAY QUE IRÁ GERAR UMA SITUÇÃO DE RETORNO
+            $certSit->setUsuarioId(868);
+
+            $cSit->add(SituacaoPeer::SIGLA, 'liqpag');
+            $certSit->setSituacao(SituacaoPeer::doSelectOne($cSit));
+            $certSit->setData(date("Y-m-d H:i:s",mtime()));
+            $certSit->save();
+
+            $cliente = $certificado->getCliente();
+
+            if ($cliente->getRazaoSocial())
+                $nome = $cliente->getRazaoSocial();
+            elseif ($cliente->getNomeFantasia())
+                $nome = $cliente->getNomeFantasia();
+            elseif ($cliente->getResponsavel())
+                $nome = $cliente->getResponsavel()->getNome();
+
+        }
+
+        $pedido = $boleto->getPedido();
+        if ($pedido) {
+            $pedido->setDataConfirmacaoPagamento(date('Y-m-d'));
+            $pedido->save();
+
+            $contasReceber = $pedido->getContasRecebers();
+            $contaReceber = $contasReceber[0];
+            if ($contaReceber) {
+                $contaReceber->setDataPagamento(date('Y-m-d'));
+                $contaReceber->save();
+            }
+
+        }
+
+
+    }
+
+}
 
 ?>

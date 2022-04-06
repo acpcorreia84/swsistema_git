@@ -7,7 +7,7 @@
  */
 require_once $_SERVER['DOCUMENT_ROOT'] . '/loader_off.php';
 
-if($funcao == 'logarUsuario') {logarUsuario();}
+if($_POST['funcao'] == 'logarUsuario') {logarUsuario();}
 
 function logarUsuario () {
     try {
@@ -31,17 +31,28 @@ function logarUsuario () {
             $logAcesso->setData($dataAtual." ".date('H:i:s'));
             $logAcesso->save();
 
+            /*
+             * SE ESTIVER NO BETA E O PERFIL NAO FOR ADMIN
+             * */
+            if ((strpos($_SERVER['SERVER_NAME'], 'beta')!== false) && $usuario->getPerfilId() != 4) {
+                echo json_encode(array('mensagem'=>'Erro', 'descricaoErro'=> "Este ambiente e um ambiente de teste, por favor use www.swsistema.com.br"));
+                exit;
+            }
+
             if(date('H:i:s') >= '23:00:00' && $usuario->getPerfilId() != 4  ){
                 echo json_encode(array('mensagem'=>'Erro', 'descricaoErro'=> "Horario de expediente encerrado!"));
+                exit;
             }
 
             /*CASO O MOTIVO DA TROCA SEJA 1 = A SENHA EXPIROU*/
             elseif ($dataAtual >= $dataExpi) {
                 echo json_encode(array('mensagem'=>'redirecionar','descricaoMensagem'=>'Sua senha expirou, voc&ecirc; precisa troc&aacute;-la agora. Clique no bot&atilde;o abaixo pra ser redirecionado.','url'=>'telaAlterarSenha.php?motivoTroca=1&dataExpiracao='.$usuario->getDataExpiracaoSenha('d/m/Y').'&usuario_id=' . $usuario->getId()));
+                exit;
             }
             /*CASO NAO TENHA DATA DE EXPIRACAO, PROVAVELMENTE POR QUE ACABOU DE CRIAR O USUARIO. PRIMEIRO LOGIN*/
             elseif (($usuario->getDataExpiracaoSenha() == NULL) || ($usuario->getDataExpiracaoSenha() == '0000-00-00')) {
                 echo json_encode(array('mensagem'=>'redirecionar', 'url'=>'telaAlterarSenha.php?motivoTroca=2&usuario_id=' . $usuario->getId()));
+                exit;
             }
             else {
                 $_SESSION["idUsuario"] = $usuario->getId();
@@ -64,6 +75,7 @@ function logarUsuario () {
         }else{
             //erroEmail("Opa, alguem esqueceu a senha ou tentou acessar o sistema indevidamente com:<br/> IP: ".$_SERVER['REMOTE_ADDR']." <br/>Software: ".$_SERVER['HTTP_USER_AGENT']."<br/>Login: ".$_POST['email']."<br/>Senha:".$_POST['senha'],"Tentativa de acesso sem sucesso ao sistema");
             echo json_encode(array('mensagem'=>'Erro', 'descricaoErro'=> "Dados incorretos ou usu&aacute;rio n&atilde;o encontrado. Tente novamente!"));
+            exit;
         }
     } catch (Exception $ex){
         echo json_encode(array('mensagem'=>'Erro', 'descricaoErro'=> "Erro ao tentar logar no sistema." . $ex->getMessage()));
