@@ -1795,9 +1795,10 @@ function carregarModalDetalharCertificado(certificado_id, desabilitarBotoes){
 						 * EXISTIR A FORMA DE PAGAMENTO FOR BOLETO, E AINDA NAO FOI PAGO
 						 * */
 						if (certificado.formaPagamento=='Boleto' && certificado.dataPagamento=='-')
-							$('#btnBoleto').css({display: 'none', visibility: 'hidden'});
+							$('#btnBoleto').css({display: 'inline', visibility: 'visible'});
 						else
-							$('#btnBoleto').css({display: 'block', visibility: 'visible'});
+							$('#btnBoleto').css({display: 'none', visibility: 'hidden'});
+
 						/*
 						 * HABILITA O BOTAO DE REVOGAR SE
 						 * EXISTIR PROTOCOLO, SE JA FOI VALIDADO E SE AINDA NAO FOI REVOGADO
