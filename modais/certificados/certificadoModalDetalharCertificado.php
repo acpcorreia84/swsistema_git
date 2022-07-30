@@ -9,7 +9,7 @@
                 <div class ="col-lg-6">
                     <h3>
                         <span id="dcDivModaisPermissao"></span>
-                        <button id='btnGerarProtocolo' class='btn btn-primary' title='Gerar Protocolo' data-toggle='modal' data-target='#gerarProtocolo' onclick='gerarProtocoloApi()' ><i class='fa fa-internet-explorer'></i></button>
+                        <button id='btnGerarProtocolo' class='btn btn-primary' title='Gerar Proocolo' data-toggle='modal' data-target='#gerarProtocolo' onclick='gerarProtocoloApi()' ><i class='fa fa-internet-explorer'></i></button>
                         <button id="btnBoleto" class="btn btn-primary" data-toggle='modal' data-target="#modalGerarBoletoS2P" title="Gerar Boleto"><i class="fa fa-barcode"></i></button>
                         <button id="btnCarregarModalDesconto"  class="btn btn-primary" data-toggle="modal" data-target="#modalDesconto" title="Desconto" onclick="carregarModalDesconto();"><i class ="fa fa-tag"></i></button>
                         <button id="btnCarregarModalTrocaDeProduto" class="btn btn-primary" data-toggle="modal" data-target="#modalTrocarProdutoCerticado" title="Trocar Produto" onclick="carregarModalTrocarProdutos()"> <i class="fa fa-retweet"></i></button>

@@ -2472,6 +2472,8 @@ function finalizarVendaCertificado() {
 
     require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/novaApi.php';
     $usuarioLogadoRn = ControleAcesso::getUsuarioLogado();
+    if ($usuarioLogadoRn->getGrupoProdutoId() == 5)
+        $cnpjArSolicitante = '10262785000124';
     /*CADASTRO DO CLIENTE NOVO*/
     try {
         $con = Propel::getConnection(CertificadoPeer::DATABASE_NAME);
@@ -2636,7 +2638,7 @@ function finalizarVendaCertificado() {
                     $telefoneCliente['ddd'], $telefoneCliente['fone'], $cliente->getEmail(), $cliente->getEndereco(), removeTracoPontoBarra($cliente->getCep()),
                     $cliente->getBairro(), $cliente->getNumero(), $cliente->getUf(), $cliente->getCidade(), $clienteNota, $documentoNota,
                     $bairroNota, $cepNota, $cidadeNota, $emailNota, $enderecoNota, $numeroNota,
-                    $estadoNota, $ieNota, $tipoProduto, 0, ''
+                    $estadoNota, $ieNota, $tipoProduto, 0, '', $cnpjArSolicitante
                 );
                 if ($resultado["protocolo"] !== 'erro') {
                     $certificadoNovo->setProtocolo($resultado['protocolo']);
@@ -2666,7 +2668,7 @@ function finalizarVendaCertificado() {
                     $telefoneCliente['ddd'], $telefoneCliente['fone'], $responsavel->getEmail(), $cliente->getEndereco(), removeTracoPontoBarra($cliente->getCep()),
                     $cliente->getBairro(), $cliente->getNumero(), $cliente->getUf(), $cliente->getCidade(), $clienteNota, $documentoNota,
                     $bairroNota, $cepNota, $cidadeNota, $emailNota, $enderecoNota, $numeroNota,
-                    $estadoNota, $ieNota, $tipoProduto, 0 ,''
+                    $estadoNota, $ieNota, $tipoProduto, 0 ,'', $cnpjArSolicitante
                 );
                 if ($resultado["protocolo"] !== 'erro') {
                     $certificadoNovo->setProtocolo($resultado['protocolo']);

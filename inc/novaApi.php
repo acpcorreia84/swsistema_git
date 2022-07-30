@@ -80,15 +80,18 @@ function consultaPrevia() {
 function gerarProtocoloPfNovo (
         $idProduto, $nome, $cpf, $dataNascimento, $ddd, $celular,
         $email, $logradouro, $cep, $bairro, $numero, $uf, $cidade, $clienteNota, $documentoNota, $bairroNota, $cepNota,
-        $cidadeNota, $emailNota, $enderecoNota, $numeroNota,  $estadoNota, $ieNota, $tipoProduto, $produtoValor = 0, $produtoDescricao =''
+        $cidadeNota, $emailNota, $enderecoNota, $numeroNota,  $estadoNota, $ieNota, $tipoProduto, $produtoValor = 0, $produtoDescricao ='', $cnpjARSolicitante = ''
         ) {
+    if ($cnpjARSolicitante == '')
+        $CnpjAR2='23917962000105';
+    else
+        $CnpjAR2=$cnpjARSolicitante;
 
-    $CnpjAR='23917962000105';
     $cr = curl_init();
 
     $payload = '
     {
-   "CnpjAR":"'.$CnpjAR.'",
+   "CnpjAR":"'.$CnpjAR2.'",
    "idProduto":"'.$idProduto.'",
    "Nome":"'.$nome.'",
    "CPF":"'.$cpf.'",
@@ -104,8 +107,6 @@ function gerarProtocoloPfNovo (
       "Bairro":"'.$bairro.'",
       "UF":"'.$uf.'",
       "Cidade":"'.$cidade.'",
-      "CodigoIbgeMunicipio": "4314902",
-      "CodigoIbgeUF": "43",
       "CEP":"'.$cep.'"
    },
     "ClienteNotaFiscal":{
@@ -119,11 +120,11 @@ function gerarProtocoloPfNovo (
       "Endereco":"'.$enderecoNota.'",
       "Numero":"'.$numeroNota.'",
       "UF":"'.$estadoNota.'",
-      "UFCodigo":"43",
       "Pais":"Brasil",
       "PaisCodigoAlpha3":"BRA",
       "IE":"'.$ieNota.'"
    }
+   "ProdutoValor":"'.$produtoValor.'","ProdutoDescricao":"'.$produtoDescricao.'"
 }
 ';
     $opcoes = array(
@@ -175,10 +176,14 @@ function gerarProtocoloPjNovo (
     $idProduto, $razaoSocial, $nomeFantasia, $nome, $cnpj = '', $cpf, $dataNascimento,
     $enderecoResponsavel, $cepResponsavel, $bairroResponsavel, $numeroResponsavel, $ufResponsavel, $cidadeResponsavel, $dddResponsavel, $celularResponsavel,
     $emailResponsavel, $ddd, $celular, $email, $logradouro, $cep, $bairro, $numero, $uf, $cidade, $clienteNota, $documentoNota, $bairroNota, $cepNota,
-    $cidadeNota, $emailNota, $enderecoNota, $numeroNota,  $estadoNota, $ieNota, $tipoProduto, $produtoValor = 0, $produtoDescricao =''
+    $cidadeNota, $emailNota, $enderecoNota, $numeroNota,  $estadoNota, $ieNota, $tipoProduto, $produtoValor = 0, $produtoDescricao ='', $cnpjArSolicitante = ''
 ) {
 
-    $CnpjAR='23917962000105';
+    if ($cnpjArSolicitante == '')
+        $CnpjAR='23917962000105';
+    else
+        $CnpjAR=$cnpjArSolicitante;
+
     $cr = curl_init();
 
     $payload = '
@@ -199,17 +204,16 @@ function gerarProtocoloPjNovo (
          "Bairro":"'.$bairroResponsavel.'",
          "UF":"'.$ufResponsavel.'",
          "Cidade":"'.$cidadeResponsavel.'",
-         "CodigoIbgeMunicipio": "4314902",
-         "CodigoIbgeUF": "43",
          "CEP":"'.$cepResponsavel.'"
       },      
    }, 
-   "Endereco":{ "Logradouro":"'.$logradouro.'", "Numero":"'.$numero.'", "Bairro":"'.$bairro.'", "UF":"'.$uf.'", "Cidade":"'.$cidade.'", "CodigoIbgeMunicipio": "4314902", "CodigoIbgeUF": "43", 
+   "Endereco":{ "Logradouro":"'.$logradouro.'", "Numero":"'.$numero.'", "Bairro":"'.$bairro.'", "UF":"'.$uf.'", "Cidade":"'.$cidade.'", 
    "CEP":"'.$cep.'" }, "ClienteNotaFiscal":{ "Sacado":"'.$clienteNota.'", "Documento":"'.$documentoNota.'", "Bairro":"'.$bairroNota.'", "Cep":"'.$cepNota.'", 
    "Cidade":"'.$cidadeNota.'", "CidadeCodigo":"4314902", "Email1":"'.$emailNota.'", 
-   "Endereco":"'.$enderecoNota.'", "Numero":"'.$numeroNota.'", "UF":"'.$estadoNota.'", "UFCodigo":"43", "Pais":"Brasil", "PaisCodigoAlpha3":"BRA", "IE":"'.$ieNota.'", 
+   "Endereco":"'.$enderecoNota.'", "Numero":"'.$numeroNota.'", "UF":"'.$estadoNota.'", "UFCodigo":"43", "Pais":"Brasil", "PaisCodigoAlpha3":"BRA", "IE":"'.$ieNota.'"    
+   } 
    "ProdutoValor":"'.$produtoValor.'","ProdutoDescricao":"'.$produtoDescricao.'"
-   } }
+   }
     ';
     $opcoes = array(
         CURLOPT_URL=>"https://acsafeweb.safewebpss.com.br/Service/Microservice/Shared/Partner/api/Add/". $tipoProduto,

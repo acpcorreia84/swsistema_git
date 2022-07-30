@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="- resolvido o problema de retorno do safe2pay. Coloquei no ar as alteracoes no ambiente de producao e tirei o ambiente beta do ar">
+    <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="- correcao do botao de gerar boleto">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/telaCertificado.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/telaCertificado.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/funcoes/funcoesCertificado.php" beforeDir="false" afterPath="$PROJECT_DIR$/funcoes/funcoesCertificado.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/novaApi.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/novaApi.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modais/certificados/certificadoModalDetalharCertificado.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/certificados/certificadoModalDetalharCertificado.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -107,7 +108,12 @@
       <workItem from="1643639480759" duration="3333000" />
       <workItem from="1647983949383" duration="16430000" />
       <workItem from="1648226333168" duration="2715000" />
-      <workItem from="1649189979080" duration="6066000" />
+      <workItem from="1649189979080" duration="6308000" />
+      <workItem from="1654175509796" duration="4586000" />
+      <workItem from="1655295163094" duration="7155000" />
+      <workItem from="1655475309998" duration="665000" />
+      <workItem from="1659132995637" duration="1728000" />
+      <workItem from="1659137674069" duration="2644000" />
     </task>
     <task id="LOCAL-00001" summary="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida">
       <created>1624365794378</created>
@@ -179,7 +185,14 @@
       <option name="project" value="LOCAL" />
       <updated>1649205508411</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="- correcao do botao de gerar boleto">
+      <created>1649206402314</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1649206402314</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -212,6 +225,7 @@
     <MESSAGE value="- iniciando o phpstorm novamente." />
     <MESSAGE value="- alteracao do sistema para nova integracao com o s2p no que diz respeito a boletos" />
     <MESSAGE value="- resolvido o problema de retorno do safe2pay. Coloquei no ar as alteracoes no ambiente de producao e tirei o ambiente beta do ar" />
-    <option name="LAST_COMMIT_MESSAGE" value="- resolvido o problema de retorno do safe2pay. Coloquei no ar as alteracoes no ambiente de producao e tirei o ambiente beta do ar" />
+    <MESSAGE value="- correcao do botao de gerar boleto" />
+    <option name="LAST_COMMIT_MESSAGE" value="- correcao do botao de gerar boleto" />
   </component>
 </project>
