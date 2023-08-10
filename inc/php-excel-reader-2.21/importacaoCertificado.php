@@ -9,7 +9,7 @@ $data = new Spreadsheet_Excel_Reader($_SERVER['DOCUMENT_ROOT']."/inc/jQuery-File
  * INSERE TODAS AS COLUNAS EM UM ARRAY
  * */
 $confereColunas = array(
-    'Protocolo'=>'', 'Nome'=>'', 'Documento'=>'', 'AVP'=>'',
+    'Protocolo'=>'', 'Nome'=>'', 'Documento'=>'', 'E-mail Titular'=>'','Telefone Titular'=>'','Validade'=>'', 'AVP'=>'',
     'CPFAVP'=>'', 'DtInclusao'=>'', 'DtInicioValidade'=>'', 'DtFimValidade'=>'', 'Status'=>''
 );
 

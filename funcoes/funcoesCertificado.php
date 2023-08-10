@@ -179,6 +179,10 @@ function gerarProtocoloApi() {
         $cidadeNota = $certificadoNota->getCidade();
         $ieNota = $certificadoNota->getIe();
         $tipoProduto = $produtoNovo->getTipoEmissao();
+        $preco = $certificado->getProduto()->getPreco();
+        $desconto = $certificado->getDesconto();
+        $valor = $preco - $desconto;
+        $produtoNome = $certificado->getProduto()->getNome();
 
         if ($clienteNota =='' || $documentoNota=='' ||
                     $bairroNota == ''|| $cepNota=='' || $cidadeNota=='' || $emailNota ==''|| $enderecoNota=='' || $numeroNota ==''||
@@ -203,7 +207,7 @@ function gerarProtocoloApi() {
                     $telefoneCliente['ddd'], $telefoneCliente['fone'], $cliente->getEmail(), $cliente->getEndereco(), removeTracoPontoBarra($cliente->getCep()),
                     $cliente->getBairro(), $cliente->getNumero(), $cliente->getUf(), $cliente->getCidade(), $clienteNota, $documentoNota,
                     $bairroNota, $cepNota, $cidadeNota, $emailNota, $enderecoNota, $numeroNota,
-                    $estadoNota, $ieNota, $tipoProduto, 0, ''
+                    $estadoNota, $ieNota, $tipoProduto, number_format($valor, 2, '.', ''), $produtoNome, ''
                 );
                 if ($resultado["protocolo"] !== 'erro') {
                     $certificado->setProtocolo($resultado['protocolo']);
@@ -232,7 +236,7 @@ function gerarProtocoloApi() {
                     $telefoneCliente['ddd'], $telefoneCliente['fone'], $responsavel->getEmail(), $cliente->getEndereco(), removeTracoPontoBarra($cliente->getCep()),
                     $cliente->getBairro(), $cliente->getNumero(), $cliente->getUf(), $cliente->getCidade(), $clienteNota, $documentoNota,
                     $bairroNota, $cepNota, $cidadeNota, $emailNota, $enderecoNota, $numeroNota,
-                    $estadoNota, $ieNota, $tipoProduto, 0 ,''
+                    $estadoNota, $ieNota, $tipoProduto, number_format($valor, 2, '.', '') , $produtoNome, ''
                 );
 
                 if ($resultado["protocolo"] !== 'erro') {
@@ -1504,7 +1508,7 @@ function gerarBoletoS2P($certificado_id){
     "Vendor": "'.$certificado->getUsuario()->getNome().'",
     "CallbackUrl": "http://swsistema.com.br/inc/retornoSafe2Pay.php?codigoGuiar='.$certificado->getId().'",
     "PaymentMethod": "1",
-    "Reference": "certID: '.$certificado->getId().'",
+    "Reference": "'.$certificado->getProtocolo().'",    
     "Customer": {
         "Name": "'.strtoupper(trim(removeEspeciais($nome))).'",
         "Identity": "'.removeTracoPontoBarra($cpfCnpj).'",
@@ -2621,6 +2625,11 @@ function finalizarVendaCertificado() {
         $ieNota = $_POST['ieNota']; $certificadoNota->setIe($ieNota);
         $tipoProduto = $produtoNovo->getTipoEmissao();
         $certificadoNota->setPessoaTipo($_POST['clienteTipoNota']);
+        $preco = $certificadoNovo->getProduto()->getPreco();
+        $desconto = $certificadoNovo->getDesconto();
+        $valor = $preco - $desconto;
+        $produtoNome = $certificadoNovo->getProduto()->getNome();
+
 
         if ($cliente->getCelular()) {
             $telefoneCliente = retornaCelularDDD($cliente->getCelular());
@@ -2638,7 +2647,7 @@ function finalizarVendaCertificado() {
                     $telefoneCliente['ddd'], $telefoneCliente['fone'], $cliente->getEmail(), $cliente->getEndereco(), removeTracoPontoBarra($cliente->getCep()),
                     $cliente->getBairro(), $cliente->getNumero(), $cliente->getUf(), $cliente->getCidade(), $clienteNota, $documentoNota,
                     $bairroNota, $cepNota, $cidadeNota, $emailNota, $enderecoNota, $numeroNota,
-                    $estadoNota, $ieNota, $tipoProduto, 0, '', $cnpjArSolicitante
+                    $estadoNota, $ieNota, $tipoProduto, number_format($valor, 2, '.', ''), $produtoNome, $cnpjArSolicitante
                 );
                 if ($resultado["protocolo"] !== 'erro') {
                     $certificadoNovo->setProtocolo($resultado['protocolo']);
@@ -2668,7 +2677,7 @@ function finalizarVendaCertificado() {
                     $telefoneCliente['ddd'], $telefoneCliente['fone'], $responsavel->getEmail(), $cliente->getEndereco(), removeTracoPontoBarra($cliente->getCep()),
                     $cliente->getBairro(), $cliente->getNumero(), $cliente->getUf(), $cliente->getCidade(), $clienteNota, $documentoNota,
                     $bairroNota, $cepNota, $cidadeNota, $emailNota, $enderecoNota, $numeroNota,
-                    $estadoNota, $ieNota, $tipoProduto, 0 ,'', $cnpjArSolicitante
+                    $estadoNota, $ieNota, $tipoProduto, number_format($valor, 2, '.', '') ,$produtoNome, $cnpjArSolicitante
                 );
                 if ($resultado["protocolo"] !== 'erro') {
                     $certificadoNovo->setProtocolo($resultado['protocolo']);
@@ -3700,11 +3709,13 @@ function importarCertificadosValidados() {
             else
                 $hora = '00:00:00';
 
-/*            //DEBUG
+          //DEBUG
+            /*
             if ($certificadoValidado['DtInclusao'] == '') {
             	var_dump($certificadoValidado);
             	var_dump(dataAvp, $certificadoValidado['DtInclusao']);
-            }*/
+            }
+            */
             $dataAvp = new DateTime($dataAvp[2].'-'.$dataAvp[1].'-'.$dataAvp[0] );
 
             /*

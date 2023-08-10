@@ -80,7 +80,8 @@ function consultaPrevia() {
 function gerarProtocoloPfNovo (
         $idProduto, $nome, $cpf, $dataNascimento, $ddd, $celular,
         $email, $logradouro, $cep, $bairro, $numero, $uf, $cidade, $clienteNota, $documentoNota, $bairroNota, $cepNota,
-        $cidadeNota, $emailNota, $enderecoNota, $numeroNota,  $estadoNota, $ieNota, $tipoProduto, $produtoValor = 0, $produtoDescricao ='', $cnpjARSolicitante = ''
+        $cidadeNota, $emailNota, $enderecoNota, $numeroNota,
+        $estadoNota, $ieNota, $tipoProduto, $produtoValor = 0, $produtoDescricao ='', $cnpjARSolicitante = ''
         ) {
     if ($cnpjARSolicitante == '')
         $CnpjAR2='23917962000105';
@@ -123,7 +124,7 @@ function gerarProtocoloPfNovo (
       "Pais":"Brasil",
       "PaisCodigoAlpha3":"BRA",
       "IE":"'.$ieNota.'"
-   }
+   },
    "ProdutoValor":"'.$produtoValor.'","ProdutoDescricao":"'.$produtoDescricao.'"
 }
 ';
@@ -211,7 +212,7 @@ function gerarProtocoloPjNovo (
    "CEP":"'.$cep.'" }, "ClienteNotaFiscal":{ "Sacado":"'.$clienteNota.'", "Documento":"'.$documentoNota.'", "Bairro":"'.$bairroNota.'", "Cep":"'.$cepNota.'", 
    "Cidade":"'.$cidadeNota.'", "CidadeCodigo":"4314902", "Email1":"'.$emailNota.'", 
    "Endereco":"'.$enderecoNota.'", "Numero":"'.$numeroNota.'", "UF":"'.$estadoNota.'", "UFCodigo":"43", "Pais":"Brasil", "PaisCodigoAlpha3":"BRA", "IE":"'.$ieNota.'"    
-   } 
+   }, 
    "ProdutoValor":"'.$produtoValor.'","ProdutoDescricao":"'.$produtoDescricao.'"
    }
     ';

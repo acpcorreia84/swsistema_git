@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="- correcao do botao de gerar boleto">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/funcoes/funcoesCertificado.php" beforeDir="false" afterPath="$PROJECT_DIR$/funcoes/funcoesCertificado.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inc/novaApi.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/novaApi.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modais/certificados/certificadoModalDetalharCertificado.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/certificados/certificadoModalDetalharCertificado.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modais/contador/modalContadorInserirEditar.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/contador/modalContadorInserirEditar.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,6 +113,7 @@
       <workItem from="1655475309998" duration="665000" />
       <workItem from="1659132995637" duration="1728000" />
       <workItem from="1659137674069" duration="2644000" />
+      <workItem from="1691680028528" duration="189000" />
     </task>
     <task id="LOCAL-00001" summary="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida">
       <created>1624365794378</created>

@@ -200,6 +200,7 @@ NAO PERMITIR ESCONDER/MOSTRAR QUADRO PJ
                                                 <option value="001" >BANCO DO BRASIL</option>
                                                 <option value="037" >BANPARA</option>
                                                 <option value="237" >BRADESCO</option>
+                                                <option value="336" >C6 BANK</option>
                                                 <option value="104" >CAIXA ECONOMICA</option>
                                                 <option value="077" >INTER</option>
                                                 <option value="341" >ITAU</option>
@@ -210,6 +211,8 @@ NAO PERMITIR ESCONDER/MOSTRAR QUADRO PJ
                                                 <option value="033" >SANTANDER</option>
                                                 <option value="748" >SICREDI</option>
                                                 <option value="756" >SICOOB</option>
+                                                <option value="655" >VOTORANTIM / ASTECAS</option>
+
 
 
                                             </select>
