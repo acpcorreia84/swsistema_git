@@ -3016,6 +3016,7 @@ function consultaPrevia () {
             alertErro('Error CP3912 - Erro ao realizar a consulta previa!' + msnPadrao + '.');
         },
         success: function (result) {
+        	console.log('aqui');
             console.log(result);
             var res = JSON.parse(result.trim());
             $("#modalCarregando").modal('hide');

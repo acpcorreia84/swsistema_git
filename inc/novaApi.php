@@ -26,7 +26,41 @@ $usuario_id = $_POST['usuario_id'];
 $funcao = $_POST['funcao'];
 if ($funcao=='consulta_previa_nova') { consultaPrevia();}
 
+function gerarToken () {
+    $cr = curl_init();
+
+    $opcoes = array(
+        CURLOPT_URL=>"https://pss.safewebpss.com.br/Service/Microservice/Shared/HubAutenticacao/Autenticacoes/api/autorizacao/token",
+        CURLOPT_RETURNTRANSFER=>true,
+        CURLOPT_ENCODING=>'',
+        CURLOPT_MAXREDIRS=>10,
+        CURLOPT_TIMEOUT=>0,
+        CURLOPT_FOLLOWLOCATION=>true,
+        CURLOPT_HTTP_VERSION=>CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST=>'POST',
+        CURLOPT_HTTPHEADER=>array('Authorization:Basic aW50ZWdyYWNhby1lY29tbWVyY2Utc2FmZXdlYi1xOUw0OEJvcDowYTlhZmFhYThhMzA2MjA0MmE5YTViNTUwZWE0Y2U2NDY2Mjc5ZGVlZWEyMjYyNjZlMmQxOGJhNzgxZGEwZTBk','Content-Type:application/json'),
+        CURLOPT_POSTFIELDS=>"",
+
+    );
+
+    curl_setopt_array($cr, $opcoes);
+
+    $postResult = curl_exec($cr);
+    $res = json_decode($postResult);
+
+    if (curl_errno($cr)) {
+        print curl_error($cr);
+    }
+
+    $token = trim($res->tokenAcesso);
+
+    curl_close($cr);
+    return trim($token);
+}
+
 function consultaPrevia() {
+    $token = gerarToken();
+
     $cr = curl_init();
     if (!$_POST['cpf'] || !$_POST['tipo'] || !$_POST['nascimento']) {
         echo json_encode(
@@ -42,7 +76,7 @@ function consultaPrevia() {
     $nascimentoCliente = dataDMAtoAMD($_POST['nascimento']);
     $cnpjCliente = removeTracoPontoBarra($_POST['cnpj']);
     $opcoes = array(
-        CURLOPT_URL=>"https://acsafeweb.safewebpss.com.br/Service/Microservice/Shared/ConsultaPrevia/api/RealizarConsultaPrevia",
+        CURLOPT_URL=>"https://pss.safewebpss.com.br/Service/Microservice/Shared/ConsultaPrevia/api/RealizarConsultaPrevia",
         CURLOPT_RETURNTRANSFER=>true,
         CURLOPT_ENCODING=>'',
         CURLOPT_MAXREDIRS=>10,
@@ -50,9 +84,8 @@ function consultaPrevia() {
         CURLOPT_FOLLOWLOCATION=>true,
         CURLOPT_HTTP_VERSION=>CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST=>'POST',
-        CURLOPT_HTTPHEADER=>array('Authorization:9gafzq4qneqftj5sx6qj','Content-Type:application/json'),
-        //CURLOPT_POSTFIELDS=>"{'CNPJ':'28410978000140','CPF':'51397862220','DocumentoTipo':'2','DtNascimento':'1984-03-03'}​​​​​",
-        CURLOPT_POSTFIELDS=>"{'CNPJ':'".$cnpjCliente."', 'CPF':'".$cpfCliente."','DocumentoTipo':'".$tipoCliente."','DtNascimento':'".$nascimentoCliente."'}​​​​​",
+        CURLOPT_HTTPHEADER=>array('Authorization: '.$token.'','Content-Type:application/json'),
+        CURLOPT_POSTFIELDS=>"{'CNPJ':'".$cnpjCliente."', 'CPF':'".$cpfCliente."','DocumentoTipo':'".$tipoCliente."','DtNascimento':'".$nascimentoCliente."'}",
 
         );
 
@@ -83,6 +116,7 @@ function gerarProtocoloPfNovo (
         $cidadeNota, $emailNota, $enderecoNota, $numeroNota,
         $estadoNota, $ieNota, $tipoProduto, $produtoValor = 0, $produtoDescricao ='', $cnpjARSolicitante = ''
         ) {
+    $token = gerarToken();
     if ($cnpjARSolicitante == '')
         $CnpjAR2='23917962000105';
     else
@@ -93,6 +127,7 @@ function gerarProtocoloPfNovo (
     $payload = '
     {
    "CnpjAR":"'.$CnpjAR2.'",
+   "UrlSolicitacao":"https://www.swsistema.com.br/inc/retornoNotificaEventos.php",
    "idProduto":"'.$idProduto.'",
    "Nome":"'.$nome.'",
    "CPF":"'.$cpf.'",
@@ -129,7 +164,7 @@ function gerarProtocoloPfNovo (
 }
 ';
     $opcoes = array(
-        CURLOPT_URL=>"https://acsafeweb.safewebpss.com.br/Service/Microservice/Shared/Partner/api/Add/". $tipoProduto,
+        CURLOPT_URL=>"https://pss.safewebpss.com.br/Service/Microservice/Shared/Partner/api/Add/". $tipoProduto,
         CURLOPT_RETURNTRANSFER=>true,
         CURLOPT_ENCODING=>'',
         CURLOPT_MAXREDIRS=>10,
@@ -137,7 +172,7 @@ function gerarProtocoloPfNovo (
         CURLOPT_FOLLOWLOCATION=>true,
         CURLOPT_HTTP_VERSION=>CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST=>'POST',
-        CURLOPT_HTTPHEADER=>array('Authorization:9gafzq4qneqftj5sx6qj','Content-Type:application/json'),
+        CURLOPT_HTTPHEADER=>array('Authorization: '.$token.'','Content-Type:application/json'),
         //CURLOPT_POSTFIELDS=>"{'CNPJ':'28410978000140','CPF':'51397862220','DocumentoTipo':'2','DtNascimento':'1984-03-03'}​​​​​",
         CURLOPT_POSTFIELDS=>$payload,
 
@@ -179,6 +214,7 @@ function gerarProtocoloPjNovo (
     $emailResponsavel, $ddd, $celular, $email, $logradouro, $cep, $bairro, $numero, $uf, $cidade, $clienteNota, $documentoNota, $bairroNota, $cepNota,
     $cidadeNota, $emailNota, $enderecoNota, $numeroNota,  $estadoNota, $ieNota, $tipoProduto, $produtoValor = 0, $produtoDescricao ='', $cnpjArSolicitante = ''
 ) {
+    $token = gerarToken();
 
     if ($cnpjArSolicitante == '')
         $CnpjAR='23917962000105';
@@ -188,7 +224,8 @@ function gerarProtocoloPjNovo (
     $cr = curl_init();
 
     $payload = '
-   { "CnpjAR":"'.$CnpjAR.'", "idProduto":"'.$idProduto.'", "RazaoSocial":"'.$razaoSocial.'", "NomeFantasia":"'.$nomeFantasia.'" ,
+   { "CnpjAR":"'.$CnpjAR.'", "UrlSolicitacao":"https://www.swsistema.com.br/inc/retornoNotificaEventos.php",
+   "idProduto":"'.$idProduto.'", "RazaoSocial":"'.$razaoSocial.'", "NomeFantasia":"'.$nomeFantasia.'" ,
    "CNPJ":"'.$cnpj.'", "Contato":{ "DDD":"'.$ddd.'", "Telefone":"'.$celular.'", "Email":"'.$email.'" },
     "Titular":{
       "Nome":"'.$nome.'",
@@ -217,7 +254,7 @@ function gerarProtocoloPjNovo (
    }
     ';
     $opcoes = array(
-        CURLOPT_URL=>"https://acsafeweb.safewebpss.com.br/Service/Microservice/Shared/Partner/api/Add/". $tipoProduto,
+        CURLOPT_URL=>"https://pss.safewebpss.com.br/Service/Microservice/Shared/Partner/api/Add/". $tipoProduto,
         CURLOPT_RETURNTRANSFER=>true,
         CURLOPT_ENCODING=>'',
         CURLOPT_MAXREDIRS=>10,
@@ -225,7 +262,7 @@ function gerarProtocoloPjNovo (
         CURLOPT_FOLLOWLOCATION=>true,
         CURLOPT_HTTP_VERSION=>CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST=>'POST',
-        CURLOPT_HTTPHEADER=>array('Authorization:9gafzq4qneqftj5sx6qj','Content-Type:application/json'),
+        CURLOPT_HTTPHEADER=>array('Authorization:'.$token.'','Content-Type:application/json'),
         //CURLOPT_POSTFIELDS=>"{'CNPJ':'28410978000140','CPF':'51397862220','DocumentoTipo':'2','DtNascimento':'1984-03-03'}​​​​​",
         CURLOPT_POSTFIELDS=>$payload,
 
@@ -261,12 +298,13 @@ function gerarProtocoloPjNovo (
 }
 
 function inserirHope ($protocolo, $tipoEmissao){
+    $token = gerarToken();
     $cr = curl_init();
 
     if ($tipoEmissao == 2) {
-        $url = 'https://acsafeweb.safewebpss.com.br/Service/Microservice/Hope/Shared/api/integration/renovation';
+        $url = 'https://pss.safewebpss.com.br/Service/Microservice/Shared/Partner/api/integration/renovation';
     } elseif ($tipoEmissao == 3) {
-        $url = 'https://acsafeweb.safewebpss.com.br/Service/Microservice/Hope/Shared/api/integration/solicitation';
+        $url = 'https://pss.safewebpss.com.br/Service/Microservice/Shared/Partner/api/integration/solicitation';
     }
 
     $payload = '
@@ -285,7 +323,7 @@ function inserirHope ($protocolo, $tipoEmissao){
         CURLOPT_FOLLOWLOCATION=>true,
         CURLOPT_HTTP_VERSION=>CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST=>'POST',
-        CURLOPT_HTTPHEADER=>array('Authorization: bearer e2f3c4a3f3be74fb7449fba7d19d2cbd27f92e99574a54acdfa655e5274d87a4','Content-Type:application/json'),
+        CURLOPT_HTTPHEADER=>array('Authorization:'.$token.'','Content-Type:application/json'),
         CURLOPT_POSTFIELDS=>$payload,
 
     );

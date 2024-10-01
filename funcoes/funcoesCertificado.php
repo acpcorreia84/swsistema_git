@@ -1549,7 +1549,7 @@ function gerarBoletoS2P($certificado_id){
             CURLOPT_MAXREDIRS=>10,
             CURLOPT_TIMEOUT=>0,
             CURLOPT_FOLLOWLOCATION=>true,
-            CURLOPT_HTTP_VERSION=>CURL_HTTP_VERSION_NONE,
+            CURLOPT_HTTP_VERSION=>CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST=>'POST',
             CURLOPT_HTTPHEADER=>array('x-api-key:E126ABEBE63F4790ACB2426EB7474A6B','Content-Type:application/json'),
             CURLOPT_POSTFIELDS=>$informacoesBoleto,

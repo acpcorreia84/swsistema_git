@@ -4,6 +4,7 @@
     <file url="file://$PROJECT_DIR$/funcoes/funcaoRelatorio.php" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/funcoes/funcoesCentralNegocios.php" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/funcoes/funcoesCertificado.php" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/funcoes/funcoesNotasFiscais.php" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/funcoes/funcoesUsuario.php" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/inc/WSCertificado.php" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/inc/rotinasComerciais/propel.log" charset="windows-1252" />

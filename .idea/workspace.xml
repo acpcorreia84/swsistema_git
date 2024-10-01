@@ -4,10 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="- correcao do botao de gerar boleto">
+    <list default="true" id="ffee94cb-45db-4a48-ad28-e8697778ea2b" name="Default Changelist" comment="- Correções gerais">
+      <change afterPath="$PROJECT_DIR$/funcoes/funcoesNotasFiscais.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/retornoCaf.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/retornoNotificaEventos.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/inc/retornoNotificaEventos_debug.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/testeCd.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/testeCertificado.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/funcoes/funcoesCertificado.php" beforeDir="false" afterPath="$PROJECT_DIR$/funcoes/funcoesCertificado.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inc/novaApi.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/novaApi.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modais/contador/modalContadorInserirEditar.php" beforeDir="false" afterPath="$PROJECT_DIR$/modais/contador/modalContadorInserirEditar.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/uteis.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/uteis.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/telaCertificado.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/telaCertificado.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,6 +26,13 @@
   <component name="ComposerSettings" doNotAsk="true" synchronizationState="DONT_SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/inc/composer.json</pharConfigPath>
     <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -44,19 +60,21 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/inc" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/funcoes" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="settings.editor.selected.configurable" value="web.server" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\PhpStormProjects\swsistema\funcoes" />
       <recent name="D:\PhpStormProjects\swsistema\inc" />
       <recent name="D:\PhpStormProjects\swsistema" />
     </key>
@@ -114,6 +132,21 @@
       <workItem from="1659132995637" duration="1728000" />
       <workItem from="1659137674069" duration="2644000" />
       <workItem from="1691680028528" duration="189000" />
+      <workItem from="1691680231464" duration="209000" />
+      <workItem from="1692021856654" duration="1638000" />
+      <workItem from="1692379103858" duration="25000" />
+      <workItem from="1704223268372" duration="895000" />
+      <workItem from="1706624551705" duration="4963000" />
+      <workItem from="1706704447551" duration="6241000" />
+      <workItem from="1706793477476" duration="4997000" />
+      <workItem from="1706881571358" duration="5403000" />
+      <workItem from="1719233588356" duration="7358000" />
+      <workItem from="1721307205094" duration="78000" />
+      <workItem from="1722259674067" duration="701000" />
+      <workItem from="1722626420107" duration="597000" />
+      <workItem from="1723557111297" duration="434000" />
+      <workItem from="1723755460518" duration="5793000" />
+      <workItem from="1727717963951" duration="11332000" />
     </task>
     <task id="LOCAL-00001" summary="Trabalhando na ligacao entre produtos e usuarios. Ainda n concluida">
       <created>1624365794378</created>
@@ -192,7 +225,14 @@
       <option name="project" value="LOCAL" />
       <updated>1649206402314</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="- correção na importação de certificados validados.">
+      <created>1691680425863</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1691680425863</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -226,6 +266,8 @@
     <MESSAGE value="- alteracao do sistema para nova integracao com o s2p no que diz respeito a boletos" />
     <MESSAGE value="- resolvido o problema de retorno do safe2pay. Coloquei no ar as alteracoes no ambiente de producao e tirei o ambiente beta do ar" />
     <MESSAGE value="- correcao do botao de gerar boleto" />
-    <option name="LAST_COMMIT_MESSAGE" value="- correcao do botao de gerar boleto" />
+    <MESSAGE value="- correção na importação de certificados validados." />
+    <MESSAGE value="- Correções gerais" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Correções gerais" />
   </component>
 </project>

@@ -77,6 +77,7 @@ function formatarCPF_CNPJ($campo, $formatado = true){
 	return $retorno;
  
 };
+
 function removeTracoPontoBarra($string){
 	$string = str_replace("-","", $string);
 	$string = str_replace("/","", $string);	
